@@ -33,43 +33,47 @@ html {
 }
 .ve-toolbar {
   position: relative;
-  height: 36px;
-  border-bottom: 1px solid #ddd;
-  background: #F7F7F8;
+  height: 37.5px;
+  border: 1px solid #ddd;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 .ve-toolbar .ve-toolbar-wrap {
   overflow: hidden;
-  height: 34px;
-  padding: 2px;
+  height: 36px;
 }
 .ve-toolbar .ve-toolbar-wrap .ve-toolbar-item {
   float: left;
-  margin: 2px;
 }
-.ve-toolbar .ve-toolbar-wrap .ve-toolbar-item a {
+.ve-toolbar .ve-toolbar-wrap .ve-toolbar-item > a {
   display: inline-block;
-  padding: 6px 8px;
-  border-radius: 3px;
-  border: 1px solid transparent;
+  padding: 8px 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.ve-toolbar .ve-toolbar-wrap .ve-toolbar-item > a:hover,
+.ve-toolbar .ve-toolbar-wrap .ve-toolbar-item > a.active {
+  background: #eee;
+  color: #000;
+}
+.fa {
+  vertical-align: middle;
 }
 .colorpicker {
   width: 192px;
-  height: 180px;
+  height: 165px;
   padding: 5px;
   position: absolute;
-  top: 36px;
+  top: 37px;
   z-index: 1000;
   background: #fff;
   border: 1px solid #ccc;
   border-top: none;
 }
 .colorpicker li a {
-  width: 20px;
-  height: 20px;
-  margin: 5px;
+  width: 22px;
+  height: 22px;
+  margin: 4px;
   float: left;
 }
 .ve-body {

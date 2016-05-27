@@ -3,7 +3,9 @@
   <div class="ve-toolbar">
     <div class="ve-toolbar-wrap">
       <div v-for="item in config" class="ve-toolbar-item" unselectable="off">
-        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" class="fa" :class="[nativeBtns[item].class]" @click="exec(item, null)"></a>
+        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="exec(item, null)">
+          <i class="fa" :class="[nativeBtns[item].class]"></i>
+        </a>
         <component v-else :is="item" :param="costomBtns[item]"></component>
       </div>
     </div>
@@ -13,10 +15,11 @@
 <script>
 
   import color from '../components/color.vue';
+  import sourceCode from '../components/code.vue';
 
   var nativeBtns = {
 
-    removeformat: {title: '清除选区格式', class: 'fa-eraser'},
+    removeformat: {title: '清除选中区域格式', class: 'fa-eraser'},
 
     bold: {title: '加粗', class: 'fa-bold'},
     italic: {title: '斜体', class: 'fa-italic'},
@@ -29,7 +32,7 @@
     outdent: {title: '减少缩进', class: 'fa-outdent'},
 
     justifyleft: {title: '左对齐', class: 'fa-align-left'},
-    justifycenter: {title: '用剑对齐对齐', class: 'fa-align-center'},
+    justifycenter: {title: '中间对齐', class: 'fa-align-center'},
     justifyright: {title: '右对齐', class: 'fa-align-right'},
     justifyfull: {title: '两端对齐', class: 'fa-align-justify'},
 
@@ -39,7 +42,8 @@
 
   var costomBtns = {
     forecolor: {colorType: 'forecolor'},
-    backcolor: {colorType: 'backcolor'}
+    backcolor: {colorType: 'backcolor'},
+    code: ''
   };
 
   export default {
@@ -49,11 +53,22 @@
         costomBtns: costomBtns,
         config: [
           'removeformat', 'bold', 'italic', 'underline', 'strikethrough', 'forecolor', 'backcolor', 'subscript', 'superscript', 'justifyleft',
-          'justifycenter', 'justifyright', 'justifyfull', 'indent', 'outdent'
-        ]
+          'justifycenter', 'justifyright', 'justifyfull', 'indent', 'outdent', 'sourceCode'
+        ],
+        state: []
       }
     },
     props: ['custom'],
+    events: {
+      stateChange: function () {
+        var json = {};
+        var config = this.custom || this.config;
+        config.forEach(function (name) {
+          json[name] = iframeDoc.queryCommandState(name);
+        });
+        this.state = json;
+      }
+    },
     methods: {
       exec: function (name, value) {
         iframeDoc.execCommand(name, false, value);
@@ -61,7 +76,8 @@
     },
     components: {
       'forecolor': color,
-      'backcolor': color
+      'backcolor': color,
+      'sourceCode': sourceCode
     }
   }
 </script>

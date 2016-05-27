@@ -1,9 +1,7 @@
 <template>
-  <div class="ve-toolbar-btn">
-    <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" class="fa"
-       :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"
-       @click="toggle = !toggle"></a>
-  </div>
+  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" @click="toggle = !toggle">
+    <i class="fa" :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"></i>
+  </a>
   <div class="ve-toolbar-dropdown colorpicker" v-show="toggle">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="颜色代码" v-model="color">

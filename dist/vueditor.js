@@ -64,11 +64,56 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	new Vue({
+	var vm = new Vue({
 	  el: 'body',
+	  data: {
+	    currentView: 'design',
+	    sourceCode: ''
+	  },
 	  components: {
 	    'toolbar': _toolbar2.default
+	  },
+	  events: {
+	    switchView: function switchView() {
+	      this.currentView = this.currentView == 'design' ? 'sourceCode' : 'design';
+	      this.sourceCode = iframeBody.innerHTML;
+	    }
+	  },
+	  methods: {
+	    init: function init() {
+	      iframeEl = document.querySelector('.ve-iframe');
+	      iframeWin = iframeEl.contentWindow;
+	      iframeDoc = iframeWin.document;
+	      iframeBody = iframeWin.document.body;
+	      this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了</p>');
+	      this.addEvent();
+	    },
+	    setContent: function setContent(content) {
+	      iframeBody.innerHTML = content;
+	    },
+	    addEvent: function addEvent() {
+	      iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
+
+	      if (navigator.userAgent.indexOf('Chrome') == -1) {
+	        var oSel = iframeWin.getSelection();
+	        var focusNode = null;
+	        setInterval(function () {
+	          if (oSel && oSel.rangeCount) {
+	            if (focusNode != oSel.focusNode) {
+	              focusNode = oSel.focusNode;
+	              this.selectionChange();
+	            }
+	          } else {
+	            oSel = iframeWin.getSelection();
+	          }
+	        }.bind(this), 500);
+	      }
+	    },
+	    selectionChange: function selectionChange() {
+	      this.$broadcast('stateChange');
+	    }
 	  }
+
 	}); /**
 	     * Created by wboll on 2016/5/26.
 	     */
@@ -109,11 +154,31 @@
 
 	var _color2 = _interopRequireDefault(_color);
 
+	var _code = __webpack_require__(8);
+
+	var _code2 = _interopRequireDefault(_code);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//
+	// <template>
+	//   <div class="ve-toolbar">
+	//     <div class="ve-toolbar-wrap">
+	//       <div v-for="item in config" class="ve-toolbar-item" unselectable="off">
+	//         <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="exec(item, null)">
+	//           <i class="fa" :class="[nativeBtns[item].class]"></i>
+	//         </a>
+	//         <component v-else :is="item" :param="costomBtns[item]"></component>
+	//       </div>
+	//     </div>
+	//   </div>
+	// </template>
+	//
+	// <script>
 
 	var nativeBtns = {
 
-	  removeformat: { title: '清除选区格式', class: 'fa-eraser' },
+	  removeformat: { title: '清除选中区域格式', class: 'fa-eraser' },
 
 	  bold: { title: '加粗', class: 'fa-bold' },
 	  italic: { title: '斜体', class: 'fa-italic' },
@@ -126,29 +191,18 @@
 	  outdent: { title: '减少缩进', class: 'fa-outdent' },
 
 	  justifyleft: { title: '左对齐', class: 'fa-align-left' },
-	  justifycenter: { title: '用剑对齐对齐', class: 'fa-align-center' },
+	  justifycenter: { title: '中间对齐', class: 'fa-align-center' },
 	  justifyright: { title: '右对齐', class: 'fa-align-right' },
 	  justifyfull: { title: '两端对齐', class: 'fa-align-justify' },
 
 	  insertOrderedList: { title: '设置有序列表', class: 'fa-list-ol' },
 	  insertUnorderedList: { title: '设置无序列表', class: 'fa-list-ul' }
-	}; //
-	// <template>
-	//   <div class="ve-toolbar">
-	//     <div class="ve-toolbar-wrap">
-	//       <div v-for="item in config" class="ve-toolbar-item" unselectable="off">
-	//         <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" class="fa" :class="[nativeBtns[item].class]" @click="exec(item, null)"></a>
-	//         <component v-else :is="item" :param="costomBtns[item]"></component>
-	//       </div>
-	//     </div>
-	//   </div>
-	// </template>
-	//
-	// <script>
+	};
 
 	var costomBtns = {
 	  forecolor: { colorType: 'forecolor' },
-	  backcolor: { colorType: 'backcolor' }
+	  backcolor: { colorType: 'backcolor' },
+	  code: ''
 	};
 
 	exports.default = {
@@ -156,10 +210,21 @@
 	    return {
 	      nativeBtns: nativeBtns,
 	      costomBtns: costomBtns,
-	      config: ['removeformat', 'bold', 'italic', 'underline', 'strikethrough', 'forecolor', 'backcolor', 'subscript', 'superscript', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'indent', 'outdent']
+	      config: ['removeformat', 'bold', 'italic', 'underline', 'strikethrough', 'forecolor', 'backcolor', 'subscript', 'superscript', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'indent', 'outdent', 'sourceCode'],
+	      state: []
 	    };
 	  },
 	  props: ['custom'],
+	  events: {
+	    stateChange: function stateChange() {
+	      var json = {};
+	      var config = this.custom || this.config;
+	      config.forEach(function (name) {
+	        json[name] = iframeDoc.queryCommandState(name);
+	      });
+	      this.state = json;
+	    }
+	  },
 	  methods: {
 	    exec: function exec(name, value) {
 	      iframeDoc.execCommand(name, false, value);
@@ -167,7 +232,8 @@
 	  },
 	  components: {
 	    'forecolor': _color2.default,
-	    'backcolor': _color2.default
+	    'backcolor': _color2.default,
+	    'sourceCode': _code2.default
 	  }
 	};
 	// </script>
@@ -204,11 +270,9 @@
 	  value: true
 	});
 	// <template>
-	//   <div class="ve-toolbar-btn">
-	//     <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" class="fa"
-	//        :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"
-	//        @click="toggle = !toggle"></a>
-	//   </div>
+	//   <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" @click="toggle = !toggle">
+	//     <i class="fa" :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"></i>
+	//   </a>
 	//   <div class="ve-toolbar-dropdown colorpicker" v-show="toggle">
 	//     <div class="input-group">
 	//       <input type="text" class="form-control" placeholder="颜色代码" v-model="color">
@@ -275,13 +339,86 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n  <div class=\"ve-toolbar-btn\">\r\n    <a href=\"javascript:;\" title=\"{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}\" class=\"fa\"\r\n       :class=\"{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}\"\r\n       @click=\"toggle = !toggle\"></a>\r\n  </div>\r\n  <div class=\"ve-toolbar-dropdown colorpicker\" v-show=\"toggle\">\r\n    <div class=\"input-group\">\r\n      <input type=\"text\" class=\"form-control\" placeholder=\"颜色代码\" v-model=\"color\">\r\n        <span class=\"input-group-btn\">\r\n            <button type=\"button\" class=\"btn btn-default\" @click=\"inputHandler\">确定</button>\r\n        </span>\r\n    </div>\r\n    <ul>\r\n      <li v-for=\"color in colors\"><a href=\"javascript:;\" title=\"{{color}}\" @click=\"clickHandler(color)\" style=\"background:{{color}};\"></a></li>\r\n    </ul>\r\n  </div>\r\n";
+	module.exports = "\r\n  <a href=\"javascript:;\" title=\"{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}\" @click=\"toggle = !toggle\">\r\n    <i class=\"fa\" :class=\"{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}\"></i>\r\n  </a>\r\n  <div class=\"ve-toolbar-dropdown colorpicker\" v-show=\"toggle\">\r\n    <div class=\"input-group\">\r\n      <input type=\"text\" class=\"form-control\" placeholder=\"颜色代码\" v-model=\"color\">\r\n        <span class=\"input-group-btn\">\r\n            <button type=\"button\" class=\"btn btn-default\" @click=\"inputHandler\">确定</button>\r\n        </span>\r\n    </div>\r\n    <ul>\r\n      <li v-for=\"color in colors\"><a href=\"javascript:;\" title=\"{{color}}\" @click=\"clickHandler(color)\" style=\"background:{{color}};\"></a></li>\r\n    </ul>\r\n  </div>\r\n";
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n  <div class=\"ve-toolbar\">\r\n    <div class=\"ve-toolbar-wrap\">\r\n      <div v-for=\"item in config\" class=\"ve-toolbar-item\" unselectable=\"off\">\r\n        <a v-if=\"nativeBtns[item]\" href=\"javascript:;\" title=\"{{nativeBtns[item].title}}\" class=\"fa\" :class=\"[nativeBtns[item].class]\" @click=\"exec(item, null)\"></a>\r\n        <component v-else :is=\"item\" :param=\"costomBtns[item]\"></component>\r\n      </div>\r\n    </div>\r\n  </div>\r\n";
+	module.exports = "\r\n  <div class=\"ve-toolbar\">\r\n    <div class=\"ve-toolbar-wrap\">\r\n      <div v-for=\"item in config\" class=\"ve-toolbar-item\" unselectable=\"off\">\r\n        <a v-if=\"nativeBtns[item]\" href=\"javascript:;\" title=\"{{nativeBtns[item].title}}\" :class=\"{'active': state[item]}\" @click=\"exec(item, null)\">\r\n          <i class=\"fa\" :class=\"[nativeBtns[item].class]\"></i>\r\n        </a>\r\n        <component v-else :is=\"item\" :param=\"costomBtns[item]\"></component>\r\n      </div>\r\n    </div>\r\n  </div>\r\n";
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(9)
+	__vue_template__ = __webpack_require__(10)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "C:\\Users\\wboll\\Documents\\vueditor\\src\\components\\code.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	//
+	// <template>
+	//   <a href="javascript:;" title="源码" @click="sourceCode">
+	//     <i class="fa fa-code"></i>
+	//   </a>
+	// </template>
+	//
+	// <script>
+	//  document.write('<link rel="stylesheet" href="./plugins/codemirror/codemirror.min.css">');
+	//  document.write('<script type="text/javascript" src="./plugins/codemirror/codemirror.min.js"><\/script>');
+	//  document.write('<script type="text/javascript" src="./plugins/codemirror/javascript.min.js"><\/script>');
+
+	exports.default = {
+	  data: function data() {
+	    return {
+	      editor: null
+	    };
+	  },
+
+	  methods: {
+	    sourceCode: function sourceCode() {
+	      this.$dispatch('switchView');
+	      this.editor.setValue(iframeBody.innerHTML);
+	    }
+	  },
+	  ready: function ready() {
+	    this.editor = CodeMirror.fromTextArea(document.getElementById('codemirror'), {
+	      lineNumbers: true,
+	      matchBrackets: true,
+	      styleActiveLine: true,
+	      theme: 'learncode'
+	    });
+	  }
+	};
+	// </script>
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n  <a href=\"javascript:;\" title=\"源码\" @click=\"sourceCode\">\r\n    <i class=\"fa fa-code\"></i>\r\n  </a>\r\n";
 
 /***/ }
 /******/ ]);
