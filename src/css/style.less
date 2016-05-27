@@ -1,0 +1,52 @@
+
+@import "reset.less";
+
+.ve-toolbar{
+  position: relative;
+  height: 36px;
+  border-bottom: 1px solid #ddd;
+  background: #F7F7F8;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  .ve-toolbar-wrap {
+    overflow: hidden;
+    height: 34px; padding: 2px;
+    .ve-toolbar-item {
+      float: left;
+      margin: 2px;
+      a {
+        display: inline-block;
+        padding: 6px 8px;
+        border-radius: 3px;
+        border: 1px solid transparent;
+      }
+    }
+  }
+}
+
+.colorpicker {
+  width: 192px;
+  height: 180px;
+  padding: 5px;
+  position: absolute;
+  top: 36px;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  li a {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    float: left;
+  }
+}
+
+.ve-body {
+  border: 1px solid #ddd;
+  border-top: none;
+}
+.ve-iframe {
+  width: 100%;
+}

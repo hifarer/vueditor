@@ -1,0 +1,81 @@
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  margin: 0;
+  padding: 0;
+}
+label {
+  font-weight: normal;
+}
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: black;
+}
+a:focus,
+a:hover {
+  text-decoration: none;
+  outline: none;
+  color: black;
+}
+hr {
+  margin: 10px 0;
+}
+html {
+  font-size: 16px;
+}
+.ve-toolbar {
+  position: relative;
+  height: 36px;
+  border-bottom: 1px solid #ddd;
+  background: #F7F7F8;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.ve-toolbar .ve-toolbar-wrap {
+  overflow: hidden;
+  height: 34px;
+  padding: 2px;
+}
+.ve-toolbar .ve-toolbar-wrap .ve-toolbar-item {
+  float: left;
+  margin: 2px;
+}
+.ve-toolbar .ve-toolbar-wrap .ve-toolbar-item a {
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+.colorpicker {
+  width: 192px;
+  height: 180px;
+  padding: 5px;
+  position: absolute;
+  top: 36px;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.colorpicker li a {
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  float: left;
+}
+.ve-body {
+  border: 1px solid #ddd;
+  border-top: none;
+}
+.ve-iframe {
+  width: 100%;
+}
