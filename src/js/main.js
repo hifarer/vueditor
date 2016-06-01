@@ -13,19 +13,13 @@ const vm = new Vue({
   components: {
     'toolbar': toolbar
   },
-  events: {
-    switchView: function () {
-      this.currentView = this.currentView == 'design' ? 'sourceCode' : 'design';
-      this.sourceCode = iframeBody.innerHTML;
-    }
-  },
   methods: {
     init: function () {
       iframeEl = document.querySelector('.ve-iframe');
       iframeWin = iframeEl.contentWindow;
       iframeDoc = iframeWin.document;
       iframeBody = iframeWin.document.body;
-      this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了</p>');
+      this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了function(){alert(1);}</p>');
       this.addEvent();
     },
     setContent:function(content) {

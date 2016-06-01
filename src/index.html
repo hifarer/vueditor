@@ -5,24 +5,29 @@
   <title>Vueditor</title>
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./plugins/codemirror/codemirror.min.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
-  <link rel="stylesheet" href="./plugins/codemirror/codemirror.min.css">
-  <link rel="stylesheet" href="./plugins/codemirror/theme.css">
-  <script type="text/javascript" src="js/vue.min.js"></script>
   <script type="text/javascript" src="./plugins/codemirror/codemirror.min.js"></script>
-  <script type="text/javascript" src="./plugins/codemirror/javascript.min.js"></script>
+  <script type="text/javascript" src="./plugins/codemirror/xml.js"></script>
+  <script type="text/javascript" src="./plugins/codemirror/htmlmixed.js"></script>
+  <script type="text/javascript" src="./plugins/beautify-html.js"></script>
 </head>
 <body style="padding: 20px;">
 
   <div class="vueditor">
     <toolbar></toolbar>
     <div class="ve-body">
-      <iframe src="iframe/page.html" frameborder="0" class="ve-iframe" @load="init" v-show="currentView == 'design'"></iframe>
-      <textarea name="codemirror" id="codemirror" v-show="currentView == 'sourceCode'">{{sourceCode}}</textarea>
+      <div class="ve-design" v-show="currentView == 'design'">
+        <iframe src="iframe/page.html" frameborder="0" class="ve-iframe" @load="init"></iframe>
+      </div>
+      <div class="ve-code" v-show="currentView == 'sourceCode'">
+        <textarea name="codemirror" id="codemirror">{{sourceCode}}</textarea>
+      </div>
     </div>
   </div>
+
+  <script src="js/vue.min.js"></script>
   <script src="../dist/vueditor.js"></script>
   <script src="js/lib.js"></script>
-
 </body>
 </html>

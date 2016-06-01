@@ -5,7 +5,6 @@
   position: relative;
   height: 37.5px;
   border: 1px solid #ddd;
-  //background: #F7F7F8;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -52,7 +51,21 @@
 .ve-body {
   border: 1px solid #ddd;
   border-top: none;
+  height: 200px;
 }
+
+.ve-design, .ve-code {
+  height: 100%;
+}
+.ve-code {
+  overflow-y: auto;
+}
+
 .ve-iframe {
   width: 100%;
+  height: 100%;
+  display: block; /*iframe默认为inline-block, 会造成底部与父元素的间隔*/
+}
+.CodeMirror {
+  height: auto;
 }

@@ -18,16 +18,28 @@
     },
     methods: {
       sourceCode () {
-        this.$dispatch('switchView');
-        this.editor.setValue(iframeBody.innerHTML);
+        if(this.$root.currentView == 'design'){
+          this.$root.currentView = 'sourceCode';
+          this.$root.sourceCode = iframeBody.innerHTML;
+          this.editor.setValue(beautifyHTML(iframeBody.innerHTML, {'indent_inner_html': true}));
+          setTimeout(function () {
+            this.editor.refresh();
+          }.bind(this), 100);
+        }else{
+          this.$root.currentView = 'design';
+          this.$root.sourceCode = this.editor.getValue();
+          iframeBody.innerHTML = this.$root.sourceCode;
+        }
       }
     },
     ready(){
       this.editor = CodeMirror.fromTextArea(document.getElementById('codemirror'), {
         lineNumbers: true,
-        matchBrackets: true,
+        lineWrapping: true,
         styleActiveLine: true,
-        theme: 'learncode'
+        viewportMargin: Infinity,
+        mode: 'htmlmixed',
+        scrollbarStyle: 'null'
       });
     }
   }

@@ -73,19 +73,13 @@
 	  components: {
 	    'toolbar': _toolbar2.default
 	  },
-	  events: {
-	    switchView: function switchView() {
-	      this.currentView = this.currentView == 'design' ? 'sourceCode' : 'design';
-	      this.sourceCode = iframeBody.innerHTML;
-	    }
-	  },
 	  methods: {
 	    init: function init() {
 	      iframeEl = document.querySelector('.ve-iframe');
 	      iframeWin = iframeEl.contentWindow;
 	      iframeDoc = iframeWin.document;
 	      iframeBody = iframeWin.document.body;
-	      this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了</p>');
+	      this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了function(){alert(1);}</p>');
 	      this.addEvent();
 	    },
 	    setContent: function setContent(content) {
@@ -124,7 +118,7 @@
 
 	var __vue_script__, __vue_template__
 	__vue_script__ = __webpack_require__(3)
-	__vue_template__ = __webpack_require__(7)
+	__vue_template__ = __webpack_require__(10)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
@@ -154,7 +148,7 @@
 
 	var _color2 = _interopRequireDefault(_color);
 
-	var _code = __webpack_require__(8);
+	var _code = __webpack_require__(7);
 
 	var _code2 = _interopRequireDefault(_code);
 
@@ -343,17 +337,11 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
-
-	module.exports = "\r\n  <div class=\"ve-toolbar\">\r\n    <div class=\"ve-toolbar-wrap\">\r\n      <div v-for=\"item in config\" class=\"ve-toolbar-item\" unselectable=\"off\">\r\n        <a v-if=\"nativeBtns[item]\" href=\"javascript:;\" title=\"{{nativeBtns[item].title}}\" :class=\"{'active': state[item]}\" @click=\"exec(item, null)\">\r\n          <i class=\"fa\" :class=\"[nativeBtns[item].class]\"></i>\r\n        </a>\r\n        <component v-else :is=\"item\" :param=\"costomBtns[item]\"></component>\r\n      </div>\r\n    </div>\r\n  </div>\r\n";
-
-/***/ },
-/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(9)
-	__vue_template__ = __webpack_require__(10)
+	__vue_script__ = __webpack_require__(8)
+	__vue_template__ = __webpack_require__(9)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) { (typeof module.exports === "function" ? module.exports.options : module.exports).template = __vue_template__ }
@@ -370,7 +358,7 @@
 	})()}
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -399,26 +387,44 @@
 
 	  methods: {
 	    sourceCode: function sourceCode() {
-	      this.$dispatch('switchView');
-	      this.editor.setValue(iframeBody.innerHTML);
+	      if (this.$root.currentView == 'design') {
+	        this.$root.currentView = 'sourceCode';
+	        this.$root.sourceCode = iframeBody.innerHTML;
+	        this.editor.setValue(beautifyHTML(iframeBody.innerHTML, { 'indent_inner_html': true }));
+	        setTimeout(function () {
+	          this.editor.refresh();
+	        }.bind(this), 100);
+	      } else {
+	        this.$root.currentView = 'design';
+	        this.$root.sourceCode = this.editor.getValue();
+	        iframeBody.innerHTML = this.$root.sourceCode;
+	      }
 	    }
 	  },
 	  ready: function ready() {
 	    this.editor = CodeMirror.fromTextArea(document.getElementById('codemirror'), {
 	      lineNumbers: true,
-	      matchBrackets: true,
+	      lineWrapping: true,
 	      styleActiveLine: true,
-	      theme: 'learncode'
+	      viewportMargin: Infinity,
+	      mode: 'htmlmixed',
+	      scrollbarStyle: 'null'
 	    });
 	  }
 	};
 	// </script>
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = "\r\n  <a href=\"javascript:;\" title=\"源码\" @click=\"sourceCode\">\r\n    <i class=\"fa fa-code\"></i>\r\n  </a>\r\n";
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n  <div class=\"ve-toolbar\">\r\n    <div class=\"ve-toolbar-wrap\">\r\n      <div v-for=\"item in config\" class=\"ve-toolbar-item\" unselectable=\"off\">\r\n        <a v-if=\"nativeBtns[item]\" href=\"javascript:;\" title=\"{{nativeBtns[item].title}}\" :class=\"{'active': state[item]}\" @click=\"exec(item, null)\">\r\n          <i class=\"fa\" :class=\"[nativeBtns[item].class]\"></i>\r\n        </a>\r\n        <component v-else :is=\"item\" :param=\"costomBtns[item]\"></component>\r\n      </div>\r\n    </div>\r\n  </div>\r\n";
 
 /***/ }
 /******/ ]);
