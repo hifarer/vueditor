@@ -1,4 +1,10 @@
 
+<style lang="less">
+  .heheda {
+    color: red;
+  }
+</style>
+
 <template>
   <div class="ve-toolbar">
     <div class="ve-toolbar-wrap">
@@ -17,7 +23,7 @@
   import color from '../components/color.vue';
   import sourceCode from '../components/code.vue';
 
-  var nativeBtns = {
+  let nativeBtns = {
 
     removeformat: {title: '清除选中区域格式', class: 'fa-eraser'},
 
@@ -40,14 +46,14 @@
     insertUnorderedList: {title: '设置无序列表', class: 'fa-list-ul'}
   };
 
-  var costomBtns = {
+  let costomBtns = {
     forecolor: {colorType: 'forecolor'},
     backcolor: {colorType: 'backcolor'},
     code: ''
   };
 
   export default {
-    data: function () {
+    data () {
       return {
         nativeBtns: nativeBtns,
         costomBtns: costomBtns,
@@ -60,9 +66,9 @@
     },
     props: ['custom'],
     events: {
-      stateChange: function () {
-        var json = {};
-        var config = this.custom || this.config;
+      stateChange () {
+        let json = {};
+        let config = this.custom || this.config;
         config.forEach(function (name) {
           json[name] = iframeDoc.queryCommandState(name);
         });
@@ -70,7 +76,7 @@
       }
     },
     methods: {
-      exec: function (name, value) {
+      exec (name, value) {
         iframeDoc.execCommand(name, false, value);
       }
     },

@@ -31,16 +31,16 @@
     },
     props: ['param'],
     methods: {
-      checkValid: function (color) {
-        var sColor = color.replace(/\s+/g, '');
-        var hsl3 = /^#[0-9a-f]{3}$/i,
+      checkValid (color) {
+        let sColor = color.replace(/\s+/g, '');
+        let hsl3 = /^#[0-9a-f]{3}$/i,
             hsl6 = /^#[0-9a-f]{6}$/i,
             rgb  = /^rgb\(((\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5]),){2}(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\)$/;
         if(hsl3.test(sColor) || hsl6.test(sColor) || rgb.test(sColor)){
           return true;
         }
       },
-      setColor: function (colorType, color){
+      setColor (colorType, color) {
         if(document.queryCommandSupported('styleWithCss')){
           iframeDoc.execCommand('styleWithCss', true);
         }
@@ -48,13 +48,13 @@
         iframeDoc.execCommand(colorType, false, color);
         //document.querySelectorAll('font').length > 0 && formatEl(arr, colorType, color);
       },
-      clickHandler: function (color) {
+      clickHandler (color) {
         this.setColor(this.param.colorType, color);
         this.toggle = false;
       },
-      inputHandler: function(){
-        var color = this.color;
-        var result = this.checkValid(color);
+      inputHandler () {
+        let color = this.color;
+        let result = this.checkValid(color);
         if(!result){
           alert('请输入正确的颜色代码。');
         }else{

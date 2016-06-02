@@ -3,6 +3,7 @@
  */
 
 import toolbar from '../components/toolbar.vue'
+import util from '../js/util';
 
 const vm = new Vue({
   el: 'body',
@@ -14,7 +15,7 @@ const vm = new Vue({
     'toolbar': toolbar
   },
   methods: {
-    init: function () {
+    init () {
       iframeEl = document.querySelector('.ve-iframe');
       iframeWin = iframeEl.contentWindow;
       iframeDoc = iframeWin.document;
@@ -22,15 +23,15 @@ const vm = new Vue({
       this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了function(){alert(1);}</p>');
       this.addEvent();
     },
-    setContent:function(content) {
+    setContent (content) {
       iframeBody.innerHTML = content;
     },
-    addEvent: function () {
+    addEvent () {
       iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
 
       if(navigator.userAgent.indexOf('Chrome') == -1){
-        var oSel = iframeWin.getSelection();
-        var focusNode = null;
+        let oSel = iframeWin.getSelection();
+        let focusNode = null;
         setInterval(function () {
           if (oSel && oSel.rangeCount) {
             if (focusNode != oSel.focusNode) {
@@ -43,7 +44,7 @@ const vm = new Vue({
         }.bind(this), 500);
       }
     },
-    selectionChange: function () {
+    selectionChange () {
       this.$broadcast('stateChange');
     }
   }

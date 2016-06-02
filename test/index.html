@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vueditor</title>
+  <link rel="stylesheet" type="text/css" href="../dist/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../dist/plugins/codemirror/codemirror-pkg.min.css">
+<link rel="stylesheet" type="text/css" href="../dist/css/style.min_8a5754bd1b.css">
+</head>
+<body style="padding: 20px;">
+
+  <div class="vueditor">
+    <toolbar></toolbar>
+    <div class="ve-body">
+      <div class="ve-design" v-show="currentView == 'design'">
+        <iframe src="../dist/iframe/page.html" frameborder="0" class="ve-iframe" @load="init"></iframe>
+      </div>
+      <div class="ve-code" v-show="currentView == 'sourceCode'">
+        <textarea name="codemirror" id="codemirror">{{sourceCode}}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="../dist/plugins/codemirror/codemirror-pkg.min.js"></script>
+<script type="text/javascript" src="../dist/plugins/beautify-html.min.js"></script>
+<script src="../src/js/varibles.js"></script>
+<script src="../dist/js/vue.min.js"></script>
+<script src="../dist/js/vueditor.min_51bcb3a6c4.js"></script>
+</body>
+</html>
