@@ -20,7 +20,7 @@ const vm = new Vue({
       iframeWin = iframeEl.contentWindow;
       iframeDoc = iframeWin.document;
       iframeBody = iframeWin.document.body;
-      this.setContent('<p>萨拉深刻的风景拉萨孔家店发链接啊算了function(){alert(1);}</p>');
+      this.setContent('<p>开始的分厘卡士大撒地方卢卡附件里是夫萨拉深刻的风景拉萨孔家店发链接啊算了function(){alert(1);}</p>');
       this.addEvent();
     },
     setContent (content) {
@@ -29,7 +29,7 @@ const vm = new Vue({
     addEvent () {
       iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
 
-      if(navigator.userAgent.indexOf('Chrome') == -1){
+      if (navigator.userAgent.indexOf('Chrome') == -1) {
         let oSel = iframeWin.getSelection();
         let focusNode = null;
         setInterval(function () {
@@ -38,7 +38,7 @@ const vm = new Vue({
               focusNode = oSel.focusNode;
               this.selectionChange();
             }
-          }else{
+          } else {
             oSel = iframeWin.getSelection();
           }
         }.bind(this), 500);
@@ -48,5 +48,5 @@ const vm = new Vue({
       this.$broadcast('stateChange');
     }
   }
-  
+
 });

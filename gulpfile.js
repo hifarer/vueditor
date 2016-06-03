@@ -7,16 +7,17 @@ const gulp = require('gulp'),
   concat = require('gulp-concat'),
   rename = require('gulp-rename'),
   uglify = require('gulp-uglify'),
-  gulpOpen = require('gulp-open'),
-  md5 = require('gulp-md5-plus'),
   fileinclude = require('gulp-file-include'),
   spriter = require('gulp-css-spriter'),
   base64 = require('gulp-css-base64'),
-  connect = require('gulp-connect'),
-  minifycss = require('gulp-minify-css'),
+  cleanCSS = require('gulp-clean-css'),
   
   webpack = require('webpack'),
-  webpackConfig = require('./webpack.config');
+  webpackConfig = require('./webpack.config'),
+
+  browserSync = require('browser-sync').create(),
+  path = require('path');
+
 
 gulp.task('pkgCodeMirrorScript', () => {
   return gulp.src(['./src/plugins/codemirror/codemirror.min.js', './src/plugins/codemirror/*.js'])
@@ -30,7 +31,7 @@ gulp.task('pkgCodeMirrorStyle', () => {
   return gulp.src('./src/plugins/codemirror/*.css')
     .pipe(concat('codemirror-pkg.css'))
     .pipe(rename({suffix:'.min'}))
-    .pipe(minifycss())
+    .pipe(cleanCSS())
     .pipe(gulp.dest('./dist/plugins/codemirror/'));
 });
 
@@ -61,21 +62,16 @@ gulp.task('includeFile', () => {
 gulp.task('webpack', ['includeFile'], () => {
   webpack(webpackConfig, (err) => {
     if(err)throw err;
-    
     gulp.src('./build/*.css')
       .pipe(clean())
-      .pipe(minifycss())
+      .pipe(cleanCSS())
       .pipe(rename({suffix: '.min'}))
-      // .pipe(md5(10, './test/index.html'))
       .pipe(gulp.dest('./dist/css/'));
-    
     gulp.src('./build/vueditor.js')
       .pipe(clean())
       .pipe(uglify())
       .pipe(rename({suffix: '.min'}))
-      // .pipe(md5(10, './test/index.html'))
       .pipe(gulp.dest('./dist/js/'));
-    
     gulp.src('./build/style.js')
       .pipe(clean());
   });
@@ -95,24 +91,19 @@ gulp.task('sprite', ['webpack'], () => {
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('connect', ()  => {
-  connect.server({
-    root: '',
-    port: 3000,
-    livereload: true
+gulp.task('browserSync', function() {
+  browserSync.init({
+    notify: false,
+    files: ['./dist/js/*.js', './dist/css/*.css'],
+    server: {
+      baseDir: './',
+      index: 'test/index.html'
+    }
   });
 });
 
-gulp.task('open', ()  => {
-  gulp.src('')
-    .pipe(gulpOpen({
-      app: 'chrome',
-      uri: 'http://localhost:3000/test/'
-    }));
-});
-
-gulp.task('watch', ()  => {
+gulp.task('watch', ['browserSync'], ()  => {
   gulp.watch('src/**/*', ['copyImages', 'includeFile', 'webpack'/*, 'sprite'*/]);
 });
 
-gulp.task('default', ['copyImages', 'includeFile', 'webpack'/*, 'sprite'*/, 'watch', 'connect', 'open']);
+gulp.task('default', ['copyImages', 'includeFile', 'webpack'/*, 'sprite'*/, 'watch']);

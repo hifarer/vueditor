@@ -1,36 +1,67 @@
+<style lang="less" rel="stylesheet/less">
+  .colorpicker {
+    width: 176px;
+    height: 220px;
+    padding: 10px;
+    position: absolute;
+    top: 39px;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    li a {
+      width: 20px;
+      height: 20px;
+      margin: 1px;
+      float: left;
+    }
+  }
+</style>
+
 <template>
-  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" @click="toggle = !toggle">
+  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" :class="{'active': display}" @click="toggle">
     <i class="fa" :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"></i>
   </a>
-  <div class="ve-toolbar-dropdown colorpicker" v-show="toggle">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="颜色代码" v-model="color">
-        <span class="input-group-btn">
-            <button type="button" class="btn btn-default" @click="inputHandler">确定</button>
-        </span>
+  <div class="ve-toolbar-dropdown colorpicker" v-show="display">
+    <div class="ve-input-box">
+      <input type="text" class="ve-input" placeholder="颜色代码" v-model="color">
+      <button type="button" class="ve-btn" @click="inputHandler">确定</button>
     </div>
     <ul>
-      <li v-for="color in colors"><a href="javascript:;" title="{{color}}" @click="clickHandler(color)" style="background:{{color}};"></a></li>
+      <li v-for="color in colors" @click="clickHandler(color)"><a href="javascript:;" title="{{color}}" style="background:{{color}};"></a></li>
     </ul>
   </div>
 </template>
 
 <script>
+  /*'#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500', '#009900', '#006600', '#99BB00', '#B8D100',
+   '#60D978', '#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE', '#00D5FF', '#FFFFFF', '#CCCCCC',
+   '#999999', '#666666', '#333333', '#000000'*/
   var colors = [
-    '#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500', '#009900', '#006600', '#99BB00', '#B8D100',
-    '#60D978', '#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE', '#00D5FF', '#FFFFFF', '#CCCCCC',
-    '#999999', '#666666', '#333333', '#000000'
+      '#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF',
+      '#FF0000', '#FF9C00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#9C00FF', '#FF00FF',
+      '#F7C6CE', '#FFE7CE', '#FFEFC6', '#D6EFD6', '#CEDEE7', '#CEE7F7', '#D6D6E7', '#E7D6DE',
+      '#E79C9C', '#FFC69C', '#FFE79C', '#B5D6A5', '#A5C6CE', '#9CC6EF', '#B5A5D6', '#D6A5BD',
+      '#E76363', '#F7AD6B', '#FFD663', '#94BD7B', '#73A5AD', '#6BADDE', '#8C7BC6', '#C67BA5',
+      '#CE0000', '#E79439', '#EFC631', '#6BA54A', '#4A7B8C', '#3984C6', '#634AA5', '#A54A7B',
+      '#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842',
+      '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
   ];
   export default {
     data () {
       return {
         colors: colors,
         color: '',
-        toggle: false
+        active: false,
+        display: false
       }
     },
     props: ['param'],
     methods: {
+      toggle () {
+        this.$dispatch('dropdownToggle', this);
+        this.display = !this.display;
+      },
       checkValid (color) {
         let sColor = color.replace(/\s+/g, '');
         let hsl3 = /^#[0-9a-f]{3}$/i,
@@ -50,7 +81,7 @@
       },
       clickHandler (color) {
         this.setColor(this.param.colorType, color);
-        this.toggle = false;
+        this.display = false;
       },
       inputHandler () {
         let color = this.color;
@@ -59,7 +90,7 @@
           alert('请输入正确的颜色代码。');
         }else{
           this.setColor(this.param.colorType, color);
-          this.toggle = false;
+          this.display = false;
         }
         this.color = '';
       }

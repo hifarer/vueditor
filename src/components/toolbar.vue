@@ -1,7 +1,27 @@
 
-<style lang="less">
-  .heheda {
-    color: red;
+<style lang="less" rel="stylesheet/less">
+  .ve-toolbar{
+    position: relative;
+    height: 38px;
+    border: 1px solid #ddd;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    .ve-toolbar-wrap {
+      overflow: hidden;
+      .ve-toolbar-item {
+        float: left;
+        &>a {
+          display: inline-block;
+          padding: 10px 12px;
+          color: rgba(0, 0, 0, 0.6);
+          &:hover, &.active {
+            background: #eee;
+            color: #000;
+          }
+        }
+      }
+    }
   }
 </style>
 
@@ -9,7 +29,7 @@
   <div class="ve-toolbar">
     <div class="ve-toolbar-wrap">
       <div v-for="item in config" class="ve-toolbar-item" unselectable="off">
-        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="exec(item, null)">
+        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="clickHandler(item, null)">
           <i class="fa" :class="[nativeBtns[item].class]"></i>
         </a>
         <component v-else :is="item" :param="costomBtns[item]"></component>
@@ -20,6 +40,7 @@
 
 <script>
 
+  import font from '../components/font.vue';
   import color from '../components/color.vue';
   import sourceCode from '../components/code.vue';
 
@@ -58,7 +79,7 @@
         nativeBtns: nativeBtns,
         costomBtns: costomBtns,
         config: [
-          'removeformat', 'bold', 'italic', 'underline', 'strikethrough', 'forecolor', 'backcolor', 'subscript', 'superscript', 'justifyleft',
+          'removeformat', 'font', 'forecolor', 'backcolor', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'justifyleft',
           'justifycenter', 'justifyright', 'justifyfull', 'indent', 'outdent', 'sourceCode'
         ],
         state: []
@@ -73,9 +94,18 @@
           json[name] = iframeDoc.queryCommandState(name);
         });
         this.state = json;
+      },
+      dropdownToggle (target) {
+        this.$children.forEach(function (component) {
+          component !== target && (component.display = false);
+        });
       }
     },
     methods: {
+      clickHandler(name, value){
+        this.$emit('dropdownToggle');
+        this.exec(name, value);
+      },
       exec (name, value) {
         iframeDoc.execCommand(name, false, value);
       }
@@ -83,7 +113,8 @@
     components: {
       'forecolor': color,
       'backcolor': color,
-      'sourceCode': sourceCode
+      'sourceCode': sourceCode,
+      'font': font
     }
   }
 </script>

@@ -17,15 +17,14 @@ module.exports = {
   output: {
     publicPath: '',
     path: path.join(__dirname, './build'),
-    filename: '[name].js',
-    chunkFilename: 'asdf.js'
+    filename: '[name].js'
   },
 
   module: {
     loaders: [
       { test: /\.vue$/, loader: 'vue' },
       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.css$/, loader: 'style!css!autoprefixer' },
+      { test: /\.css$/, loader: 'style!css!postcss' },
       { test: /\.less$/, loader: common.extract('style-loader', 'css!less') },
       { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' }
     ]
@@ -33,14 +32,13 @@ module.exports = {
 
   vue: {
     loaders: {
-      css: components.extract('style!css!autoprefixer'),
-      less: components.extract('style-loader', 'css!less!autoprefixer')
+      css: components.extract('style!css!postcss'),
+      less: components.extract('style-loader', 'css!less!postcss')
     }
   },
 
   babel: {
-    presets: ['es2015'],
-    plugins: ['transform-runtime']
+    presets: ['es2015']
   },
 
   plugins: [
