@@ -2,16 +2,16 @@
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar{
     position: relative;
-    height: 38px;
     border: 1px solid #ddd;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
     .ve-toolbar-wrap {
+      height: 38px;
       overflow: hidden;
       .ve-toolbar-item {
         float: left;
-        &>a {
+        &>a:not(.separator) {
           display: inline-block;
           padding: 10px 12px;
           color: rgba(0, 0, 0, 0.6);
@@ -19,6 +19,13 @@
             background: #eee;
             color: #000;
           }
+        }
+        &>a.separator {
+          display: block;
+          width: 0;
+          height: 26px;
+          margin: 6px;
+          border-right: 1px solid #ddd;
         }
       }
     }
@@ -32,6 +39,7 @@
         <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="clickHandler(item, null)">
           <i class="fa" :class="[nativeBtns[item].class]"></i>
         </a>
+        <a v-if="item == 'separator'" href="javascript:;" class="separator"></a>
         <component v-else :is="item" :param="costomBtns[item]"></component>
       </div>
     </div>
@@ -40,8 +48,9 @@
 
 <script>
 
-  import font from '../components/font.vue';
   import color from '../components/color.vue';
+  import fontName from '../components/fontname.vue';
+  import fontSize from '../components/fontsize.vue';
   import sourceCode from '../components/code.vue';
 
   let nativeBtns = {
@@ -69,8 +78,7 @@
 
   let costomBtns = {
     forecolor: {colorType: 'forecolor'},
-    backcolor: {colorType: 'backcolor'},
-    code: ''
+    backcolor: {colorType: 'backcolor'}
   };
 
   export default {
@@ -79,8 +87,9 @@
         nativeBtns: nativeBtns,
         costomBtns: costomBtns,
         config: [
-          'removeformat', 'font', 'forecolor', 'backcolor', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'justifyleft',
-          'justifycenter', 'justifyright', 'justifyfull', 'indent', 'outdent', 'sourceCode'
+          'removeformat', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
+          'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
+          'separator', 'indent', 'outdent', 'separator', 'sourcecode'
         ],
         state: []
       }
@@ -113,8 +122,9 @@
     components: {
       'forecolor': color,
       'backcolor': color,
-      'sourceCode': sourceCode,
-      'font': font
+      'fontname': fontName,
+      'fontsize': fontSize,
+      'sourcecode': sourceCode
     }
   }
 </script>

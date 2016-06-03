@@ -7,7 +7,6 @@ const gulp = require('gulp'),
   concat = require('gulp-concat'),
   rename = require('gulp-rename'),
   uglify = require('gulp-uglify'),
-  fileinclude = require('gulp-file-include'),
   spriter = require('gulp-css-spriter'),
   base64 = require('gulp-css-base64'),
   cleanCSS = require('gulp-clean-css'),
@@ -50,16 +49,7 @@ gulp.task('copyImages', () => {
     .pipe(gulp.dest('dist/images'));
 });
 
-gulp.task('includeFile', () => {
-  gulp.src(['test/index.html'])
-    .pipe(fileinclude({
-      prefix: '@@',
-      basepath: '@file'
-    }))
-    .pipe(gulp.dest('test/'));
-});
-
-gulp.task('webpack', ['includeFile'], () => {
+gulp.task('webpack', () => {
   webpack(webpackConfig, (err) => {
     if(err)throw err;
     gulp.src('./build/*.css')
@@ -103,7 +93,7 @@ gulp.task('browserSync', function() {
 });
 
 gulp.task('watch', ['browserSync'], ()  => {
-  gulp.watch('src/**/*', ['copyImages', 'includeFile', 'webpack'/*, 'sprite'*/]);
+  gulp.watch('src/**/*', ['copyImages', 'webpack'/*, 'sprite'*/]);
 });
 
-gulp.task('default', ['copyImages', 'includeFile', 'webpack'/*, 'sprite'*/, 'watch']);
+gulp.task('default', ['copyImages', 'webpack'/*, 'sprite'*/, 'watch']);

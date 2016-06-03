@@ -75,9 +75,7 @@
         if(document.queryCommandSupported('styleWithCss')){
           iframeDoc.execCommand('styleWithCss', true);
         }
-
         iframeDoc.execCommand(colorType, false, color);
-        //document.querySelectorAll('font').length > 0 && formatEl(arr, colorType, color);
       },
       clickHandler (color) {
         this.setColor(this.param.colorType, color);
