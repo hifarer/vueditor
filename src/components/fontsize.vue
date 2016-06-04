@@ -37,9 +37,7 @@
 </template>
 
 <script>
-  let sizeArray = [
-    12, 14, 16, 18, 20, 24, 28, 32, 36
-  ];
+  let sizeArray = [12, 14, 16, 18, 20, 24, 28, 32, 36];
 
   export default {
     data () {
@@ -65,7 +63,6 @@
           selection.removeAllRanges();
           selection.addRange(range);
         }else{
-
           if(navigator.userAgent.indexOf('Chrome') != -1 && navigator.userAgent.indexOf('Edge') == -1){
             if(document.queryCommandSupported('styleWithCss')){
               iframeDoc.execCommand('styleWithCss', false, true);
@@ -78,6 +75,7 @@
               if(span.style.fontSize == '-webkit-xxx-large' || span.style.fontSize == 'xx-large'){
                 span.style.fontSize = size + 'px';
               }
+              span.normalize();
             });
           }else{
             if(document.queryCommandSupported('styleWithCss')){
@@ -98,6 +96,7 @@
               });
               span.innerHTML = font.innerHTML;
               span.querySelectorAll('span').length != 0 && this.clear(span);   //firefox 不会格式化选区内部元素的字号，手动修改。将来firefox改的跟chrome一样，这个函数不执行。
+              span.normalize();
               font.parentNode.replaceChild(span, font);
               spanList.push(span);
               i--;

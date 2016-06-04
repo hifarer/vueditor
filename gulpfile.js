@@ -3,9 +3,8 @@
  */
 
 const gulp = require('gulp'),
-  clean = require('gulp-clean'),
+  del = require('del'),
   concat = require('gulp-concat'),
-  rename = require('gulp-rename'),
   uglify = require('gulp-uglify'),
   spriter = require('gulp-css-spriter'),
   base64 = require('gulp-css-base64'),
@@ -20,24 +19,21 @@ const gulp = require('gulp'),
 
 gulp.task('pkgCodeMirrorScript', () => {
   return gulp.src(['./src/plugins/codemirror/codemirror.min.js', './src/plugins/codemirror/*.js'])
-    .pipe(concat('codemirror-pkg.js'))
-    .pipe(rename({suffix:'.min'}))
+    .pipe(concat('codemirror-pkg.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./dist/plugins/codemirror/'));
 });
 
 gulp.task('pkgCodeMirrorStyle', () => {
   return gulp.src('./src/plugins/codemirror/*.css')
-    .pipe(concat('codemirror-pkg.css'))
-    .pipe(rename({suffix:'.min'}))
+    .pipe(concat('codemirror-pkg.min.css'))
     .pipe(cleanCSS())
     .pipe(gulp.dest('./dist/plugins/codemirror/'));
 });
 
 gulp.task('beautifyHTML', () => {
-  return gulp.src('./src/plugins/beautify-html.js')
+  return gulp.src('./src/plugins/beautify-html.min.js')
     .pipe(uglify())
-    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('./dist/plugins/'))
 });
 
@@ -53,17 +49,13 @@ gulp.task('webpack', () => {
   webpack(webpackConfig, (err) => {
     if(err)throw err;
     gulp.src('./build/*.css')
-      .pipe(clean())
+      .pipe(concat('vueditor.min.css'))
       .pipe(cleanCSS())
-      .pipe(rename({suffix: '.min'}))
       .pipe(gulp.dest('./dist/css/'));
-    gulp.src('./build/vueditor.js')
-      .pipe(clean())
+    gulp.src(['./src/js/varibles.js', './src/js/util.js', './build/vueditor.js'])
+      .pipe(concat('vueditor.min.js'))
       .pipe(uglify())
-      .pipe(rename({suffix: '.min'}))
       .pipe(gulp.dest('./dist/js/'));
-    gulp.src('./build/style.js')
-      .pipe(clean());
   });
 });
 
@@ -81,7 +73,11 @@ gulp.task('sprite', ['webpack'], () => {
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('browserSync', function() {
+gulp.task('clean', ['webpack'], () => {
+  del(['./build/'], {force: true});    //TODO clean task not working
+});
+
+gulp.task('browserSync', () => {
   browserSync.init({
     notify: false,
     files: ['./dist/js/*.js', './dist/css/*.css'],
@@ -93,7 +89,7 @@ gulp.task('browserSync', function() {
 });
 
 gulp.task('watch', ['browserSync'], ()  => {
-  gulp.watch('src/**/*', ['copyImages', 'webpack'/*, 'sprite'*/]);
+  gulp.watch('src/**/*', ['copyImages', 'webpack'/*, 'sprite'*/, 'clean']);
 });
 
-gulp.task('default', ['copyImages', 'webpack'/*, 'sprite'*/, 'watch']);
+gulp.task('default', ['copyImages', 'webpack'/*, 'sprite'*/, 'clean', 'watch']);
