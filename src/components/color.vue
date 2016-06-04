@@ -73,7 +73,7 @@
       },
       setColor (colorType, color) {
         if(document.queryCommandSupported('styleWithCss')){
-          iframeDoc.execCommand('styleWithCss', true);
+          iframeDoc.execCommand('styleWithCss', false, true);
         }
         iframeDoc.execCommand(colorType, false, color);
       },

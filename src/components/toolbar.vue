@@ -112,10 +112,14 @@
     },
     methods: {
       clickHandler(name, value){
-        this.$emit('dropdownToggle');
         this.exec(name, value);
+        this.$emit('dropdownToggle');
+        this.$emit('stateChange');
       },
       exec (name, value) {
+        if(document.queryCommandSupported('styleWithCss')){
+          iframeDoc.execCommand('styleWithCss', false, true);
+        }
         iframeDoc.execCommand(name, false, value);
       }
     },

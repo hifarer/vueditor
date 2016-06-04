@@ -29,7 +29,7 @@ const vm = new Vue({
     addEvent () {
       iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
 
-      if (navigator.userAgent.indexOf('Chrome') == -1) {
+      if (navigator.userAgent.indexOf('Firefox') !== -1) {
         let oSel = iframeWin.getSelection();
         let focusNode = null;
         setInterval(function () {

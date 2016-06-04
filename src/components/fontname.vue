@@ -58,7 +58,7 @@
       },
       clickHandler (fontfamily) {
         if(document.queryCommandSupported('styleWithCss')){
-          iframeDoc.execCommand('styleWithCss', true);
+          iframeDoc.execCommand('styleWithCss', false, true);
         }
         iframeDoc.execCommand('fontName', false, fontfamily + ', sans-serif');
         this.display = false;
