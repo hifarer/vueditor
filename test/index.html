@@ -9,17 +9,7 @@
 </head>
 <body style="padding: 20px;">
 
-  <div class="vueditor">
-    <toolbar></toolbar>
-    <div class="ve-body">
-      <div class="ve-design" v-show="currentView == 'design'">
-        <iframe src="../dist/iframe/page.html" frameborder="0" class="ve-iframe" @load="init"></iframe>
-      </div>
-      <div class="ve-code" v-show="currentView == 'sourceCode'">
-        <textarea name="codemirror" id="codemirror">{{sourceCode}}</textarea>
-      </div>
-    </div>
-  </div>
+  <vueditor></vueditor>
 
   <script type="text/javascript" src="../dist/plugins/codemirror/codemirror-pkg.min.js"></script>
   <script type="text/javascript" src="../dist/plugins/beautify-html.min.js"></script>

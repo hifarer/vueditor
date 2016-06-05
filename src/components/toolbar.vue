@@ -121,6 +121,14 @@
           iframeDoc.execCommand('styleWithCss', false, true);
         }
         iframeDoc.execCommand(name, false, value);
+        if(name == 'removeformat'){
+          let range = veUtil.range.get();
+          if(!range)return;
+          let container = range.commonAncestorContainer;
+          container.nodeType == 3 && (container = container.parentNode);
+          container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
+          veUtil.command.format(container, 'span', 'verticalAlign');
+        }
       }
     },
     components: {

@@ -15,17 +15,18 @@
     },
     methods: {
       sourceCode () {
-        if(this.$root.currentView == 'design'){
-          this.$root.currentView = 'sourceCode';
-          this.$root.sourceCode = iframeBody.innerHTML;
+        let app = this.$root.$children[0];
+        if(app.currentView == 'design'){
+          app.currentView = 'sourceCode';
+          app.sourceCode = iframeBody.innerHTML;
           this.editor.setValue(beautifyHTML(iframeBody.innerHTML, {'indent_inner_html': true, 'indent_size': 2}));
           setTimeout(function () {
             this.editor.refresh();
           }.bind(this), 100);
         }else{
-          this.$root.currentView = 'design';
-          this.$root.sourceCode = this.editor.getValue();
-          iframeBody.innerHTML = this.$root.sourceCode;
+          app.currentView = 'design';
+          app.sourceCode = this.editor.getValue();
+          iframeBody.innerHTML = app.sourceCode;
         }
       }
     },

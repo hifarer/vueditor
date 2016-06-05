@@ -16,7 +16,6 @@ const gulp = require('gulp'),
   browserSync = require('browser-sync').create(),
   path = require('path');
 
-
 gulp.task('pkgCodeMirrorScript', () => {
   return gulp.src(['./src/plugins/codemirror/codemirror.min.js', './src/plugins/codemirror/*.js'])
     .pipe(concat('codemirror-pkg.min.js'))
