@@ -24,8 +24,8 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="字号" :class="{'active': display}" @click="toggle">
-    <i class="fa fa-sort-numeric-asc"></i>
+  <a href="javascript:;" class="selectvalue" @click="toggle">
+    {{val || sizeArray[0]}}px<i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
   <div class="ve-toolbar-dropdown fontsize" v-show="display">
     <ul>
@@ -43,6 +43,7 @@
     data () {
       return {
         sizeArray: sizeArray,
+        val: '',
         display: false
       }
     },
@@ -54,7 +55,7 @@
       clickHandler (size) {
         let selection = iframeWin.getSelection();
         let range = veUtil.range.get();
-        if(!range){
+        if(!range || range.collapsed){
           this.display = false;
           return;
         }
@@ -112,6 +113,7 @@
           }
         }
         this.display = false;
+        this.val = size;
       }
     }
   }

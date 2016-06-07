@@ -4,7 +4,7 @@
 
 const veUtil = {
   range: {
-    get: function () {
+    get () {
       var oSel, oRange;
       if (iframeWin && iframeWin.getSelection) {
         oSel = iframeWin.getSelection();
@@ -17,7 +17,7 @@ const veUtil = {
   },
  
   command: {
-    format: function (obj, tagName, cssName) {
+    format (obj, tagName, cssName) {
       // 此处不能用let？
       var temp = [];
       var pattern = {fontSize: /font\-size:\s?\d+px;/g, verticalAlign: /vertical\-align:\s?(sub|super);/g};

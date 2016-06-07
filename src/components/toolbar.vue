@@ -48,10 +48,11 @@
 
 <script>
 
-  import color from '../components/color.vue';
-  import fontName from '../components/fontname.vue';
-  import fontSize from '../components/fontsize.vue';
-  import sourceCode from '../components/code.vue';
+  import color from './color.vue';
+  import fontName from './fontname.vue';
+  import fontSize from './fontsize.vue';
+  import sourceCode from './code.vue';
+  import elements from './elements.vue';
 
   let nativeBtns = {
 
@@ -87,7 +88,7 @@
         nativeBtns: nativeBtns,
         costomBtns: costomBtns,
         config: [
-          'removeformat', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
+          'removeformat', 'separator', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
           'separator', 'indent', 'outdent', 'separator', 'sourcecode'
         ],
@@ -100,7 +101,9 @@
         let json = {};
         let config = this.custom || this.config;
         config.forEach(function (name) {
-          json[name] = iframeDoc.queryCommandState(name);
+          try {
+            json[name] = iframeDoc.queryCommandState(name);
+          }catch (e){}
         });
         this.state = json;
       },
@@ -136,7 +139,8 @@
       'backcolor': color,
       'fontname': fontName,
       'fontsize': fontSize,
-      'sourcecode': sourceCode
+      'sourcecode': sourceCode,
+      'elements': elements
     }
   }
 </script>

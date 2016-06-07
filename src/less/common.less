@@ -47,3 +47,20 @@
   user-select: none;
   line-height: (32-2*1-5*2)*1px;
 }
+
+[class^=triangle] {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-top: 4px solid;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  transition: 200ms;
+}
+.triangle-down {
+  transform: rotate(0deg);
+}
+.triangle-up {
+  transform: rotate(-180deg);
+}

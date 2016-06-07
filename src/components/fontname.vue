@@ -1,5 +1,12 @@
 
 <style lang="less" rel="stylesheet/less">
+  .font-select {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+  }
   .fontname {
     width: 176px;
     padding: 5px 10px;
@@ -24,12 +31,12 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="字体" :class="{'active': display}" @click="toggle">
-    <i class="fa fa fa-font"></i>
+  <a href="javascript:;" class="selectvalue font-select" @click="toggle">
+    {{val || fontArray[0].abbr}}<i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
   <div class="ve-toolbar-dropdown fontname" v-show="display">
     <ul>
-      <li v-for="font in fontArray" @click="clickHandler(font.name)">
+      <li v-for="font in fontArray" @click="clickHandler(font)">
         <a href="javascript:;" style="font-family: {{font.name}}, sans-serif;">{{font.abbr || font.name}}</a>
       </li>
     </ul>
@@ -47,8 +54,9 @@
   export default {
     data(){
       return {
+        display: false,
         fontArray: fontArray,
-        display: false
+        val: ''
       }
     },
     methods: {
@@ -56,12 +64,13 @@
         this.$dispatch('dropdownToggle', this);
         this.display = !this.display;
       },
-      clickHandler (fontfamily) {
+      clickHandler (font) {
         if(document.queryCommandSupported('styleWithCss')){
           iframeDoc.execCommand('styleWithCss', false, true);
         }
-        iframeDoc.execCommand('fontName', false, fontfamily + ', sans-serif');
+        iframeDoc.execCommand('fontName', false, font.name + ', sans-serif');
         this.display = false;
+        this.val = font.abbr || font.name;
       }
     }
   }

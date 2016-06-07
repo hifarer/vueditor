@@ -87,7 +87,7 @@ gulp.task('browserSync', () => {
   });
 });
 
-gulp.task('watch', ['browserSync'], ()  => {
+gulp.task('watch', ()  => {
   gulp.watch('src/**/*', ['copyImages', 'webpack'/*, 'sprite'*/, 'clean']);
 });
 

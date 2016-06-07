@@ -1,7 +1,6 @@
 <style lang="less" rel="stylesheet/less">
   .colorpicker {
     width: 176px;
-    height: 220px;
     padding: 10px;
     position: absolute;
     top: 39px;
