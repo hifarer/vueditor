@@ -27,7 +27,7 @@
       <button type="button" class="ve-btn" @click="inputHandler">确定</button>
     </div>
     <ul>
-      <li v-for="color in colors" @click="clickHandler(color)"><a href="javascript:;" title="{{color}}" style="background:{{color}};"></a></li>
+      <li v-for="color in colors" @click="clickHandler(color)"><a href="javascript:;" title="{{color}}" :style="{background: color}"></a></li>
     </ul>
   </div>
 </template>

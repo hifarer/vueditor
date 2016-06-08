@@ -39,7 +39,7 @@
         <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="clickHandler(item, null)">
           <i class="fa" :class="[nativeBtns[item].class]"></i>
         </a>
-        <a v-if="item == 'separator'" href="javascript:;" class="separator"></a>
+        <a v-if="item == 'separator' || item == '|'" href="javascript:;" class="separator"></a>
         <component v-else :is="item" :param="costomBtns[item]"></component>
       </div>
     </div>
@@ -88,7 +88,7 @@
         nativeBtns: nativeBtns,
         costomBtns: costomBtns,
         config: [
-          'removeformat', 'separator', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
+          'removeformat', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
           'separator', 'indent', 'outdent', 'separator', 'sourcecode'
         ],

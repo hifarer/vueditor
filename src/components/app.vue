@@ -1,5 +1,5 @@
 <template>
-  <div class="vueditor">
+  <div class="vueditor" @click="setActive">
     <toolbar></toolbar>
     <div class="ve-body">
       <div class="ve-design" v-show="currentView == 'design'">
@@ -27,9 +27,9 @@
       'toolbar': toolbar
     },
     methods: {
-      init () {
-        iframeEl = document.querySelector('.ve-iframe');
-        iframeWin = iframeEl.contentWindow;
+      init (event) {
+        iframeEle = event.target;
+        iframeWin = iframeEle.contentWindow;
         iframeDoc = iframeWin.document;
         iframeBody = iframeWin.document.body;
         this.setContent('<p>开始的分厘卡士大撒地方卢卡附件里是夫萨拉深刻的风景拉萨孔家店发链接啊算了function(){alert(1);}</p>');
@@ -38,9 +38,23 @@
       setContent (content) {
         iframeBody.innerHTML = content;
       },
+      setActive (event) {
+        iframeEle = event.currentTarget.getElementsByTagName('iframe').item(0);
+        iframeWin = iframeEle.contentWindow;
+        iframeDoc = iframeWin.document;
+        iframeBody = iframeWin.document.body;
+      },
       addEvent () {
-        iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
 
+        iframeBody.addEventListener('focus', function (event){
+          this.$broadcast('dropdownToggle', null);
+          iframeBody = event.currentTarget;
+          iframeDoc = iframeBody.ownerDocument;
+          iframeWin = iframeDoc.defaultView;
+          iframeEle = iframeWin.frameElement;
+        }.bind(this), false);
+
+        iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
         if (navigator.userAgent.indexOf('Firefox') !== -1) {
           let oSel = iframeWin.getSelection();
           let focusNode = null;

@@ -9,6 +9,7 @@
     background: #fff;
     border: 1px solid #ccc;
     border-top: none;
+    margin-left: -7px;
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;

@@ -19,6 +19,7 @@
         if(app.currentView == 'design'){
           app.currentView = 'sourceCode';
           app.sourceCode = iframeBody.innerHTML;
+          this.$dispatch('dropdownToggle', this);
           this.editor.setValue(beautifyHTML(iframeBody.innerHTML, {'indent_inner_html': true, 'indent_size': 2}));
           setTimeout(function () {
             this.editor.refresh();
@@ -28,6 +29,9 @@
           app.sourceCode = this.editor.getValue();
           iframeBody.innerHTML = app.sourceCode;
         }
+      },
+      switchView () {
+
       }
     },
     ready(){

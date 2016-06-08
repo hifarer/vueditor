@@ -5,7 +5,8 @@
     min-width: 60px;
     border-right: 1px solid #ddd;
     line-height: 26px;
-    margin: 6px 0px;
+    margin: 6px;
+    margin-left: 0;
     padding: 0 20px 0 10px!important;
     i {
       float: right;
@@ -28,6 +29,7 @@
     background: #fff;
     border: 1px solid #ccc;
     border-top: none;
+    margin-left: -7px;
     a {
       display: block;
       padding: 6px;
@@ -60,7 +62,7 @@
     data(){
       return {
         display: false,
-        arr: ['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'],
+        arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         val: '',
       }
     },
@@ -75,9 +77,15 @@
         this.display = false;
         this.val = tagName;
         if(ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)){
-          iframeDoc.execCommand('formatblock', false, '<' + tagName + '>');
+          let range = veUtil.range.get();
+          if(!range || range.collapsed){
+            alert('在IE浏览器中必须选中一段文字才能使用此功能！');
+          }else{
+            iframeDoc.execCommand('formatblock', false, '<' + tagName.toUpperCase() + '>');
+          }
+        } else {
+          iframeDoc.execCommand('formatblock', false, tagName);
         }
-        iframeDoc.execCommand('formatblock', false, tagName);
       }
     }
   }

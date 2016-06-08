@@ -16,6 +16,7 @@
     background: #fff;
     border: 1px solid #ccc;
     border-top: none;
+    margin-left: -7px;
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;
@@ -37,7 +38,7 @@
   <div class="ve-toolbar-dropdown fontname" v-show="display">
     <ul>
       <li v-for="font in fontArray" @click="clickHandler(font)">
-        <a href="javascript:;" style="font-family: {{font.name}}, sans-serif;">{{font.abbr || font.name}}</a>
+        <a href="javascript:;" :style="{fontFamily: font.name + ', sans-serif'}">{{font.abbr || font.name}}</a>
       </li>
     </ul>
   </div>
