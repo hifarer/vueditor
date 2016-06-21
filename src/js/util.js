@@ -26,7 +26,9 @@ const veUtil = {
         if(node.attributes.length == 1 && node.style.length != 0 && node.getAttribute('style').match(pattern[cssName]) != null){
           if(node.children.length == 0){
             if(node.style.length == 1){
-              node.parentNode.replaceChild(document.createTextNode(node.innerHTML), node);
+              let parent = node.parentNode;
+              parent.replaceChild(document.createTextNode(node.innerHTML), node);
+              parent.normalize();
               i--;
             }else{
               node.style[cssName] = '';

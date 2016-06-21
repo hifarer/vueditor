@@ -53,6 +53,7 @@
   import fontSize from './fontsize.vue';
   import sourceCode from './code.vue';
   import elements from './elements.vue';
+  import myTable from './table.vue';
 
   let nativeBtns = {
 
@@ -90,7 +91,7 @@
         config: [
           'removeformat', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-          'separator', 'indent', 'outdent', 'separator', 'sourcecode'
+          'separator', 'indent', 'outdent', 'separator', 'myTable', '|', 'sourcecode'
         ],
         state: []
       }
@@ -131,6 +132,7 @@
           container.nodeType == 3 && (container = container.parentNode);
           container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
           veUtil.command.format(container, 'span', 'verticalAlign');
+          container.normalize();
         }
       }
     },
@@ -140,7 +142,8 @@
       'fontname': fontName,
       'fontsize': fontSize,
       'sourcecode': sourceCode,
-      'elements': elements
+      'elements': elements,
+      'myTable': myTable
     }
   }
 </script>
