@@ -8,11 +8,14 @@
     background: #fff;
     border: 1px solid #ccc;
     border-top: none;
-    li a {
-      width: 20px;
-      height: 20px;
+    li {
       margin: 1px;
       float: left;
+      a {
+        display: block;
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 </style>

@@ -1,15 +1,6 @@
 
 <style lang="less" rel="stylesheet/less">
-  .fontsize {
-    width: 176px;
-    padding: 5px 10px;
-    position: absolute;
-    top: 39px;
-    z-index: 1000;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    margin-left: -7px;
+  .font-size {
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;
@@ -25,10 +16,10 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="selectvalue" @click="toggle">
-    {{val || sizeArray[0]}}px<i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
+  <a href="javascript:;" class="ve-select" @click="toggle">
+    <span>{{val || sizeArray[0]}}px</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
-  <div class="ve-toolbar-dropdown fontsize" v-show="display">
+  <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display">
     <ul>
       <li v-for="size in sizeArray" @click="clickHandler(size)">
         <a href="javascript:;">{{size}}px</a>

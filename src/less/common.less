@@ -47,3 +47,34 @@
   user-select: none;
   line-height: (32-2*1-5*2)*1px;
 }
+
+.ve-select {
+  position: relative;
+  min-width: 60px;
+  line-height: 26px;
+  margin: 6px 6px 6px 0;
+  padding: 0 20px 0 10px!important;
+  border-right: 1px solid #ddd;
+  i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -2px;
+  }
+  &:hover {
+    background: transparent!important;
+    color: #000;
+  }
+}
+
+.ve-select-dropdown {
+  width: 176px;
+  padding: 5px 10px;
+  position: absolute;
+  top: 39px;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  margin-left: -7px;
+}

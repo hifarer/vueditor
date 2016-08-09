@@ -1,35 +1,5 @@
-
 <style lang="less" rel="stylesheet/less">
-  .selectvalue {
-    position: relative;
-    min-width: 60px;
-    border-right: 1px solid #ddd;
-    line-height: 26px;
-    margin: 6px;
-    margin-left: 0;
-    padding: 0 20px 0 10px!important;
-    i {
-      float: right;
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      margin-top: -2px;
-    }
-    &:hover {
-      background: transparent!important;
-      color: #000;
-    }
-  }
-  .selectbox {
-    width: 176px;
-    padding: 5px 10px;
-    position: absolute;
-    top: 39px;
-    z-index: 1000;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    margin-left: -7px;
+  .format-block {
     a {
       display: block;
       padding: 6px;
@@ -46,13 +16,11 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="selectvalue" @click="toggle">
-    {{val || arr[0]}}<i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
+  <a href="javascript:;" class="ve-select" @click="toggle">
+    <span>{{val || arr[0]}}</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
-  <div class="selectbox" @click="selectItem" v-show="display">
-    <a href="javascript:;" v-for="item in arr">
-      {{item}}
-    </a>
+  <div class="ve-toolbar-dropdown ve-select-dropdown format-block" @click="selectItem" v-show="display">
+    <a href="javascript:;" v-for="item in arr">{{item}}</a>
   </div>
 </template>
 

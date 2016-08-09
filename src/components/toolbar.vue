@@ -1,41 +1,40 @@
 
 <style lang="less" rel="stylesheet/less">
-  .ve-toolbar{
+  .ve-toolbar {
     position: relative;
     border: 1px solid #ddd;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    .ve-toolbar-wrap {
-      height: 38px;
+    .wrap {
       overflow: hidden;
-      .ve-toolbar-item {
-        float: left;
-        &>a:not(.separator) {
-          display: inline-block;
-          padding: 10px 12px;
-          color: rgba(0, 0, 0, 0.6);
-          &:hover, &.active {
-            background: #eee;
-            color: #000;
-          }
-        }
-        &>a.separator {
-          display: block;
-          width: 0;
-          height: 26px;
-          margin: 6px;
-          border-right: 1px solid #ddd;
-        }
+    }
+  }
+  .ve-toolbar-item {
+    float: left;
+    &>a:not(.separator) {
+      display: inline-block;
+      padding: 10px 12px;
+      color: rgba(0, 0, 0, 0.6);
+      &:hover, &.active {
+        background: #eee;
+        color: #000;
       }
+    }
+    &>a.separator {
+      display: block;
+      width: 0;
+      height: 26px;
+      margin: 6px;
+      border-right: 1px solid #ddd;
     }
   }
 </style>
 
 <template>
   <div class="ve-toolbar">
-    <div class="ve-toolbar-wrap">
-      <div v-for="item in config" class="ve-toolbar-item" unselectable="off">
+    <div class="wrap">
+      <div v-for="item in config" class="ve-toolbar-item" unselectable="on">
         <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="clickHandler(item, null)">
           <i class="fa" :class="[nativeBtns[item].class]"></i>
         </a>
@@ -91,7 +90,7 @@
         config: [
           'removeformat', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-          'separator', 'indent', 'outdent', 'separator', 'myTable', '|', 'sourcecode'
+          '|', 'indent', 'outdent', '|', 'mytable', '|', 'sourcecode'
         ],
         state: []
       }
@@ -143,7 +142,7 @@
       'fontsize': fontSize,
       'sourcecode': sourceCode,
       'elements': elements,
-      'myTable': myTable
+      'mytable': myTable
     }
   }
 </script>
