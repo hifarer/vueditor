@@ -23,7 +23,7 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="表格" @click="toggle">
+  <a href="javascript:;" title="表格" :class="{'ve-disabled': !available}" @click="toggle">
     <i class="fa fa-table"></i>
   </a>
   <div class="ve-toolbar-dropdown mytable" v-show="display">
@@ -46,12 +46,15 @@
         display: false
       }
     },
+    props: ['available'],
     methods: {
       toggle () {
-        this.$dispatch('dropdownToggle', this);
-        this.display = !this.display;
-        this.x = -1;
-        this.y = -1;
+        if(this.available){
+          this.$dispatch('dropdownToggle', this);
+          this.display = !this.display;
+          this.x = -1;
+          this.y = -1;
+        }
       },
       overHandler (index) {
         this.x = index % 8;
@@ -64,15 +67,17 @@
       },
       createTable (rows, cols) {
         let oTable = iframeDoc.createElement('table');
+        let oTbody = iframeDoc.createElement('tbody');
+        oTable.appendChild(oTbody);
         for (let i = 0; i < rows; i++) {
           let tr = iframeDoc.createElement('tr');
           for (let j = 0; j < cols; j++) {
             let td = iframeDoc.createElement('td');
             td.innerHTML = '<br>';
-            td.style.cssText = 'width: 50px; border: 1px solid #ddd;';
+            td.style.cssText = 'width: 50px; border: 1px #ddd solid;';
             tr.appendChild(td);
           }
-          oTable.appendChild(tr);
+          oTbody.appendChild(tr);
         }
         oTable.style.cssText = 'border-collapse: collapse;';
         return oTable.outerHTML;

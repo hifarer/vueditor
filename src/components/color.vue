@@ -21,7 +21,7 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" :class="{'active': display}" @click="toggle">
+  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" :class="{'active': display, 've-disabled': !available}" @click="toggle">
     <i class="fa" :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"></i>
   </a>
   <div class="ve-toolbar-dropdown colorpicker" v-show="display">
@@ -58,11 +58,13 @@
         display: false
       }
     },
-    props: ['param'],
+    props: ['param', 'available'],
     methods: {
       toggle () {
-        this.$dispatch('dropdownToggle', this);
-        this.display = !this.display;
+        if(this.available){
+          this.$dispatch('dropdownToggle', this);
+          this.display = !this.display;
+        }
       },
       checkValid (color) {
         let sColor = color.replace(/\s+/g, '');

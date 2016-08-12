@@ -24,7 +24,7 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select font-select" @click="toggle">
+  <a href="javascript:;" class="ve-select font-select" :class="{'ve-disabled': !available}" @click="toggle">
     <span>{{val || fontArray[0].abbr}}</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
   <div class="ve-toolbar-dropdown ve-select-dropdown font-name" v-show="display">
@@ -52,10 +52,13 @@
         val: ''
       }
     },
+    props: ['available'],
     methods: {
       toggle () {
-        this.$dispatch('dropdownToggle', this);
-        this.display = !this.display;
+        if(this.available){
+          this.$dispatch('dropdownToggle', this);
+          this.display = !this.display;
+        }
       },
       clickHandler (font) {
         if(document.queryCommandSupported('styleWithCss')){

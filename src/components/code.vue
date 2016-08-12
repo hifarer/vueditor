@@ -1,6 +1,6 @@
 
 <template>
-  <a href="javascript:;" title="源码" @click="sourceCode">
+  <a href="javascript:;" title="源码" @click="switchView">
     <i class="fa fa-code"></i>
   </a>
 </template>
@@ -14,7 +14,7 @@
       }
     },
     methods: {
-      sourceCode () {
+      switchView () {
         let app = this.$root.$children[0];
         if(app.currentView == 'design'){
           app.currentView = 'sourceCode';
@@ -29,9 +29,6 @@
           app.sourceCode = this.editor.getValue();
           iframeBody.innerHTML = app.sourceCode;
         }
-      },
-      switchView () {
-
       }
     },
     ready(){

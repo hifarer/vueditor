@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select" @click="toggle">
+  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': !available}" @click="toggle">
     <span>{{val || arr[0]}}</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
   <div class="ve-toolbar-dropdown ve-select-dropdown format-block" @click="selectItem" v-show="display">
@@ -31,13 +31,16 @@
       return {
         display: false,
         arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-        val: '',
+        val: ''
       }
     },
+    props: ['available'],
     methods: {
       toggle () {
-        this.$dispatch('dropdownToggle', this);
-        this.display = !this.display;
+        if(this.available){
+          this.$dispatch('dropdownToggle', this);
+          this.display = !this.display;
+        }
       },
       selectItem (event) {
         let ua = navigator.userAgent.toLowerCase();

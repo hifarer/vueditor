@@ -26,6 +26,12 @@
     components: {
       'toolbar': toolbar
     },
+    watch: {
+      'currentView': function () {
+        let available = this.currentView == 'design';
+        this.$broadcast('availableState', available);
+      }
+    },
     methods: {
       init (event) {
         iframeEle = event.target;
@@ -71,7 +77,7 @@
         }
       },
       selectionChange () {
-        this.$broadcast('stateChange');
+        this.$broadcast('activeState');
       }
     }
   }

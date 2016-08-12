@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select" @click="toggle">
+  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': !available}" @click="toggle">
     <span>{{val || sizeArray[0]}}px</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
   <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display">
@@ -39,10 +39,13 @@
         display: false
       }
     },
+    props: ['available'],
     methods: {
       toggle () {
-        this.$dispatch('dropdownToggle', this);
-        this.display = !this.display;
+        if(this.available){
+          this.$dispatch('dropdownToggle', this);
+          this.display = !this.display;
+        }
       },
       clickHandler (size) {
         let selection = iframeWin.getSelection();

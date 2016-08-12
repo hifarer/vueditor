@@ -16,9 +16,11 @@
       display: inline-block;
       padding: 10px 12px;
       color: rgba(0, 0, 0, 0.6);
-      &:hover, &.active {
-        background: #eee;
-        color: #000;
+      &:not(.ve-disabled) {
+        &:hover, &.active {
+          background: #eee;
+          color: #000;
+        }
       }
     }
     &>a.separator {
@@ -35,11 +37,12 @@
   <div class="ve-toolbar">
     <div class="wrap">
       <div v-for="item in config" class="ve-toolbar-item" unselectable="on">
-        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}" :class="{'active': state[item]}" @click="clickHandler(item, null)">
+        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}"
+           :class="{'active': state[item].active, 've-disabled': !state[item].available}" @click="clickHandler(item, null)">
           <i class="fa" :class="[nativeBtns[item].class]"></i>
         </a>
         <a v-if="item == 'separator' || item == '|'" href="javascript:;" class="separator"></a>
-        <component v-else :is="item" :param="costomBtns[item]"></component>
+        <component v-else :is="item" :param="costomBtns[item]" :available="state[item].available"></component>
       </div>
     </div>
   </div>
@@ -92,20 +95,23 @@
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
           '|', 'indent', 'outdent', '|', 'mytable', '|', 'sourcecode'
         ],
-        state: []
+        state: {}
       }
     },
     props: ['custom'],
     events: {
-      stateChange () {
-        let json = {};
-        let config = this.custom || this.config;
-        config.forEach(function (name) {
+      activeState () {
+        for(let name in this.state){
           try {
-            json[name] = iframeDoc.queryCommandState(name);
+            this.state[name].active = iframeDoc.queryCommandState(name);
           }catch (e){}
-        });
-        this.state = json;
+        }
+      },
+      availableState (available) {
+        for(let name in this.state){
+          this.state[name].available = available;
+        }
+        this.state.sourcecode.available = true;
       },
       dropdownToggle (target) {
         this.$children.forEach(function (component) {
@@ -134,6 +140,16 @@
           container.normalize();
         }
       }
+    },
+    created () {
+      let json = {};
+      let config = this.custom || this.config;
+      config.forEach(function (name) {
+        !json[name] && (json[name] = {});
+        json[name].active = false;
+        json[name].available = true;
+      });
+      this.state = json;
     },
     components: {
       'forecolor': color,
