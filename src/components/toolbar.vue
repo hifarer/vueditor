@@ -123,7 +123,7 @@
       clickHandler(name, value){
         this.exec(name, value);
         this.$emit('dropdownToggle');
-        this.$emit('stateChange');
+        this.$emit('activeState');
       },
       exec (name, value) {
         if(document.queryCommandSupported('styleWithCss')){
