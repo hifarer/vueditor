@@ -7,7 +7,7 @@
 
 <script>
 
-  import {switchView, updateToolbarDisabled} from '../vuex/toolbar-actions';
+  import {switchView, updateTBDisabled} from '../vuex/toolbar-actions';
 
   export default {
     data(){
@@ -18,13 +18,13 @@
     vuex: {
       actions: {
         switchView,
-        updateToolbarDisabled
+        updateTBDisabled
       }
     },
     methods: {
       clickHandler () {
         this.switchView();
-        this.updateToolbarDisabled();
+        this.updateTBDisabled();
       }
     }
   }

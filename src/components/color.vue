@@ -7,7 +7,7 @@
     z-index: 1000;
     background: #fff;
     border: 1px solid #ccc;
-    border-top: none;
+    /*border-top: none;*/
     li {
       margin: 1px;
       float: left;
@@ -21,10 +21,11 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}" :class="{'active': display, 've-disabled': !available}" @click="toggle">
+  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}"
+     :class="{'active': display, 've-disabled': toolBtns[this.param.colorType].disabled}" @click="toggle">
     <i class="fa" :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"></i>
   </a>
-  <div class="ve-toolbar-dropdown colorpicker" v-show="display">
+  <div class="ve-toolbar-dropdown colorpicker" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
     <div class="ve-input-box">
       <input type="text" class="ve-input" placeholder="颜色代码" v-model="color">
       <button type="button" class="ve-btn" @click="inputHandler">确定</button>
@@ -55,14 +56,25 @@
         colors: colors,
         color: '',
         active: false,
-        display: false
+        display: false,
+        left: 50,
+        top: 50
       }
     },
-    props: ['param', 'available'],
+    props: ['param'],
+    vuex: {
+      getters: {
+        toolBtns: function (state) {
+          return state.toolBtns;
+        }
+      }
+    },
     methods: {
       toggle () {
-        if(this.available){
-          this.$dispatch('dropdownToggle', this);
+        if(!this.toolBtns[this.param.colorType].disabled){
+          let obj = this.$el.nextElementSibling;
+          this.left = obj.offsetLeft;
+          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.display = !this.display;
         }
       },

@@ -14,7 +14,7 @@
 
 <script>
 
-    import {updateToolbarActive} from '../vuex/toolbar-actions';
+    import {updateTBActive} from '../vuex/toolbar-actions';
 
     export default {
         data () {
@@ -36,7 +36,7 @@
                 }
             },
             actions: {
-                updateToolbarActive
+                updateTBActive
             }
         },
 
@@ -104,7 +104,7 @@
             },
 
             selectionChange () {
-                this.updateToolbarActive(this.iframeDoc);
+                this.updateTBActive(this.iframeDoc);
             },
 
             exec (name, value) {

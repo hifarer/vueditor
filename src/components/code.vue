@@ -55,7 +55,6 @@
         },
         watch: {
           'currentView': function () {
-              alert(this.content);
               this.editor.setValue(beautifyHTML(this.content, {'indent_inner_html': true, 'indent_size': 2}));
               setTimeout(function () {
                   this.editor.refresh();

@@ -3,10 +3,10 @@
 </style>
 
 <template>
-    <a href="javascript:;" title="撤销" :class="{'ve-disabled': !available && !_states.undo}" @click="undo">
+    <a href="javascript:;" title="撤销" :class="{'ve-disabled': disabled && !_states.undo}" @click="undo">
         <i class="fa fa-undo"></i>
     </a>
-    <a href="javascript:;" title="恢复" :class="{'ve-disabled': !available && !_states.redo}" @click="redo">
+    <a href="javascript:;" title="恢复" :class="{'ve-disabled': disabled && !_states.redo}" @click="redo">
         <i class="fa fa-repeat"></i>
     </a>
 </template>
@@ -24,7 +24,14 @@
                 _index: -1
             };
         },
-        props: ['param', 'available'],
+        props: ['param'],
+        vuex: {
+            getters: {
+                disabled: function (state) {
+                    return state.toolBtns.undo.disabled;
+                }
+            }
+        },
         method: {
 
             get _canUndo() {

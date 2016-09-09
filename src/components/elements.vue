@@ -16,10 +16,10 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': !available}" @click="toggle">
-    <span>{{val || arr[0]}}</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
+  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
+    <span>{{val || arr[0]}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
-  <div class="ve-toolbar-dropdown ve-select-dropdown format-block" @click="selectItem" v-show="display">
+  <div class="ve-toolbar-dropdown ve-select-dropdown format-block" @click="selectItem" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
     <a href="javascript:;" v-for="item in arr">{{item}}</a>
   </div>
 </template>
@@ -31,14 +31,26 @@
       return {
         display: false,
         arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-        val: ''
+        val: '',
+        left: 50,
+        top: 50
       }
     },
-    props: ['available'],
+    vuex: {
+      getters: {
+        disabled: function (state) {
+          return state.toolBtns.elements.disabled;
+        }
+      }
+    },
     methods: {
       toggle () {
-        if(this.available){
-          this.$dispatch('dropdownToggle', this);
+        if(!this.disabled){
+          // https://vuejs.org.cn/api/#vm-el
+          // https://vuejs.org.cn/guide/components.html#片断实例
+          let obj = this.$el.nextElementSibling;
+          this.left = obj.offsetLeft;
+          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.display = !this.display;
         }
       },

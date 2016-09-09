@@ -16,10 +16,10 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': !available}" @click="toggle">
-    <span>{{val || sizeArray[0]}}px</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
+  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
+    <span>{{val || sizeArray[0]}}px</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
-  <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display">
+  <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
     <ul>
       <li v-for="size in sizeArray" @click="clickHandler(size)">
         <a href="javascript:;">{{size}}px</a>
@@ -30,20 +30,29 @@
 
 <script>
   let sizeArray = [12, 14, 16, 18, 20, 24, 28, 32, 36];
-
   export default {
     data () {
       return {
+        display: false,
         sizeArray: sizeArray,
         val: '',
-        display: false
+        left: 50,
+        top: 50
       }
     },
-    props: ['available'],
+    vuex: {
+      getters: {
+        disabled: function (state) {
+          return state.toolBtns.fontsize.disabled;
+        }
+      }
+    },
     methods: {
       toggle () {
-        if(this.available){
-          this.$dispatch('dropdownToggle', this);
+        if(!this.disabled){
+          let obj = this.$el.nextElementSibling;
+          this.left = obj.offsetLeft;
+          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.display = !this.display;
         }
       },

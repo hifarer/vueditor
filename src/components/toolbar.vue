@@ -6,23 +6,29 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    overflow: hidden;
-
-    a {
-      float: left;
-    }
-    a.divider {
+    &:after {
+      clear: both;
+      content: "";
       display: block;
       width: 0;
-      height: 26px;
-      margin: 6px;
-      border-right: 1px solid #ddd;
+      height: 0;
+      visibility: hidden;
     }
-    a:not(.divider) {
-      display: inline-block;
-      padding: 10px 12px;
-      color: rgba(0, 0, 0, 0.6);
-      &:not(.disabled) {
+    &>a {
+      float: left;
+      &.ve-divider {
+        display: block;
+        width: 0;
+        height: 26px;
+        margin: 6px;
+        border-right: 1px solid #ddd;
+      }
+      &:not(.ve-divider) {
+        display: inline-block;
+        padding: 10px 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+      &:not(.ve-disabled) {
         &:hover, &.active {
           background: #eee;
           color: #000;
@@ -34,13 +40,13 @@
 
 <template>
   <div class="ve-toolbar">
-    <template v-for="item in config">
+    <template v-for="item in (customConfig || defaultConfig)">
       <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}"
-         :class="{'active': toolBtns[item].active, 'disabled': toolBtns[item].disabled}" @click="clickHandler(item, null)"  unselectable="on">
+         :class="{'ve-active': toolBtns[item].active, 've-disabled': toolBtns[item].disabled}" @click="clickHandler(item, null)"  unselectable="on">
         <i class="fa" :class="[nativeBtns[item].class]"></i>
       </a>
-      <a v-if="item == 'divider' || item == '|'" href="javascript:;" class="divider"></a>
-      <component v-else :is="item" :param="costomBtns[item]"></component>
+      <a v-if="item == 'divider' || item == '|'" href="javascript:;" class="ve-divider"></a>
+      <component v-else :is="item" :param="customBtns[item]"></component>
     </template>
   </div>
 </template>
@@ -56,6 +62,7 @@
   import undo from './undo.vue';
 
   import * as actions from '../vuex/toolbar-actions';
+  import {toolbarConfig} from '../js/config';
 
   let nativeBtns = {
 
@@ -80,7 +87,7 @@
     insertUnorderedList: {title: '设置无序列表', class: 'fa-list-ul'}
   };
 
-  let costomBtns = {
+  let customBtns = {
     forecolor: {colorType: 'forecolor'},
     backcolor: {colorType: 'backcolor'},
     undo: {obj: document.body, cb: function () {alert(1)}}
@@ -90,15 +97,15 @@
     data () {
       return {
         nativeBtns: nativeBtns,
-        costomBtns: costomBtns,
-        config: [
+        customBtns: customBtns,
+        defaultConfig: [
           'removeformat', 'undo', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
           '|', 'indent', 'outdent', '|', 'mytable', '|', 'view'
-        ]
+        ],
+        customConfig: toolbarConfig
       }
     },
-    props: ['custom'],
     vuex: {
       getters: {
         toolBtns: function(state) {
@@ -109,12 +116,9 @@
     },
     methods: {
       clickHandler(name, value){
-        this.updateToolbarActive();
-        this.updateToolbarDisabled();
+        this.updateTBActive();
+        this.updateTBDisabled();
       }
-    },
-    created () {
-      this.initToolbarStatus(this.custom || this.config);
     },
     components: {
       'forecolor': color,

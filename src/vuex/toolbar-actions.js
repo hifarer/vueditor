@@ -3,20 +3,16 @@
  */
 
 
-export const initToolbarStatus = ({dispatch}, config) => {
-    dispatch('INIT_TOOLBAR_STATUS', config);
+export const updateTBActive = ({dispatch}, obj) => {
+    dispatch('UPDATE_TB_ACTIVE', obj);
 };
 
-export const updateToolbarActive = ({dispatch}, obj) => {
-    dispatch('UPDATE_TOOLBAR_ACTIVE', obj);
+export const updateTBDisabled = ({dispatch}) => {
+    dispatch('UPDATE_TB_DISABLED');
 };
 
-export const updateToolbarDisabled = ({dispatch}) => {
-    dispatch('UPDATE_TOOLBAR_DISABLED');
-};
-
-export const updateToolbarDisplay = ({dispatch}) => {
-    dispatch('UPDATE_TOOLBAR_DISPLAY');
+export const updateTBDropdownDisplay = ({dispatch}) => {
+    dispatch('UPDATE_TB_DROPDOWN_DISPLAY');
 };
 
 export const updateContent = ({dispatch}) => {

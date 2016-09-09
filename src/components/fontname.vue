@@ -24,10 +24,10 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select font-select" :class="{'ve-disabled': !available}" @click="toggle">
-    <span>{{val || fontArray[0].abbr}}</span><i v-bind:class="{'triangle-down': !display, 'triangle-up': display}"></i>
+  <a href="javascript:;" class="ve-select font-select" :class="{'ve-disabled': disabled}" @click="toggle">
+    <span>{{val || fontArray[0].abbr}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
   </a>
-  <div class="ve-toolbar-dropdown ve-select-dropdown font-name" v-show="display">
+  <div class="ve-toolbar-dropdown ve-select-dropdown font-name" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
     <ul>
       <li v-for="font in fontArray" @click="clickHandler(font)">
         <a href="javascript:;" :style="{fontFamily: font.name + ', sans-serif'}">{{font.abbr || font.name}}</a>
@@ -49,14 +49,24 @@
       return {
         display: false,
         fontArray: fontArray,
-        val: ''
+        val: '',
+        left: 50,
+        top: 50
       }
     },
-    props: ['available'],
+    vuex: {
+      getters: {
+        disabled: function (state) {
+          return state.toolBtns.fontname.disabled;
+        }
+      }
+    },
     methods: {
       toggle () {
-        if(this.available){
-          this.$dispatch('dropdownToggle', this);
+        if(!this.disabled){
+          let obj = this.$el.nextElementSibling;
+          this.left = obj.offsetLeft;
+          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.display = !this.display;
         }
       },

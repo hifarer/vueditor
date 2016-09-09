@@ -23,10 +23,10 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="表格" :class="{'ve-disabled': !available}" @click="toggle">
+  <a href="javascript:;" title="表格" :class="{'ve-disabled': disabled}" @click="toggle">
     <i class="fa fa-table"></i>
   </a>
-  <div class="ve-toolbar-dropdown mytable" v-show="display">
+  <div class="ve-toolbar-dropdown mytable" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
     <ul>
       <li v-for="i in num" @mouseover="overHandler(i)" @click="clickHandler(i)">
         <a href="javascript:;" :class="{'active': (i%8 <= x && parseInt(i/8) <= y)}"></a>
@@ -43,14 +43,24 @@
         num: 64,
         x: -1,
         y: -1,
-        display: false
+        display: false,
+        left: 50,
+        top: 50
       }
     },
-    props: ['available'],
+    vuex: {
+      getters: {
+        disabled: function (state) {
+          return state.toolBtns.fontname.disabled;
+        }
+      }
+    },
     methods: {
       toggle () {
-        if(this.available){
-          this.$dispatch('dropdownToggle', this);
+        if(!this.disabled){
+          let obj = this.$el.nextElementSibling;
+          this.left = obj.offsetLeft;
+          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.display = !this.display;
           this.x = -1;
           this.y = -1;
