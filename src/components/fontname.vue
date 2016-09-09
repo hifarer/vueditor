@@ -61,10 +61,11 @@
         }
       },
       clickHandler (font) {
+        let app = this.$root.$children[0];
         if(document.queryCommandSupported('styleWithCss')){
-          iframeDoc.execCommand('styleWithCss', false, true);
+          app.iframeDoc.execCommand('styleWithCss', false, true);
         }
-        iframeDoc.execCommand('fontName', false, font.name + ', sans-serif');
+        app.iframeDoc.execCommand('fontName', false, font.name + ', sans-serif');
         this.display = false;
         this.val = font.abbr || font.name;
       }

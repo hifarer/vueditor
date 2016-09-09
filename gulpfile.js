@@ -83,7 +83,7 @@ gulp.task('sprite', ['webpack'], () => {
 });
 
 gulp.task('clean', ['webpack'], () => {
-  del(['./build/'], {force: true});    //TODO clean task not working
+  //del(['./build/'], {force: true});    //TODO clean task not working
 });
 
 gulp.task('browserSync', () => {

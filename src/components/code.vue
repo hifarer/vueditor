@@ -1,38 +1,18 @@
+<style lang="less" rel="stylesheet/less">
+    .ve-code {
+        border: 1px solid #ddd;
+        border-top: none;
+    }
+</style>
 
 <template>
-  <a href="javascript:;" title="源码" @click="switchView">
-    <i class="fa fa-code"></i>
-  </a>
+    <div class="ve-code" v-show="currentView == 'sourceCode'">
+        <textarea name="codemirror" id="codemirror"></textarea>
+    </div>
 </template>
 
 <script>
-
-  export default {
-    data(){
-      return {
-        editor: null
-      }
-    },
-    methods: {
-      switchView () {
-        let app = this.$root.$children[0];
-        if(app.currentView == 'design'){
-          app.currentView = 'sourceCode';
-          app.sourceCode = iframeBody.innerHTML;
-          this.$dispatch('dropdownToggle', this);
-          this.editor.setValue(beautifyHTML(iframeBody.innerHTML, {'indent_inner_html': true, 'indent_size': 2}));
-          setTimeout(function () {
-            this.editor.refresh();
-          }.bind(this), 100);
-        }else{
-          app.currentView = 'design';
-          app.sourceCode = this.editor.getValue();
-          iframeBody.innerHTML = app.sourceCode;
-        }
-      }
-    },
-    ready(){
-      this.editor = CodeMirror.fromTextArea(document.getElementById('codemirror'), {
+    let cmConfig = {
         mode: 'htmlmixed',
         scrollbarStyle: 'null',
         viewportMargin: Infinity,
@@ -43,15 +23,47 @@
         foldGutter: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         extraKeys: {
-          'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); },
-          'F11': function(cm) {
-            cm.setOption('fullScreen', !cm.getOption('fullScreen'));
-          },
-          'Esc': function(cm) {
-            if (cm.getOption('fullScreen')) cm.setOption('fullScreen', false);
-          }
+            'Ctrl-Q': function (cm) {
+                cm.foldCode(cm.getCursor());
+            },
+            'F11': function (cm) {
+                cm.setOption('fullScreen', !cm.getOption('fullScreen'));
+            },
+            'Esc': function (cm) {
+                if (cm.getOption('fullScreen')) cm.setOption('fullScreen', false);
+            }
         }
-      });
+    };
+
+    import {getView, getContent} from '../vuex/getters';
+
+    export default {
+        data () {
+          return {
+            editor: null
+          }
+        },
+        vuex: {
+          getters: {
+              currentView: function(state) {
+                  return state.currentView;
+              },
+              content: function(state) {
+                  return state.content;
+              }
+          }
+        },
+        watch: {
+          'currentView': function () {
+              alert(this.content);
+              this.editor.setValue(beautifyHTML(this.content, {'indent_inner_html': true, 'indent_size': 2}));
+              setTimeout(function () {
+                  this.editor.refresh();
+              }.bind(this), 100);
+          }
+        },
+        ready () {
+            this.editor = CodeMirror.fromTextArea(document.getElementById('codemirror'), cmConfig);
+        }
     }
-  }
 </script>

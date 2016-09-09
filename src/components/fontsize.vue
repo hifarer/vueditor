@@ -48,7 +48,8 @@
         }
       },
       clickHandler (size) {
-        let selection = iframeWin.getSelection();
+        let app = this.$root.$children[0];
+        let selection = app.iframeWin.getSelection();
         let range = veUtil.range.get();
         if(!range || range.collapsed){
           this.display = false;
@@ -65,9 +66,9 @@
         }else{
           if(navigator.userAgent.indexOf('Chrome') != -1 && navigator.userAgent.indexOf('Edge') == -1){
             if(document.queryCommandSupported('styleWithCss')){
-              iframeDoc.execCommand('styleWithCss', false, true);
+              app.iframeDoc.execCommand('styleWithCss', false, true);
             }
-            iframeDoc.execCommand('fontSize', false, 7);    //设置为1-7一般都可以，但是当设置为3时，在chrome中会没反应，应该是face="3"和默认字号一样大造成的。
+            app.iframeDoc.execCommand('fontSize', false, 7);    //设置为1-7一般都可以，但是当设置为3时，在chrome中会没反应，应该是face="3"和默认字号一样大造成的。
             let container = range.commonAncestorContainer;
             container.nodeType == 3 && (container = container.parentNode);
             container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
@@ -79,9 +80,9 @@
             });
           }else{
             if(document.queryCommandSupported('styleWithCss')){
-              iframeDoc.execCommand('styleWithCss', false, false);
+              app.iframeDoc.execCommand('styleWithCss', false, false);
             }
-            iframeDoc.execCommand('fontSize', false, 7);
+            app.iframeDoc.execCommand('fontSize', false, 7);
 
             let fontList = [], spanList = [];
             let container = range.commonAncestorContainer;

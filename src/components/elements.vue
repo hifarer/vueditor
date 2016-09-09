@@ -43,6 +43,7 @@
         }
       },
       selectItem (event) {
+        let app = this.$root.$children[0];
         let ua = navigator.userAgent.toLowerCase();
         let tagName = event.target.innerHTML.trim();
         this.display = false;
@@ -52,10 +53,10 @@
           if(!range || range.collapsed){
             alert('在IE浏览器中必须选中一段文字才能使用此功能！');
           }else{
-            iframeDoc.execCommand('formatblock', false, '<' + tagName.toUpperCase() + '>');
+            app.iframeDoc.execCommand('formatblock', false, '<' + tagName.toUpperCase() + '>');
           }
         } else {
-          iframeDoc.execCommand('formatblock', false, tagName);
+          app.iframeDoc.execCommand('formatblock', false, tagName);
         }
       }
     }

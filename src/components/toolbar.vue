@@ -6,45 +6,42 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    .wrap {
-      overflow: hidden;
+    overflow: hidden;
+
+    a {
+      float: left;
     }
-  }
-  .ve-toolbar-item {
-    float: left;
-    &>a:not(.separator) {
-      display: inline-block;
-      padding: 10px 12px;
-      color: rgba(0, 0, 0, 0.6);
-      &:not(.ve-disabled) {
-        &:hover, &.active {
-          background: #eee;
-          color: #000;
-        }
-      }
-    }
-    &>a.separator {
+    a.divider {
       display: block;
       width: 0;
       height: 26px;
       margin: 6px;
       border-right: 1px solid #ddd;
     }
+    a:not(.divider) {
+      display: inline-block;
+      padding: 10px 12px;
+      color: rgba(0, 0, 0, 0.6);
+      &:not(.disabled) {
+        &:hover, &.active {
+          background: #eee;
+          color: #000;
+        }
+      }
+    }
   }
 </style>
 
 <template>
   <div class="ve-toolbar">
-    <div class="wrap">
-      <div v-for="item in config" class="ve-toolbar-item" unselectable="on">
-        <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}"
-           :class="{'active': state[item].active, 've-disabled': !state[item].available}" @click="clickHandler(item, null)">
-          <i class="fa" :class="[nativeBtns[item].class]"></i>
-        </a>
-        <a v-if="item == 'separator' || item == '|'" href="javascript:;" class="separator"></a>
-        <component v-else :is="item" :param="costomBtns[item]" :available="state[item].available"></component>
-      </div>
-    </div>
+    <template v-for="item in config">
+      <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}"
+         :class="{'active': toolBtns[item].active, 'disabled': toolBtns[item].disabled}" @click="clickHandler(item, null)"  unselectable="on">
+        <i class="fa" :class="[nativeBtns[item].class]"></i>
+      </a>
+      <a v-if="item == 'divider' || item == '|'" href="javascript:;" class="divider"></a>
+      <component v-else :is="item" :param="costomBtns[item]"></component>
+    </template>
   </div>
 </template>
 
@@ -53,9 +50,12 @@
   import color from './color.vue';
   import fontName from './fontname.vue';
   import fontSize from './fontsize.vue';
-  import sourceCode from './code.vue';
+  import view from './view.vue';
   import elements from './elements.vue';
   import myTable from './table.vue';
+  import undo from './undo.vue';
+
+  import * as actions from '../vuex/toolbar-actions';
 
   let nativeBtns = {
 
@@ -82,7 +82,8 @@
 
   let costomBtns = {
     forecolor: {colorType: 'forecolor'},
-    backcolor: {colorType: 'backcolor'}
+    backcolor: {colorType: 'backcolor'},
+    undo: {obj: document.body, cb: function () {alert(1)}}
   };
 
   export default {
@@ -91,74 +92,39 @@
         nativeBtns: nativeBtns,
         costomBtns: costomBtns,
         config: [
-          'removeformat', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
+          'removeformat', 'undo', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
           'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-          '|', 'indent', 'outdent', '|', 'mytable', '|', 'sourcecode'
-        ],
-        state: {}
+          '|', 'indent', 'outdent', '|', 'mytable', '|', 'view'
+        ]
       }
     },
     props: ['custom'],
-    events: {
-      activeState () {
-        for(let name in this.state){
-          try {
-            this.state[name].active = iframeDoc.queryCommandState(name);
-          }catch (e){}
+    vuex: {
+      getters: {
+        toolBtns: function(state) {
+          return state.toolBtns;
         }
       },
-      availableState (available) {
-        for(let name in this.state){
-          this.state[name].available = available;
-        }
-        this.state.sourcecode.available = true;
-      },
-      dropdownToggle (target) {
-        this.$children.forEach(function (component) {
-          component !== target && (component.display = false);
-        });
-      }
+      actions
     },
     methods: {
       clickHandler(name, value){
-        this.exec(name, value);
-        this.$emit('dropdownToggle');
-        this.$emit('activeState');
-      },
-      exec (name, value) {
-        if(document.queryCommandSupported('styleWithCss')){
-          iframeDoc.execCommand('styleWithCss', false, true);
-        }
-        iframeDoc.execCommand(name, false, value);
-        if(name == 'removeformat'){
-          let range = veUtil.range.get();
-          if(!range)return;
-          let container = range.commonAncestorContainer;
-          container.nodeType == 3 && (container = container.parentNode);
-          container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
-          veUtil.command.format(container, 'span', 'verticalAlign');
-          container.normalize();
-        }
+        this.updateToolbarActive();
+        this.updateToolbarDisabled();
       }
     },
     created () {
-      let json = {};
-      let config = this.custom || this.config;
-      config.forEach(function (name) {
-        !json[name] && (json[name] = {});
-        json[name].active = false;
-        json[name].available = true;
-      });
-      this.state = json;
+      this.initToolbarStatus(this.custom || this.config);
     },
     components: {
       'forecolor': color,
       'backcolor': color,
       'fontname': fontName,
       'fontsize': fontSize,
-      'sourcecode': sourceCode,
+      'view': view,
       'elements': elements,
-      'mytable': myTable
+      'mytable': myTable,
+      'undo': undo
     }
   }
 </script>

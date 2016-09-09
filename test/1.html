@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="hehe">
+    <template v-for="item in config">
+        <span>{{config[$index]}}</span>
+    </template>
+</div>
+
+<script src="../dist/js/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '.hehe',
+        data: {
+            config: ['a', 'b', 'c']
+            /*config: {a: 'b', c: 'd', e: 'f'}*/
+        }
+    });
+</script>
+
+</body>
+</html>

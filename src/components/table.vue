@@ -66,13 +66,14 @@
         this.display = false;
       },
       createTable (rows, cols) {
-        let oTable = iframeDoc.createElement('table');
-        let oTbody = iframeDoc.createElement('tbody');
+        let app = this.$root.$children[0];
+        let oTable = app.iframeDoc.createElement('table');
+        let oTbody = app.iframeDoc.createElement('tbody');
         oTable.appendChild(oTbody);
         for (let i = 0; i < rows; i++) {
-          let tr = iframeDoc.createElement('tr');
+          let tr = app.iframeDoc.createElement('tr');
           for (let j = 0; j < cols; j++) {
-            let td = iframeDoc.createElement('td');
+            let td = app.iframeDoc.createElement('td');
             td.innerHTML = '<br>';
             td.style.cssText = 'width: 50px; border: 1px #ddd solid;';
             tr.appendChild(td);
@@ -83,10 +84,11 @@
         return oTable.outerHTML;
       },
       insertTable (html) {
-        var oSel = iframeWin.getSelection();
+        let app = this.$root.$children[0];
+        let oSel = app.iframeWin.getSelection();
         if (!oSel.rangeCount)return;
-        var oRange = oSel.getRangeAt(0), node = null;
-        var frag = iframeDoc.createDocumentFragment(), obj = iframeDoc.createElement('div');
+        let oRange = oSel.getRangeAt(0), node = null;
+        let frag = app.iframeDoc.createDocumentFragment(), obj = app.iframeDoc.createElement('div');
         obj.innerHTML = html;
         while (obj.firstChild) {
           node = obj.firstChild;
