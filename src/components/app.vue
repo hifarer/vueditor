@@ -1,8 +1,8 @@
 <template>
     <div class="vueditor">
-        <toolbar></toolbar>
-        <design></design>
-        <code1></code1>
+        <toolbar v-ref:toolbar></toolbar>
+        <design v-ref:design></design>
+        <code1 v-ref:code></code1>
     </div>
 </template>
 

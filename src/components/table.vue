@@ -37,6 +37,8 @@
 
 <script>
 
+  import {updateTBDropdownDisplay} from '../vuex/toolbar-actions';
+
   export default {
     data () {
       return {
@@ -51,8 +53,11 @@
     vuex: {
       getters: {
         disabled: function (state) {
-          return state.toolBtns.fontname.disabled;
+          return state.toolBtns.table.disabled;
         }
+      },
+      actions: {
+        updateTBDropdownDisplay
       }
     },
     methods: {
@@ -61,9 +66,9 @@
           let obj = this.$el.nextElementSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.display = !this.display;
           this.x = -1;
           this.y = -1;
+          this.updateTBDropdownDisplay('table');
         }
       },
       overHandler (index) {
@@ -73,7 +78,7 @@
       clickHandler (index) {
         let html = this.createTable(this.x+1, this.y+1);
         this.insertTable(html);
-        this.display = false;
+        this.updateTBDropdownDisplay();
       },
       createTable (rows, cols) {
         let app = this.$root.$children[0];

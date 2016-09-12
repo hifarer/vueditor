@@ -7,7 +7,6 @@
     z-index: 1000;
     background: #fff;
     border: 1px solid #ccc;
-    /*border-top: none;*/
     li {
       margin: 1px;
       float: left;
@@ -21,11 +20,11 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="{{param.colorType == 'forecolor' ? '文字颜色' : '背景颜色'}}"
+  <a href="javascript:;" title="{{param.colorType == 'foreColor' ? '文字颜色' : '背景颜色'}}"
      :class="{'active': display, 've-disabled': toolBtns[this.param.colorType].disabled}" @click="toggle">
-    <i class="fa" :class="{'fa-file-text': param.colorType == 'backcolor', 'fa-file-text-o': param.colorType == 'forecolor'}"></i>
+    <i class="fa" :class="{'fa-file-text': param.colorType == 'backColor', 'fa-file-text-o': param.colorType == 'foreColor'}"></i>
   </a>
-  <div class="ve-toolbar-dropdown colorpicker" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
+  <div class="ve-toolbar-dropdown colorpicker" v-show="toolBtns[this.param.colorType].showmenu" :style="{left: left + 'px', top: top + 'px'}">
     <div class="ve-input-box">
       <input type="text" class="ve-input" placeholder="颜色代码" v-model="color">
       <button type="button" class="ve-btn" @click="inputHandler">确定</button>
@@ -37,9 +36,11 @@
 </template>
 
 <script>
+
   /*'#E53333', '#E56600', '#FF9900', '#64451D', '#DFC5A4', '#FFE500', '#009900', '#006600', '#99BB00', '#B8D100',
    '#60D978', '#337FE5', '#003399', '#4C33E5', '#9933E5', '#CC33E5', '#EE33EE', '#00D5FF', '#FFFFFF', '#CCCCCC',
    '#999999', '#666666', '#333333', '#000000'*/
+
   var colors = [
       '#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF',
       '#FF0000', '#FF9C00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#9C00FF', '#FF00FF',
@@ -50,15 +51,16 @@
       '#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842',
       '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
   ];
+
+  import {updateTBDropdownDisplay} from '../vuex/toolbar-actions';
+
   export default {
     data () {
       return {
         colors: colors,
         color: '',
-        active: false,
-        display: false,
-        left: 50,
-        top: 50
+        left: 0,
+        top: 0
       }
     },
     props: ['param'],
@@ -67,6 +69,9 @@
         toolBtns: function (state) {
           return state.toolBtns;
         }
+      },
+      actions: {
+        updateTBDropdownDisplay
       }
     },
     methods: {
@@ -75,7 +80,8 @@
           let obj = this.$el.nextElementSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.display = !this.display;
+          //this.display = !this.display;
+          this.updateTBDropdownDisplay(this.param.colorType);
         }
       },
       checkValid (color) {
@@ -88,14 +94,11 @@
         }
       },
       setColor (colorType, color) {
-        if(document.queryCommandSupported('styleWithCss')){
-          iframeDoc.execCommand('styleWithCss', false, true);
-        }
-        iframeDoc.execCommand(colorType, false, color);
+        this.$root.$refs.design.exec(colorType, color);
       },
       clickHandler (color) {
         this.setColor(this.param.colorType, color);
-        this.display = false;
+        this.updateTBDropdownDisplay();
       },
       inputHandler () {
         let color = this.color;
@@ -104,7 +107,7 @@
           alert('请输入正确的颜色代码。');
         }else{
           this.setColor(this.param.colorType, color);
-          this.display = false;
+          this.updateTBDropdownDisplay();
         }
         this.color = '';
       }

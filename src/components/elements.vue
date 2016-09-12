@@ -26,10 +26,11 @@
 
 <script>
 
+  import {updateTBDropdownDisplay} from '../vuex/toolbar-actions';
+
   export default {
     data(){
       return {
-        display: false,
         arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         val: '',
         left: 50,
@@ -40,7 +41,13 @@
       getters: {
         disabled: function (state) {
           return state.toolBtns.elements.disabled;
+        },
+        display: function (state) {
+          return state.toolBtns.elements.showmenu;
         }
+      },
+      actions: {
+        updateTBDropdownDisplay
       }
     },
     methods: {
@@ -51,25 +58,14 @@
           let obj = this.$el.nextElementSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.display = !this.display;
+          this.updateTBDropdownDisplay('elements');
         }
       },
       selectItem (event) {
-        let app = this.$root.$children[0];
-        let ua = navigator.userAgent.toLowerCase();
         let tagName = event.target.innerHTML.trim();
-        this.display = false;
         this.val = tagName;
-        if(ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)){
-          let range = veUtil.range.get();
-          if(!range || range.collapsed){
-            alert('在IE浏览器中必须选中一段文字才能使用此功能！');
-          }else{
-            app.iframeDoc.execCommand('formatblock', false, '<' + tagName.toUpperCase() + '>');
-          }
-        } else {
-          app.iframeDoc.execCommand('formatblock', false, tagName);
-        }
+        this.$root.$refs.design.exec('formatBlock', tagName);
+        this.updateTBDropdownDisplay();
       }
     }
   }

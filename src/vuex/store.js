@@ -10,14 +10,14 @@ toolbarConfig.forEach(function (name) {
     !toolBtns[name] && (toolBtns[name] = {});
     toolBtns[name].active = false;
     toolBtns[name].disabled = false;
-    toolBtns[name].dropdownShow = true;
+    toolBtns[name].showmenu = false;
 });
 
 const state = {
 
     // toolbar disabled state & active state
     toolBtns: toolBtns,
-
+    
     // editor content
     content: '',
 

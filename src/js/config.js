@@ -1,6 +1,6 @@
 
 export let toolbarConfig = [
-  'removeformat', 'undo', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
-  'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-  '|', 'indent', 'outdent', '|', 'mytable', '|', 'view'
+  'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+  'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+  '|', 'indent', 'outdent', '|', 'table1', '|', 'view'
 ];

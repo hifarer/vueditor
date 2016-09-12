@@ -58,7 +58,7 @@
   import fontSize from './fontsize.vue';
   import view from './view.vue';
   import elements from './elements.vue';
-  import myTable from './table.vue';
+  import table1 from './table.vue';
   import undo from './undo.vue';
 
   import * as actions from '../vuex/toolbar-actions';
@@ -66,30 +66,30 @@
 
   let nativeBtns = {
 
-    removeformat: {title: '清除选中区域格式', class: 'fa-eraser'},
+    removeFormat: {title: '清除选中区域格式', class: 'fa-eraser'},
 
     bold: {title: '加粗', class: 'fa-bold'},
     italic: {title: '斜体', class: 'fa-italic'},
     underline: {title: '下划线', class: 'fa-underline'},
-    strikethrough: {title: '中划线', class: 'fa-strikethrough'},
+    strikeThrough: {title: '中划线', class: 'fa-strikethrough'},
 
     superscript: {title: '上标文字', class: 'fa-superscript'},
     subscript: {title: '下标文字', class: 'fa-subscript'},
     indent: {title: '增加缩进', class: 'fa-indent'},
     outdent: {title: '减少缩进', class: 'fa-outdent'},
 
-    justifyleft: {title: '左对齐', class: 'fa-align-left'},
-    justifycenter: {title: '中间对齐', class: 'fa-align-center'},
-    justifyright: {title: '右对齐', class: 'fa-align-right'},
-    justifyfull: {title: '两端对齐', class: 'fa-align-justify'},
+    justifyLeft: {title: '左对齐', class: 'fa-align-left'},
+    justifyCenter: {title: '中间对齐', class: 'fa-align-center'},
+    justifyRight: {title: '右对齐', class: 'fa-align-right'},
+    justifyFull: {title: '两端对齐', class: 'fa-align-justify'},
 
     insertOrderedList: {title: '设置有序列表', class: 'fa-list-ol'},
     insertUnorderedList: {title: '设置无序列表', class: 'fa-list-ul'}
   };
 
   let customBtns = {
-    forecolor: {colorType: 'forecolor'},
-    backcolor: {colorType: 'backcolor'},
+    foreColor: {colorType: 'foreColor'},
+    backColor: {colorType: 'backColor'},
     undo: {obj: document.body, cb: function () {alert(1)}}
   };
 
@@ -99,9 +99,9 @@
         nativeBtns: nativeBtns,
         customBtns: customBtns,
         defaultConfig: [
-          'removeformat', 'undo', '|', 'elements', 'fontname', 'fontsize', 'forecolor', 'backcolor', 'separator', 'bold', 'italic', 'underline', 'strikethrough',
-          'separator', 'subscript', 'superscript', 'separator', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull',
-          '|', 'indent', 'outdent', '|', 'mytable', '|', 'view'
+          'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+          'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+          '|', 'indent', 'outdent', '|', 'table1', '|', 'view'
         ],
         customConfig: toolbarConfig
       }
@@ -118,17 +118,18 @@
       clickHandler(name, value){
         this.updateTBActive();
         this.updateTBDisabled();
+        this.$root.$refs.design.exec(name, value);
       }
     },
     components: {
-      'forecolor': color,
-      'backcolor': color,
-      'fontname': fontName,
-      'fontsize': fontSize,
-      'view': view,
-      'elements': elements,
-      'mytable': myTable,
-      'undo': undo
+      'foreColor': color,
+      'backColor': color,
+      fontName,
+      fontSize,
+      view,
+      elements,
+      table1,
+      undo
     }
   }
 </script>

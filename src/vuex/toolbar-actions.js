@@ -11,8 +11,8 @@ export const updateTBDisabled = ({dispatch}) => {
     dispatch('UPDATE_TB_DISABLED');
 };
 
-export const updateTBDropdownDisplay = ({dispatch}) => {
-    dispatch('UPDATE_TB_DROPDOWN_DISPLAY');
+export const updateTBDropdownDisplay = ({dispatch}, current) => {
+    dispatch('UPDATE_TB_DROPDOWN_DISPLAY', current);
 };
 
 export const updateContent = ({dispatch}) => {

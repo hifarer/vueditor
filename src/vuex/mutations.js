@@ -20,9 +20,10 @@ const mutations = {
         state.toolBtns.view.disabled = false;
     },
 
-    UPDATE_TB_DROPDOWN_DISPLAY (state) {
+    UPDATE_TB_DROPDOWN_DISPLAY (state, current) {
+        current && (state.toolBtns[current].showmenu = !state.toolBtns[current].showmenu);
         for(let name in state.toolBtns){
-            state.toolBtns[name].dropdown = false;
+            name != current && (state.toolBtns[name].showmenu = false);
         }
     },
     
