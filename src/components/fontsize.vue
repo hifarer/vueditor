@@ -46,10 +46,10 @@
     vuex: {
       getters: {
         disabled: function (state) {
-          return state.toolBtns.fontsize.disabled;
+          return state.toolBtns.fontSize.disabled;
         },
         display: function (state) {
-          return state.toolBtns.fontsize.showmenu;
+          return state.toolBtns.fontSize.showmenu;
         }
       },
       actions: {
@@ -62,7 +62,7 @@
           let obj = this.$el.nextElementSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.updateTBDropdownDisplay('fontsize');
+          this.updateTBDropdownDisplay('fontSize');
         }
       },
       clickHandler (size) {

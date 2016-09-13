@@ -8,7 +8,6 @@
     z-index: 1000;
     background: #fff;
     border: 1px solid #ccc;
-    border-top: none;
     li a {
       width: 20px;
       height: 20px;
@@ -45,15 +44,17 @@
         num: 64,
         x: -1,
         y: -1,
-        display: false,
-        left: 50,
-        top: 50
+        left: 0,
+        top: 0
       }
     },
     vuex: {
       getters: {
         disabled: function (state) {
-          return state.toolBtns.table.disabled;
+          return state.toolBtns.table1.disabled;
+        },
+        display: function (state) {
+          return state.toolBtns.table1.showmenu;
         }
       },
       actions: {
@@ -68,7 +69,7 @@
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.x = -1;
           this.y = -1;
-          this.updateTBDropdownDisplay('table');
+          this.updateTBDropdownDisplay('table1');
         }
       },
       overHandler (index) {
@@ -77,43 +78,25 @@
       },
       clickHandler (index) {
         let html = this.createTable(this.x+1, this.y+1);
-        this.insertTable(html);
+        this.$root.$refs.design.exec('insertHTML', html);
         this.updateTBDropdownDisplay();
       },
       createTable (rows, cols) {
-        let app = this.$root.$children[0];
-        let oTable = app.iframeDoc.createElement('table');
-        let oTbody = app.iframeDoc.createElement('tbody');
+        let oTable = document.createElement('table');
+        let oTbody = document.createElement('tbody');
+        oTable.style.cssText = 'border-collapse: collapse;';
         oTable.appendChild(oTbody);
         for (let i = 0; i < rows; i++) {
-          let tr = app.iframeDoc.createElement('tr');
+          let tr = document.createElement('tr');
           for (let j = 0; j < cols; j++) {
-            let td = app.iframeDoc.createElement('td');
+            let td = document.createElement('td');
             td.innerHTML = '<br>';
             td.style.cssText = 'width: 50px; border: 1px #ddd solid;';
             tr.appendChild(td);
           }
           oTbody.appendChild(tr);
         }
-        oTable.style.cssText = 'border-collapse: collapse;';
         return oTable.outerHTML;
-      },
-      insertTable (html) {
-        let app = this.$root.$children[0];
-        let oSel = app.iframeWin.getSelection();
-        if (!oSel.rangeCount)return;
-        let oRange = oSel.getRangeAt(0), node = null;
-        let frag = app.iframeDoc.createDocumentFragment(), obj = app.iframeDoc.createElement('div');
-        obj.innerHTML = html;
-        while (obj.firstChild) {
-          node = obj.firstChild;
-          frag.appendChild(node);
-        }
-        oRange.insertNode(frag);
-        oRange.setStartAfter(node);
-        oRange.collapse(true);
-        oSel.removeAllRanges();
-        oSel.addRange(oRange);
       }
     }
   }

@@ -58,10 +58,10 @@
     vuex: {
       getters: {
         disabled: function (state) {
-          return state.toolBtns.fontname.disabled;
+          return state.toolBtns.fontName.disabled;
         },
         display: function (state) {
-          return state.toolBtns.fontname.showmenu;
+          return state.toolBtns.fontName.showmenu;
         }
       },
       actions: {
@@ -74,7 +74,7 @@
           let obj = this.$el.nextElementSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.updateTBDropdownDisplay('fontname');
+          this.updateTBDropdownDisplay('fontName');
         }
       },
       clickHandler (font) {

@@ -1,92 +1,82 @@
-<style lang="less" rel="text/less">
-
-</style>
 
 <template>
-    <a href="javascript:;" title="撤销" :class="{'ve-disabled': disabled && !_states.undo}" @click="undo">
+    <a href="javascript:;" title="撤销" :class="{'ve-disabled': undoDisabled}" @click="undo">
         <i class="fa fa-undo"></i>
     </a>
-    <a href="javascript:;" title="恢复" :class="{'ve-disabled': disabled && !_states.redo}" @click="redo">
+    <a href="javascript:;" title="恢复" :class="{'ve-disabled': redoDisabled}" @click="redo">
         <i class="fa fa-repeat"></i>
     </a>
 </template>
 
 <script>
 
+    import {updateContent, updateTBDisabled} from '../vuex/toolbar-actions';
+
     export default {
         data () {
             return {
-                _prevContent: '',
-                _tmp: '',
-                _obj: null,
-                _cb: null,
-                _stack: [],
-                _index: -1
+                stack: [],
+                index: -1
             };
         },
-        props: ['param'],
         vuex: {
             getters: {
-                disabled: function (state) {
+                undoDisabled: function (state) {
                     return state.toolBtns.undo.disabled;
+                },
+                redoDisabled: function (state) {
+                    return state.toolBtns.redo.disabled;
+                },
+                content: function (state) {
+                    return state.content;
                 }
+            },
+            actions: {
+                updateContent,
+                updateTBDisabled
             }
         },
-        method: {
-
-            get _canUndo() {
-                return this._index >= 0;
+        computed: {
+            canUndo: function () {
+                return this.index >= 0;
             },
-
-            get _canRedo() {
-                return this._index < this._stack.length - 1;
-            },
-
-            // 更新内容->更新状态->更新UI
-            set _content(content) {
-                this._tmp = content;
-                this._updateStates();
-            },
-
-            get _content() {
-                return this._tmp;
-            },
-
-            _updateStates (states) {
-                this._states = {undo: this._canUndo, redo: this._canRedo};
-                this._renderUI();
-            },
-
-            _renderUI () {
-                this._obj.innerHTML = this._content;
-                this._cb && this._cb();
-            },
-
+            canRedo: function () {
+                return this.index < this.stack.length - 1;
+            }
+        },
+        watch: {
+            'content': function (content) {
+                this.push(content);
+            }
+        },
+        methods: {
             undo () {
-                if (!this._canUndo)return;
-                this._index--;
-                this._content = this._stack[this._index] || this._prevContent;
+                if (!this.canUndo)return;
+                this.index--;
+                let content = this.stack[this.index];
+                this.updateContent(content);
             },
-
             redo () {
-                if (!this._canRedo)return;
-                this._index++;
-                this._content = this._stack[this._index];
+                if (!this.canRedo)return;
+                this.index++;
+                let content = this.stack[this.index];
+                this.updateContent(content);
             },
-
             push (content) {
-                if (content != this._stack[this._index]) {
-                    this._stack = this._stack.slice(0, this._index + 1);
-                    this._stack.push(content);
-                    this._index++;
-                    this._updateStates();
+                if (content != this.stack[this.index]) {
+                    this.stack = this.stack.slice(0, this.index + 1);
+                    this.stack.push(content);
+                    this.index++;
+                    this.render();
                 }
+            },
+            render (content) {
+                content && this.updateContent(content);
+                this.updateTBDisabled({undo: !this.canUndo, redo: !this.canRedo});
             }
         },
         ready () {
-            this._prevContent = this.param.obj.innerHTML;
-            this._obj = this.param.obj;
-            this._cb = this.param.cb;
+            this.push(this.content);
         }
     }
 </script>

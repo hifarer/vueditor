@@ -79,6 +79,7 @@
         },
 
         methods: {
+
             init (event) {
                 this.iframeEle = event.target;
                 this.iframeWin = this.iframeEle.contentWindow;
@@ -86,8 +87,34 @@
                 this.iframeBody = this.iframeWin.document.body;
                 this.addEvent();
             },
+
             addEvent () {
-                this.iframeDoc.addEventListener('selectionchange', this.selectionChange.bind(this), false);
+                this.selectionChange();
+                this.iframeBody.addEventListener('keydown', this.keydownHandler, false);
+                this.iframeBody.addEventListener('keyup', this.keyupHandler, false);
+            },
+
+            keydownHandler (event) {
+                //console.log(event);
+                if (event.ctrlKey && event.keyCode == 89) {     //恢复
+                    event.preventDefault();
+                }
+                if (event.ctrlKey && event.keyCode == 90) {     //撤销
+                    event.preventDefault();
+                }
+            },
+
+            keyupHandler (event) {
+                console.log(event);
+                /*timer = */setTimeout(function () {
+                    //iframeBody.undoManager.stackin(iframeBody.innerHTML);
+                }, 500);
+            },
+
+            selectionChange () {
+                this.iframeDoc.addEventListener('selectionchange', function () {
+                    this.updateTBActive(this.iframeDoc);
+                }.bind(this), false);
                 if (navigator.userAgent.indexOf('Firefox') !== -1) {
                     let oSel = this.iframeWin.getSelection();
                     let focusNode = null;
@@ -95,7 +122,7 @@
                         if (oSel && oSel.rangeCount) {
                             if (focusNode != oSel.focusNode) {
                                 focusNode = oSel.focusNode;
-                                this.selectionChange();
+                                this.updateTBActive(this.iframeDoc);
                             }
                         } else {
                             oSel = this.iframeWin.getSelection();
@@ -104,15 +131,32 @@
                 }
             },
 
-            selectionChange () {
-                this.updateTBActive(this.iframeDoc);
-            },
-
             exec (name, value) {
                 if(document.queryCommandSupported('styleWithCss')){
                     this.iframeDoc.execCommand('styleWithCss', false, true);
                 }
                 this[name] ? this[name](name, value) : this.iframeDoc.execCommand(name, false, value);
+                this.updateTBActive(this.iframeDoc);
+                console.log(this.$root.$refs.toolbar);
+            },
+
+            insertHTML (name, value) {
+                let oSel = this.iframeWin.getSelection();
+                let oRange = this.range;
+                if (!oRange)return;
+                let node = null;
+                let frag = this.iframeDoc.createDocumentFragment();
+                let obj = this.iframeDoc.createElement('div');
+                obj.innerHTML = value;
+                while (obj.firstChild) {
+                    node = obj.firstChild;
+                    frag.appendChild(node);
+                }
+                oRange.insertNode(frag);
+                oRange.setStartAfter(node);
+                oRange.collapse(true);
+                oSel.removeAllRanges();
+                oSel.addRange(oRange);
             },
             
             fontSize (name, value) {

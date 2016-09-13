@@ -12,10 +12,13 @@ const mutations = {
         }
     },
 
-    UPDATE_TB_DISABLED (state) {
+    UPDATE_TB_DISABLED (state, json) {
         let disabled = state.currentView !== 'design';
         for(let name in state.toolBtns){
             state.toolBtns[name].disabled = disabled;
+        }
+        for(let name in json){
+            state.toolBtns[name].disabled = json[name];
         }
         state.toolBtns.view.disabled = false;
     },

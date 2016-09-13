@@ -29,7 +29,7 @@
         color: rgba(0, 0, 0, 0.6);
       }
       &:not(.ve-disabled) {
-        &:hover, &.active {
+        &:hover, &.ve-active {
           background: #eee;
           color: #000;
         }
@@ -40,13 +40,13 @@
 
 <template>
   <div class="ve-toolbar">
-    <template v-for="item in (customConfig || defaultConfig)">
+    <template v-for="item in config">
       <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}"
          :class="{'ve-active': toolBtns[item].active, 've-disabled': toolBtns[item].disabled}" @click="clickHandler(item, null)"  unselectable="on">
         <i class="fa" :class="[nativeBtns[item].class]"></i>
       </a>
       <a v-if="item == 'divider' || item == '|'" href="javascript:;" class="ve-divider"></a>
-      <component v-else :is="item" :param="customBtns[item]"></component>
+      <component v-else :is="item" v-ref:item :param="customBtns[item]"></component>
     </template>
   </div>
 </template>
@@ -89,8 +89,7 @@
 
   let customBtns = {
     foreColor: {colorType: 'foreColor'},
-    backColor: {colorType: 'backColor'},
-    undo: {obj: document.body, cb: function () {alert(1)}}
+    backColor: {colorType: 'backColor'}
   };
 
   export default {
@@ -106,6 +105,11 @@
         customConfig: toolbarConfig
       }
     },
+    computed: {
+      config: function () {
+        return this.customConfig || this.defaultConfig;
+      }
+    },
     vuex: {
       getters: {
         toolBtns: function(state) {
@@ -116,8 +120,6 @@
     },
     methods: {
       clickHandler(name, value){
-        this.updateTBActive();
-        this.updateTBDisabled();
         this.$root.$refs.design.exec(name, value);
       }
     },
