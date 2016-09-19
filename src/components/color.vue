@@ -52,7 +52,7 @@
       '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
   ];
 
-  import {updateTBDropdownDisplay} from '../vuex/toolbar-actions';
+  import {updateTBDropdownDisplay} from '../vuex/actions';
 
   export default {
     data () {

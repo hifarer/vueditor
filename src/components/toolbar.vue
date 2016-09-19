@@ -40,13 +40,13 @@
 
 <template>
   <div class="ve-toolbar">
-    <template v-for="item in config">
+    <template v-for="item in config" v-ref="config">
       <a v-if="nativeBtns[item]" href="javascript:;" title="{{nativeBtns[item].title}}"
          :class="{'ve-active': toolBtns[item].active, 've-disabled': toolBtns[item].disabled}" @click="clickHandler(item, null)"  unselectable="on">
         <i class="fa" :class="[nativeBtns[item].class]"></i>
       </a>
       <a v-if="item == 'divider' || item == '|'" href="javascript:;" class="ve-divider"></a>
-      <component v-else :is="item" v-ref:item :param="customBtns[item]"></component>
+      <component v-else :is="item" :param="customBtns[item]"></component>
     </template>
   </div>
 </template>
@@ -61,7 +61,7 @@
   import table1 from './table.vue';
   import undo from './undo.vue';
 
-  import * as actions from '../vuex/toolbar-actions';
+  import * as actions from '../vuex/actions';
   import {toolbarConfig} from '../js/config';
 
   let nativeBtns = {
@@ -122,6 +122,13 @@
       clickHandler(name, value){
         this.$root.$refs.design.exec(name, value);
       }
+    },
+    ready () {
+      let temp = null;
+      this.$children.forEach(function (comp) {
+        comp.hasOwnProperty('canRedo') && (temp = comp);
+      });
+      this.$refs.undo = temp;
     },
     components: {
       'foreColor': color,

@@ -54,7 +54,7 @@ gulp.task('webpack', ['babel'], () => {
       .pipe(gulp.dest('./dist/css/'));
     gulp.src(['./build/es6.js', './build/vueditor.js'])
       .pipe(concat('vueditor.min.js'))
-      .pipe(uglify())
+      //.pipe(uglify())
       .pipe(gulp.dest('./dist/js/'));
   });
 });

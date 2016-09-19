@@ -13,6 +13,7 @@ const mutations = {
     },
 
     UPDATE_TB_DISABLED (state, json) {
+        //console.log(json);
         let disabled = state.currentView !== 'design';
         for(let name in state.toolBtns){
             state.toolBtns[name].disabled = disabled;
@@ -24,7 +25,7 @@ const mutations = {
     },
 
     UPDATE_TB_DROPDOWN_DISPLAY (state, current) {
-        current && (state.toolBtns[current].showmenu = !state.toolBtns[current].showmenu);
+        (current && typeof current == 'string') && (state.toolBtns[current].showmenu = !state.toolBtns[current].showmenu);
         for(let name in state.toolBtns){
             name != current && (state.toolBtns[name].showmenu = false);
         }

@@ -32,7 +32,7 @@
 
   let fontSize = [12, 14, 16, 18, 20, 24, 28, 32, 36];
 
-  import {updateTBDropdownDisplay} from '../vuex/toolbar-actions';
+  import {updateTBDropdownDisplay} from '../vuex/actions';
 
   export default {
     data () {

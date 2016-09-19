@@ -36,7 +36,7 @@
 
 <script>
 
-  import {updateTBDropdownDisplay} from '../vuex/toolbar-actions';
+  import {updateTBDropdownDisplay} from '../vuex/actions';
 
   export default {
     data () {

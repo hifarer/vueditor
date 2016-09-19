@@ -14,7 +14,7 @@
 
 <script>
 
-    import {updateTBActive} from '../vuex/toolbar-actions';
+    import {updateContent, updateTBActive, updateTBDropdownDisplay} from '../vuex/actions';
 
     export default {
         data () {
@@ -22,7 +22,8 @@
                 iframeEle: null,
                 iframeWin: null,
                 iframeDoc: null,
-                iframeBody: null
+                iframeBody: null,
+                timer: null
             }
         },
 
@@ -36,7 +37,9 @@
                 }
             },
             actions: {
-                updateTBActive
+                updateContent,
+                updateTBActive,
+                updateTBDropdownDisplay
             }
         },
 
@@ -60,21 +63,15 @@
                         oSel.addRange(range);
                     }
                 }
-            },
-
-            content: {
-                get () {
-                    return this.iframeBody.innerHTML;
-                },
-                set (content) {
-                    this.iframeBody.innerHTML = content;
-                }
             }
         },
 
         watch: {
             'currentView': function () {
 
+            },
+            'content': function (val) {
+                this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
             }
         },
 
@@ -90,25 +87,28 @@
 
             addEvent () {
                 this.selectionChange();
+                this.iframeDoc.addEventListener('click', this.updateTBDropdownDisplay, false);
                 this.iframeBody.addEventListener('keydown', this.keydownHandler, false);
                 this.iframeBody.addEventListener('keyup', this.keyupHandler, false);
             },
 
             keydownHandler (event) {
-                //console.log(event);
+                let comp = this.$root.$refs.toolbar.$refs.undo;
                 if (event.ctrlKey && event.keyCode == 89) {     //恢复
                     event.preventDefault();
+                    comp.redo();
                 }
                 if (event.ctrlKey && event.keyCode == 90) {     //撤销
                     event.preventDefault();
+                    comp.undo();
                 }
             },
 
             keyupHandler (event) {
-                console.log(event);
-                /*timer = */setTimeout(function () {
-                    //iframeBody.undoManager.stackin(iframeBody.innerHTML);
-                }, 500);
+                clearTimeout(this.timer);
+                this.timer = setTimeout(function () {
+                    this.updateContent(this.iframeBody.innerHTML);
+                }.bind(this), 500);
             },
 
             selectionChange () {
@@ -137,7 +137,7 @@
                 }
                 this[name] ? this[name](name, value) : this.iframeDoc.execCommand(name, false, value);
                 this.updateTBActive(this.iframeDoc);
-                console.log(this.$root.$refs.toolbar);
+                this.updateContent(this.iframeBody.innerHTML);
             },
 
             insertHTML (name, value) {

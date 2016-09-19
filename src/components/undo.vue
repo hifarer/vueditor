@@ -1,30 +1,31 @@
 
 <template>
-    <a href="javascript:;" title="撤销" :class="{'ve-disabled': undoDisabled}" @click="undo">
+    <a href="javascript:;" title="撤销" :class="{'ve-disabled': undoState}" @click="undo">
         <i class="fa fa-undo"></i>
     </a>
-    <a href="javascript:;" title="恢复" :class="{'ve-disabled': redoDisabled}" @click="redo">
+    <a href="javascript:;" title="恢复" :class="{'ve-disabled': redoState}" @click="redo">
         <i class="fa fa-repeat"></i>
     </a>
 </template>
 
 <script>
 
-    import {updateContent, updateTBDisabled} from '../vuex/toolbar-actions';
+    import {updateContent, updateTBDisabled} from '../vuex/actions';
 
     export default {
         data () {
             return {
                 stack: [],
-                index: -1
+                index: -1,
+                prev: ''
             };
         },
         vuex: {
             getters: {
-                undoDisabled: function (state) {
+                undoState: function (state) {
                     return state.toolBtns.undo.disabled;
                 },
-                redoDisabled: function (state) {
+                redoState: function (state) {
                     return state.toolBtns.redo.disabled;
                 },
                 content: function (state) {
@@ -38,7 +39,7 @@
         },
         computed: {
             canUndo: function () {
-                return this.index >= 0;
+                return this.index > 0;
             },
             canRedo: function () {
                 return this.index < this.stack.length - 1;
@@ -62,21 +63,17 @@
                 let content = this.stack[this.index];
                 this.updateContent(content);
             },
-            push (content) {
+            push (content, isInit) {
                 if (content != this.stack[this.index]) {
                     this.stack = this.stack.slice(0, this.index + 1);
                     this.stack.push(content);
                     this.index++;
-                    this.render();
                 }
-            },
-            render (content) {
-                content && this.updateContent(content);
-                this.updateTBDisabled({undo: !this.canUndo, redo: !this.canRedo});
+                this.updateTBDisabled(isInit ? {undo: true, redo: true} : {undo: !this.canUndo, redo: !this.canRedo});
             }
         },
         ready () {
-            this.push(this.content);
+            this.push(this.content, true);
         }
     }
 </script>

@@ -15,8 +15,8 @@ export const updateTBDropdownDisplay = ({dispatch}, current) => {
     dispatch('UPDATE_TB_DROPDOWN_DISPLAY', current);
 };
 
-export const updateContent = ({dispatch}) => {
-    dispatch('UPDATE_CONTENT');
+export const updateContent = ({dispatch}, content) => {
+    dispatch('UPDATE_CONTENT', content);
 };
 
 export const switchView = ({dispatch}) => {
