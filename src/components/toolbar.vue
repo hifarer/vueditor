@@ -60,6 +60,9 @@
   import elements from './elements.vue';
   import table1 from './table.vue';
   import undo from './undo.vue';
+  import link from './link.vue';
+  import emoji from './emoji.vue';
+  import picture from './picture.vue';
 
   import * as actions from '../vuex/actions';
   import {toolbarConfig} from '../js/config';
@@ -99,8 +102,8 @@
         customBtns: customBtns,
         defaultConfig: [
           'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
-          'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-          '|', 'indent', 'outdent', '|', 'table1', '|', 'view'
+          'link', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+          '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table1', '|', 'view'
         ],
         customConfig: toolbarConfig
       }
@@ -138,7 +141,10 @@
       view,
       elements,
       table1,
-      undo
+      undo,
+      link,
+      emoji,
+      picture
     }
   }
 </script>

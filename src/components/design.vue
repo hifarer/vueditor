@@ -43,29 +43,6 @@
             }
         },
 
-        computed: {
-            range: {
-                get () {
-                    let oSel, oRange;
-                    if (this.iframeWin.getSelection) {
-                        oSel = this.iframeWin.getSelection();
-                        if (oSel && oSel.rangeCount != 0) {
-                            oRange = oSel.getRangeAt(0);
-                        }
-                    }
-                    return oRange;
-                },
-                set (range) {
-                    let oSel;
-                    if (this.iframeWin.getSelection) {
-                        oSel = this.iframeWin.getSelection();
-                        oSel.removeAllRanges();
-                        oSel.addRange(range);
-                    }
-                }
-            }
-        },
-
         watch: {
             'currentView': function () {
 
@@ -142,7 +119,7 @@
 
             insertHTML (name, value) {
                 let oSel = this.iframeWin.getSelection();
-                let oRange = this.range;
+                let oRange = this.getRange();
                 if (!oRange)return;
                 let node = null;
                 let frag = this.iframeDoc.createDocumentFragment();
@@ -161,7 +138,7 @@
             
             fontSize (name, value) {
                 let selection = this.iframeWin.getSelection();
-                let range = this.range;
+                let range = this.getRange();
                 if(!range || range.collapsed){
                     return;
                 }
@@ -223,7 +200,7 @@
             formatBlock (name, value) {
                 let ua = navigator.userAgent.toLowerCase();
                 if(ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)){
-                    let range = this.range;
+                    let range = this.getRange();
                     if(!range || range.collapsed){
                         alert('在IE浏览器中必须选中一段文字才能使用此功能！');
                     }else{
@@ -262,13 +239,46 @@
 
             removeFormat (name, value) {
                 this.iframeDoc.execCommand(name, false, value);
-                let range = this.range;
+                let range = this.getRange();
                 if(!range)return;
                 let container = range.commonAncestorContainer;
                 container.nodeType == 3 && (container = container.parentNode);
                 container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
                 this.formatContent(container, 'span', 'verticalAlign');
                 container.normalize();
+            },
+
+            getRange () {
+                let oSel, oRange;
+                if (this.iframeWin.getSelection) {
+                    oSel = this.iframeWin.getSelection();
+                    if (oSel && oSel.rangeCount != 0) {
+                        oRange = oSel.getRangeAt(0);
+                    }
+                }
+                return oRange;
+            },
+
+            setRange (range) {
+                let oSel;
+                if (this.iframeWin.getSelection) {
+                    oSel = this.iframeWin.getSelection();
+                    oSel.removeAllRanges();
+                    oSel.addRange(range);
+                }
+            },
+
+            removeRange () {
+                let oSel;
+                if (this.iframeWin.getSelection) {
+                    oSel = this.iframeWin.getSelection();
+                    oSel.removeAllRanges();
+                }
+            },
+
+            rangeValid () {
+                let range = this.getRange();
+                return (range && !range.collapsed);
             }
 
         }

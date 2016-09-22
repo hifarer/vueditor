@@ -22,7 +22,7 @@
 </style>
 
 <template>
-  <a href="javascript:;" title="表格" :class="{'ve-disabled': disabled}" @click="toggle">
+  <a href="javascript:;" title="表格" :class="{'ve-disabled': disabled, 've-active': display}" @click="toggle">
     <i class="fa fa-table"></i>
   </a>
   <div class="ve-toolbar-dropdown mytable" v-show="display" :style="{left: left + 'px', top: top + 'px'}">

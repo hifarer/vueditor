@@ -83,3 +83,63 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.ve-popover {
+  font-size: 14px;
+  position: absolute;
+  background-color: #fff;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.pop-arrow {
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  margin-left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid rgba(0,0,0,.25);
+  &:after {
+    position: absolute;
+    left: -10px;
+    top: 1px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    content: "";
+    border-bottom: 10px solid #fff;
+  }
+}
+.pop-header {
+  background: #f7f7f7;
+  padding: 8px 14px;
+  border-bottom: 1px solid #ebebeb;
+}
+.pop-body {
+  padding: 8px;
+}
+
+.ve-dialog {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+.dialog-header {
+  background: #f7f7f7;
+}
+.dialog-body {
+
+}

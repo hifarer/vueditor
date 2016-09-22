@@ -7,6 +7,7 @@ import {toolbarConfig} from '../js/config';
 
 let toolBtns = {};
 toolbarConfig.push('redo');
+toolbarConfig.push('unlink');
 toolbarConfig.forEach(function (name) {
     !toolBtns[name] && (toolBtns[name] = {});
     toolBtns[name].active = false;

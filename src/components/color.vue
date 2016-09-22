@@ -21,7 +21,7 @@
 
 <template>
   <a href="javascript:;" title="{{param.colorType == 'foreColor' ? '文字颜色' : '背景颜色'}}"
-     :class="{'active': display, 've-disabled': toolBtns[this.param.colorType].disabled}" @click="toggle">
+     :class="{'ve-active': toolBtns[this.param.colorType].showmenu, 've-disabled': toolBtns[this.param.colorType].disabled}" @click="toggle">
     <i class="fa" :class="{'fa-file-text': param.colorType == 'backColor', 'fa-file-text-o': param.colorType == 'foreColor'}"></i>
   </a>
   <div class="ve-toolbar-dropdown colorpicker" v-show="toolBtns[this.param.colorType].showmenu" :style="{left: left + 'px', top: top + 'px'}">
