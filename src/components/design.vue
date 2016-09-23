@@ -46,6 +46,12 @@
         },
 
         watch: {
+            'currentView': function (val) {
+                if(val == 'sourceCode'){
+                    clearTimeout(this.timer);
+                    this.updateContent(this.iframeBody.innerHTML)
+                }
+            },
             'content': function (val) {
                 if(this.inited){
                     this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
