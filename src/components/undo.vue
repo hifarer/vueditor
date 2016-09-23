@@ -51,10 +51,12 @@
             'content': function (content) {
                 this.push(content);
             },
-            'currentView': function () {
-                this.stack = [];
-                this.index = -1;
-                this.push(this.content, true);
+            'currentView': function (val) {
+                if(val == 'design'){
+                    this.stack = [];
+                    this.index = -1;
+                    this.push(this.content, true);
+                }
             }
         },
         methods: {
@@ -76,7 +78,11 @@
                     this.stack.push(content);
                     this.index++;
                 }
-                this.updateTBDisabled(isInit ? {undo: true, redo: true} : {undo: !this.canUndo, redo: !this.canRedo});
+                let json = {undo: !this.canUndo, redo: !this.canRedo};
+                if(isInit || this.currentView == 'sourceCode'){
+                    json = {undo: true, redo: true};
+                }
+                this.updateTBDisabled(json);
             }
         },
         ready () {
