@@ -1,5 +1,8 @@
 <style lang="less" rel="stylesheet/less">
-
+    .link-popover {
+        width: 240px;
+        height: 90px;
+    }
 </style>
 
 <template>
@@ -9,7 +12,7 @@
     <a href="javascript:;" title="取消超链接" :class="{'ve-disabled': unLinkState}" @click="unLinkHandler">
         <i class="fa fa-unlink"></i>
     </a>
-    <div class="ve-popover link-popover" v-show="display" :style="{width: width + 'px', height: height + 'px', left: left + 'px', top: top + 'px'}">
+    <div class="ve-popover link-popover" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
         <div class="pop-arrow"></div>
         <div class="pop-header">添加超链接</div>
         <div class="pop-body">
@@ -27,8 +30,6 @@
     export default {
         data () {
             return {
-                width: 240,
-                height: 90,
                 left: 0,
                 top: 0,
                 linkVal: ''

@@ -22,7 +22,8 @@ var toolbarConfig = [
 <head>
   <meta charset="UTF-8">
   <title>Vueditor</title>
-  <!--do not add codemirror-pkg.min.css if you don't need the "code"-->
+  <!--codemirror-pkg.min.css, codemirror-pkg.min.js and beautify-html.min.js is only neccessy when you need to switch to the source code,-->
+  <!--don't add "view" to your toolbarConfig if not-->
   <link rel="stylesheet" type="text/css" href="../dist/plugins/codemirror/codemirror-pkg.min.css">
   <link rel="stylesheet" type="text/css" href="../dist/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="../dist/css/vueditor.min.css">
@@ -31,7 +32,6 @@ var toolbarConfig = [
 
   <div id="vueditor" style="height: 200px;"></div>
    
-  <!--do not add codemirror-pkg.min.js and beautify-html.min.js if you don't need the "code"-->
   <script type="text/javascript" src="../dist/plugins/codemirror/codemirror-pkg.min.js"></script>
   <script type="text/javascript" src="../dist/plugins/beautify-html.min.js"></script>
   <script type="text/javascript" src="../dist/js/config.js"></script>

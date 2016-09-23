@@ -1,5 +1,7 @@
 <style lang="less" rel="stylesheet/less">
-
+    .pic-dialog .ve-dialog-wrap {
+        width: 500px;
+    }
 </style>
 
 <template>
@@ -7,7 +9,7 @@
         <i class="fa fa-file-image-o"></i>
     </a>
     <div class="ve-dialog pic-dialog" v-show="display" @click="hideDialog" :style="{width: ctnW + 'px', height: ctnH + 'px'}">
-        <div class="ve-dialog-wrap" v-on:click.stop :style="{width: wrapW + 'px'}">
+        <div class="ve-dialog-wrap" v-on:click.stop>
             <div class="dialog-header">插入图片<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
             <div class="dialog-body">
                 <input type="file">
@@ -29,9 +31,8 @@
     export default {
         data () {
             return {
-                ctnW: 0,
-                ctnH: 0,
-                wrapW: 600
+                ctnW: window.innerWidth,
+                ctnH: window.innerHeight
             }
         },
         vuex: {
@@ -50,8 +51,6 @@
         methods: {
             toggle () {
                 if(!this.disabled){
-                    this.ctnW = window.innerWidth;
-                    this.ctnH = window.innerHeight;
                     this.updateTBDropdownDisplay('picture');
                 }
             },
@@ -76,6 +75,12 @@
                     alert('未选择图片或选择的文件并非图片!');
                 }
             }
+        },
+        ready () {
+            window.addEventListener('resize', function () {
+                this.ctnW = window.innerWidth;
+                this.ctnH = window.innerHeight;
+            }.bind(this), false);
         }
     }
 </script>
