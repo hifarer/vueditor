@@ -30,6 +30,8 @@
     export default {
         data () {
             return {
+                width: 240,
+                height: 90,
                 left: 0,
                 top: 0,
                 linkVal: ''

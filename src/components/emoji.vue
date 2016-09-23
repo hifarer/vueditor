@@ -26,7 +26,7 @@
         <div class="pop-body">
             <div class="emoji-wrap" @click="insertItem">
                 <a href="javascript:;" v-for="item in arr">
-                    <img :src="'../dist/images/emoji/'+item+'.png'">
+                    <img :src="'./images/emoji/'+item+'.png'">
                 </a>
             </div>
         </div>
@@ -44,6 +44,8 @@
                     "U_E403", "U_E404", "U_E405", "U_E406", "U_E407", "U_E408", "U_E409", "U_E410", "U_E411", "U_E412",
                     "U_E413", "U_E414", "U_E415", "U_E416", "U_E417", "U_E418", "U_E40A", "U_E40B", "U_E40C", "U_E40D",
                     "U_E40E", "U_E40F"],
+                width: 260,
+                height: 180,
                 left: 0,
                 top: 0
             }
@@ -73,7 +75,7 @@
             insertItem (event) {
                 let img = event.target.cloneNode(true);
                 img.style.width = '30px';
-                this.$root.$refs.design.exec('insertHTML', img.outerHTML.replace('/dist', ''));
+                this.$root.$refs.design.exec('insertHTML', img.outerHTML.replace('./', '../'));
             }
         }
     }

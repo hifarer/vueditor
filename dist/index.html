@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vueditor</title>
+  <link rel="stylesheet" type="text/css" href="./plugins/codemirror/codemirror-pkg.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/vueditor.min.css">
+  <style>
+    #vueditor {
+      margin: 20px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="vueditor"></div>
+
+  <script type="text/javascript" src="./plugins/codemirror/codemirror-pkg.min.js"></script>
+  <script type="text/javascript" src="./plugins/beautify-html.min.js"></script>
+  <script type="text/javascript" src="./js/config.js"></script>
+  <script type="text/javascript" src="./js/vue.min.js"></script>
+  <script type="text/javascript" src="./js/vuex.min.js"></script>
+  <script type="text/javascript" src="./js/vueditor.min.js"></script>
+  <script>
+    var inst = new Vueditor('#vueditor');
+    inst.setContent('fill your content here');
+    console.log(inst.getContent());
+  </script>
+</body>
+</html>
