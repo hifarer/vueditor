@@ -8,7 +8,7 @@
 
 <template>
     <div class="ve-design" v-show="currentView == 'design'">
-        <iframe src="../dist/iframe/page.html" frameborder="0" class="ve-iframe" @load="init"></iframe>
+        <iframe src="../dist/iframe/page.html" frameborder="0" @load="init"></iframe>
     </div>
 </template>
 
@@ -23,7 +23,9 @@
                 iframeWin: null,
                 iframeDoc: null,
                 iframeBody: null,
-                timer: null
+                timer: null,
+                inited: false,
+                cache: ''
             }
         },
 
@@ -44,11 +46,12 @@
         },
 
         watch: {
-            'currentView': function () {
-
-            },
             'content': function (val) {
-                this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
+                if(this.inited){
+                    this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
+                }else{
+                    this.cache = val;
+                }
             }
         },
 
@@ -59,6 +62,11 @@
                 this.iframeWin = this.iframeEle.contentWindow;
                 this.iframeDoc = this.iframeWin.document;
                 this.iframeBody = this.iframeWin.document.body;
+                this.inited = true;
+                if(this.cache){
+                    this.iframeBody.innerHTML != this.cache && (this.iframeBody.innerHTML = this.cache);
+                    this.cache = '';
+                }
                 this.addEvent();
             },
 

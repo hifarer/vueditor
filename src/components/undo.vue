@@ -16,8 +16,7 @@
         data () {
             return {
                 stack: [],
-                index: -1,
-                prev: ''
+                index: -1
             };
         },
         vuex: {
@@ -27,6 +26,9 @@
                 },
                 redoState: function (state) {
                     return state.toolBtns.redo.disabled;
+                },
+                currentView: function(state) {
+                    return state.currentView;
                 },
                 content: function (state) {
                     return state.content;
@@ -48,6 +50,11 @@
         watch: {
             'content': function (content) {
                 this.push(content);
+            },
+            'currentView': function () {
+                this.stack = [];
+                this.index = -1;
+                this.push(this.content, true);
             }
         },
         methods: {

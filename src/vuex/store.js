@@ -1,9 +1,6 @@
-/**
- * Created by vwvo on 2016/8/29.
- */
 
 import mutations from './mutations';
-import {toolbarConfig} from '../js/config';
+//import {toolbarConfig} from '../js/config';
 
 let toolBtns = {};
 toolbarConfig.push('redo');

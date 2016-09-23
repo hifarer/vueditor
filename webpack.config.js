@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const components = new ExtractTextPlugin('components.css', {allChunks: true});
 const common = new ExtractTextPlugin('style.css');
@@ -39,6 +40,10 @@ module.exports = {
 
   babel: {
     presets: ['es2015']
+  },
+
+  postcss: function () {
+    return [autoprefixer];
   },
 
   plugins: [

@@ -5,6 +5,7 @@
   "main": "test.js",
   "dependencies": {},
   "devDependencies": {
+    "autoprefixer": "^6.4.1",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
@@ -22,6 +23,7 @@
     "gulp-watch": "^4.3.6",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "postcss": "^5.2.0",
     "postcss-loader": "^0.9.1",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.6",

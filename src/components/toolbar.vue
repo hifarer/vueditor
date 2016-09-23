@@ -1,7 +1,6 @@
 
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
-    position: relative;
     border: 1px solid #ddd;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -65,7 +64,7 @@
   import picture from './picture.vue';
 
   import * as actions from '../vuex/actions';
-  import {toolbarConfig} from '../js/config';
+  //import {toolbarConfig} from '../js/config';
 
   let nativeBtns = {
 

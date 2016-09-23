@@ -45,7 +45,7 @@ gulp.task('copyImages', () => {
     .pipe(gulp.dest('dist/images'));
 });
 
-gulp.task('webpack', ['babel'], () => {
+gulp.task('webpack', () => {
   webpack(webpackConfig, (err) => {
     if(err)throw err;
     gulp.src('./build/*.css')
@@ -54,18 +54,9 @@ gulp.task('webpack', ['babel'], () => {
       .pipe(gulp.dest('./dist/css/'));
     gulp.src(['./build/es6.js', './build/vueditor.js'])
       .pipe(concat('vueditor.min.js'))
-      //.pipe(uglify())
+      .pipe(uglify())
       .pipe(gulp.dest('./dist/js/'));
   });
-});
-
-gulp.task('babel', () => {
-  gulp.src(['./src/js/varibles.js', './src/js/util.js'])
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(concat('es6.js'))
-    .pipe(gulp.dest('./build/'));
 });
 
 gulp.task('sprite', ['webpack'], () => {
@@ -98,7 +89,7 @@ gulp.task('browserSync', () => {
 });
 
 gulp.task('watch', ()  => {
-  gulp.watch('src/**/*', ['copyImages', 'babel', 'webpack'/*, 'sprite'*/, 'clean']);
+  gulp.watch('src/**/*', ['copyImages', 'webpack'/*, 'sprite'*/, 'clean']);
 });
 
-gulp.task('default', ['copyImages', 'babel', 'webpack'/*, 'sprite'*/, 'clean', 'watch']);
+gulp.task('default', ['copyImages', 'webpack'/*, 'sprite'*/, 'clean', 'watch']);

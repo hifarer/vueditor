@@ -6,23 +6,21 @@
   <link rel="stylesheet" type="text/css" href="../dist/plugins/codemirror/codemirror-pkg.min.css">
   <link rel="stylesheet" type="text/css" href="../dist/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="../dist/css/vueditor.min.css">
-  <style>
-    .vueditor {
-      margin: 20px;
-    }
-  </style>
 </head>
 <body>
 
-  <div id="vueditor"></div>
+  <div id="vueditor" style="height: 200px;"></div>
 
   <script type="text/javascript" src="../dist/plugins/codemirror/codemirror-pkg.min.js"></script>
   <script type="text/javascript" src="../dist/plugins/beautify-html.min.js"></script>
+  <script type="text/javascript" src="../dist/js/config.js"></script>
   <script type="text/javascript" src="../dist/js/vue.min.js"></script>
   <script type="text/javascript" src="../dist/js/vuex.min.js"></script>
   <script type="text/javascript" src="../dist/js/vueditor.min.js"></script>
   <script>
-    Vueditor('#vueditor');
+    var inst = new Vueditor('#vueditor');
+    inst.setContent('fill your content here');
+    console.log(inst.getContent());
   </script>
 </body>
 </html>

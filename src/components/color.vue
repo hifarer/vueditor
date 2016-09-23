@@ -77,7 +77,7 @@
     methods: {
       toggle () {
         if(!this.toolBtns[this.param.colorType].disabled){
-          let obj = this.$el.nextElementSibling;
+          let obj = this.$el.nextElementSibling || this.$el.nextSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           //this.display = !this.display;

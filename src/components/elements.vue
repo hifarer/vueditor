@@ -55,7 +55,7 @@
         if(!this.disabled){
           // https://vuejs.org.cn/api/#vm-el
           // https://vuejs.org.cn/guide/components.html#片断实例
-          let obj = this.$el.nextElementSibling;
+          let obj = this.$el.nextElementSibling || this.$el.nextSibling;
           this.left = obj.offsetLeft;
           this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
           this.updateTBDropdownDisplay('elements');

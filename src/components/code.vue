@@ -35,8 +35,6 @@
         }
     };
 
-    import {getView, getContent} from '../vuex/getters';
-
     export default {
         data () {
           return {

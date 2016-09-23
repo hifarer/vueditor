@@ -5,4 +5,6 @@ function Vueditor(el) {
   return new Vue(app);
 }
 
+export default Vueditor;
+
 window.Vueditor = Vueditor;

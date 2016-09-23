@@ -12,15 +12,34 @@
     import design from './design.vue';
     import code1 from './code.vue';
     import store from '../vuex/store';
+    import {updateContent} from '../vuex/actions';
 
     export default {
         el: '',
         store,
+        vuex: {
+            // todo 根节点这样有没有问题?
+            getters: {
+                content: function(state) {
+                    return state.content;
+                }
+            },
+            actions: {
+                updateContent
+            }
+        },
         components: {
             toolbar,
             design,
             code1
+        },
+        methods: {
+            getContent () {
+                return this.content;
+            },
+            setContent (content) {
+                this.updateContent(content);
+            }
         }
     }
-
 </script>

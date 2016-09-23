@@ -1,7 +1,3 @@
-/**
- * Created by vwvo on 2016/8/29.
- */
-
 
 export const updateTBActive = ({dispatch}, obj) => {
     dispatch('UPDATE_TB_ACTIVE', obj);

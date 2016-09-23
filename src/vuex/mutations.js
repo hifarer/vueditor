@@ -1,6 +1,3 @@
-/**
- * Created by vwvo on 2016/8/29.
- */
 
 const mutations = {
 
@@ -13,7 +10,6 @@ const mutations = {
     },
 
     UPDATE_TB_DISABLED (state, json) {
-        //console.log(json);
         let disabled = state.currentView !== 'design';
         for(let name in state.toolBtns){
             state.toolBtns[name].disabled = disabled;
