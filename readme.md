@@ -15,7 +15,7 @@ var toolbarConfig = [
 ];
 ```
 
-2.add the following stylesheets and scripts to you page, remember set width and height to the container.
+2.add the following stylesheets and scripts to you page, remember to add width and height to the container.
 ```
 <!DOCTYPE html>
 <html lang="en">
