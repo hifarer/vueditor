@@ -9,7 +9,6 @@ var pkg = require('../package.json');
 var banner = pkg.name + ' v' + pkg.version;
 banner += '\nhttps://github.com/hifarer/Vueditor';
 
-
 module.exports = {
 
   context: __dirname,
@@ -28,7 +27,7 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.vue$/, loader: 'vue' },
+      { test: /\.vue$/, loader: 'vue', exclude: /node_modules/ },
       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
       { test: /\.(css|less)$/, loader: style.extract('style-loader', 'css!less!postcss') },
       { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' }
@@ -53,8 +52,8 @@ module.exports = {
         warnings: false
       }
     }),
-    new webpack.BannerPlugin(banner),
     new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': 'production'

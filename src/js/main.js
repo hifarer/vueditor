@@ -1,13 +1,15 @@
-import app from "../components/app.vue";
-import createStore from '../vuex/store';
-import defaultConfig from './config';
-import globalConfig from 'config';
+
+import Vue from 'vue'
+import app from '../components/app.vue'
+import createStore from '../vuex/store'
+import defaultConfig from './config'
+import globalConfig from 'config'
 
 export default class Vueditor {
   constructor (el, opts) {
-    let config = opts || globalConfig || defaultConfig;
-    this.obj = document.querySelector(el);
-    this.obj.innerHTML = '<app></app>';
+    let config = opts || globalConfig || defaultConfig
+    this.obj = document.querySelector(el)
+    this.obj.innerHTML = '<app></app>'
     this.vue = new Vue({
       el: this.obj,
       data: {
@@ -19,19 +21,19 @@ export default class Vueditor {
       },
       methods: {
         getContent () {
-          return this.$store.state.content;
+          return this.$store.state.content
         },
         setContent (content) {
-          this.$store.dispatch('updateContent', content);
+          this.$store.dispatch('updateContent', content)
         }
       }
-    });
+    })
   }
   setContent (content) {
-    this.vue.setContent(content);
+    this.vue.setContent(content)
   }
   getContent () {
-    return this.vue.getContent();
+    return this.vue.getContent()
   }
 }
 

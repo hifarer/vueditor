@@ -23,7 +23,7 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.vue$/, loader: 'vue' },
+      { test: /\.vue$/, loader: 'vue', exclude: /node_modules/ },
       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
       { test: /\.(css|less)$/, loader: style.extract('style-loader', 'css!less!postcss') },
       { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' }

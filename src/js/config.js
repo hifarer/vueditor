@@ -8,4 +8,4 @@ export default {
   iframePath: '',  // mode设置为iframe, 需要指定iframe.html的路径
   assetsPath: '/Vueditor/dist', // 图片等资源的访问路径
   fileuploadUrl: '' // 上传文件的接口地址, 留空不上传文件, 只显示本地预览。
-};
+}

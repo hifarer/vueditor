@@ -1,18 +1,16 @@
 
-import Vue from 'vue';
 import Vuex from 'vuex';
 import * as actions from './actions';
 import mutations from './mutations';
 
 export default function (config) {
-
   let toolbarConfig = config.toolbar;
   let toolbarStates = {};
 
-  if(toolbarConfig.indexOf('undo') != -1){
+  if (toolbarConfig.indexOf('undo') !== -1) {
     toolbarConfig.push('redo');
   }
-  if(toolbarConfig.indexOf('links') != -1){
+  if (toolbarConfig.indexOf('links') !== -1) {
     toolbarConfig.push('unlink');
   }
   toolbarConfig.forEach(function (name) {
@@ -47,5 +45,4 @@ export default function (config) {
     actions,
     mutations
   });
-
 }
