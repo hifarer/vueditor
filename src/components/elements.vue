@@ -16,56 +16,45 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
-    <span>{{val || arr[0]}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
-  </a>
-  <div class="ve-toolbar-dropdown ve-select-dropdown format-block" @click="selectItem" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
-    <a href="javascript:;" v-for="item in arr">{{item}}</a>
+  <div>
+    <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
+      <span>{{val || arr[0]}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
+    </a>
+    <div class="ve-toolbar-dropdown ve-select-dropdown format-block" @click="selectItem" v-show="display">
+      <a href="javascript:;" v-for="item in arr">{{item}}</a>
+    </div>
   </div>
 </template>
 
 <script>
 
-  import {updateTBDropdownDisplay} from '../vuex/actions';
-
   export default {
     data(){
       return {
         arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-        val: '',
-        left: 0,
-        top: 0
+        val: ''
       }
     },
-    vuex: {
-      getters: {
-        disabled: function (state) {
-          return state.toolBtns.elements.disabled;
-        },
-        display: function (state) {
-          return state.toolBtns.elements.showmenu;
-        }
+    computed: {
+      disabled () {
+        return this.$store.state.toolbarStates.elements.disabled;
       },
-      actions: {
-        updateTBDropdownDisplay
+      display () {
+        return this.$store.state.toolbarStates.elements.showPopup;
       }
     },
     methods: {
+      updatePopupDisplay (current) {
+        this.$store.dispatch('updatePopupDisplay', current);
+      },
       toggle () {
-        if(!this.disabled){
-          // https://vuejs.org.cn/api/#vm-el
-          // https://vuejs.org.cn/guide/components.html#片断实例
-          let obj = this.$el.nextElementSibling || this.$el.nextSibling;
-          this.left = obj.offsetLeft;
-          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.updateTBDropdownDisplay('elements');
-        }
+        !this.disabled && this.updatePopupDisplay('elements');
       },
       selectItem (event) {
         let tagName = event.target.innerHTML.trim();
         this.val = tagName;
-        this.$root.$refs.design.exec('formatBlock', tagName);
-        this.updateTBDropdownDisplay();
+        this.$store.dispatch('execCommand', {name: 'formatBlock', value: tagName});
+        this.updatePopupDisplay();
       }
     }
   }

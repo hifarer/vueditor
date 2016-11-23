@@ -16,15 +16,17 @@
 </style>
 
 <template>
-  <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
-    <span>{{val || fontSize[0]}}px</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
-  </a>
-  <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
-    <ul>
-      <li v-for="size in fontSize" @click="clickHandler(size)">
-        <a href="javascript:;">{{size}}px</a>
-      </li>
-    </ul>
+  <div>
+    <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
+      <span>{{val || fontSize[0]}}px</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
+    </a>
+    <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display">
+      <ul>
+        <li v-for="size in fontSize" @click="clickHandler(size)">
+          <a href="javascript:;">{{size}}px</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -32,43 +34,32 @@
 
   let fontSize = [12, 14, 16, 18, 20, 24, 28, 32, 36];
 
-  import {updateTBDropdownDisplay} from '../vuex/actions';
-
   export default {
     data () {
       return {
         fontSize: fontSize,
-        val: '',
-        left: 0,
-        top: 0
+        val: ''
       }
     },
-    vuex: {
-      getters: {
-        disabled: function (state) {
-          return state.toolBtns.fontSize.disabled;
-        },
-        display: function (state) {
-          return state.toolBtns.fontSize.showmenu;
-        }
+    computed: {
+      disabled () {
+        return this.$store.state.toolbarStates.fontSize.disabled;
       },
-      actions: {
-        updateTBDropdownDisplay
+      display () {
+        return this.$store.state.toolbarStates.fontSize.showPopup;
       }
     },
     methods: {
+      updatePopupDisplay (current) {
+        this.$store.dispatch('updatePopupDisplay', current);
+      },
       toggle () {
-        if(!this.disabled){
-          let obj = this.$el.nextElementSibling || this.$el.nextSibling;
-          this.left = obj.offsetLeft;
-          this.top = obj.offsetTop + (obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom));
-          this.updateTBDropdownDisplay('fontSize');
-        }
+        !this.disabled && this.updatePopupDisplay('fontSize');
       },
       clickHandler (size) {
         this.val = size;
-        this.$root.$refs.design.exec('fontSize', size);
-        this.updateTBDropdownDisplay();
+        this.$store.dispatch('execCommand', {name: 'fontSize', value: size});
+        this.updatePopupDisplay();
       }
     }
   }

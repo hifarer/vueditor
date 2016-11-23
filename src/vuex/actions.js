@@ -1,20 +1,28 @@
 
-export const updateTBActive = ({dispatch}, obj) => {
-    dispatch('UPDATE_TB_ACTIVE', obj);
+export const updateToolbarActiveStates = ({commit}, obj) => {
+  commit('UPDATE_TOOLBAR_ACTIVE_STATES', obj);
 };
 
-export const updateTBDisabled = ({dispatch}, json) => {
-    dispatch('UPDATE_TB_DISABLED', json);
+export const updateToolbarDisabledStates = ({commit}, json) => {
+  commit('UPDATE_TOOLBAR_DISABLED_STATES', json);
 };
 
-export const updateTBDropdownDisplay = ({dispatch}, current) => {
-    dispatch('UPDATE_TB_DROPDOWN_DISPLAY', current);
+export const updatePopupDisplay = ({commit}, current) => {
+  commit('UPDATE_POPUP_DISPLAY', current);
 };
 
-export const updateContent = ({dispatch}, content) => {
-    dispatch('UPDATE_CONTENT', content);
+export const updateContent = ({commit}, content) => {
+  commit('UPDATE_CONTENT', content);
 };
 
-export const switchView = ({dispatch}) => {
-    dispatch('SWITCH_VIEW');
+export const switchView = ({commit}) => {
+  commit('SWITCH_VIEW');
+};
+
+export const execCommand = ({commit}, data) => {
+  commit('EXEC_COMMAND', data);
+};
+
+export const callAction = ({commit}, name) => {
+  commit('CALL_ACTION', name);
 };

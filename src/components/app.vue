@@ -1,45 +1,45 @@
 <template>
-    <div class="vueditor">
-        <toolbar v-ref:toolbar></toolbar>
-        <design v-ref:design></design>
-        <code1 v-ref:code></code1>
-    </div>
+  <div class="vueditor">
+    <template v-for="item in comps">
+      <component :is="item"></component>
+    </template>
+  </div>
 </template>
 
 <script>
-    // 取名为code 和 sourcecode 渲染不出来?
-    import toolbar from './toolbar.vue';
-    import design from './design.vue';
-    import code1 from './code.vue';
-    import store from '../vuex/store';
-    import {updateContent} from '../vuex/actions';
 
-    export default {
-        el: '',
-        store,
-        vuex: {
-            // todo 根节点这样有没有问题?
-            getters: {
-                content: function(state) {
-                    return state.content;
-                }
-            },
-            actions: {
-                updateContent
-            }
-        },
-        components: {
-            toolbar,
-            design,
-            code1
-        },
-        methods: {
-            getContent () {
-                return this.content;
-            },
-            setContent (content) {
-                this.updateContent(content);
-            }
-        }
+  import toolbar from './toolbar.vue';
+  import pictureDialog from './pictureDialog.vue'
+  import editable from './editable.vue';
+  import iframe from './iframe.vue';
+  import sourcecode from './sourcecode.vue';
+
+  import '../less/style.less';
+
+  export default {
+    data () {
+      let config = this.$root.config;
+      let comps = [
+        'toolbar',
+        'editable',
+        'sourcecode'
+      ];
+      if(config.toolbar.indexOf('picture') !== -1){
+        comps.push('pictureDialog');
+      }
+      if(config.mode !== 'default'){
+        comps[1] = 'iframe';
+      }
+      return {
+        comps: comps
+      }
+    },
+    components: {
+      toolbar,
+      iframe,
+      editable,
+      sourcecode,
+      pictureDialog
     }
+  }
 </script>
