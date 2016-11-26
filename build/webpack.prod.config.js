@@ -6,8 +6,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var style = new ExtractTextPlugin('css/vueditor.min.css');
 
 var pkg = require('../package.json');
-var banner = pkg.name + ' v' + pkg.version;
-banner += '\nhttps://github.com/hifarer/Vueditor';
+var banner = pkg.name + ' v' + pkg.version + '\n' + pkg.repository.url;
 
 module.exports = {
 
@@ -22,7 +21,8 @@ module.exports = {
     path: path.join(__dirname, '../dist'),
     filename: 'js/[name].min.js',
     library: 'Vueditor',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
 
   module: {
@@ -42,7 +42,7 @@ module.exports = {
   },
 
   postcss: function () {
-    return [autoprefixer];
+    return [autoprefixer({remove: false})];
   },
 
   plugins: [
@@ -56,15 +56,24 @@ module.exports = {
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': 'production'
+        'NODE_ENV': '"production"'
       }
     })
   ],
 
   externals: {
-    config: 'VueditorConfig',
-    vue: 'Vue',
-    vuex: 'Vuex'
+    vue: {
+      commonjs: 'vue',
+      commonjs2: 'vue',
+      amd: 'vue',
+      root: 'Vue',
+    },
+    vuex: {
+      commonjs: 'vuex',
+      commonjs2: 'vuex',
+      amd: 'vuex',
+      root: 'Vuex',
+    }
   }
 
 };

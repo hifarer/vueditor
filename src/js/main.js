@@ -1,40 +1,35 @@
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 import app from '../components/app.vue'
-import createStore from '../vuex/store'
+import createModule from '../vuex/store'
 import defaultConfig from './config'
-import globalConfig from 'config'
 
-export default class Vueditor {
-  constructor (el, opts) {
-    let config = opts || globalConfig || defaultConfig
-    this.obj = document.querySelector(el)
-    this.obj.innerHTML = '<app></app>'
-    this.vue = new Vue({
-      el: this.obj,
-      data: {
-        config: config
-      },
-      store: createStore(config),
-      components: {
-        app
-      },
-      methods: {
-        getContent () {
-          return this.$store.state.content
-        },
-        setContent (content) {
-          this.$store.dispatch('updateContent', content)
-        }
-      }
-    })
-  }
-  setContent (content) {
-    this.vue.setContent(content)
-  }
-  getContent () {
-    return this.vue.getContent()
-  }
+const globalConfig = window.VueditorConfig ? VueditorConfig : null;
+const install = function (Vue, opts = {}) {
+  let config = opts || globalConfig || defaultConfig;
+  let storeModule = createModule(config);
+  let data = {
+    config,
+    comps: [
+      'toolbar',
+      'editable',
+      'sourcecode',
+      'pictureDialog'
+    ]
+  };
+  opts.mode !== 'default' && (data.comps[1] = 'iframe');
+  opts.toolbar.indexOf('picture') !== -1 && data.comps.push('pictureDialog');
+  Vue.component('Vueditor', Object.assign({}, app, {
+    store: new Vuex.Store(storeModule),
+    data: function (){
+      return data;
+    }
+  }));
+};
+
+export default {
+  install
 }
 
 // TODO 安全，图片上传

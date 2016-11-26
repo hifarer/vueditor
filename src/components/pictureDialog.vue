@@ -47,7 +47,7 @@
       certainHandler (event) {
         let url = '';
         let obj = this.$el.querySelector('input');
-        let fileuploadUrl = this.$root.config.fileuploadUrl;
+        let fileuploadUrl = this.$store.state.config.fileuploadUrl;
         if (navigator.userAgent.indexOf('MSIE') >= 1) { // IE
           url = obj.value;
         } else {

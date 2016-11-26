@@ -52,7 +52,7 @@
           "U_E40E", "U_E40F"],
         width: 260,
         height: 180,
-        assetsPath: this.$root.config.assetsPath
+        assetsPath: this.$store.state.config.assetsPath
       }
     },
     computed: {

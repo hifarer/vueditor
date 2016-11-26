@@ -113,7 +113,7 @@
     },
     computed: {
       config () {
-        return this.$root.config.toolbar;
+        return this.$store.state.config.toolbar;
       },
       states () {
         return this.$store.state.toolbarStates;

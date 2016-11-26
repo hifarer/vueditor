@@ -12,7 +12,7 @@
 
 <template>
   <div class="ve-design" v-show="currentView == 'design'">
-    <div contenteditable="true" ref="div" @click="updatePopupDisplay" @keydown="keydownHandler" @keyup="keyupHandler"></div>
+    <div contenteditable="true" spellcheck="false" ref="div" @click="updatePopupDisplay" @keydown="keydownHandler" @keyup="keyupHandler"></div>
   </div>
 </template>
 
@@ -58,6 +58,9 @@
         this.exec (data.name, data.value);
       }
     },
+    mounted () {
+      this.selectionChange();
+    },
     methods: Object.assign({}, mapActions([
       'updateContent',
       'updateToolbarActiveStates',
@@ -81,21 +84,25 @@
       },
 
       selectionChange () {
-        let oSel = window.getSelection();
-        let focusOffset = -1;
-        setInterval(function () {
-          if (oSel && oSel.rangeCount) {
-            if (focusOffset != oSel.focusOffset) {
-              focusOffset = oSel.focusOffset;
-              this.updateToolbarActiveStates(document);
-            }
-          } else {
-            oSel = window.getSelection();
+        document.addEventListener('selectionchange', function(){
+          if(this.$refs.div.contains(window.getSelection().focusNode)){
+            this.updateToolbarActiveStates(document);
           }
-        }.bind(this), 500);
-        this.$refs.div.addEventListener('input', function () {
-          this.updateToolbarActiveStates(document);
         }.bind(this), false);
+        if (navigator.userAgent.indexOf('Firefox') !== -1) {
+          let oSel = this.iframeWin.getSelection();
+          let focusOffset = -1;
+          setInterval(function () {
+            if (oSel && oSel.rangeCount) {
+              if (focusOffset !== oSel.focusOffset) {
+                focusOffset = oSel.focusOffset;
+                this.updateToolbarActiveStates(this.iframeDoc);
+              }
+            } else {
+              oSel = window.getSelection();
+            }
+          }.bind(this), 300);
+        }
       },
 
       exec (name, value) {

@@ -18,7 +18,7 @@
         timer: null,
         inited: false,
         cache: '',
-        iframePath: this.$root.config.iframePath
+        iframePath: this.$store.state.config.iframePath
       }
     },
 
@@ -118,7 +118,7 @@
             } else {
               oSel = this.iframeWin.getSelection();
             }
-          }.bind(this), 500);
+          }.bind(this), 300);
         }
       },
 

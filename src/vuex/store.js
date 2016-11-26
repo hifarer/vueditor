@@ -6,13 +6,8 @@ import mutations from './mutations';
 export default function (config) {
   let toolbarConfig = config.toolbar;
   let toolbarStates = {};
-
-  if (toolbarConfig.indexOf('undo') !== -1) {
-    toolbarConfig.push('redo');
-  }
-  if (toolbarConfig.indexOf('links') !== -1) {
-    toolbarConfig.push('unlink');
-  }
+  toolbarConfig.indexOf('undo') !== -1 && toolbarConfig.push('redo');
+  toolbarConfig.indexOf('links') !== -1 && toolbarConfig.push('unlink');
   toolbarConfig.forEach(function (name) {
     toolbarStates[name] = {};
     toolbarStates[name].active = false;
@@ -21,28 +16,24 @@ export default function (config) {
   });
 
   let state = {
-
+    // editor config, in case of components need it
+    config,
     // toolbar disabled state & active state
     toolbarStates,
-
     // editor content
     content: '',
-
     // current display block: design or sourceCode
     currentView: 'design',
-
     command: {
       name: '',
       value: ''
     },
-
     action: ''
-
   };
 
-  return new Vuex.Store({
+  return {
     state,
     actions,
     mutations
-  });
+  };
 }

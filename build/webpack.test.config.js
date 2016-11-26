@@ -8,16 +8,13 @@ module.exports = {
   context: __dirname,
 
   entry: {
-    vueditor: ['webpack-hot-middleware/client?path=/__webpack_hmr', '../src/js/main.js']
+    test: ['../src/js/test.js']
   },
 
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
     filename: 'js/[name].min.js',
-    library: 'Vueditor',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
   },
 
   module: {
@@ -51,18 +48,10 @@ module.exports = {
     })
   ],
 
-  externals: {
-    vue: {
-      commonjs: 'vue',
-      commonjs2: 'vue',
-      amd: 'vue',
-      root: 'Vue',
-    },
-    vuex: {
-      commonjs: 'vuex',
-      commonjs2: 'vuex',
-      amd: 'vuex',
-      root: 'Vuex',
+  resolve: {
+    alias: {
+      'vue': 'vue/dist/vue.min.js',
+      'vuex': 'vuex/dist/vuex.min.js'
     }
   }
 
