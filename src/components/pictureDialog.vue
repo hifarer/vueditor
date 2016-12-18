@@ -9,14 +9,14 @@
   <div class="ve-dialog pic-dialog" v-show="display" @click="hideDialog"
        :style="{width: ctnW + 'px', height: ctnH + 'px'}">
     <div class="wrap" @click.stop>
-      <div class="dialog-header">插入图片<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
+      <div class="dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="dialog-body">
         <input type="file">
       </div>
       <div class="dialog-footer">
         <div class="ve-btn-box">
-          <button class="ve-btn" @click="hideDialog">取消</button>
-          <button class="ve-btn" @click="certainHandler">确定</button>
+          <button class="ve-btn" @click="hideDialog">{{lang.cancel}}</button>
+          <button class="ve-btn" @click="certainHandler">{{lang.ok}}</button>
         </div>
       </div>
     </div>
@@ -33,6 +33,9 @@
       }
     },
     computed: {
+      lang () {
+        return this.$store.state.lang.pictureDialog;
+      },
       display: function () {
         return this.$store.state.toolbarStates.picture.showPopup;
       }
@@ -60,7 +63,7 @@
           this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${url}">`});
           this.hideDialog();
         } else {
-          alert('未选择图片或选择的文件并非图片!');
+          alert(this.lang.invalidFile);
         }
       }
     },

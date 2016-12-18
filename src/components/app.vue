@@ -1,5 +1,5 @@
 <template>
-  <div class="vueditor">
+  <div class="vueditor" :class="classList" :id="id">
     <template v-for="item in comps">
       <component :is="item"></component>
     </template>
@@ -23,6 +23,14 @@
       editable,
       sourcecode,
       pictureDialog
+    },
+    methods: {
+      setContent (content) {
+        this.$store.dispatch('updateContent', content);
+      },
+      getContent () {
+        return this.$store.state.content;
+      }
     }
   }
 </script>

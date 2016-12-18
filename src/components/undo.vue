@@ -1,9 +1,9 @@
 <template>
   <div>
-    <a href="javascript:;" title="撤销" :class="{'ve-disabled': undoState}" @click="undo">
+    <a href="javascript:;" :title="lang.undo" :class="{'ve-disabled': undoState}" @click="undo">
       <i class="icon-undo"></i>
     </a>
-    <a href="javascript:;" title="恢复" :class="{'ve-disabled': redoState}" @click="redo">
+    <a href="javascript:;" :title="lang.redo" :class="{'ve-disabled': redoState}" @click="redo">
       <i class="icon-repeat"></i>
     </a>
   </div>
@@ -21,6 +21,9 @@
       };
     },
     computed: {
+      lang () {
+        return this.$store.state.lang.undo;
+      },
       currentView () {
         return this.$store.state.currentView;
       },

@@ -12,7 +12,7 @@
 
 <template>
   <div class="ve-design" v-show="currentView == 'design'">
-    <div contenteditable="true" spellcheck="false" ref="div" @click="updatePopupDisplay" @keydown="keydownHandler" @keyup="keyupHandler"></div>
+    <div contenteditable="true" spellcheck="false" @click="updatePopupDisplay" @keydown="keydownHandler" @keyup="keyupHandler"></div>
   </div>
 </template>
 
@@ -30,6 +30,9 @@
     },
 
     computed: {
+      lang () {
+        return this.$store.state.lang.editable;
+      },
       currentView: function () {
         return this.$store.state.currentView;
       },
@@ -45,14 +48,14 @@
       'currentView': function (val) {
         if (val == 'sourceCode') {
           clearTimeout(this.timer);
-          this.updateContent(this.$refs.div.innerHTML);
-          this.updateToolbarActiveStates();   // 切换到源码视图全部关闭激活状态
+          this.updateContent(this.$el.children[0].innerHTML);
+          this.updateToolbarActiveStates();
         }else{
           this.updateToolbarActiveStates(document);
         }
       },
       'content': function (val) {
-        this.$refs.div.innerHTML != val && (this.$refs.div.innerHTML = val);
+        this.$el.children[0].innerHTML != val && (this.$el.children[0].innerHTML = val);
       },
       'command': function (data) {
         this.exec (data.name, data.value);
@@ -71,21 +74,21 @@
       keydownHandler (event) {
         if (event.ctrlKey && (event.keyCode == 89 || event.keyCode == 90)) {
           event.preventDefault();
-          event.keyCode == 89 && this.callAction('redo');     //恢复
-          event.keyCode == 90 && this.callAction('undo');     //撤销
+          event.keyCode == 89 && this.callAction('redo');
+          event.keyCode == 90 && this.callAction('undo');
         }
       },
 
       keyupHandler () {
         clearTimeout(this.timer);
         this.timer = setTimeout(function () {
-          this.updateContent(this.$refs.div.innerHTML);
+          this.updateContent(this.$el.children[0].innerHTML);
         }.bind(this), 500);
       },
 
       selectionChange () {
         document.addEventListener('selectionchange', function(){
-          if(this.$refs.div.contains(window.getSelection().focusNode)){
+          if(this.$el.children[0].contains(window.getSelection().focusNode)){
             this.updateToolbarActiveStates(document);
           }
         }.bind(this), false);
@@ -111,7 +114,7 @@
         }
         this[name] ? this[name](name, value) : document.execCommand(name, false, value);
         this.updateToolbarActiveStates(document);
-        this.updateContent(this.$refs.div.innerHTML);
+        this.updateContent(this.$el.children[0].innerHTML);
       },
 
       insertHTML (name, value) {
@@ -152,7 +155,7 @@
             if (document.queryCommandSupported('styleWithCss')) {
               document.execCommand('styleWithCss', false, true);
             }
-            document.execCommand('fontSize', false, 7);    //设置为1-7一般都可以，但是当设置为3时，在chrome中会没反应，应该是face="3"和默认字号一样大造成的。
+            document.execCommand('fontSize', false, 7);
             let container = range.commonAncestorContainer;
             container.nodeType == 3 && (container = container.parentNode);
             container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
@@ -173,14 +176,14 @@
             container.nodeType == 3 && (container = container.parentNode);
             container.tagName.toLowerCase() == 'font' && (container = container.parentNode);
             fontList = container.getElementsByTagName('font');
-            for (let i = 0; i < fontList.length; i++) {   //将<font face="7"></font>转换成<span style="font-size: npx;"></span>
+            for (let i = 0; i < fontList.length; i++) {
               let font = fontList[i];
               let span = document.createElement('span');
               Array.prototype.forEach.call(font.attributes, function (attr) {
                 attr.nodeName == 'size' ? span.style.fontSize = value + 'px' : span.setAttribute(attr.nodeName, attr.nodeValue);
               });
               span.innerHTML = font.innerHTML;
-              span.querySelectorAll('span').length != 0 && veUtil.command.format(span, 'span', 'fontSize');   //firefox 不会格式化选区内部元素的字号，手动修改。将来firefox改的跟chrome一样，这个函数不执行。
+              span.querySelectorAll('span').length != 0 && veUtil.command.format(span, 'span', 'fontSize');
               span.normalize();
               font.parentNode.replaceChild(span, font);
               spanList.push(span);
@@ -199,7 +202,7 @@
         if (ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)) {
           let range = this.getRange();
           if (!range || range.collapsed) {
-            alert('在IE浏览器中必须选中一段文字才能使用此功能！');
+            alert(this.lang.ieMsg);
           } else {
             document.execCommand('formatblock', false, '<' + value.toUpperCase() + '>');
           }

@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <a href="javascript:;" title="源码" @click="clickHandler">
+    <a href="javascript:;" :title="lang.title" @click="clickHandler">
       <i class="icon-code"></i>
     </a>
   </div>
@@ -16,6 +16,11 @@
       return {
         editor: null
       }
+    },
+    computed: {
+      lang () {
+        return this.$store.state.lang.switchView;
+      },
     },
     methods: Object.assign({}, mapActions([
       'switchView',

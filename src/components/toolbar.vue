@@ -38,7 +38,7 @@
   <div class="ve-toolbar">
     <template v-for="item in config">
       <div v-if="nativeBtns[item]">
-        <a href="javascript:;" :title="nativeBtns[item].title"
+        <a href="javascript:;" :title="lang[item].title"
            :class="{'ve-active': states[item].active, 've-disabled': states[item].disabled}"
            @click="clickHandler(item, null)" unselectable="on">
           <i :class="[nativeBtns[item].class]"></i>
@@ -65,29 +65,27 @@
   import emoji from './emoji.vue';
   import picture from './picture.vue';
 
-  'asdfasdf';
-
   let nativeBtns = {
 
-    removeFormat: {title: '清除选中区域格式', class: 'icon-eraser'},
+    removeFormat: {class: 'icon-eraser'},
 
-    bold: {title: '加粗', class: 'icon-bold'},
-    italic: {title: '斜体', class: 'icon-italic'},
-    underline: {title: '下划线', class: 'icon-underline'},
-    strikeThrough: {title: '中划线', class: 'icon-strikethrough'},
+    bold: {class: 'icon-bold'},
+    italic: {class: 'icon-italic'},
+    underline: {class: 'icon-underline'},
+    strikeThrough: {class: 'icon-strikethrough'},
 
-    superscript: {title: '上标文字', class: 'icon-superscript'},
-    subscript: {title: '下标文字', class: 'icon-subscript'},
-    indent: {title: '增加缩进', class: 'icon-indent'},
-    outdent: {title: '减少缩进', class: 'icon-outdent'},
+    superscript: {class: 'icon-superscript'},
+    subscript: {class: 'icon-subscript'},
+    indent: {class: 'icon-indent'},
+    outdent: {class: 'icon-outdent'},
 
-    justifyLeft: {title: '左对齐', class: 'icon-align-left'},
-    justifyCenter: {title: '中间对齐', class: 'icon-align-center'},
-    justifyRight: {title: '右对齐', class: 'icon-align-right'},
-    justifyFull: {title: '两端对齐', class: 'icon-align-justify'},
+    justifyLeft: {class: 'icon-align-left'},
+    justifyCenter: {class: 'icon-align-center'},
+    justifyRight: {class: 'icon-align-right'},
+    justifyFull: {class: 'icon-align-justify'},
 
-    insertOrderedList: {title: '设置有序列表', class: 'icon-list-ol'},
-    insertUnorderedList: {title: '设置无序列表', class: 'icon-list-ul'}
+    insertOrderedList: {class: 'icon-list-ol'},
+    insertUnorderedList: {class: 'icon-list-ul'}
   };
 
   let customBtns = [
@@ -112,6 +110,9 @@
       }
     },
     computed: {
+      lang () {
+        return this.$store.state.lang.toolbar;
+      },
       config () {
         return this.$store.state.config.toolbar;
       },

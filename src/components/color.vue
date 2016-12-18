@@ -20,15 +20,15 @@
 
 <template>
   <div>
-    <a href="javascript:;" :title="compName == 'foreColor' ? '文字颜色' : '背景颜色'"
+    <a href="javascript:;" :title="compName == 'foreColor' ? lang.foreColor : lang.backColor"
        :class="{'ve-active': this.display, 've-disabled': this.disabled}"
        @click="toggle">
       <i :class="{'icon-file-text': compName == 'backColor', 'icon-file-text-o': compName == 'foreColor'}"></i>
     </a>
     <div class="ve-toolbar-dropdown colorpicker" v-show="display">
       <div class="ve-input-box">
-        <input type="text" class="ve-input" placeholder="颜色代码" v-model="color">
-        <button type="button" class="ve-btn" @click="inputHandler">确定</button>
+        <input type="text" class="ve-input" :placeholder="lang.colorCode" v-model="color">
+        <button type="button" class="ve-btn" @click="inputHandler">{{lang.ok}}</button>
       </div>
       <ul>
         <li v-for="color in colors" @click="clickHandler(color)">
@@ -61,6 +61,9 @@
     },
     props: ['comp-name'],
     computed: {
+      lang () {
+        return this.$store.state.lang.color;
+      },
       disabled () {
         return this.$store.state.toolbarStates[this.compName].disabled;
       },
@@ -95,7 +98,7 @@
         let color = this.color;
         let result = this.checkValid(color);
         if (!result) {
-          alert('请输入正确的颜色代码。');
+          alert(this.lang.invalidColorCodeMsg);
         } else {
           this.setColor(this.compName, color);
           this.updatePopupDisplay();

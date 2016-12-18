@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vueditor</title>
+  <link rel="stylesheet" type="text/css" href="./dist/css/vueditor.min.css">
+  <style>
+    section {
+      width: 80%;
+      margin: 0 auto;
+    }
+    header {
+      text-align: right;
+    }
+    #editor1, #someid {
+      height: 250px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <section>
+    <header>
+      <a href="https://github.com/hifarer/Vueditor">Github</a>
+    </header>
+    <div id="editor1">
+      <Vueditor></Vueditor>
+    </div>
+    <div id="editor2"></div>
+  </section>
+
+  <script src="//cdn.bootcss.com/vue/2.1.4/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
+  <script src="./dist/js/vueditor.min.js"></script>
+  <script>
+    Vue.use(Vueditor, {
+      toolbar: [
+        'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+        'links', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
+      ],
+      lang: 'en',
+      mode: 'default',
+      iframePath: '',
+      fileuploadUrl: ''
+    });
+    new Vue({
+        el: '#editor1'
+    });
+  </script>
+  <script>
+    // another usage
+    var inst = Vueditor.createEditor('#editor2', {
+      toolbar: [
+          'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+      ],
+      lang: 'en',
+      mode: 'default',
+      iframePath: '',
+      fileuploadUrl: '',
+      classList: ['someclass'],
+      id: 'someid'
+    });
+    inst.setContent('fill your content here');
+    console.log('the content you set is: "' + inst.getContent() + '"');
+  </script>
+</body>
+</html>

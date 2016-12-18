@@ -3,7 +3,11 @@ import Vuex from 'vuex';
 import * as actions from './actions';
 import mutations from './mutations';
 
+import cn from '../js/lang-cn.js';
+import en from '../js/lang-en.js';
+
 export default function (config) {
+  let lang = config.lang || 'cn';
   let toolbarConfig = config.toolbar;
   let toolbarStates = {};
   toolbarConfig.indexOf('undo') !== -1 && toolbarConfig.push('redo');
@@ -15,24 +19,24 @@ export default function (config) {
     toolbarStates[name].showPopup = false;
   });
 
-  let state = {
-    // editor config, in case of components need it
-    config,
-    // toolbar disabled state & active state
-    toolbarStates,
-    // editor content
-    content: '',
-    // current display block: design or sourceCode
-    currentView: 'design',
-    command: {
-      name: '',
-      value: ''
-    },
-    action: ''
-  };
-
   return {
-    state,
+    state: {
+      // editor config, in case of children components need it
+      config,
+      // language
+      lang: lang === 'cn' ? cn : en,
+      // toolbar disabled state & active state & dropdown menu display state
+      toolbarStates,
+      // editor's content
+      content: '',
+      // current display block: design or sourceCode
+      currentView: 'design',
+      command: {
+        name: '',
+        value: ''
+      },
+      action: ''
+    },
     actions,
     mutations
   };

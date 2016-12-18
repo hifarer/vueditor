@@ -22,12 +22,12 @@
 
 <template>
   <div>
-    <a href="javascript:;" title="表格" :class="{'ve-disabled': disabled, 've-active': display}" @click="toggle">
+    <a href="javascript:;" :title="lang.title" :class="{'ve-disabled': disabled, 've-active': display}" @click="toggle">
       <i class="icon-table"></i>
     </a>
     <div class="ve-toolbar-dropdown ve-table" v-show="display">
       <ul>
-        <!--vue 2.0 v-for i 从1开始-->
+        <!--vue 2.0 v-for i start with 1-->
         <li v-for="i in num" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
           <a href="javascript:;" :class="{'active': ((i-1)%8 <= x && parseInt((i-1)/8) <= y)}"></a>
         </li>
@@ -47,6 +47,9 @@
       }
     },
     computed: {
+      lang () {
+        return this.$store.state.lang.tables;
+      },
       disabled () {
         return this.$store.state.toolbarStates.tables.disabled;
       },

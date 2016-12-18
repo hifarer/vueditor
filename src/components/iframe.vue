@@ -23,6 +23,9 @@
     },
 
     computed: {
+      lang () {
+        return this.$store.state.lang.editable;
+      },
       currentView: function () {
         return this.$store.state.currentView;
       },
@@ -35,7 +38,7 @@
     },
     created () {
       if(!this.iframePath){
-        throw '使用iframe模式必须指定一个HTML文件作为iframe页面，请指定其路径！';
+        throw this.lang.iframeUrl;
       }
     },
 
@@ -44,7 +47,7 @@
         if (val == 'sourceCode') {
           clearTimeout(this.timer);
           this.updateContent(this.iframeBody.innerHTML);
-          this.updateToolbarActiveStates();   // 切换到源码视图全部关闭激活状态
+          this.updateToolbarActiveStates();
         }else{
           this.updateToolbarActiveStates(this.iframeDoc);
         }
@@ -90,8 +93,8 @@
       keydownHandler (event) {
         if (event.ctrlKey && (event.keyCode == 89 || event.keyCode == 90)) {
           event.preventDefault();
-          event.keyCode == 89 && this.callAction('redo');     //恢复
-          event.keyCode == 90 && this.callAction('undo');     //撤销
+          event.keyCode == 89 && this.callAction('redo');
+          event.keyCode == 90 && this.callAction('undo');
         }
       },
 
@@ -169,7 +172,7 @@
             if (document.queryCommandSupported('styleWithCss')) {
               this.iframeDoc.execCommand('styleWithCss', false, true);
             }
-            this.iframeDoc.execCommand('fontSize', false, 7);    //设置为1-7一般都可以，但是当设置为3时，在chrome中会没反应，应该是face="3"和默认字号一样大造成的。
+            this.iframeDoc.execCommand('fontSize', false, 7);
             let container = range.commonAncestorContainer;
             container.nodeType == 3 && (container = container.parentNode);
             container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
@@ -190,7 +193,7 @@
             container.nodeType == 3 && (container = container.parentNode);
             container.tagName.toLowerCase() == 'font' && (container = container.parentNode);
             fontList = container.getElementsByTagName('font');
-            for (let i = 0; i < fontList.length; i++) {   //将<font face="7"></font>转换成<span style="font-size: npx;"></span>
+            for (let i = 0; i < fontList.length; i++) {
               let font = fontList[i];
               let span = document.createElement('span');
               Array.prototype.forEach.call(font.attributes, function (attr) {
@@ -216,7 +219,7 @@
         if (ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)) {
           let range = this.getRange();
           if (!range || range.collapsed) {
-            alert('在IE浏览器中必须选中一段文字才能使用此功能！');
+            alert(this.lang.ieMsg);
           } else {
             this.iframeDoc.execCommand('formatblock', false, '<' + value.toUpperCase() + '>');
           }

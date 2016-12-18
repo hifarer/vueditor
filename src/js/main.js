@@ -5,31 +5,40 @@ import app from '../components/app.vue'
 import createModule from '../vuex/store'
 import defaultConfig from './config'
 
-const globalConfig = window.VueditorConfig ? VueditorConfig : null;
-const install = function (Vue, opts = {}) {
-  let config = opts || globalConfig || defaultConfig;
+function mixinConfig (opts) {
+  let config = opts || defaultConfig;
+  let lang = config.lang || 'cn';
   let storeModule = createModule(config);
   let data = {
     config,
     comps: [
       'toolbar',
       'editable',
-      'sourcecode',
-      'pictureDialog'
-    ]
+      'sourcecode'
+    ],
+    classList: opts.classList,
+    id: opts.id
   };
   opts.mode !== 'default' && (data.comps[1] = 'iframe');
   opts.toolbar.indexOf('picture') !== -1 && data.comps.push('pictureDialog');
-  Vue.component('Vueditor', Object.assign({}, app, {
+  return Object.assign({}, app, {
     store: new Vuex.Store(storeModule),
     data: function (){
       return data;
     }
-  }));
+  });
+}
+
+const install = function (Vue, opts = {}) {
+  Vue.component('Vueditor', mixinConfig(opts));
+};
+
+const createEditor = function (el, opts = {}) {
+  let Editor = Vue.extend(mixinConfig(opts));
+  return new Editor().$mount(el);
 };
 
 export default {
-  install
+  install,
+  createEditor
 }
-
-// TODO 安全，图片上传
