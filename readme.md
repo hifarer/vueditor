@@ -35,7 +35,7 @@ online [demo](http://hifarer.github.io/Vueditor/)
       el: '#editor1'
   });
 ```
-### then in your vue template somewhere:
+#### then in your vue template somewhere:
 ```
   <template>
     <div>
@@ -59,8 +59,7 @@ online [demo](http://hifarer.github.io/Vueditor/)
     id: ''
   });
 ```
-### note that the second usage will replace the element been initial with, in this case, you can add classList or id or both to the config
-### for adding styles, the render result element will have these attributes. createEditor returns an instance, you can set and get content use it:
+#### note that the second usage will replace the element been initial with, in this case, you can add classList or id or both to the config for adding styles, the render result element will have these attributes. createEditor returns an instance, you can set and get content use it:
 ```
 var inst = createEditor(...);
 inst.setContent('your content here');
