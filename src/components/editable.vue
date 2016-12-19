@@ -109,6 +109,11 @@
       },
 
       exec (name, value) {
+        let range = this.getRange();
+        let container = range.commonAncestorContainer;
+        if(!this.$el.children[0].contains(container)){
+          return;
+        }
         if (document.queryCommandSupported('styleWithCss')) {
           document.execCommand('styleWithCss', false, true);
         }

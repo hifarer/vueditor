@@ -11,7 +11,7 @@
     <div class="wrap" @click.stop>
       <div class="dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="dialog-body">
-        <input type="file">
+        <input type="file" ref="file">
       </div>
       <div class="dialog-footer">
         <div class="ve-btn-box">
@@ -58,10 +58,23 @@
             url = window.URL.createObjectURL(obj.files.item(0));
           }
         }
-
         if (url) {
-          this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${url}">`});
-          this.hideDialog();
+          if(fileuploadUrl){
+            let formData = new FormData(obj);
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', fileuploadUrl);
+            xhr.send(formData);
+            xhr.onload = function () {
+              this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${xhr.responseText}">`});
+              this.hideDialog();
+            };
+            xhr.onerror = function (err) {
+              alert(err);
+            }
+          }else{
+            this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${url}">`});
+            this.hideDialog();
+          }
         } else {
           alert(this.lang.invalidFile);
         }
