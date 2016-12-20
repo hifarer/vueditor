@@ -15,6 +15,12 @@
         height: 20px;
       }
     }
+    .ve-input {
+      max-width: ~"calc(100% - 35px)";
+    }
+    .ve-btn {
+      line-height: 16px;
+    }
   }
 </style>
 

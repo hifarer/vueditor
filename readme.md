@@ -1,12 +1,10 @@
 Vueditor
 ======
-a wysiwyg editor based on vue and vuex.
+A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x or higher version.
 
-only support vue 2.x.x version.
+Browser compatibility: IE 9+, Chrome, Firefox.
 
-browser compatibility: Ami to compatible with IE 9+, Chrome, Firefox, only Chrome tested.
-
-online [demo](http://hifarer.github.io/Vueditor/)
+Online [demo](http://hifarer.github.io/Vueditor/)
 
 ![vueditor](./vueditor.gif)
 
@@ -24,13 +22,14 @@ online [demo](http://hifarer.github.io/Vueditor/)
       'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
       'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
     ],
-    lang: 'en', // default is Chinese, to set English, fill this with 'en'.
+    lang: 'en', // default is Chinese, to set to English, fill this with 'en'
     mode: 'default', // options: default | iframe
     iframePath: '',    // fill this if 'mode: iframe'
-    fileuploadUrl: '' // your file upload url, the return result must be a string refer to the uploaded image, leave it empty will result in local preview for your images.
+    fileuploadUrl: '' // your file upload url, the return result must be a string refer to the uploaded image, leave it empty will end up with local preview
   };
 ```
-### 1. if only one editor required in a page, use it like this:
+
+### 1. Only one editor required in a page, use it like this:
 ```javascript
   Vue.use(Vuex);
   Vue.use(Vueditor, config);
@@ -38,6 +37,7 @@ online [demo](http://hifarer.github.io/Vueditor/)
       el: '#editor1'
   });
 ```
+
 then in your vue template somewhere:
 ```html
   <template>
@@ -48,7 +48,7 @@ then in your vue template somewhere:
   </template>
 ```
 
-### 2. if multiple editor required, call createEditor and pass specific config as parameter respectively:
+### 2. Multiple editors required, call createEditor and pass specific config as parameter respectively:
 ```javascript
   createEditor('#editor2', {
     toolbar: [
@@ -62,7 +62,8 @@ then in your vue template somewhere:
     id: ''
   });
 ```
-note that the second usage will replace the element been initial with, in this case, you can add classList or id or both to the config for adding styles, the render result element will have these attributes. createEditor returns an instance, you can set and get content use it:
+
+Note that the second usage will replace the element been initial with, in this case you can add classList or id to the config for adding styles, the rendered element will have these attributes. createEditor returns a Vueditor instance, you can set and get content with it:
 ```javascript
 var inst = createEditor(...);
 inst.setContent('your content here');

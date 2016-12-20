@@ -2,8 +2,8 @@
   .ve-code textarea {
     box-sizing: border-box;
     display: block;
-    width: 576px;
-    height: 94px;
+    width: 100%;
+    height: 100%;
     outline: none;
     border: none;
     resize: none;

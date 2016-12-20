@@ -6,9 +6,13 @@
     user-select: none;
     display: table;
     width: 100%;
+    font-size: 0;
+    letter-spacing: -4px;
     &>div {
       position: relative;
       display: inline-block;
+      font-size: initial;
+      letter-spacing: initial;
       &>a {
         display: inline-block;
         padding: 10px 12px;
