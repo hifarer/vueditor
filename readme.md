@@ -4,7 +4,7 @@ A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
 
 No jQuery or Bootstrap needed. 
 
-Browser compatibility: IE 9+, Chrome, Firefox.
+Browser compatibility: Chrome, Firefox, Safari, IE 9+.
 
 Online [demo](http://hifarer.github.io/Vueditor/)
 
@@ -31,7 +31,7 @@ Online [demo](http://hifarer.github.io/Vueditor/)
   };
 ```
 
-### 1. Only one editor required or multiple editors required but shared the same config, use it like this:
+#### 1. Only one editor required or multiple editors required but shared the same config, use it like this:
 ```javascript
   Vue.use(Vuex);
   Vue.use(Vueditor, config);
@@ -41,7 +41,7 @@ Online [demo](http://hifarer.github.io/Vueditor/)
   });
 ```
 
-then in your vue template somewhere:
+Then in your vue template somewhere:
 ```html
   <template>
     <div>
@@ -51,7 +51,7 @@ then in your vue template somewhere:
   </template>
 ```
 
-To get and set content you need to aquire the Vueditor component, you can using `$children[index]` or `ref` to do that.
+To get and set content you need to aquire the Vueditor component, you can use `$children[index]` or `ref` to do that.
 ```javascript
   let parent = new Vue({
       el: '#editor1'
@@ -61,7 +61,7 @@ To get and set content you need to aquire the Vueditor component, you can using 
   inst.getContent();
 ```
 
-### 2. Multiple editors required, call `createEditor` and pass specific config as parameter respectively:
+#### 2. Multiple editors required, call `createEditor` and pass specific config as parameter respectively:
 ```javascript
   createEditor('#editor2', {
     toolbar: [

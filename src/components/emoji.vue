@@ -1,6 +1,6 @@
 <style lang="less" rel="stylesheet/less">
   .emoji-popover {
-    width: 260px;
+    width: 276px;
     transform: translateX(-50%);
     margin-left: 50%;
   }

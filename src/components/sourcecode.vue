@@ -1,5 +1,7 @@
 <style>
   .ve-code textarea {
+    /*safari*/
+    position: absolute;
     box-sizing: border-box;
     display: block;
     width: 100%;

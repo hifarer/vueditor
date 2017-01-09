@@ -4,14 +4,14 @@ export default {
 
   },
   color: {
-    foreColor: 'font color',
-    backColor: 'background color',
-    colorCode: 'color code',
+    foreColor: 'Font color',
+    backColor: 'Background color',
+    colorCode: 'Color code',
     invalidColorCodeMsg: 'Please enter the correct color code',
     ok: 'ok',
   },
   editable: {
-    ieMsg: 'you must select a text to use this feature in IE browser'
+    ieMsg: 'You must select a text to use this feature in IE browser'
   },
   elements: {
 
@@ -30,49 +30,49 @@ export default {
     iframeUrl: 'You must specify a HTML file path while using iframe mode'
   },
   links: {
-    addLink: 'add link',
-    cancelLink: 'cancel link',
-    ok: 'ok'
+    addLink: 'Add link',
+    cancelLink: 'Cancel link',
+    ok: 'OK'
   },
   picture: {
     title: 'Insert Picture',
   },
   pictureDialog: {
     title: 'Insert Picture',
-    ok: 'ok',
-    cancel: 'cancle',
-    invalidFile: 'Picture not selected or selected file is not a picture'
+    ok: 'OK',
+    cancel: 'Cancel',
+    invalidFile: 'No file selected or selected file is not a picture'
   },
   switchView: {
-    title: 'source code'
+    title: 'Source code'
   },
   tables: {
-    title: 'table'
+    title: 'Table'
   },
   undo: {
-    undo: 'undo',
-    redo: 'redo'
+    undo: 'Undo',
+    redo: 'Redo'
   },
 
   toolbar: {
-    removeFormat: {title: 'remove format'},
+    removeFormat: {title: 'Remove format'},
 
-    bold: {title: 'bold'},
-    italic: {title: 'italic'},
-    underline: {title: 'underline'},
-    strikeThrough: {title: 'strike through'},
+    bold: {title: 'Bold'},
+    italic: {title: 'Italic'},
+    underline: {title: 'Underline'},
+    strikeThrough: {title: 'Strike through'},
 
-    superscript: {title: 'superscript'},
-    subscript: {title: 'subscript'},
-    indent: {title: 'indent'},
-    outdent: {title: 'outdent'},
+    superscript: {title: 'Superscript'},
+    subscript: {title: 'Subscript'},
+    indent: {title: 'Indent'},
+    outdent: {title: 'Outdent'},
 
-    justifyLeft: {title: 'justify left'},
-    justifyCenter: {title: 'justify center'},
-    justifyRight: {title: 'justify right'},
-    justifyFull: {title: 'justify full'},
+    justifyLeft: {title: 'Justify left'},
+    justifyCenter: {title: 'Justify center'},
+    justifyRight: {title: 'Justify right'},
+    justifyFull: {title: 'Justify full'},
 
-    insertOrderedList: {title: 'insert ordered list'},
-    insertUnorderedList: {title: 'insert unordered list'}
+    insertOrderedList: {title: 'Insert ordered list'},
+    insertUnorderedList: {title: 'Insert unordered list'}
   }
 }

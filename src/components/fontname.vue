@@ -26,7 +26,7 @@
 <template>
   <div>
     <a href="javascript:;" class="ve-select font-select" :class="{'ve-disabled': disabled}" @click="toggle">
-      <span>{{val || fonts[0].abbr}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
+      <span>{{val || fonts[0].abbr || fonts[0].name}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
     </a>
     <div class="ve-toolbar-dropdown ve-select-dropdown font-name" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
       <ul>
@@ -41,9 +41,9 @@
 <script>
 
   let fonts = [
-    {name: "宋体, SimSun", abbr: "宋体"}, {name: "黑体, SimHei", abbr: "黑体"}, {name: "楷体, SimKai", abbr: "楷体"},
-    {name: "微软雅黑, 'Microsoft YaHei'", abbr: "微软雅黑"}, {name: "arial black"}, {name: "times new roman"},
-    {name: "Courier New"}
+    {name: "arial black"}, {name: "times new roman"}, {name: "Courier New"}, 
+    {name: "宋体, SimSun", abbr: "宋体"}, {name: "黑体, SimHei", abbr: "黑体"},
+    {name: "楷体, SimKai", abbr: "楷体"}, {name: "微软雅黑, 'Microsoft YaHei'", abbr: "微软雅黑"}
   ];
 
   export default {
