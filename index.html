@@ -30,8 +30,8 @@
     <div id="editor2"></div>
   </section>
 
-  <script src="//cdn.bootcss.com/vue/2.1.4/vue.min.js"></script>
-  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
+  <script src="//cdn.bootcss.com/vue/2.1.8/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.1.1/vuex.min.js"></script>
   <script src="./dist/js/vueditor.min.js"></script>
   <script>
     Vue.use(Vueditor, {
@@ -45,13 +45,16 @@
       iframePath: './dist/iframe/page.html',
       fileuploadUrl: ''
     });
-    new Vue({
+    let parent = new Vue({
         el: '#editor1'
     });
+    let inst1 = parent.$children[0];
+    inst1.setContent('fill your content here');
+    console.log(inst1.getContent());
   </script>
   <script>
     // another usage
-    var inst = Vueditor.createEditor('#editor2', {
+    let inst2 = Vueditor.createEditor('#editor2', {
       toolbar: [
           'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
       ],
@@ -62,8 +65,8 @@
       classList: ['someclass'],
       id: 'someid'
     });
-    inst.setContent('fill your content here');
-    console.log('the content you set is: "' + inst.getContent() + '"');
+    inst2.setContent('fill your content here');
+    console.log('the content you set is: "' + inst2.getContent() + '"');
   </script>
 </body>
 </html>

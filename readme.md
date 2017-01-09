@@ -1,6 +1,8 @@
 Vueditor
 ======
-A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x or higher version.
+A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
+
+No jQuery or Bootstrap needed. 
 
 Browser compatibility: IE 9+, Chrome, Firefox.
 
@@ -29,10 +31,11 @@ Online [demo](http://hifarer.github.io/Vueditor/)
   };
 ```
 
-### 1. Only one editor required in a page, use it like this:
+### 1. Only one editor required or multiple editors required but shared the same config, use it like this:
 ```javascript
   Vue.use(Vuex);
   Vue.use(Vueditor, config);
+  // create a root instance
   new Vue({
       el: '#editor1'
   });
@@ -48,7 +51,17 @@ then in your vue template somewhere:
   </template>
 ```
 
-### 2. Multiple editors required, call createEditor and pass specific config as parameter respectively:
+To get and set content you need to aquire the Vueditor component, you can using `$children[index]` or `ref` to do that.
+```javascript
+  let parent = new Vue({
+      el: '#editor1'
+  });
+  let inst = parent.$children[0];
+  inst.setContent('your content here');
+  inst.getContent();
+```
+
+### 2. Multiple editors required, call `createEditor` and pass specific config as parameter respectively:
 ```javascript
   createEditor('#editor2', {
     toolbar: [
@@ -63,9 +76,9 @@ then in your vue template somewhere:
   });
 ```
 
-Note that the second usage will replace the element been initial with, in this case you can add classList or id to the config for adding styles, the rendered element will have these attributes. createEditor returns a Vueditor instance, you can set and get content with it:
+Note that the second usage will replace the element been initial with, in this case you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a Vueditor instance, you can set and get content with it:
 ```javascript
-var inst = createEditor(...);
+let inst = createEditor(...);
 inst.setContent('your content here');
 inst.getContent();
 ```
