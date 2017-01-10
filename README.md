@@ -10,11 +10,20 @@ Online [demo](http://hifarer.github.io/Vueditor/)
 
 ![vueditor](./vueditor.gif)
 
-## How to use
+## Installation
+```javascript
+npm install vueditor
+```
+
+If you prefer to use it via script tag, just add "vueditor.min.js", "vueditor.min.css" to your page. 
+
+## Usage
 ```javascript
   import Vue from 'vue'
   import Vuex from 'vuex'
-  import Vueditor, {createEditor} from 'path/to/vueditor.min.js'
+  import Vueditor, {createEditor} from 'vueditor'
+
+  import "vueditor/dist/css/vueditor.min.css"
 
   // your config here
   let config = {

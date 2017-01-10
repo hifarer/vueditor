@@ -1,11 +1,12 @@
 {
   "name": "vueditor",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "a wysiwyg editor based on vue and vuex",
   "repository": {
     "type": "git",
     "url": "https://github.com/hifarer/Vueditor.git"
   },
+  "main": "dist/js/vueditor.min.js",
   "scripts": {
     "dev-server": "node ./build/dev-server.js",
     "dev": "webpack --config ./build/webpack.dev.config.js",
@@ -41,7 +42,9 @@
     "webpack-hot-middleware": "^2.15.0"
   },
   "keywords": [
-    "vue editor"
+    "vue editor",
+    "vue.js editor",
+    "rich text editor"
   ],
   "author": "hifarer",
   "license": "MIT"

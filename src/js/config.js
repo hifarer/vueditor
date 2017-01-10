@@ -12,7 +12,6 @@ export default {
   fontSize: [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
   ],
-  // http://unicode.org/emoji/charts/full-emoji-list.html
   emoji: [
     "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606", "1f609", "1f60a", "1f60b", "1f60e", "1f60d", "1f618",
     "1f617", "1f619", "1f61a", "263a", "1f642", "1f917", "1f914", "1f610", "1f611", "1f636", "1f644", "1f60f", "1f623", "1f625",
@@ -22,7 +21,7 @@ export default {
     "1f637", "1f912", "1f915", "1f922", "1f927"
   ],
   lang: 'cn',
-  mode: 'iframe', // options: default | iframe
-  iframePath: './iframe/page.html',  // fill this if 'mode: iframe'
+  mode: 'iframe',
+  iframePath: './iframe/page.html',
   fileuploadUrl: ''
 };
