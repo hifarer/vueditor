@@ -6,7 +6,7 @@ import createModule from '../vuex/store'
 import defaultConfig from './config'
 
 function mixinConfig (opts) {
-  let config = Object.assign({}, defaultConfig, opts);
+  let config = opts ? Object.assign({}, defaultConfig, opts) : defaultConfig;
   let lang = config.lang || 'cn';
   let storeModule = createModule(config);
   let data = {
@@ -16,11 +16,11 @@ function mixinConfig (opts) {
       'editable',
       'sourcecode'
     ],
-    classList: opts.classList,
-    id: opts.id
+    classList: config.classList,
+    id: config.id
   };
-  opts.mode !== 'default' && (data.comps[1] = 'iframe');
-  opts.toolbar.indexOf('picture') !== -1 && data.comps.push('pictureDialog');
+  config.mode !== 'default' && (data.comps[1] = 'iframe');
+  config.toolbar.indexOf('picture') !== -1 && data.comps.push('pictureDialog');
   return Object.assign({}, app, {
     store: new Vuex.Store(storeModule),
     data: function (){
@@ -29,11 +29,11 @@ function mixinConfig (opts) {
   });
 }
 
-const install = function (Vue, opts = {}) {
+const install = function (Vue, opts) {
   Vue.component('Vueditor', mixinConfig(opts));
 };
 
-const createEditor = function (el, opts = {}) {
+const createEditor = function (el, opts) {
   let Editor = Vue.extend(mixinConfig(opts));
   return new Editor().$mount(el);
 };

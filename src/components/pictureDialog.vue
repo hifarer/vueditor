@@ -11,7 +11,9 @@
     <div class="wrap" @click.stop>
       <div class="dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="dialog-body">
-        <input type="file" ref="file">
+        <form ref="form">
+          <input type="file" name="image" ref="file">
+        </form>
       </div>
       <div class="dialog-footer">
         <div class="ve-btn-box">
@@ -47,7 +49,8 @@
       },
       certainHandler (event) {
         let url = '';
-        let obj = this.$el.querySelector('input');
+        let obj = this.$refs.file;
+        let form = this.$refs.form;
         let fileuploadUrl = this.$store.state.config.fileuploadUrl;
         if (navigator.userAgent.indexOf('MSIE') >= 1) { // IE
           url = obj.value;
@@ -58,14 +61,14 @@
         }
         if (url) {
           if(fileuploadUrl){
-            let formData = new FormData(obj);
+            let formData = new FormData(form);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', fileuploadUrl);
             xhr.send(formData);
             xhr.onload = function () {
               this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${xhr.responseText}">`});
               this.hideDialog();
-            };
+            }.bind(this);
             xhr.onerror = function (err) {
               alert(err);
             }

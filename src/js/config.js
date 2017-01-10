@@ -21,7 +21,7 @@ export default {
     "1f637", "1f912", "1f915", "1f922", "1f927"
   ],
   lang: 'cn',
-  mode: 'iframe',
-  iframePath: './iframe/page.html',
+  mode: 'default',
+  iframePath: '',
   fileuploadUrl: ''
 };
