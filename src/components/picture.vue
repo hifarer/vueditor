@@ -11,10 +11,12 @@
 <script>
 
   export default {
+    data () {
+      return {
+        lang: this.$store.state.lang.picture
+      };
+    },
     computed: {
-      lang () {
-        return this.$store.state.lang.picture;
-      },
       disabled: function () {
         return this.$store.state.toolbarStates.picture.disabled;
       }

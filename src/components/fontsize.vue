@@ -18,12 +18,12 @@
 <template>
   <div>
     <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
-      <span>{{val || fontSize[0]}}px</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
+      <span>{{val || fontSize[0]}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
     </a>
     <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display">
       <ul>
         <li v-for="size in fontSize" @click="clickHandler(size)">
-          <a href="javascript:;">{{size}}px</a>
+          <a href="javascript:;">{{size}}</a>
         </li>
       </ul>
     </div>
@@ -32,12 +32,10 @@
 
 <script>
 
-  let fontSize = [12, 14, 16, 18, 20, 24, 28, 32, 36];
-
   export default {
     data () {
       return {
-        fontSize: fontSize,
+        fontSize: this.$store.state.config.fontSize,
         val: ''
       }
     },

@@ -14,20 +14,43 @@ Online [demo](http://hifarer.github.io/Vueditor/)
 ```javascript
   import Vue from 'vue'
   import Vuex from 'vuex'
-  import Vueditor, {createEditor} from 'path/to/vueditor.min.js';
+  import Vueditor, {createEditor} from 'path/to/vueditor.min.js'
 
   // your config here
   let config = {
+    
+    // buttons on the toolbar, you can use '|' or 'divider' as the separator
     toolbar: [
       'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider',
       'bold', 'italic', 'underline', 'strikeThrough', 'links', 'divider', 'subscript', 'superscript',
       'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
       'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
     ],
-    lang: 'en', // default is Chinese, to set to English, fill this with 'en'
-    mode: 'default', // options: default | iframe
-    iframePath: '',    // fill this if 'mode: iframe'
-    fileuploadUrl: '' // your file upload url, the return result must be a string refer to the uploaded image, leave it empty will end up with local preview
+
+    // the font-family select's options, "val" refer to the actual css value, "abbr" refer to the option's text
+    // "abbr" is optional when equals to "val";
+    fontName: [
+      {val: "", abbr: ""}
+      {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    ],
+
+    // the font-size select's options
+    fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
+
+    // the emoji list, you can get full list here: http://unicode.org/emoji/charts/full-emoji-list.html
+    emoji: ["1f600", "1f601", "1f602", "1f923", "1f603"],
+
+    // default is Chinese, to set to English use lang: 'en'
+    lang: 'en',
+
+    // mode options: default | iframe
+    mode: 'default',
+
+    // if mode is set to 'iframe', specify a HTML file path here
+    iframePath: '',
+
+     // your file upload url, the return result must be a string refer to the uploaded image, leave it empty will end up with local preview
+    fileuploadUrl: ''
   };
 ```
 
@@ -51,7 +74,7 @@ Then in your vue template somewhere:
   </template>
 ```
 
-To get and set content you need to aquire the Vueditor component, you can use `$children[index]` or `ref` to do that.
+To get and set content you need to acquire the Vueditor component, you can use `$children[index]` or `ref` to do that.
 ```javascript
   let parent = new Vue({
       el: '#editor1'

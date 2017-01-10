@@ -6,7 +6,7 @@ import createModule from '../vuex/store'
 import defaultConfig from './config'
 
 function mixinConfig (opts) {
-  let config = opts || defaultConfig;
+  let config = Object.assign({}, defaultConfig, opts);
   let lang = config.lang || 'cn';
   let storeModule = createModule(config);
   let data = {

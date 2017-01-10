@@ -62,14 +62,12 @@
     data () {
       return {
         colors: colors,
-        color: ''
+        color: '',
+        lang: this.$store.state.lang.color
       }
     },
     props: ['comp-name'],
     computed: {
-      lang () {
-        return this.$store.state.lang.color;
-      },
       disabled () {
         return this.$store.state.toolbarStates[this.compName].disabled;
       },

@@ -41,6 +41,13 @@
         'links', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
         '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
       ],
+      fontName: [
+        {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+      ],
+      fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
+      emoji: [
+        "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606"
+      ],
       lang: 'en',
       mode: 'iframe',
       iframePath: './dist/iframe/page.html',
@@ -57,7 +64,7 @@
     // another usage
     let inst2 = Vueditor.createEditor('#editor2', {
       toolbar: [
-          'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+          'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
       ],
       lang: 'en',
       mode: 'default',

@@ -35,13 +35,11 @@
       return {
         width: 240,
         height: 90,
-        linkVal: ''
+        linkVal: '',
+        lang: this.$store.state.lang.links
       }
     },
     computed: {
-      lang () {
-        return this.$store.state.lang.links;
-      },
       linkState () {
         return this.$store.state.toolbarStates.links.disabled;
       },

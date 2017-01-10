@@ -25,14 +25,12 @@
       return {
         timer: null,
         inited: false,
-        cache: ''
+        cache: '',
+        lang: this.$store.state.lang.editable
       }
     },
 
     computed: {
-      lang () {
-        return this.$store.state.lang.editable;
-      },
       currentView: function () {
         return this.$store.state.currentView;
       },
@@ -150,7 +148,7 @@
         let childNodes = range.cloneContents().childNodes;
         if (childNodes.length == 1 && childNodes[0].nodeType == 1 && childNodes[0].tagName.toLowerCase() == 'span') {
           let span = range.extractContents().childNodes[0];
-          span.style.fontSize = value + 'px';
+          span.style.fontSize = value;
           range.insertNode(span);
           range.selectNode(span);
           selection.removeAllRanges();
@@ -166,7 +164,7 @@
             container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
             Array.prototype.forEach.call(container.getElementsByTagName('span'), function (span) {
               if (span.style.fontSize.trim() == '-webkit-xxx-large' || span.style.fontSize.trim() == 'xx-large') {
-                span.style.fontSize = value + 'px';
+                span.style.fontSize = value;
               }
               span.normalize();
             });
@@ -185,7 +183,7 @@
               let font = fontList[i];
               let span = document.createElement('span');
               Array.prototype.forEach.call(font.attributes, function (attr) {
-                attr.nodeName == 'size' ? span.style.fontSize = value + 'px' : span.setAttribute(attr.nodeName, attr.nodeValue);
+                attr.nodeName == 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue);
               });
               span.innerHTML = font.innerHTML;
               span.querySelectorAll('span').length != 0 && veUtil.command.format(span, 'span', 'fontSize');

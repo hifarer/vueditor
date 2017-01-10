@@ -29,13 +29,11 @@
     data () {
       return {
         ctnW: window.innerWidth,
-        ctnH: window.innerHeight
+        ctnH: window.innerHeight,
+        lang: this.$store.state.lang.pictureDialog
       }
     },
     computed: {
-      lang () {
-        return this.$store.state.lang.pictureDialog;
-      },
       display: function () {
         return this.$store.state.toolbarStates.picture.showPopup;
       }

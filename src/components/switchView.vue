@@ -14,13 +14,9 @@
   export default {
     data(){
       return {
-        editor: null
+        editor: null,
+        lang: this.$store.state.lang.switchView
       }
-    },
-    computed: {
-      lang () {
-        return this.$store.state.lang.switchView;
-      },
     },
     methods: Object.assign({}, mapActions([
       'switchView',

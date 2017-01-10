@@ -43,13 +43,11 @@
       return {
         num: 64,
         x: -1,
-        y: -1
+        y: -1,
+        lang: this.$store.state.lang.tables
       }
     },
     computed: {
-      lang () {
-        return this.$store.state.lang.tables;
-      },
       disabled () {
         return this.$store.state.toolbarStates.tables.disabled;
       },

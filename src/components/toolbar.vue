@@ -110,16 +110,12 @@
     data () {
       return {
         nativeBtns,
-        customBtns
+        customBtns,
+        lang: this.$store.state.lang.toolbar,
+        config: this.$store.state.config.toolbar
       }
     },
     computed: {
-      lang () {
-        return this.$store.state.lang.toolbar;
-      },
-      config () {
-        return this.$store.state.config.toolbar;
-      },
       states () {
         return this.$store.state.toolbarStates;
       }

@@ -17,13 +17,11 @@
     data () {
       return {
         stack: [],
-        index: -1
+        index: -1,
+        lang: this.$store.state.lang.undo
       };
     },
     computed: {
-      lang () {
-        return this.$store.state.lang.undo;
-      },
       currentView () {
         return this.$store.state.currentView;
       },
