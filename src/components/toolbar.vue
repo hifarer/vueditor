@@ -8,32 +8,27 @@
     width: 100%;
     font-size: 0;
     letter-spacing: -4px;
-    &>div {
+    a {
       position: relative;
       display: inline-block;
-      font-size: initial;
-      letter-spacing: initial;
-      &>a {
-        display: inline-block;
-        padding: 10px 12px;
-        color: rgba(0, 0, 0, 0.6);
-      }
-      a.ve-divider {
-        width: 0;
-        height: 26px;
-        margin: 0 5px;
-        padding: 0;
-        border-right: 1px solid #ddd;
-        vertical-align: middle;
-      }
-      a.ve-active {
-         background: #eee;
-         color: #000;
-      }
-      &>a:not(.ve-disabled):hover {
+      padding: 10px 12px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    a.ve-divider {
+      width: 0;
+      height: 26px;
+      margin: 5px;
+      padding: 0;
+      border-right: 1px solid #ddd;
+      vertical-align: top;
+    }
+    a.ve-active {
         background: #eee;
         color: #000;
-      }
+    }
+    a:not(.ve-disabled):hover {
+      background: #eee;
+      color: #000;
     }
   }
 </style>
@@ -41,102 +36,63 @@
 <template>
   <div class="ve-toolbar">
     <template v-for="item in config">
-      <div v-if="nativeBtns[item]">
-        <a href="javascript:;" :title="lang[item].title"
-           :class="{'ve-active': states[item].active, 've-disabled': states[item].disabled}"
-           @click="clickHandler(item, null)" unselectable="on">
-          <i :class="[nativeBtns[item].class]"></i>
-        </a>
-      </div>
-      <div v-if="item == 'divider' || item == '|'">
-        <a href="javascript:;" class="ve-divider"></a>
-      </div>
-      <component v-if="customBtns.indexOf(item) != -1" :is="item" :comp-name="item"></component>
+      <a href="javascript:;" :title="lang[item].title" v-if="nativeBtns[item]"
+        :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}"
+        @click="nativeHandler(item, null)" unselectable="on">
+        <i :class="[nativeBtns[item].class]"></i>
+      </a>
+      <a href="javascript:;" :title="lang[item].title" v-if="customBtns[item]"
+        :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}"
+        @click="customHandler($event, item)" unselectable="on">
+        <i :class="[customBtns[item].class]"></i>
+      </a>
+      <a href="javascript:;" v-if="selects[item]"
+        class="ve-select" :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].class]"
+        @click="customHandler($event, item)" unselectable="on">
+        <span>{{states[item].value}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
+      </a>
+      <a href="javascript:;" class="ve-divider" v-if="item == 'divider' || item == '|'"></a>
     </template>
   </div>
 </template>
 
 <script>
 
-  import color from './color.vue';
-  import fontName from './fontname.vue';
-  import fontSize from './fontsize.vue';
-  import switchView from './switchView.vue';
-  import elements from './elements.vue';
-  import tables from './tables.vue';
-  import undo from './undo.vue';
-  import links from './links.vue';
-  import emoji from './emoji.vue';
-  import picture from './picture.vue';
-
-  let nativeBtns = {
-
-    removeFormat: {class: 'icon-eraser'},
-
-    bold: {class: 'icon-bold'},
-    italic: {class: 'icon-italic'},
-    underline: {class: 'icon-underline'},
-    strikeThrough: {class: 'icon-strikethrough'},
-
-    superscript: {class: 'icon-superscript'},
-    subscript: {class: 'icon-subscript'},
-    indent: {class: 'icon-indent'},
-    outdent: {class: 'icon-outdent'},
-
-    justifyLeft: {class: 'icon-align-left'},
-    justifyCenter: {class: 'icon-align-center'},
-    justifyRight: {class: 'icon-align-right'},
-    justifyFull: {class: 'icon-align-justify'},
-
-    insertOrderedList: {class: 'icon-list-ol'},
-    insertUnorderedList: {class: 'icon-list-ul'}
-  };
-
-  let customBtns = [
-    'foreColor',
-    'backColor',
-    'fontName',
-    'fontSize',
-    'switchView',
-    'elements',
-    'tables',
-    'undo',
-    'links',
-    'emoji',
-    'picture'
-  ];
+  import {nativeBtns, customBtns, selects} from '../js/btns.js';
 
   export default {
     data () {
       return {
         nativeBtns,
         customBtns,
+        selects,
         lang: this.$store.state.lang.toolbar,
         config: this.$store.state.config.toolbar
       }
     },
     computed: {
       states () {
-        return this.$store.state.toolbarStates;
+        return this.$store.state.toolbar;
       }
     },
     methods: {
-      clickHandler(name, value){
+      nativeHandler(name, value){
         this.$store.dispatch('execCommand', {name, value});
+      },
+      customHandler (event, current) {
+        if(customBtns[current] && customBtns[current].action){
+          this.$store.dispatch('callAction', {name: current});
+        }else{
+          let rect = event.currentTarget.getBoundingClientRect();
+          let display = this.states[current].showPopup.display;
+          this.$store.dispatch('updatePopupDisplay', {
+            name: current,
+            display: !display,
+            left: rect.left,
+            top: rect.top
+          });
+        }
       }
-    },
-    components: {
-      'foreColor': color,
-      'backColor': color,
-      fontName,
-      fontSize,
-      switchView,
-      elements,
-      tables,
-      undo,
-      links,
-      emoji,
-      picture
     }
   }
 </script>

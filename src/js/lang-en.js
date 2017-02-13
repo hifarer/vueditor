@@ -10,10 +10,7 @@ export default {
     invalidColorCodeMsg: 'Please enter the correct color code',
     ok: 'ok',
   },
-  editable: {
-    ieMsg: 'You must select a text to use this feature in IE browser'
-  },
-  elements: {
+  format: {
 
   },
   emoji: {
@@ -26,32 +23,18 @@ export default {
 
   },
   iframe: {
-    ieMsg: 'You must select a text to use this feature in IE browser',
-    iframeUrl: 'You must specify a HTML file path while using iframe mode'
+    ieMsg: 'You must select a text to use this feature in IE browser'
   },
-  links: {
+  link: {
     addLink: 'Add link',
     cancelLink: 'Cancel link',
     ok: 'OK'
   },
   picture: {
     title: 'Insert Picture',
-  },
-  pictureDialog: {
-    title: 'Insert Picture',
     ok: 'OK',
     cancel: 'Cancel',
     invalidFile: 'No file selected or selected file is not a picture'
-  },
-  switchView: {
-    title: 'Source code'
-  },
-  tables: {
-    title: 'Table'
-  },
-  undo: {
-    undo: 'Undo',
-    redo: 'Redo'
   },
 
   toolbar: {
@@ -73,6 +56,31 @@ export default {
     justifyFull: {title: 'Justify full'},
 
     insertOrderedList: {title: 'Insert ordered list'},
-    insertUnorderedList: {title: 'Insert unordered list'}
+    insertUnorderedList: {title: 'Insert unordered list'},
+
+    link: {title: ''},
+    unLink: {title: ''},
+    markdown: {title: ''},
+    picture: {title: ''},
+    switchView: {title: ''},
+    table: {title: ''},
+    undo: {title: ''},
+    redo: {title: ''},
+    foreColor: {title: ''},
+    backColor: {title: ''},
+    emoji: {title: ''},
+    fontName: {title: ''},
+    fontSize: {title: ''},
+
+    switchView: {
+      title: 'Source code'
+    },
+    table: {
+      title: 'Table'
+    },
+    undo: {
+      undo: 'Undo',
+      redo: 'Redo'
+    },
   }
 }

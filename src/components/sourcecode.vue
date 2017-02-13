@@ -6,6 +6,7 @@
     display: block;
     width: 100%;
     height: 100%;
+    padding: 8px;
     outline: none;
     border: none;
     resize: none;

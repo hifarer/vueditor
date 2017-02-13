@@ -1,10 +1,14 @@
 
-export const updateToolbarActiveStates = ({commit}, obj) => {
-  commit('UPDATE_TOOLBAR_ACTIVE_STATES', obj)
+export const updateToolbarValue = ({commit}, data) => {
+  commit('UPDATE_TOOLBAR_VALUE', data)
 }
 
-export const updateToolbarDisabledStates = ({commit}, json) => {
-  commit('UPDATE_TOOLBAR_DISABLED_STATES', json)
+// updateToolbarActiveStates
+// UPDATE_TOOLBAR_ACTIVE_STATES
+// updateToolbarDisabledStates
+// UPDATE_TOOLBAR_DISABLED_STATES
+export const updateToolbarStates = ({commit}, json) => {
+  commit('UPDATE_TOOLBAR_STATES', json)
 }
 
 export const updatePopupDisplay = ({commit}, current) => {
@@ -23,6 +27,6 @@ export const execCommand = ({commit}, data) => {
   commit('EXEC_COMMAND', data)
 }
 
-export const callAction = ({commit}, name) => {
-  commit('CALL_ACTION', name)
+export const callAction = ({commit}, data) => {
+  commit('CALL_ACTION', data)
 }

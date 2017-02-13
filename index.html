@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Vueditor</title>
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="">
   <link rel="stylesheet" type="text/css" href="./dist/css/vueditor.min.css">
   <style>
     section {
@@ -37,9 +37,9 @@
   <script>
     Vue.use(Vueditor, {
       toolbar: [
-        'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
-        'links', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
+        'removeFormat', 'undo', 'redo', '|', 'format', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+        'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'switchView'
       ],
       fontName: [
         {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
@@ -48,9 +48,7 @@
       emoji: [
         "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606"
       ],
-      lang: 'en',
-      mode: 'iframe',
-      iframePath: './dist/iframe/page.html',
+      lang: 'cn',
       fileuploadUrl: ''
     });
     let parent = new Vue({
@@ -60,13 +58,12 @@
     inst1.setContent('fill your content here');
     console.log(inst1.getContent());
   </script>
-  <script>
+  <script type="asfas">
     // another usage
     let inst2 = Vueditor.createEditor('#editor2', {
       toolbar: [
           'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
       ],
-      mode: 'default',
       fileuploadUrl: '',
       classList: ['someclass'],
       id: 'someid'

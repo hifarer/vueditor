@@ -11,16 +11,9 @@ function mixinConfig (opts) {
   let storeModule = createModule(config);
   let data = {
     config,
-    comps: [
-      'toolbar',
-      'editable',
-      'sourcecode'
-    ],
     classList: config.classList,
     id: config.id
   };
-  config.mode !== 'default' && (data.comps[1] = 'iframe');
-  config.toolbar.indexOf('picture') !== -1 && data.comps.push('pictureDialog');
   return Object.assign({}, app, {
     store: new Vuex.Store(storeModule),
     data: function (){

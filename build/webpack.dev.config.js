@@ -7,6 +7,8 @@ module.exports = {
 
   context: __dirname,
 
+  watch: true,
+
   entry: {
     vueditor: ['webpack-hot-middleware/client?path=/__webpack_hmr', '../src/js/main.js']
   },

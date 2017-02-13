@@ -21,18 +21,14 @@
 </style>
 
 <template>
-  <div>
-    <a href="javascript:;" :title="lang.title" :class="{'ve-disabled': disabled, 've-active': display}" @click="toggle">
-      <i class="icon-table"></i>
-    </a>
-    <div class="ve-toolbar-dropdown ve-table" v-show="display">
-      <ul>
-        <!--vue 2.0 v-for i start with 1-->
-        <li v-for="i in num" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
-          <a href="javascript:;" :class="{'active': ((i-1)%8 <= x && parseInt((i-1)/8) <= y)}"></a>
-        </li>
-      </ul>
-    </div>
+  <div class="ve-table" v-show="showPopup.display"
+  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+    <ul>
+      <!--vue.js 2.0 v-for i start with 1-->
+      <li v-for="i in num" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
+        <a href="javascript:;" :class="{'active': ((i-1)%8 <= x && parseInt((i-1)/8) <= y)}"></a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -44,24 +40,15 @@
         num: 64,
         x: -1,
         y: -1,
-        lang: this.$store.state.lang.tables
+        lang: this.$store.state.lang.table
       }
     },
     computed: {
-      disabled () {
-        return this.$store.state.toolbarStates.tables.disabled;
-      },
-      display () {
-        return this.$store.state.toolbarStates.tables.showPopup;
+      showPopup () {
+        return this.$store.state.toolbar.table.showPopup;
       }
     },
     methods: {
-      updatePopupDisplay (current) {
-        this.$store.dispatch('updatePopupDisplay', current);
-      },
-      toggle () {
-        !this.disabled && this.updatePopupDisplay('tables');
-      },
       overHandler (index) {
         this.x = index % 8;
         this.y = parseInt(index/8);
@@ -69,7 +56,7 @@
       clickHandler (index) {
         let html = this.createTable(this.x+1, this.y+1);
         this.$store.dispatch('execCommand', {name: 'insertHTML', value: html});
-        this.updatePopupDisplay();
+        this.$store.dispatch('updatePopupDisplay');
       },
       createTable (rows, cols) {
         let oTable = document.createElement('table');

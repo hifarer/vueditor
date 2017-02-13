@@ -1,13 +1,3 @@
-<template>
-  <div>
-    <a href="javascript:;" :title="lang.undo" :class="{'ve-disabled': undoState}" @click="undo">
-      <i class="icon-undo"></i>
-    </a>
-    <a href="javascript:;" :title="lang.redo" :class="{'ve-disabled': redoState}" @click="redo">
-      <i class="icon-repeat"></i>
-    </a>
-  </div>
-</template>
 
 <script>
 
@@ -31,12 +21,6 @@
       action: function () {
         return this.$store.state.action;
       },
-      undoState () {
-        return this.$store.state.toolbarStates.undo.disabled;
-      },
-      redoState () {
-        return this.$store.state.toolbarStates.redo.disabled;
-      },
       canUndo: function () {
         return this.index > 0;
       },
@@ -55,13 +39,15 @@
           this.push(this.content, true);
         }
       },
-      'action': function (val) {
-        this[val]();
+      'action': function (data) {
+        if(['undo', 'redo'].indexOf(data.name) != -1){
+          this[data.name]();
+        }
       }
     },
     methods: Object.assign({}, mapActions([
       'updateContent',
-      'updateToolbarDisabledStates'
+      'updateToolbarStates'
     ]), {
       undo () {
         if (!this.canUndo)return;
@@ -85,7 +71,7 @@
         if (isInit || this.currentView == 'sourceCode') {
           json = {undo: true, redo: true};
         }
-        this.updateToolbarDisabledStates(json);
+        this.updateToolbarStates({data: json});
       }
     }),
     mounted () {

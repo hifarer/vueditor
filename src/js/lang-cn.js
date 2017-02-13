@@ -10,12 +10,6 @@ export default {
     invalidColorCodeMsg: "请输入正确的颜色代码。",
     ok: '确定',
   },
-  editable: {
-    ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
-  },
-  elements: {
-
-  },
   emoji: {
     title: '插入表情'
   },
@@ -25,33 +19,37 @@ export default {
   fontSize: {
 
   },
-  iframe: {
-    ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！',
-    iframeUrl: '使用iframe模式必须指定一个HTML文件作为iframe页面，请指定其路径！'
+  format: {
+
   },
-  links: {
+  iframe: {
+    ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
+  },
+  link: {
     addLink: '添加超链接',
     cancelLink: '取消超链接',
     ok: '确定'
   },
-  picture: {
-    title: '插入图片',
+  markdown: {
+
   },
-  pictureDialog: {
+  picture: {
     title: '插入图片',
     ok: '确定',
     cancel: '取消',
     invalidFile: '未选择图片或选择的文件并非图片!'
   },
-  switchView: {
-    title: '源码'
+  sourceCode: {
+
   },
-  tables: {
-    title: '表格'
+  switchView: {
+
+  },
+  table: {
+
   },
   undo: {
-    undo: '撤销',
-    redo: '恢复'
+
   },
 
   toolbar: {
@@ -73,6 +71,18 @@ export default {
     justifyFull: {title: '两端对齐'},
 
     insertOrderedList: {title: '有序列表'},
-    insertUnorderedList: {title: '无序列表'}
+    insertUnorderedList: {title: '无序列表'},
+
+    foreColor: {title: '文本颜色'},
+    backColor: {title: '背景颜色'},
+    emoji: {title: '插入表情'},
+    link: {title: '添加超链接'},
+    unLink: {title: '取消超链接'},
+    markdown: {title: 'markdown'},
+    picture: {title: '插入图片'},
+    switchView: {title: '源码'},
+    table: {title: '表格'},
+    undo: {title: '撤销'},
+    redo: {title: '恢复'},
   }
 }

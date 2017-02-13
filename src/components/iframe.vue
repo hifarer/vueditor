@@ -1,6 +1,6 @@
 <template>
   <div class="ve-design" v-show="currentView == 'design'">
-    <iframe :src="iframePath" frameborder="0" @load="init"></iframe>
+    <iframe src="about:blank" frameborder="0" @load="init"></iframe>
   </div>
 </template>
 
@@ -18,8 +18,7 @@
         timer: null,
         inited: false,
         cache: '',
-        iframePath: this.$store.state.config.iframePath,
-        lang: this.$store.state.lang.editable
+        lang: this.$store.state.lang.iframe
       }
     },
 
@@ -34,25 +33,21 @@
         return this.$store.state.command;
       }
     },
-    created () {
-      if(!this.iframePath){
-        throw this.lang.iframeUrl;
-      }
-    },
 
     watch: {
       'currentView': function (val) {
         if (val == 'sourceCode') {
           clearTimeout(this.timer);
           this.updateContent(this.iframeBody.innerHTML);
-          this.updateToolbarActiveStates();
+          this.updateToolbarStates({});
         }else{
-          this.updateToolbarActiveStates(this.iframeDoc);
+          this.updateToolbarStates({doc: this.iframeDoc});
         }
       },
       'content': function (val) {
         if (this.inited) {
           this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
+          this.updateToolbarStates({doc: this.iframeDoc});
         } else {
           this.cache = val;
         }
@@ -64,7 +59,7 @@
 
     methods: Object.assign({}, mapActions([
       'updateContent',
-      'updateToolbarActiveStates',
+      'updateToolbarStates',
       'updatePopupDisplay',
       'callAction'
     ]), {
@@ -78,6 +73,7 @@
           this.iframeBody.innerHTML != this.cache && (this.iframeBody.innerHTML = this.cache);
           this.cache = '';
         }
+        this.iframeDoc.designMode = 'on';
         this.addEvent();
       },
 
@@ -91,8 +87,8 @@
       keydownHandler (event) {
         if (event.ctrlKey && (event.keyCode == 89 || event.keyCode == 90)) {
           event.preventDefault();
-          event.keyCode == 89 && this.callAction('redo');
-          event.keyCode == 90 && this.callAction('undo');
+          event.keyCode == 89 && this.callAction({name: 'redo'});
+          event.keyCode == 90 && this.callAction({name: 'undo'});
         }
       },
 
@@ -105,7 +101,7 @@
 
       selectionChange () {
         this.iframeDoc.addEventListener('selectionchange', function () {
-          this.updateToolbarActiveStates(this.iframeDoc);
+          this.updateToolbarStates({doc: this.iframeDoc});
         }.bind(this), false);
         if (navigator.userAgent.indexOf('Firefox') !== -1) {
           let oSel = this.iframeWin.getSelection();
@@ -114,7 +110,7 @@
             if (oSel && oSel.rangeCount) {
               if (focusOffset != oSel.focusOffset) {
                 focusOffset = oSel.focusOffset;
-                this.updateToolbarActiveStates(this.iframeDoc);
+                this.updateToolbarStates({doc: this.iframeDoc});
               }
             } else {
               oSel = this.iframeWin.getSelection();
@@ -128,8 +124,8 @@
           this.iframeDoc.execCommand('styleWithCss', false, true);
         }
         this[name] ? this[name](name, value) : this.iframeDoc.execCommand(name, false, value);
-        this.updateToolbarActiveStates(this.iframeDoc);
         this.updateContent(this.iframeBody.innerHTML);
+        this.updateToolbarStates({doc: this.iframeDoc});
       },
 
       insertHTML (name, value) {

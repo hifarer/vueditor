@@ -25,23 +25,17 @@
 </style>
 
 <template>
-  <div>
-    <a href="javascript:;" :title="compName == 'foreColor' ? lang.foreColor : lang.backColor"
-       :class="{'ve-active': this.display, 've-disabled': this.disabled}"
-       @click="toggle">
-      <i :class="{'icon-file-text': compName == 'backColor', 'icon-file-text-o': compName == 'foreColor'}"></i>
-    </a>
-    <div class="ve-toolbar-dropdown colorpicker" v-show="display">
-      <div class="ve-input-box">
-        <input type="text" class="ve-input" :placeholder="lang.colorCode" v-model="color">
-        <button type="button" class="ve-btn" @click="inputHandler">{{lang.ok}}</button>
-      </div>
-      <ul>
-        <li v-for="color in colors" @click="clickHandler(color)">
-          <a href="javascript:;" :title="color" :style="{background: color}"></a>
-        </li>
-      </ul>
+  <div class="colorpicker" v-show="showPopup.display"
+  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+    <div class="ve-input-box">
+      <input type="text" class="ve-input" :placeholder="lang.colorCode" v-model="color">
+      <button type="button" class="ve-btn" @click="inputHandler">{{lang.ok}}</button>
     </div>
+    <ul>
+      <li v-for="color in colors" @click="clickHandler(color)">
+        <a href="javascript:;" :title="color" :style="{background: color}"></a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -68,19 +62,13 @@
     },
     props: ['comp-name'],
     computed: {
-      disabled () {
-        return this.$store.state.toolbarStates[this.compName].disabled;
-      },
-      display () {
-        return this.$store.state.toolbarStates[this.compName].showPopup;
+      showPopup () {
+        return this.$store.state.toolbar[this.compName].showPopup;
       }
     },
     methods: {
-      updatePopupDisplay (current) {
-        this.$store.dispatch('updatePopupDisplay', current);
-      },
-      toggle () {
-        !this.disabled && this.updatePopupDisplay(this.compName);
+      updatePopupDisplay () {
+        this.$store.dispatch('updatePopupDisplay');
       },
       checkValid (color) {
         let sColor = color.replace(/\s+/g, '');
