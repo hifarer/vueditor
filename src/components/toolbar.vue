@@ -87,6 +87,9 @@
           let rect = event.currentTarget.getBoundingClientRect();
           let display = this.states[name].showPopup.display;
           let json = {};
+          for(let item in customBtns){
+            !customBtns[item].action && (json[item] = 'default');
+          }
           json[name] = 'actived';
           this.$store.dispatch('updatePopupDisplay', {
             name,

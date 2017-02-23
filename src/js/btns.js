@@ -28,7 +28,7 @@ export default {
     emoji: {className: 'icon-smile-o'},
     link: {className: 'icon-link'},
     unLink: {className: 'icon-unlink', action: true},
-    markdown: {className: 'icon-markdown'},
+    // markdown: {className: 'icon-markdown'},
     picture: {className: 'icon-file-image-o'},
     switchView: {className: 'icon-code', action: true},
     table: {className: 'icon-table'},
