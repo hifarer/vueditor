@@ -18,7 +18,7 @@
         timer: null,
         inited: false,
         cache: '',
-        lang: this.$store.state.lang.iframe
+        lang: this.$parent.lang.iframe
       }
     },
 
@@ -31,6 +31,9 @@
       },
       command: function () {
         return this.$store.state.command;
+      },
+      states: function () {
+        return this.$store.state.toolbar;
       }
     },
 
@@ -39,15 +42,15 @@
         if (val == 'sourceCode') {
           clearTimeout(this.timer);
           this.updateContent(this.iframeBody.innerHTML);
-          this.updateToolbarStates({});
+          this.updateStates({});
         }else{
-          this.updateToolbarStates({doc: this.iframeDoc});
+          this.updateStates();
         }
       },
       'content': function (val) {
         if (this.inited) {
           this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
-          this.updateToolbarStates({doc: this.iframeDoc});
+          this.updateStates();
         } else {
           this.cache = val;
         }
@@ -77,9 +80,30 @@
         this.addEvent();
       },
 
+      updateStates (data) {
+        if(!data){
+          let json = {};
+          for (let name in this.states) {
+            if(['redo', 'undo'].indexOf(name) == -1){
+              if(this.iframeDoc.queryCommandSupported(name)){
+                json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default';
+              }else{
+                json[name] = 'default';
+              }
+            }
+          }
+          this.updateToolbarStates(json);
+        }else{
+          this.updateToolbarStates();
+        }
+      },
+
       addEvent () {
         this.selectionChange();
-        this.iframeDoc.addEventListener('click', this.updatePopupDisplay, false);
+        this.iframeDoc.addEventListener('click', () => {
+          this.updatePopupDisplay();
+          this.updateStates();
+        }, false);
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false);
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false);
       },
@@ -101,7 +125,7 @@
 
       selectionChange () {
         this.iframeDoc.addEventListener('selectionchange', function () {
-          this.updateToolbarStates({doc: this.iframeDoc});
+          this.updateStates();
         }.bind(this), false);
         if (navigator.userAgent.indexOf('Firefox') !== -1) {
           let oSel = this.iframeWin.getSelection();
@@ -110,7 +134,7 @@
             if (oSel && oSel.rangeCount) {
               if (focusOffset != oSel.focusOffset) {
                 focusOffset = oSel.focusOffset;
-                this.updateToolbarStates({doc: this.iframeDoc});
+                this.updateStates();
               }
             } else {
               oSel = this.iframeWin.getSelection();
@@ -125,7 +149,7 @@
         }
         this[name] ? this[name](name, value) : this.iframeDoc.execCommand(name, false, value);
         this.updateContent(this.iframeBody.innerHTML);
-        this.updateToolbarStates({doc: this.iframeDoc});
+        this.updateStates();
       },
 
       insertHTML (name, value) {

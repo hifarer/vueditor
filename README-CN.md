@@ -1,43 +1,44 @@
+
 Vueditor
 ===
 
 [![vueditor](https://img.shields.io/npm/v/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![vueditor](https://img.shields.io/npm/l/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 
-[中文文档] (./README-CN.md)
+[English DOC] (./README.md)
 
-A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
+基于 Vue.js 和 Vuex.js 实现的富文本编辑器, 只支持 Vue.js 2.x.x
 
-Browser compatibility: Chrome, Firefox, Safari, IE 9+.
+浏览器兼容性: Chrome, Firefox, Safari, IE 9+.
 
-Online [DEMO](http://hifarer.github.io/Vueditor/)
+在线 [DEMO](http://hifarer.github.io/Vueditor/)
 
-## Screenshot
+## 截图
 
 ![vueditor](./vueditor.gif)
 
-## Features
+## 特性
 
-- No jQuery, Bootstrap or any other font file needed
-- Light weighted, 55kb for js and 50kb for css
-- Using .vue file development mode
-- Based on npm + webpack + babel, using ES2015
+- 无需 jQuery, Bootstrap 或其他任何字体文件支持。
+- 轻量级, js 55kb,  css 50kb
+- 功能模块独立
+- 使用 npm + webpack + babel, ES2015
 
-## Installation
+## 安装
 ```javascript
 npm install vueditor
 ```
 
-If you prefer to use it via script tag, just add "vueditor.min.js", "vueditor.min.css" to your page. 
+如果期望通过 script 标签引用, 只需添加 "vueditor.min.js", "vueditor.min.css" 到相关页面即可. 
 
-## Usage
+## 用法
 
 ### Vue.use(Vueditor, config)
 
-Use it in the following cases:
+适用于一下场景:
 
-1. Only one editor required
-2. Multiple editors required but shared the same config
+1. 只需一个编辑器的情况
+2. 一个页面有多个编辑器但配置相同
 
 ```javascript
 import Vue from 'vue'
@@ -46,7 +47,7 @@ import Vueditor from 'vueditor'
 
 import "vueditor/dist/css/vueditor.min.css"
 
-// your config here
+// 编辑器配置
 let config = {
   toolbar: [
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
@@ -62,13 +63,13 @@ let config = {
 
 Vue.use(Vuex);
 Vue.use(Vueditor, config);
-// create a root instance
+// 创建根实例
 new Vue({
     el: '#editor1'
 });
 ```
 
-Then in your vue template somewhere:
+然后在*.vue的template某一处:
 ```html
 <template>
   <div>
@@ -78,7 +79,7 @@ Then in your vue template somewhere:
 </template>
 ```
 
-To get and set content you need to acquire the Vueditor component, you can use `$children[index]` or `ref` to do that.
+获取和设置内容需要先拿到上一步`<Vueditor></Vueditor>`生成的组件，可以通过`$children[index]` 和 `ref`获取到。
 
 ```javascript
 let parent = new Vue({
@@ -91,7 +92,7 @@ inst.getContent();
 
 ### createEditor(selector, config)
 
-Call `createEditor` and pass specific config as parameter respectively for multiple editors in a page. 
+`createEditor`适用于多个Vueditor实例，分别传参。
 
 ```javascript
 
@@ -113,8 +114,7 @@ Call `createEditor` and pass specific config as parameter respectively for multi
     classList: []
   });
 ```
-
-The initialized element will be replaced in this case, you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a Vueditor instance, you can set and get content with it:
+注意这种用法会替换掉被初始化的那个元素，如果要添加样式到该元素可以在config里面加上`classList` 或 `id`来实现；`createEditor`返回一个Vueditor实例，通过实例可以获取和设置内容:
 
 ```javascript
 let inst = createEditor(...);
@@ -122,21 +122,21 @@ inst.setContent('your content here');
 inst.getContent();
 ```
 
-## Options for configuration:
+## 可配置参数:
 
-|          Name         |    Type    |                                                         Description                                                         |
+|          名称         |    类型    |                                                         描述                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as the separator for grouping |
-| fontName              | `Object`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
-| fontSize              | `Array`    | The font-size select's options |
-| emoji                 | `Array`    | The emoji list, you can get full list [here](http://unicode.org/emoji/charts/full-emoji-list.html) |
-| lang                  | `String`   | Interface language, default is Chinese, to set to English use `lang: 'en'` |
-| fileUploadUrl         | `String`   | File upload url, the return result must be a string refer to the uploaded image, leave it empty will end up with local preview |
-| id                    | `String`   | id for the rendered editor element |
-| classList             | `Array`    | className for the rendered editor element |
+| toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
+| fontName              | `Object`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
+| fontSize              | `Array`    | font-size 选项 |
+| emoji                 | `Array`    | emoji 表情列表, 获取全部 [点击](http://unicode.org/emoji/charts/full-emoji-list.html) |
+| lang                  | `String`   | 界面语言, 默认中文, 使用英文 `lang: 'en'` |
+| fileUploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
+| id                    | `String`   | 容器id |
+| classList             | `Array`    | 容器className |
 
 
-Default value of the above fields:
+以上可配置项的默认值
 
 ```javascript
 {
@@ -172,13 +172,13 @@ Default value of the above fields:
 
 ## TODO
 
-- [ ] Popup menu position auto adjust
-- [ ] Full screen and fixed toolbar feature
-- [ ] Advanced table options
-- [ ] Code highlight
-- [ ] Markdown support
-- [ ] Plugin support
-- [ ] XSS prevention
+- [ ] 弹出菜单位置自适应
+- [ ] 全屏及工具栏固定选项
+- [ ] 表格高级设置
+- [ ] 代码高亮
+- [ ] Markdown 支持
+- [ ] 插件支持
+- [ ] XSS 预防
 
 ## License
 

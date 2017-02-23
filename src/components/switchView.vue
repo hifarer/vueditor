@@ -6,7 +6,7 @@
   export default {
     data(){
       return {
-        lang: this.$store.state.lang.switchView
+        lang: this.$parent.lang.switchView
       }
     },
     computed: {

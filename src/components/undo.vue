@@ -8,7 +8,7 @@
       return {
         stack: [],
         index: -1,
-        lang: this.$store.state.lang.undo
+        lang: this.$parent.lang.undo
       };
     },
     computed: {
@@ -67,11 +67,10 @@
           this.stack.push(content);
           this.index++;
         }
-        let json = {undo: !this.canUndo, redo: !this.canRedo};
-        if (isInit || this.currentView == 'sourceCode') {
-          json = {undo: true, redo: true};
-        }
-        this.updateToolbarStates({data: json});
+        this.updateToolbarStates({
+          undo: this.canUndo ? 'default' : 'disabled',
+          redo: this.canRedo ? 'default' : 'disabled'
+        });
       }
     }),
     mounted () {

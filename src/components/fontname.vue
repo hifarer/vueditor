@@ -25,7 +25,7 @@
 
 <template>
   <div class="ve-select-dropdown font-name" v-show="showPopup.display" 
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
     <ul>
       <li v-for="font in fonts" @click="clickHandler(font)">
         <a href="javascript:;" :style="{fontFamily: font.val + ', sans-serif'}">{{font.abbr || font.val}}</a>
@@ -38,7 +38,7 @@
 
   export default {
     data(){
-      let arr = this.$store.state.config.fontName;
+      let arr = this.$parent.config.fontName;
       return {
         fonts: arr,
         val: arr[0].abbr || arr[0].val

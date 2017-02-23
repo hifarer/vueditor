@@ -1,29 +1,16 @@
-const mutations = {
+
+export default {
 
   UPDATE_TOOLBAR_VALUE (state, data) {
      state.toolbar[data.name].value = data.value;
   },
 
-  UPDATE_TOOLBAR_STATES (state, {data, doc}) {
+  UPDATE_TOOLBAR_STATES (state, data) {
     let bool = state.currentView !== 'design';
     for (let name in state.toolbar) {
-      // disabled
-      if(bool){
-        state.toolbar[name].status = 'disabled';
-      }else{
-        if(['redo', 'undo'].indexOf(name) != -1){
-          if(data && data[name] !== undefined){
-            state.toolbar[name].status = data[name] ? 'disabled' : 'default';
-          }
-        }else{
-          state.toolbar[name].status != 'actived' && (state.toolbar[name].status = 'default');
-        }
-      }
-      // actived
-      if(state.toolbar[name].status != 'disabled'){
-        if(doc && doc.queryCommandSupported(name)){
-          state.toolbar[name].status = doc.queryCommandState(name) ? 'actived' : 'default';
-        }
+      bool && (state.toolbar[name].status = 'disabled');
+      if(data && data[name] !== undefined){
+        state.toolbar[name].status = data[name];
       }
     }
     state.toolbar.switchView && (state.toolbar.switchView.status = 'default');
@@ -55,14 +42,12 @@ const mutations = {
     state.currentView = state.currentView == 'design' ? 'sourceCode' : 'design'
   },
 
-  EXEC_COMMAND (state, data) {
-    state.command = data
-  },
-
   CALL_ACTION (state, data) {
     state.action = data
+  },
+
+  EXEC_COMMAND (state, data) {
+    state.command = data
   }
 
 }
-
-export default mutations

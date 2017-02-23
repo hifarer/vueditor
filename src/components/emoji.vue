@@ -7,16 +7,11 @@
     max-height: 350px;
     overflow: auto;
   }
-  .emoji-wrap {
-    a {
-      float: left;
-      width: 30px;
-      height: 30px;
-      padding: 1px;
-    }
-    img {
-      max-width: 100%;
-    }
+  .emoji-wrap a {
+    float: left;
+    width: 30px;
+    height: 30px;
+    padding: 1px;
   }
 </style>
 
@@ -39,22 +34,22 @@
 
 <script>
 
-// http://unicode.org/emoji/charts/full-emoji-list.html
-// in console panel
+// To get emoji list for Vueditor, open http://unicode.org/emoji/charts/full-emoji-list.html
+// and put the following code in console panel then run.
 // var arr = [];
 // [].forEach.call(document.querySelectorAll('.code'), function(node){
 // 	arr.push(node.children[0].getAttribute('name'))
 // });
 // console.log(arr);
 
-  import twemoji from "exports?twemoji!../js/twemoji.min.js";
+  import twemoji from 'exports?twemoji!../js/twemoji.min.js';
 
   export default {
     data () {
       return {
         twemoji,
-        arr: this.$store.state.config.emoji,
-        lang: this.$store.state.lang.emoji
+        arr: this.$parent.config.emoji,
+        lang: this.$parent.lang.emoji
       }
     },
     computed: {

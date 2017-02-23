@@ -17,7 +17,7 @@
 
 <template>
   <div class="ve-select-dropdown format-block" @click="selectItem" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
     <a href="javascript:;" v-for="item in arr">{{item}}</a>
   </div>
 </template>

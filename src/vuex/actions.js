@@ -3,10 +3,6 @@ export const updateToolbarValue = ({commit}, data) => {
   commit('UPDATE_TOOLBAR_VALUE', data)
 }
 
-// updateToolbarActiveStates
-// UPDATE_TOOLBAR_ACTIVE_STATES
-// updateToolbarDisabledStates
-// UPDATE_TOOLBAR_DISABLED_STATES
 export const updateToolbarStates = ({commit}, json) => {
   commit('UPDATE_TOOLBAR_STATES', json)
 }
@@ -23,10 +19,10 @@ export const switchView = ({commit}) => {
   commit('SWITCH_VIEW')
 }
 
-export const execCommand = ({commit}, data) => {
-  commit('EXEC_COMMAND', data)
-}
-
 export const callAction = ({commit}, data) => {
   commit('CALL_ACTION', data)
+}
+
+export const execCommand = ({commit}, data) => {
+  commit('EXEC_COMMAND', data)
 }

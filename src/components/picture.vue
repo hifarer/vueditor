@@ -32,7 +32,7 @@
       return {
         ctnW: window.innerWidth,
         ctnH: window.innerHeight,
-        lang: this.$store.state.lang.picture
+        lang: this.$parent.lang.picture
       }
     },
     computed: {
@@ -48,7 +48,7 @@
         let url = '';
         let obj = this.$refs.file;
         let form = this.$refs.form;
-        let fileuploadUrl = this.$store.state.config.fileuploadUrl;
+        let fileuploadUrl = this.$parent.config.fileuploadUrl;
         if (navigator.userAgent.indexOf('MSIE') >= 1) { // IE
           url = obj.value;
         } else {

@@ -17,7 +17,7 @@
 
 <template>
   <div class="ve-select-dropdown font-size" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
     <ul>
       <li v-for="size in fontSize" @click="clickHandler(size)">
         <a href="javascript:;">{{size}}</a>
@@ -30,7 +30,7 @@
 
   export default {
     data () {
-      let arr = this.$store.state.config.fontSize;
+      let arr = this.$parent.config.fontSize;
       return {
         fontSize: arr,
         val: arr[0]

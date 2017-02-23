@@ -1,44 +1,44 @@
 
 export default {
   nativeBtns: {
-    removeFormat: {class: 'icon-eraser'},
+    removeFormat: {className: 'icon-eraser'},
 
-    bold: {class: 'icon-bold'},
-    italic: {class: 'icon-italic'},
-    underline: {class: 'icon-underline'},
-    strikeThrough: {class: 'icon-strikethrough'},
+    bold: {className: 'icon-bold'},
+    italic: {className: 'icon-italic'},
+    underline: {className: 'icon-underline'},
+    strikeThrough: {className: 'icon-strikethrough'},
 
-    superscript: {class: 'icon-superscript'},
-    subscript: {class: 'icon-subscript'},
-    indent: {class: 'icon-indent'},
-    outdent: {class: 'icon-outdent'},
+    superscript: {className: 'icon-superscript'},
+    subscript: {className: 'icon-subscript'},
+    indent: {className: 'icon-indent'},
+    outdent: {className: 'icon-outdent'},
 
-    justifyLeft: {class: 'icon-align-left'},
-    justifyCenter: {class: 'icon-align-center'},
-    justifyRight: {class: 'icon-align-right'},
-    justifyFull: {class: 'icon-align-justify'},
+    justifyLeft: {className: 'icon-align-left'},
+    justifyCenter: {className: 'icon-align-center'},
+    justifyRight: {className: 'icon-align-right'},
+    justifyFull: {className: 'icon-align-justify'},
 
-    insertOrderedList: {class: 'icon-list-ol'},
-    insertUnorderedList: {class: 'icon-list-ul'}
+    insertOrderedList: {className: 'icon-list-ol'},
+    insertUnorderedList: {className: 'icon-list-ul'}
   },
 
   customBtns: {
-    foreColor: {class: 'icon-file-text-o'},
-    backColor: {class: 'icon-file-text'},
-    emoji: {class: 'icon-smile-o'},
-    link: {class: 'icon-link'},
-    unLink: {class: 'icon-unlink', action: true},
-    markdown: {class: 'icon-markdown'},
-    picture: {class: 'icon-file-image-o'},
-    switchView: {class: 'icon-code', action: true},
-    table: {class: 'icon-table'},
-    undo: {class: 'icon-undo', action: true},
-    redo: {class: 'icon-repeat', action: true}
+    foreColor: {className: 'icon-file-text-o'},
+    backColor: {className: 'icon-file-text'},
+    emoji: {className: 'icon-smile-o'},
+    link: {className: 'icon-link'},
+    unLink: {className: 'icon-unlink', action: true},
+    markdown: {className: 'icon-markdown'},
+    picture: {className: 'icon-file-image-o'},
+    switchView: {className: 'icon-code', action: true},
+    table: {className: 'icon-table'},
+    undo: {className: 'icon-undo', action: true},
+    redo: {className: 'icon-repeat', action: true}
   },
 
   selects: {
-    fontName: {class: 'font-select'},
-    fontSize: {class: ''},
-    format: {class: ''},
+    fontName: {className: 'font-select'},
+    fontSize: {className: ''},
+    format: {className: ''},
   }
 }

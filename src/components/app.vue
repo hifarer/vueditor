@@ -3,17 +3,9 @@
     <toolbar></toolbar>
     <veiframe></veiframe>
     <sourcecode></sourcecode>
-    <foreColor comp-name="foreColor"></foreColor>
-    <backColor comp-name="backColor"></backColor>
-    <fontName></fontName>
-    <fontSize></fontSize>
-    <format></format>
-    <vetable></vetable>
-    <undo></undo>
-    <velink></velink>
-    <emoji></emoji>
-    <picture></picture>
-    <switchView></switchView>
+    <template v-for="item in list">
+      <component v-if="config.toolbar.indexOf(item.replace('ve', '')) != -1" :is="item" :comp-name="item"></component>
+    </template>
   </div>
 </template>
 
@@ -43,7 +35,6 @@
       toolbar,
       veiframe,
       sourcecode,
-      color,
       'foreColor': color,
       'backColor': color,
       fontName,
@@ -63,6 +54,11 @@
       getContent () {
         return this.$store.state.content;
       }
+    },
+    created () {
+      this.list = [
+        'foreColor', 'backColor', 'fontName', 'fontSize', 'switchView', 'format', 'vetable', 'undo', 'velink', 'emoji', 'picture'
+      ];
     }
   }
 </script>

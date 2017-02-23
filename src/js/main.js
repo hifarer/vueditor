@@ -5,19 +5,21 @@ import app from '../components/app.vue'
 import createModule from '../vuex/store'
 import defaultConfig from './config'
 
+import cn from '../js/lang-cn.js'
+import en from '../js/lang-en.js'
+
 function mixinConfig (opts) {
   let config = opts ? Object.assign({}, defaultConfig, opts) : defaultConfig;
   let lang = config.lang || 'cn';
-  let storeModule = createModule(config);
-  let data = {
-    config,
-    classList: config.classList,
-    id: config.id
-  };
   return Object.assign({}, app, {
-    store: new Vuex.Store(storeModule),
+    store: new Vuex.Store(createModule(config)),
     data: function (){
-      return data;
+      return {
+        config,
+        lang: lang == 'cn' ? cn : en,
+        id: config.id,
+        classList: config.classList,
+      };
     }
   });
 }

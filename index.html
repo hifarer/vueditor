@@ -48,7 +48,7 @@
       emoji: [
         "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606"
       ],
-      lang: 'cn',
+      lang: 'en',
       fileuploadUrl: ''
     });
     let parent = new Vue({
@@ -58,11 +58,11 @@
     inst1.setContent('fill your content here');
     console.log(inst1.getContent());
   </script>
-  <script type="asfas">
+  <script>
     // another usage
     let inst2 = Vueditor.createEditor('#editor2', {
       toolbar: [
-          'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
+          'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
       ],
       fileuploadUrl: '',
       classList: ['someclass'],

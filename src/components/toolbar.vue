@@ -1,8 +1,6 @@
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
     border-bottom: 1px solid #ddd;
-    -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
     display: table;
     width: 100%;
@@ -23,8 +21,8 @@
       vertical-align: top;
     }
     a.ve-active {
-        background: #eee;
-        color: #000;
+      background: #eee;
+      color: #000;
     }
     a:not(.ve-disabled):hover {
       background: #eee;
@@ -39,15 +37,15 @@
       <a href="javascript:;" :title="lang[item].title" v-if="nativeBtns[item]"
         :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}"
         @click="nativeHandler(item, null)" unselectable="on">
-        <i :class="[nativeBtns[item].class]"></i>
+        <i :class="[nativeBtns[item].className]"></i>
       </a>
       <a href="javascript:;" :title="lang[item].title" v-if="customBtns[item]"
         :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}"
         @click="customHandler($event, item)" unselectable="on">
-        <i :class="[customBtns[item].class]"></i>
+        <i :class="[customBtns[item].className]"></i>
       </a>
       <a href="javascript:;" v-if="selects[item]"
-        class="ve-select" :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].class]"
+        class="ve-select" :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].className]"
         @click="customHandler($event, item)" unselectable="on">
         <span>{{states[item].value}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
       </a>
@@ -58,7 +56,7 @@
 
 <script>
 
-  import {nativeBtns, customBtns, selects} from '../js/btns.js';
+  import {nativeBtns, customBtns, selects} from '../js/btns';
 
   export default {
     data () {
@@ -66,8 +64,8 @@
         nativeBtns,
         customBtns,
         selects,
-        lang: this.$store.state.lang.toolbar,
-        config: this.$store.state.config.toolbar
+        lang: this.$parent.lang,
+        config: this.$parent.config.toolbar
       }
     },
     computed: {
@@ -76,21 +74,27 @@
       }
     },
     methods: {
-      nativeHandler(name, value){
-        this.$store.dispatch('execCommand', {name, value});
+      nativeHandler(name){
+        this.states[name].status !== 'disabled' && this.$store.dispatch('execCommand', {name, null});
       },
-      customHandler (event, current) {
-        if(customBtns[current] && customBtns[current].action){
-          this.$store.dispatch('callAction', {name: current});
+      customHandler (event, name) {
+        // directly do something
+        if(this.states[name].status == 'disabled')return;
+        if(customBtns[name] && customBtns[name].action){
+          this.$store.dispatch('callAction', {name});
         }else{
+          // show the popup menu
           let rect = event.currentTarget.getBoundingClientRect();
-          let display = this.states[current].showPopup.display;
+          let display = this.states[name].showPopup.display;
+          let json = {};
+          json[name] = 'actived';
           this.$store.dispatch('updatePopupDisplay', {
-            name: current,
+            name,
             display: !display,
             left: rect.left,
             top: rect.top
           });
+          this.$store.dispatch('updateToolbarStates', json);
         }
       }
     }
