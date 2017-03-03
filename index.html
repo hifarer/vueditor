@@ -6,30 +6,28 @@
   <link rel="shortcut icon" type="image/x-icon" href="">
   <link rel="stylesheet" type="text/css" href="./dist/css/vueditor.min.css">
   <style>
-    section {
-      width: 80%;
-      margin: 0 auto;
+    body {
+      margin: 0;
+      height: 2000px;
     }
-    header {
+    #github {
       text-align: right;
     }
-    #editor1, #someid {
-      height: 250px;
-      margin-top: 20px;
+    #editor1 {
+      width: 500px;
+      height: 500px;
     }
   </style>
 </head>
 <body>
 
-  <section>
-    <header>
-      <a href="https://github.com/hifarer/Vueditor">Github</a>
-    </header>
-    <div id="editor1">
-      <Vueditor></Vueditor>
-    </div>
-    <div id="editor2"></div>
-  </section>
+  <div id="github">
+    <a href="https://github.com/hifarer/Vueditor">Github</a>
+  </div>
+  <div id="editor1">
+    <Vueditor></Vueditor>
+  </div>
+  <div id="editor2"></div>
 
   <script src="//cdn.bootcss.com/vue/2.1.8/vue.min.js"></script>
   <script src="//cdn.bootcss.com/vuex/2.1.1/vuex.min.js"></script>
@@ -39,7 +37,7 @@
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'format', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
         'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'switchView'
+        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullScreen', 'sourceCode', 'markdown'
       ],
       fontName: [
         {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
@@ -52,13 +50,48 @@
       fileuploadUrl: ''
     });
     let parent = new Vue({
-        el: '#editor1'
+      el: '#editor1'
     });
     let inst1 = parent.$children[0];
-    inst1.setContent('fill your content here');
-    console.log(inst1.getContent());
+    inst1.setContent(`
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+
+      fill your content here
+    `);
+    // console.log(inst1.getContent());
   </script>
-  <script>
+  <script type="adf">
     // another usage
     let inst2 = Vueditor.createEditor('#editor2', {
       toolbar: [

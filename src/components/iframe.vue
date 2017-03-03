@@ -39,18 +39,18 @@
 
     watch: {
       'currentView': function (val) {
-        if (val == 'sourceCode') {
+        if (val == 'design') {
+          this.updateStates();
+        }else{
           clearTimeout(this.timer);
           this.updateContent(this.iframeBody.innerHTML);
           this.updateStates({});
-        }else{
-          this.updateStates();
         }
       },
       'content': function (val) {
         if (this.inited) {
           this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
-          this.updateStates();
+          this.currentView == 'design' && this.updateStates();
         } else {
           this.cache = val;
         }
@@ -80,6 +80,7 @@
         this.addEvent();
       },
 
+      // content change, selection change, view change
       updateStates (data) {
         if(!data){
           let json = {};
@@ -102,7 +103,6 @@
         this.selectionChange();
         this.iframeDoc.addEventListener('click', () => {
           this.updatePopupDisplay();
-          this.updateStates();
         }, false);
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false);
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false);
@@ -124,8 +124,13 @@
       },
 
       selectionChange () {
+        let timer = null;
         this.iframeDoc.addEventListener('selectionchange', function () {
-          this.updateStates();
+          // throttle
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            this.currentView == 'design' && this.updateStates();
+          }, 300);
         }.bind(this), false);
         if (navigator.userAgent.indexOf('Firefox') !== -1) {
           let oSel = this.iframeWin.getSelection();
@@ -134,7 +139,7 @@
             if (oSel && oSel.rangeCount) {
               if (focusOffset != oSel.focusOffset) {
                 focusOffset = oSel.focusOffset;
-                this.updateStates();
+                this.currentView == 'design' && this.updateStates();
               }
             } else {
               oSel = this.iframeWin.getSelection();
@@ -149,7 +154,6 @@
         }
         this[name] ? this[name](name, value) : this.iframeDoc.execCommand(name, false, value);
         this.updateContent(this.iframeBody.innerHTML);
-        this.updateStates();
       },
 
       insertHTML (name, value) {

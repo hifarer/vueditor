@@ -50,16 +50,20 @@ export default {
   unLink: {
     title: '取消超链接'
   },
-  markdown: {},
+  markdown: {
+    title: 'markdown'
+  },
   picture: {
     title: '插入图片',
     ok: '确定',
     cancel: '取消',
     invalidFile: '未选择图片或选择的文件并非图片!'
   },
-  sourceCode: {},
-  switchView: {
+  sourceCode: {
     title: '源码'
+  },
+  fullScreen: {
+    title: '全屏'
   },
   table: {title: '表格'},
   undo: {title: '撤销'},

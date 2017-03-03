@@ -1,5 +1,5 @@
-<style lang="less" rel="stylesheet/less">
-  .colorpicker {
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
     width: 176px;
     padding: 10px;
     position: absolute;
@@ -15,21 +15,21 @@
         height: 20px;
       }
     }
-    .ve-input {
-      max-width: ~"calc(100% - 35px)";
-    }
-    .ve-btn {
-      line-height: 16px;
-    }
+  }
+  .input {
+    max-width: ~"calc(100% - 35px)";
+  }
+  .btn {
+    line-height: 16px;
   }
 </style>
 
 <template>
-  <div class="colorpicker" v-show="showPopup.display"
+  <div class="ve-color-picker" :class="$style.ctn" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
     <div class="ve-input-box">
-      <input type="text" class="ve-input" :placeholder="lang.colorCode" v-model="color">
-      <button type="button" class="ve-btn" @click="inputHandler">{{lang.ok}}</button>
+      <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="color">
+      <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
     </div>
     <ul>
       <li v-for="color in colors" @click="clickHandler(color)">
@@ -54,16 +54,17 @@
 
   export default {
     data () {
+      let tag = this.$options._componentTag;
       return {
         colors: colors,
         color: '',
-        lang: this.$parent.lang[this.compName]
+        tag,
+        lang: this.$parent.lang[tag]
       }
     },
-    props: ['comp-name'],
     computed: {
       showPopup () {
-        return this.$store.state.toolbar[this.compName].showPopup;
+        return this.$store.state.toolbar[this.tag].showPopup;
       }
     },
     methods: {
@@ -83,7 +84,7 @@
         this.$store.dispatch('execCommand', {name: colorType, value: color});
       },
       clickHandler (color) {
-        this.setColor(this.compName, color);
+        this.setColor(this.tag, color);
         this.updatePopupDisplay();
       },
       inputHandler () {
@@ -92,7 +93,7 @@
         if (!result) {
           alert(this.lang.invalidColorCodeMsg);
         } else {
-          this.setColor(this.compName, color);
+          this.setColor(this.tag, color);
           this.updatePopupDisplay();
         }
         this.color = '';

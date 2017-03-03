@@ -1,14 +1,6 @@
 
-<style lang="less" rel="stylesheet/less">
-  .font-select {
-    width: 100px;
-    span {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-  .font-name {
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;
@@ -24,7 +16,7 @@
 </style>
 
 <template>
-  <div class="ve-select-dropdown font-name" v-show="showPopup.display" 
+  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup.display" 
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
     <ul>
       <li v-for="font in fonts" @click="clickHandler(font)">

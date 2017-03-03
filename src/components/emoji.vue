@@ -1,13 +1,13 @@
-<style lang="less" rel="stylesheet/less">
-  .emoji-popover {
+<style module>
+  .ctn {
     width: 276px;
     margin-left: -120px;
   }
-  .emoji-popover .pop-body {
+  .main {
     max-height: 350px;
     overflow: auto;
   }
-  .emoji-wrap a {
+  .wrap a {
     float: left;
     width: 30px;
     height: 30px;
@@ -16,12 +16,12 @@
 </style>
 
 <template>
-  <div class="ve-popover emoji-popover" v-show="showPopup.display"
+  <div class="ve-popover" :class="$style.ctn" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
-    <div class="pop-arrow"></div>
-    <div class="pop-header">{{lang.title}}</div>
-    <div class="pop-body">
-      <div class="emoji-wrap" @click="insertItem">
+    <div class="ve-pop-arrow"></div>
+    <div class="ve-pop-header">{{lang.title}}</div>
+    <div class="ve-pop-body" :class="$style.main">
+      <div :class="$style.wrap" @click="insertItem">
         <a href="javascript:;" v-for="item in arr">
           <img class="emoji" draggable="false" 
           :alt="twemoji.convert.fromCodePoint(item)" 

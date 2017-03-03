@@ -26,8 +26,13 @@ export default function (config) {
       toolbar,
       // editor's content
       content: '',
-      // current display block: design or sourceCode
+      // current display block: design, sourceCode, markdown
       currentView: 'design',
+      fullScreen: false,
+      rect: {
+        w: 0,
+        h: 0
+      },
       command: {
         name: '',
         value: ''

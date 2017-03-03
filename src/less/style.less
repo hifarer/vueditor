@@ -2,13 +2,28 @@
 @import "reset.less";
 
 .vueditor {
+  min-width: 300px;
+  min-height: 150px;
   height: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid #ddd;
+  background: #fff;
+  box-sizing: border-box;
 }
+
+.ve-full-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+}
+
 .ve-design,
-.ve-code {
+.ve-code,
+.ve-md {
   flex: 1;
   overflow: hidden;
 }
@@ -24,7 +39,7 @@
   overflow-y: auto;
 }
 
-[class^=triangle] {
+[class^=ve-triangle] {
   display: inline-block;
   width: 0;
   height: 0;
@@ -34,10 +49,10 @@
   border-left: 4px solid transparent;
   transition: 200ms;
 }
-.triangle-down {
+.ve-triangle-down {
   transform: rotate(0deg);
 }
-.triangle-up {
+.ve-triangle-up {
   transform: rotate(-180deg);
 }
 
@@ -111,7 +126,7 @@
   }
 }
 
-.ve-select-dropdown {
+.ve-dropdown {
   width: 176px;
   padding: 5px 10px;
   position: absolute;
@@ -125,7 +140,6 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 .ve-popover {
   font-size: 14px;
   position: absolute;
@@ -137,7 +151,7 @@
   box-shadow: 0 5px 10px rgba(0,0,0,.2);
   box-sizing: border-box;
 }
-.pop-arrow {
+.ve-pop-arrow {
   position: absolute;
   left: 50%;
   top: -10px;
@@ -155,12 +169,12 @@
     border-bottom: 10px solid #fff;
   }
 }
-.pop-header {
+.ve-pop-header {
   background: #f7f7f7;
   padding: 8px 14px;
   border-bottom: 1px solid #ebebeb;
 }
-.pop-body {
+.ve-pop-body {
   padding: 8px;
 }
 
@@ -171,24 +185,19 @@
   left: 0;
   z-index: 1000;
 }
-.ve-dialog .wrap {
-  position: relative;
-  top: 50%;
-  background: #fff;
-  margin: 0 auto;
-  transform: translateY(-80%);
-}
-.dialog-header {
+
+.ve-dialog-header {
   background: #f7f7f7;
   padding: 10px;
-  .ve-close {
-    float: right;
-  }
 }
-.dialog-body {
+.ve-close {
+  float: right;
+}
+
+.ve-dialog-body {
   padding: 10px;
 }
-.dialog-footer {
+.ve-dialog-footer {
   padding: 10px;
   overflow: hidden;
 }

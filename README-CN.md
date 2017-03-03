@@ -170,15 +170,22 @@ inst.getContent();
 };
 ```
 
+## 更新记录
+0.2.5
+1. 添加markdown支持
+2. 添加全屏及工具栏固定选项
+3. 使用CSS Modules生成className
+
 ## TODO
 
+- [x] Markdown 支持
+- [x] 全屏及工具栏固定选项
 - [ ] 弹出菜单位置自适应
-- [ ] 全屏及工具栏固定选项
 - [ ] 表格高级设置
 - [ ] 代码高亮
-- [ ] Markdown 支持
 - [ ] 插件支持
 - [ ] XSS 预防
+- [ ] 测试
 
 ## License
 

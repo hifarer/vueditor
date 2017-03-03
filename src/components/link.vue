@@ -1,5 +1,5 @@
-<style lang="less" rel="stylesheet/less">
-  .link-popover {
+<style module>
+  .ctn {
     width: 240px;
     height: 90px;
     margin-left: -102px;
@@ -7,11 +7,11 @@
 </style>
 
 <template>
-  <div class="ve-popover link-popover" v-show="showPopup.display"
+  <div class="ve-popover" :class="$style.ctn" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
-    <div class="pop-arrow"></div>
-    <div class="pop-header">{{lang.addLink}}</div>
-    <div class="pop-body">
+    <div class="ve-pop-arrow"></div>
+    <div class="ve-pop-header">{{lang.title}}</div>
+    <div class="ve-pop-body">
       <div class="ve-input-box">
         <input type="text" class="ve-input" v-model="linkVal">
         <button class="ve-btn" @click="linkHandler">{{lang.ok}}</button>

@@ -7,8 +7,7 @@
     data () {
       return {
         stack: [],
-        index: -1,
-        lang: this.$parent.lang.undo
+        index: -1
       };
     },
     computed: {
@@ -30,13 +29,15 @@
     },
     watch: {
       'content': function (content) {
-        this.push(content);
+        if(this.currentView == 'design'){
+          this.push(content);
+        }
       },
       'currentView': function (val) {
         if (val == 'design') {
           this.stack = [];
           this.index = -1;
-          this.push(this.content, true);
+          this.push(this.content);
         }
       },
       'action': function (data) {
@@ -61,7 +62,7 @@
         let content = this.stack[this.index];
         this.updateContent(content);
       },
-      push (content, isInit) {
+      push (content) {
         if (content != this.stack[this.index]) {
           this.stack = this.stack.slice(0, this.index + 1);
           this.stack.push(content);
@@ -72,9 +73,6 @@
           redo: this.canRedo ? 'default' : 'disabled'
         });
       }
-    }),
-    mounted () {
-      this.push(this.content, true);
-    }
+    })
   }
 </script>

@@ -50,16 +50,20 @@ export default {
   unLink: {
     title: 'Cancel link'
   },
-  markdown: {},
+  markdown: {
+    title: 'markdown'
+  },
   picture: {
     title: 'Insert Picture',
     ok: 'OK',
     cancel: 'Cancel',
     invalidFile: 'No file selected or selected file is not a picture'
   },
-  sourceCode: {},
-  switchView: {
+  sourceCode: {
     title: 'Source Code'
+  },
+  fullScreen: {
+    title: 'Full Screen'
   },
   table: {title: 'Table'},
   undo: {title: 'Undo'},

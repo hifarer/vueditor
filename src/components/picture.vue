@@ -1,21 +1,26 @@
 
-<style lang="less" rel="stylesheet/less">
-  .pic-dialog .wrap {
+<style module>
+  .wrap {
     width: 500px;
+    position: relative;
+    top: 50%;
+    background: #fff;
+    margin: 0 auto;
+    transform: translateY(-60%);
   }
 </style>
 
 <template>
-  <div class="ve-dialog pic-dialog" v-show="showPopup.display" @click="hideDialog"
+  <div class="ve-dialog" v-show="showPopup.display" @click="hideDialog"
       :style="{width: ctnW + 'px', height: ctnH + 'px'}">
-    <div class="wrap" @click.stop>
-      <div class="dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
-      <div class="dialog-body">
+    <div :class="$style.wrap" @click.stop>
+      <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
+      <div class="ve-dialog-body">
         <form ref="form">
           <input type="file" name="image" ref="file">
         </form>
       </div>
-      <div class="dialog-footer">
+      <div class="ve-dialog-footer">
         <div class="ve-btn-box">
           <button class="ve-btn" @click="hideDialog">{{lang.cancel}}</button>
           <button class="ve-btn" @click="certainHandler">{{lang.ok}}</button>
@@ -38,6 +43,15 @@
     computed: {
       showPopup: function () {
         return this.$store.state.toolbar.picture.showPopup;
+      },
+      rect: function () {
+        return this.$store.state.rect;
+      }
+    },
+    watch: {
+      'rect': function (val) {
+        this.ctnW = val.w;
+        this.ctnH = val.h;
       }
     },
     methods: {
@@ -77,12 +91,6 @@
           alert(this.lang.invalidFile);
         }
       }
-    },
-    mounted () {
-      window.addEventListener('resize', function () {
-        this.ctnW = window.innerWidth;
-        this.ctnH = window.innerHeight;
-      }.bind(this), false);
     }
   }
 </script>

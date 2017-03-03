@@ -13,7 +13,9 @@ export default {
         state.toolbar[name].status = data[name];
       }
     }
-    state.toolbar.switchView && (state.toolbar.switchView.status = 'default');
+    ['sourceCode', 'markdown', 'fullScreen'].forEach(item => {
+      state.toolbar[item] && (state.toolbar[item].status = 'default');
+    });
   },
 
   UPDATE_POPUP_DISPLAY (state, json) {
@@ -38,8 +40,16 @@ export default {
     state.content = content
   },
 
-  SWITCH_VIEW (state) {
-    state.currentView = state.currentView == 'design' ? 'sourceCode' : 'design'
+  SWITCH_VIEW (state, view) {
+    state.currentView = view;
+  },
+
+  FULL_SCREEN (state, bool){
+    state.fullScreen = bool;
+  },
+
+  UPDATE_RECT (state, data){
+    state.rect = data;
   },
 
   CALL_ACTION (state, data) {

@@ -1,5 +1,6 @@
-<style>
-  .ve-code textarea {
+
+<style module>
+  .editor {
     /*safari*/
     position: absolute;
     box-sizing: border-box;
@@ -13,18 +14,21 @@
     font-size: 14px;
   }
 </style>
+
 <template>
   <div class="ve-code" v-show="currentView == 'sourceCode'">
-    <textarea ref="codemirror">{{content}}</textarea>
+    <textarea :class="$style.editor" ref="codemirror">{{content}}</textarea>
   </div>
 </template>
 
 <script>
 
+  import {mapActions} from 'vuex';
+
   export default {
     data () {
       return {
-        editor: null
+        view: 'design'
       }
     },
     computed: {
@@ -33,19 +37,32 @@
       },
       content: function () {
         return this.$store.state.content;
+      },
+      action: function () {
+        return this.$store.state.action;
       }
     },
     watch: {
       'currentView': function (val) {
-        if(val == 'design'){
+        // this.view: previous view
+        if(val != 'sourceCode' && this.view == 'sourceCode'){
           this.updateContent(this.$refs.codemirror.value);
+        }
+        this.view = val;
+      },
+      'action': function (data) {
+        if(data.name == 'sourceCode'){
+          this.switchView(this.currentView == 'sourceCode' ? 'design' : 'sourceCode');
+          this.updatePopupDisplay();
         }
       }
     },
-    methods: {
-      updateContent (content) {
-        this.$store.dispatch('updateContent', content);
-      }
-    }
+    methods: Object.assign({}, 
+      mapActions([
+        'switchView',
+        'updateContent',
+        'updatePopupDisplay'
+      ])
+    )
   }
 </script>

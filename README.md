@@ -170,15 +170,22 @@ Default value of the above fields:
 };
 ```
 
+## Change Log
+0.2.5
+1. Add markdown support
+2. Add Full screen and fixed toolbar features
+3. Using CSS Modules to produce className
+
 ## TODO
 
+- [x] Markdown support
+- [x] Full screen and fixed toolbar features
 - [ ] Popup menu position auto adjust
-- [ ] Full screen and fixed toolbar feature
 - [ ] Advanced table options
 - [ ] Code highlight
-- [ ] Markdown support
 - [ ] Plugin support
 - [ ] XSS prevention
+- [ ] Test
 
 ## License
 

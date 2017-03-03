@@ -1,5 +1,5 @@
-<style lang="less" rel="stylesheet/less">
-  .format-block {
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
     a {
       display: block;
       padding: 6px;
@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <div class="ve-select-dropdown format-block" @click="selectItem" v-show="showPopup.display"
+  <div class="ve-dropdown" :class="$style.ctn" @click="selectItem" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
     <a href="javascript:;" v-for="item in arr">{{item}}</a>
   </div>

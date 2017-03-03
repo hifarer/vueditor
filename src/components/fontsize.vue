@@ -1,6 +1,6 @@
 
-<style lang="less" rel="stylesheet/less">
-  .font-size {
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;
@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <div class="ve-select-dropdown font-size" v-show="showPopup.display"
+  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
     <ul>
       <li v-for="size in fontSize" @click="clickHandler(size)">

@@ -6,6 +6,7 @@
     width: 100%;
     font-size: 0;
     letter-spacing: -4px;
+    background: #fff;
     a {
       position: relative;
       display: inline-block;
@@ -29,10 +30,18 @@
       color: #000;
     }
   }
+  .font-select {
+    width: 100px;
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
 </style>
 
 <template>
-  <div class="ve-toolbar">
+  <div class="ve-toolbar" ref="toolbar">
     <template v-for="item in config">
       <a href="javascript:;" :title="lang[item].title" v-if="nativeBtns[item]"
         :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}"
@@ -47,7 +56,7 @@
       <a href="javascript:;" v-if="selects[item]"
         class="ve-select" :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].className]"
         @click="customHandler($event, item)" unselectable="on">
-        <span>{{states[item].value}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
+        <span>{{states[item].value}}</span><i :class="{'ve-triangle-down': !display, 've-triangle-up': display}"></i>
       </a>
       <a href="javascript:;" class="ve-divider" v-if="item == 'divider' || item == '|'"></a>
     </template>
@@ -78,8 +87,8 @@
         this.states[name].status !== 'disabled' && this.$store.dispatch('execCommand', {name, null});
       },
       customHandler (event, name) {
-        // directly do something
         if(this.states[name].status == 'disabled')return;
+        // directly do something
         if(customBtns[name] && customBtns[name].action){
           this.$store.dispatch('callAction', {name});
         }else{
