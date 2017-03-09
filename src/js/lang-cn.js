@@ -40,7 +40,7 @@ export default {
   fontName: {},
   fontSize: {},
   format: {},
-  iframe: {
+  design: {
     ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
   },
   link: {

@@ -20,7 +20,7 @@ Vueditor
 ## 特性
 
 - 无需 jQuery, Bootstrap 或其他任何字体文件支持。
-- 轻量级, js 55kb,  css 50kb
+- 轻量级
 - 功能模块独立
 - 使用 npm + webpack + babel, ES2015
 
@@ -171,7 +171,9 @@ inst.getContent();
 ```
 
 ## 更新记录
+
 0.2.5
+
 1. 添加markdown支持
 2. 添加全屏及工具栏固定选项
 3. 使用CSS Modules生成className

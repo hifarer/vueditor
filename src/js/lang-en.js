@@ -40,7 +40,7 @@ export default {
   fontName: {},
   fontSize: {},
   format: {},
-  iframe: {
+  design: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
   link: {

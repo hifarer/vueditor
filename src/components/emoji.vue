@@ -22,10 +22,11 @@
     <div class="ve-pop-header">{{lang.title}}</div>
     <div class="ve-pop-body" :class="$style.main">
       <div :class="$style.wrap" @click="insertItem">
-        <a href="javascript:;" v-for="item in arr">
-          <img class="emoji" draggable="false" 
+        <a href="javascript:;" draggable="false" v-for="item in arr">
+          <img class="emoji"
+          :src="parseSrc(item)"
           :alt="twemoji.convert.fromCodePoint(item)" 
-          :src="parseSrc(twemoji.parse(twemoji.convert.fromCodePoint(item)))">
+          >
         </a>
       </div>
     </div>
@@ -34,15 +35,15 @@
 
 <script>
 
-// To get emoji list for Vueditor, open http://unicode.org/emoji/charts/full-emoji-list.html
-// and put the following code in console panel then run.
-// var arr = [];
-// [].forEach.call(document.querySelectorAll('.code'), function(node){
-// 	arr.push(node.children[0].getAttribute('name'))
-// });
-// console.log(arr);
+  // To get emoji list for Vueditor, open http://unicode.org/emoji/charts/full-emoji-list.html
+  // and put the following code in console panel then run.
+  // var arr = [];
+  // [].forEach.call(document.querySelectorAll('.code'), function(node){
+  // 	arr.push(node.children[0].getAttribute('name'))
+  // });
+  // console.log(arr);
 
-  import twemoji from 'exports?twemoji!../js/twemoji.min.js';
+  import twemoji from 'twemoji';
 
   export default {
     data () {
@@ -59,14 +60,17 @@
     },
     methods: {
       parseSrc (str) {
+        // let url = 'https://twemoji.maxcdn.com/';
         let div = document.createElement('div');
-        div.innerHTML = str;
-        return div.querySelector('img').src;
+        div.innerHTML = twemoji.parse(twemoji.convert.fromCodePoint(str));
+        return div.children[0].src;
       },
       insertItem (event) {
-        let img = event.target.cloneNode(true);
-        img.style.width = '30px';
-        this.$store.dispatch('execCommand', {name: 'insertHTML', value: img.outerHTML});
+        let obj = event.target;
+        if(obj.tagName.toLowerCase() == 'a'){
+          obj = obj.children[0];
+        }
+        this.$store.dispatch('execCommand', {name: 'insertHTML', value: obj.outerHTML});
       }
     }
   }

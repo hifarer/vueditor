@@ -29,8 +29,8 @@
   </div>
   <div id="editor2"></div>
 
-  <script src="//cdn.bootcss.com/vue/2.1.8/vue.min.js"></script>
-  <script src="//cdn.bootcss.com/vuex/2.1.1/vuex.min.js"></script>
+  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
   <script src="./dist/js/vueditor.min.js"></script>
   <script>
     Vue.use(Vueditor, {
@@ -53,46 +53,10 @@
       el: '#editor1'
     });
     let inst1 = parent.$children[0];
-    inst1.setContent(`
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-
-      fill your content here
-    `);
-    // console.log(inst1.getContent());
+    inst1.setContent(`fill your content here`);
+    console.log(inst1.getContent());
   </script>
-  <script type="adf">
-    // another usage
+  <script>
     let inst2 = Vueditor.createEditor('#editor2', {
       toolbar: [
           'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'

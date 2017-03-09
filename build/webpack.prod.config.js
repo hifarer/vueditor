@@ -49,11 +49,11 @@ module.exports = {
 
   plugins: [
     style,
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({

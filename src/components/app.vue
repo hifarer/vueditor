@@ -1,7 +1,7 @@
 <template>
-  <div class="vueditor" :class="classNames" :id="id" :style="style">
+  <div class="vueditor" :id="id" :class="classNames" :style="style">
     <toolbar></toolbar>
-    <veiframe></veiframe>
+    <design></design>
     <template v-for="item in list">
       <component v-if="config.toolbar.indexOf(item.replace('ve', '')) != -1" :is="item"></component>
     </template>
@@ -13,7 +13,7 @@
   // the component name can not be any of the html tagName
 
   import toolbar from './toolbar.vue';
-  import veiframe from './iframe.vue';
+  import design from './design.vue';
   
   import color from './color.vue';
   import fontName from './fontname.vue';
@@ -33,7 +33,7 @@
   export default {
     components: {
       toolbar,
-      veiframe,
+      design,
       sourceCode,
       'foreColor': color,
       'backColor': color,

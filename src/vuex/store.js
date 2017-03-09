@@ -29,6 +29,7 @@ export default function (config) {
       // current display block: design, sourceCode, markdown
       currentView: 'design',
       fullScreen: false,
+      // editor width, height
       rect: {
         w: 0,
         h: 0

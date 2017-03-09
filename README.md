@@ -4,7 +4,7 @@ Vueditor
 [![vueditor](https://img.shields.io/npm/v/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![vueditor](https://img.shields.io/npm/l/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 
-[中文文档] (./README-CN.md)
+[中文文档] (./README.CN.md)
 
 A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
 
@@ -19,7 +19,7 @@ Online [DEMO](http://hifarer.github.io/Vueditor/)
 ## Features
 
 - No jQuery, Bootstrap or any other font file needed
-- Light weighted, 55kb for js and 50kb for css
+- Light weighted
 - Using .vue file development mode
 - Based on npm + webpack + babel, using ES2015
 
@@ -171,7 +171,9 @@ Default value of the above fields:
 ```
 
 ## Change Log
+
 0.2.5
+
 1. Add markdown support
 2. Add Full screen and fixed toolbar features
 3. Using CSS Modules to produce className
