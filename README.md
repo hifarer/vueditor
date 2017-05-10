@@ -8,7 +8,7 @@ A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
 
 Browser compatibility: Chrome, Firefox, Safari, IE 9+.
 
-Online [demo](http://hifarer.github.io/Vueditor/)
+Online [demo](http://hifarer.github.io/vueditor/)
 
 ## Screenshot
 
