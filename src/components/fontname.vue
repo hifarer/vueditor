@@ -42,13 +42,13 @@
       }
     },
     mounted () {
-      this.$store.dispatch('updateToolbarValue', {name: 'fontName', value: this.val});
+      this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val});
     },
     methods: {
       clickHandler (font) {
         this.val = font.abbr || font.val;
         this.$store.dispatch('execCommand', {name: 'fontName', value: font.val + ', sans-serif'});
-        this.$store.dispatch('updateToolbarValue', {name: 'fontName', value: this.val});
+        this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val});
         this.$store.dispatch('updatePopupDisplay');
       }
     }

@@ -1,17 +1,17 @@
+
 <template>
-  <div class="ve-design" v-show="currentView == 'design'">
+  <div class="ve-design" v-show="view == 'design'">
     <iframe src="about:blank" frameborder="0" @load="init"></iframe>
   </div>
 </template>
 
 <script>
 
-  import {mapActions} from 'vuex';
+  import { mapActions, mapState } from 'vuex';
 
   export default {
     data () {
       return {
-        iframeEle: null,
         iframeWin: null,
         iframeDoc: null,
         iframeBody: null,
@@ -22,23 +22,15 @@
       }
     },
 
-    computed: {
-      currentView: function () {
-        return this.$store.state.currentView;
-      },
-      content: function () {
-        return this.$store.state.content;
-      },
-      command: function () {
-        return this.$store.state.command;
-      },
-      states: function () {
-        return this.$store.state.toolbar;
-      }
-    },
+    computed: mapState({
+      view: 'view',
+      content: 'content',
+      command: 'command',
+      states: 'toolbar',
+    }),
 
     watch: {
-      'currentView': function (val) {
+      'view': function (val) {
         if (val == 'design') {
           this.updateStates();
         }else{
@@ -50,25 +42,24 @@
       'content': function (val) {
         if (this.inited) {
           this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
-          this.currentView == 'design' && this.updateStates();
+          this.view == 'design' && this.updateStates();
         } else {
           this.cache = val;
         }
       },
       'command': function (data) {
-        this.exec (data.name, data.value);
+        this.exec(data.name, data.value);
       }
     },
 
     methods: Object.assign({}, mapActions([
       'updateContent',
-      'updateToolbarStates',
+      'updateButtonStates',
       'updatePopupDisplay',
-      'callAction'
+      'exec'
     ]), {
       init (event) {
-        this.iframeEle = event.target;
-        this.iframeWin = this.iframeEle.contentWindow;
+        this.iframeWin = event.target.contentWindow;
         this.iframeDoc = this.iframeWin.document;
         this.iframeBody = this.iframeWin.document.body;
         this.inited = true;
@@ -93,9 +84,9 @@
               }
             }
           }
-          this.updateToolbarStates(json);
+          this.updateButtonStates(json);
         }else{
-          this.updateToolbarStates();
+          this.updateButtonStates();
         }
       },
 
@@ -129,7 +120,7 @@
           // throttle
           clearTimeout(timer);
           timer = setTimeout(() => {
-            this.currentView == 'design' && this.updateStates();
+            this.view == 'design' && this.updateStates();
           }, 300);
         }.bind(this), false);
         if (navigator.userAgent.indexOf('Firefox') !== -1) {
@@ -139,7 +130,7 @@
             if (oSel && oSel.rangeCount) {
               if (focusOffset != oSel.focusOffset) {
                 focusOffset = oSel.focusOffset;
-                this.currentView == 'design' && this.updateStates();
+                this.view == 'design' && this.updateStates();
               }
             } else {
               oSel = this.iframeWin.getSelection();

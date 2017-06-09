@@ -30,34 +30,31 @@
       }
     },
     computed: {
-      showPopup () {
+      showPopup:function () {
         return this.$store.state.toolbar.link.showPopup;
       },
-      action: function () {
-        return this.$store.state.action;
+      callee: function () {
+        return this.$store.state.callee;
       }
     },
     watch: {
-      'action': function (data) {
-        data.name == 'unLink' && this.unLinkHandler();
+      'callee': function (val) {
+        val.name == 'unLink' && this.unLinkHandler();
       }
     },
     methods: {
-      execCommand (data) {
-        this.$store.dispatch('execCommand', data);
-      },
       checkValid () {
         let link = this.linkVal;
-        link.indexOf('http://') == -1 && (link = 'http://' + link);
+        link.match(/^https?:\/\//igm) === null && (link = 'http://' + link);
         return link;
       },
       linkHandler () {
         let link = this.checkValid();
-        this.execCommand({name: 'CreateLink', value: link});
+        this.$store.dispatch('execCommand', { name: 'createlink', value: link });
         this.$store.dispatch('updatePopupDisplay');
       },
       unLinkHandler () {
-        this.execCommand({name: 'unlink', value: null});
+        this.$store.dispatch('execCommand', { name: 'unlink', value: null });
       }
     }
   }

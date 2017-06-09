@@ -2,7 +2,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const pkg = require('../package.json');
 const banner = pkg.name + ' v' + pkg.version + '\n' + pkg.repository.url;
@@ -13,13 +12,13 @@ module.exports = {
 
   watch: true,
 
-  entry: '../src/main.js',
+  entry: '../src/plugins/emoji.vue',
 
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'js/vueditor.min.js',
-    library: 'Vueditor',
+    filename: 'js/emoji.min.js',
+    library: 'emoji',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -28,15 +27,15 @@ module.exports = {
     loaders: [
       { test: /\.vue$/, loader: 'vue', exclude: /node_modules/ },
       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.(css|less)$/, loader: ExtractTextPlugin.extract('style-loader', 'css!less!postcss') },
+      { test: /\.(css|less)$/, loader: 'stylecss!less!postcss' },
       { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' }
     ]
   },
 
   vue: {
     loaders: {
-      css: ExtractTextPlugin.extract('style-loader', 'css!postcss'),
-      less: ExtractTextPlugin.extract('style-loader', 'css!less!postcss')
+      css: 'style!css!postcss',
+      less: 'style!css!less!postcss'
     }
   },
 
@@ -45,7 +44,6 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('css/vueditor.min.css'),
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
     //     warnings: false

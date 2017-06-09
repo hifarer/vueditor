@@ -1,20 +1,21 @@
 {
   "name": "vueditor",
   "version": "0.2.5",
-  "description": "a wysiwyg editor based on vue and vuex",
+  "description": "a wysiwyg editor based on Vue.js and Vuex",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hifarer/Vueditor.git"
+    "url": "https://github.com/hifarer/vueditor.git"
   },
   "main": "dist/js/vueditor.min.js",
   "scripts": {
     "dev-server": "node ./build/dev-server.js",
-    "dev": "webpack --config ./build/webpack.dev.config.js",
-    "build": "webpack --config ./build/webpack.prod.config.js"
+    "dev": "webpack --config ./build/webpack.dev.config.js  --progress --hide-modules",
+    "build": "webpack --config ./build/webpack.prod.config.js --progress --hide-modules",
+    "plugin": "webpack --config ./build/webpack.plug.config.js --progress --hide-modules"
   },
   "dependencies": {
     "marked": "^0.3.6",
-    "twemoji": "^2.2.5",
+    "twemoji": "^2.3.0",
     "vue": "^2.0.5",
     "vuex": "^2.0.0"
   },

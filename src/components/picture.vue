@@ -11,8 +11,7 @@
 </style>
 
 <template>
-  <div class="ve-dialog" v-show="showPopup.display" @click="hideDialog"
-      :style="{width: ctnW + 'px', height: ctnH + 'px'}">
+  <div class="ve-dialog" v-show="showPopup.display" @click="hideDialog">
     <div :class="$style.wrap" @click.stop>
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">
@@ -35,23 +34,21 @@
   export default {
     data () {
       return {
-        ctnW: window.innerWidth,
-        ctnH: window.innerHeight,
         lang: this.$parent.lang.picture
       }
     },
     computed: {
       showPopup: function () {
         return this.$store.state.toolbar.picture.showPopup;
-      },
-      rect: function () {
-        return this.$store.state.rect;
       }
     },
     watch: {
-      'rect': function (val) {
-        this.ctnW = val.w;
-        this.ctnH = val.h;
+      'showPopup': function (val) {
+        if(val.display){
+          document.body.classList.add('ve-fixed');
+        }else{
+          document.body.classList.remove('ve-fixed');
+        }
       }
     },
     methods: {
@@ -71,7 +68,14 @@
           }
         }
         if (url) {
-          if(fileuploadUrl){
+          if(this.$parent.upload){
+            this.$parent.upload(obj).then((href) => {
+              this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${href}">`});
+              this.hideDialog();
+            }, (err) => {
+              throw err;
+            });
+          }else if(fileuploadUrl){
             let formData = new FormData(form);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', fileuploadUrl);

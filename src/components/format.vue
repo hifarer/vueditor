@@ -37,14 +37,14 @@
       }
     },
     mounted () {
-      this.$store.dispatch('updateToolbarValue', {name: 'format', value: this.val});
+      this.$store.dispatch('updateSelectValue', {name: 'format', value: this.val});
     },
     methods: {
       selectItem (event) {
         let tagName = event.target.innerHTML.trim();
         this.val = tagName;
         this.$store.dispatch('execCommand', {name: 'formatBlock', value: tagName});
-        this.$store.dispatch('updateToolbarValue', {name: 'format', value: tagName});
+        this.$store.dispatch('updateSelectValue', {name: 'format', value: tagName});
         this.$store.dispatch('updatePopupDisplay');
       }
     }

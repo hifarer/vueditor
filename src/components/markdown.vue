@@ -33,26 +33,8 @@
 
 <script>
 
-  import marked from 'marked';
-  import {mapActions} from 'vuex';
-
-  let renderer = new marked.Renderer();
-  renderer.heading = function (text, level) {
-    return `<h${level}>${text}</h${level}>`;
-  };
-  renderer.paragraph = function(text) {
-    let div = document.createElement('div');
-    div.innerHTML = text;
-    if(div.children.length == 0){
-      return '<p>' + text + '</p>\n';
-    }
-    return text + '\n';
-  };
-
-  marked.setOptions({
-    renderer: renderer,
-    gfm: false
-  });
+  import marked from 'marked'
+  import { mapActions } from 'vuex'
 
   export default {
     data () {
@@ -61,34 +43,33 @@
         el: null,
         doc: null,
         top: 0,
-        view: 'design',
+        currentView: 'design',
       }
     },
     computed: {
-      currentView: function () {
-        return this.$store.state.currentView;
+      view: function () {
+        return this.$store.state.view;
       },
       content: function () {
         return this.$store.state.content;
       },
-      action: function () {
-        return this.$store.state.action;
+      callee: function () {
+        return this.$store.state.callee;
       }
     },
     watch: {
-      'currentView': function (val) {
-        // this.view: previous view
-        if(val != 'markdown' && this.view == 'markdown'){
+      'view': function (val) {
+        if(val !== 'markdown' && this.currentView === 'markdown'){
           this.updateContent(this.doc.body.innerHTML);
         }else{
           this.md = this.content;
           this.update();
         }
-        this.view = val;
+        this.currentView = val;
       },
-      'action': function (data) {
-        if(data.name == 'markdown'){
-          this.switchView(this.currentView == 'markdown' ? 'design' : 'markdown');
+      'callee': function (val) {
+        if(val.name === 'markdown'){
+          this.switchView(this.view == 'markdown' ? 'design' : 'markdown');
           this.updatePopupDisplay();
         }
       }
@@ -136,6 +117,23 @@
       }
     ),
     created () {
+      let renderer = new marked.Renderer();
+      renderer.heading = function (text, level) {
+        return `<h${level}>${text}</h${level}>`;
+      };
+      renderer.paragraph = function(text) {
+        let div = document.createElement('div');
+        div.innerHTML = text;
+        if(div.children.length == 0){
+          return '<p>' + text + '</p>\n';
+        }
+        return text + '\n';
+      };
+
+      marked.setOptions({
+        renderer: renderer,
+        gfm: false
+      });
       this.isJsAction = false;
       this.timer = null;
     }

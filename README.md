@@ -4,13 +4,13 @@ Vueditor
 [![vueditor](https://img.shields.io/npm/v/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![vueditor](https://img.shields.io/npm/l/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 
-[中文文档] (./README.CN.md)
+[中文文档](./docs/CN.md)
 
-A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
+A wysiwyg editor written in Vue.js and Vuex.js, require Vue.js 2.0.0, Vuex.js 2.0.0 and above.
 
 Browser compatibility: Chrome, Firefox, Safari, IE 9+.
 
-Online [DEMO](http://hifarer.github.io/Vueditor/)
+Online [DEMO](http://hifarer.github.io/vueditor/)
 
 ## Screenshot
 
@@ -18,17 +18,15 @@ Online [DEMO](http://hifarer.github.io/Vueditor/)
 
 ## Features
 
-- No jQuery, Bootstrap or any other font file needed
-- Light weighted
-- Using .vue file development mode
-- Based on npm + webpack + babel, using ES2015
+- Light weighted, very few dependencies
+- Plugin support
 
 ## Installation
 ```javascript
 npm install vueditor
 ```
 
-If you prefer to use it via script tag, just add "vueditor.min.js", "vueditor.min.css" to your page. 
+If you prefer to use it via script tag, just add `vueditor.min.js`, `vueditor.min.css` to your page. 
 
 ## Usage
 
@@ -44,27 +42,28 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
-import "vueditor/dist/css/vueditor.min.css"
+import 'vueditor/dist/css/vueditor.min.css'
 
 // your config here
 let config = {
+  lang: 'en',
   toolbar: [
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
   fontName: [
-    {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    {val: "arial black"}, 
+    {val: "times new roman"}, 
+    {val: "Courier New"}
   ],
   fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-  emoji: ["1f600", "1f601", "1f602", "1f923", "1f603"],
-  lang: 'en',
-  fileuploadUrl: ''
+  uploadUrl: ''
 };
 
 Vue.use(Vuex);
 Vue.use(Vueditor, config);
 // create a root instance
 new Vue({
-    el: '#editor1'
+  el: '#editorContainer'
 });
 ```
 
@@ -82,11 +81,11 @@ To get and set content you need to acquire the Vueditor component, you can use `
 
 ```javascript
 let parent = new Vue({
-    el: '#editor1'
+  el: '#editor1'
 });
-let inst = parent.$children[0];
-inst.setContent('your content here');
-inst.getContent();
+let editor = parent.$children[0];
+editor.setContent('your content here');
+editor.getContent();
 ```
 
 ### createEditor(selector, config)
@@ -97,18 +96,18 @@ Call `createEditor` and pass specific config as parameter respectively for multi
 
   import Vue from 'vue'
   import Vuex from 'vuex'
-  import {createEditor} from 'vueditor'
+  import { createEditor } from 'vueditor'
 
-  import "vueditor/dist/css/vueditor.min.css"
+  import 'vueditor/dist/css/vueditor.min.css'
   
   Vue.use(Vuex);
 
-  createEditor('#editor2', {
-    toolbar: [
-        'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
-    ],
+  createEditor('#editorContainer', {
     lang: 'en',
-    fileuploadUrl: '',
+    toolbar: [
+      'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+    ],
+    uploadUrl: '',
     id: '',
     classList: []
   });
@@ -126,12 +125,11 @@ inst.getContent();
 
 |          Name         |    Type    |                                                         Description                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as the separator for grouping |
+| lang                  | `String`   | Interface language, default is English, to set to other language, see |
+| toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
 | fontName              | `Object`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
 | fontSize              | `Array`    | The font-size select's options |
-| emoji                 | `Array`    | The emoji list, you can get full list [here](http://unicode.org/emoji/charts/full-emoji-list.html) |
-| lang                  | `String`   | Interface language, default is Chinese, to set to English use `lang: 'en'` |
-| fileUploadUrl         | `String`   | File upload url, the return result must be a string refer to the uploaded image, leave it empty will end up with local preview |
+| uploadUrl         | `String`   | File upload url, the return result of this must be a string refer to the uploaded file url, leave it empty will end up with local preview |
 | id                    | `String`   | id for the rendered editor element |
 | classList             | `Array`    | className for the rendered editor element |
 
@@ -144,39 +142,31 @@ Default value of the above fields:
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider',
     'bold', 'italic', 'underline', 'strikeThrough', 'links', 'divider', 'subscript', 'superscript',
     'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
-    'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
+    'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'tables', '|', 'switchView'
   ],
   fontName: [
-    {val: "宋体, SimSun", abbr: "宋体"}, {val: "黑体, SimHei", abbr: "黑体"},
-    {val: "楷体, SimKai", abbr: "楷体"}, {val: "微软雅黑, 'Microsoft YaHei'", abbr: "微软雅黑"},
-    {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    {val: "arial black"}, 
+    {val: "times new roman"}, 
+    {val: "Courier New"}
   ],
   fontSize: [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
   ],
-  emoji: [
-    "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606", "1f609", "1f60a", "1f60b",
-    "1f60e", "1f60d", "1f618", "1f617", "1f619", "1f61a", "263a", "1f642", "1f917", "1f914", "1f610",
-    "1f611", "1f636", "1f644", "1f60f", "1f623", "1f625", "1f62e", "1f910", "1f62f", "1f62a", "1f62b",
-    "1f634", "1f60c", "1f913", "1f61b", "1f61c", "1f61d", "1f924", "1f612", "1f613", "1f614", "1f615",
-    "1f643", "1f911", "1f632", "2639", "1f641", "1f616", "1f61e", "1f61f", "1f624", "1f622", "1f62d",
-    "1f626", "1f627", "1f628", "1f629", "1f62c", "1f630", "1f631", "1f633", "1f635", "1f621", "1f620",
-    "1f607", "1f920", "1f921", "1f925", "1f637", "1f912", "1f915", "1f922", "1f927"
-  ],
-  lang: 'cn',
-  fileuploadUrl: ''
+  uploadUrl: ''
   id: '',
   classList: []
 };
 ```
 
-## Change Log
+## Change log
 
 0.2.5
 
 1. Add markdown support
 2. Add Full screen and fixed toolbar features
 3. Using CSS Modules to produce className
+
+## Bug confirmed
 
 ## TODO
 
@@ -185,7 +175,7 @@ Default value of the above fields:
 - [ ] Popup menu position auto adjust
 - [ ] Advanced table options
 - [ ] Code highlight
-- [ ] Plugin support
+- [x] Plugin support
 - [ ] XSS prevention
 - [ ] Test
 
@@ -194,3 +184,7 @@ Default value of the above fields:
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2016 hifarer
+
+
+同一个按钮出现两次
+不同类型的插件

@@ -1,5 +1,6 @@
 
 export default {
+  
   app: {},
 
   removeFormat: {title: 'Remove format'},
@@ -33,9 +34,6 @@ export default {
     ok: 'ok',
     colorCode: 'Color code',
     invalidColorCodeMsg: 'Please enter the correct color code',
-  },
-  emoji: {
-    title: 'Insert expression'
   },
   fontName: {},
   fontSize: {},

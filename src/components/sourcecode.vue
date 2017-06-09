@@ -23,36 +23,35 @@
 
 <script>
 
-  import {mapActions} from 'vuex';
+  import { mapActions } from 'vuex'
 
   export default {
     data () {
       return {
-        view: 'design'
+        currentView: 'design'
       }
     },
     computed: {
-      currentView: function () {
-        return this.$store.state.currentView;
+      view: function () {
+        return this.$store.state.view;
       },
       content: function () {
         return this.$store.state.content;
       },
-      action: function () {
-        return this.$store.state.action;
+      callee: function () {
+        return this.$store.state.callee;
       }
     },
     watch: {
-      'currentView': function (val) {
-        // this.view: previous view
-        if(val != 'sourceCode' && this.view == 'sourceCode'){
+      'view': function (val) {
+        if(val !== 'sourceCode' && this.currentView === 'sourceCode'){
           this.updateContent(this.$refs.codemirror.value);
         }
-        this.view = val;
+        this.currentView = val;
       },
-      'action': function (data) {
-        if(data.name == 'sourceCode'){
-          this.switchView(this.currentView == 'sourceCode' ? 'design' : 'sourceCode');
+      'callee': function (val) {
+        if(val.name === 'sourceCode'){
+          this.switchView(this.view == 'sourceCode' ? 'design' : 'sourceCode');
           this.updatePopupDisplay();
         }
       }

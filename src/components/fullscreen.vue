@@ -2,17 +2,17 @@
 <script>
   export default {
     computed: {
-      action: function () {
-        return this.$store.state.action;
+      callee: function () {
+        return this.$store.state.callee;
       },
       fullScreen: function () {
         return this.$store.state.fullScreen;
       }
     },
     watch: {
-      'action': function (data) {
-        if(data.name == 'fullScreen'){
-          this.$store.dispatch('fullScreen', !this.fullScreen);
+      'callee': function (val) {
+        if(val.name === 'fullScreen'){
+          this.$store.dispatch('setFullScreen', !this.fullScreen);
         }
       }
     }

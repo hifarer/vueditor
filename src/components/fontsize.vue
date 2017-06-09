@@ -42,13 +42,13 @@
       }
     },
     mounted () {
-      this.$store.dispatch('updateToolbarValue', {name: 'fontSize', value: this.val});
+      this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: this.val});
     },
     methods: {
       clickHandler (size) {
         this.val = size;
         this.$store.dispatch('execCommand', {name: 'fontSize', value: size});
-        this.$store.dispatch('updateToolbarValue', {name: 'fontSize', value: size});
+        this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: size});
         this.$store.dispatch('updatePopupDisplay');
       }
     }

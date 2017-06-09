@@ -24,7 +24,7 @@
   <div class="ve-table" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
     <ul>
-      <!--vue.js 2.0 v-for i start with 1-->
+      <!--Vue.js 2.0 v-for i start with 1-->
       <li v-for="i in num" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
         <a href="javascript:;" :class="{'active': ((i-1)%8 <= x && parseInt((i-1)/8) <= y)}"></a>
       </li>
@@ -51,11 +51,11 @@
     methods: {
       overHandler (index) {
         this.x = index % 8;
-        this.y = parseInt(index/8);
+        this.y = parseInt(index / 8);
       },
       clickHandler (index) {
-        let html = this.createTable(this.x+1, this.y+1);
-        this.$store.dispatch('execCommand', {name: 'insertHTML', value: html});
+        let html = this.createTable(this.x + 1, this.y + 1);
+        this.$store.dispatch('execCommand', { name: 'insertHTML', value: html });
         this.$store.dispatch('updatePopupDisplay');
       },
       createTable (rows, cols) {

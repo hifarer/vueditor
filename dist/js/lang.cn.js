@@ -1,26 +1,25 @@
-
-export default {
+const lang = {
   app: {},
 
-  removeFormat: {title: 'Remove format'},
+  removeFormat: {title: '清除格式'},
 
-  bold: {title: 'Bold'},
-  italic: {title: 'Italic'},
-  underline: {title: 'Underline'},
-  strikeThrough: {title: 'Strike through'},
+  bold: {title: '加粗'},
+  italic: {title: '斜体'},
+  underline: {title: '下划线'},
+  strikeThrough: {title: '中划线'},
 
-  superscript: {title: 'Superscript'},
-  subscript: {title: 'Subscript'},
-  indent: {title: 'Indent'},
-  outdent: {title: 'Outdent'},
+  superscript: {title: '上标'},
+  subscript: {title: '下标'},
+  indent: {title: '增加缩进'},
+  outdent: {title: '减少缩进'},
 
-  justifyLeft: {title: 'Justify left'},
-  justifyCenter: {title: 'Justify center'},
-  justifyRight: {title: 'Justify right'},
-  justifyFull: {title: 'Justify full'},
+  justifyLeft: {title: '左对齐'},
+  justifyCenter: {title: '居中对齐'},
+  justifyRight: {title: '右对齐'},
+  justifyFull: {title: '两端对齐'},
 
-  insertOrderedList: {title: 'Insert ordered list'},
-  insertUnorderedList: {title: 'Insert unordered list'},
+  insertOrderedList: {title: '插入有序列表'},
+  insertUnorderedList: {title: '插入无序列表'},
 
   foreColor: {
     title: '文字颜色',
@@ -33,9 +32,6 @@ export default {
     ok: '确定',
     colorCode: '颜色代码',
     invalidColorCodeMsg: '请输入正确的颜色代码。',
-  },
-  emoji: {
-    title: '插入表情'
   },
   fontName: {},
   fontSize: {},
