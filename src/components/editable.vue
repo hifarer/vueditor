@@ -108,6 +108,7 @@
 
       exec (name, value) {
         let range = this.getRange();
+        if (!range) return;
         let container = range.commonAncestorContainer;
         if(!this.$el.children[0].contains(container)){
           return;
