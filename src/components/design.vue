@@ -7,7 +7,7 @@
 
 <script>
 
-  import { mapActions, mapState } from 'vuex';
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     data () {
@@ -26,7 +26,7 @@
       view: 'view',
       content: 'content',
       command: 'command',
-      states: 'toolbar',
+      states: 'toolbar'
     }),
 
     watch: {
@@ -35,11 +35,10 @@
           clearTimeout(this.timer);
           this.updateContent(this.iframeBody.innerHTML);
         }
-        this.updateStates();
       },
       'content': function (val) {
         if (this.inited) {
-          this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
+          this.iframeBody.innerHTML !== val && (this.iframeBody.innerHTML = val);
           this.view === 'design' && this.updateStates();
         } else {
           this.cache = val;
@@ -62,28 +61,22 @@
         this.iframeBody = this.iframeWin.document.body;
         this.inited = true;
         if (this.cache) {
-          this.iframeBody.innerHTML != this.cache && (this.iframeBody.innerHTML = this.cache);
+          this.iframeBody.innerHTML !== this.cache && (this.iframeBody.innerHTML = this.cache);
           this.cache = '';
         }
         this.iframeDoc.designMode = 'on';
         this.addEvent();
       },
 
-      // init, selection change, view change
+      // init, selection change
       updateStates () {
         let json = {};
         for (let name in this.states) {
-          if(this.view !== 'design'){
-            if(['sourceCode', 'markdown', 'fullScreen'].indexOf(name) === -1){
-              json[name] = 'disabled';
-            }
-          } else {
-            if(['redo', 'undo'].indexOf(name) === -1){
-              if(this.iframeDoc.queryCommandSupported(name)){
-                json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default';
-              }else{
-                json[name] = 'default';
-              }
+          if(['redo', 'undo'].indexOf(name) === -1){
+            if(this.iframeDoc.queryCommandSupported(name)){
+              json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default';
+            }else if (name !== 'fullScreen') {
+              json[name] = 'default';
             }
           }
         }
@@ -102,10 +95,10 @@
       },
 
       keydownHandler (event) {
-        if (event.ctrlKey && (event.keyCode == 89 || event.keyCode == 90)) {
+        if (event.ctrlKey && (event.keyCode === 89 || event.keyCode === 90)) {
           event.preventDefault();
-          event.keyCode == 89 && this.callMethod({name: 'redo'});
-          event.keyCode == 90 && this.callMethod({name: 'undo'});
+          event.keyCode === 89 && this.callMethod({name: 'redo'});
+          event.keyCode === 90 && this.callMethod({name: 'undo'});
         }
       },
 
@@ -122,7 +115,7 @@
           // throttle
           clearTimeout(timer);
           timer = setTimeout(() => {
-            this.view == 'design' && this.updateStates();
+            this.view === 'design' && this.updateStates();
           }, 300);
         }, false);
         if (!'onselectionchange' in document) {
@@ -130,9 +123,9 @@
           let focusOffset = -1;
           setInterval(() => {
             if (oSel && oSel.rangeCount) {
-              if (focusOffset != oSel.focusOffset) {
+              if (focusOffset !== oSel.focusOffset) {
                 focusOffset = oSel.focusOffset;
-                this.view == 'design' && this.updateStates();
+                this.view === 'design' && this.updateStates();
               }
             } else {
               oSel = this.iframeWin.getSelection();
@@ -175,7 +168,7 @@
           return;
         }
         let childNodes = range.cloneContents().childNodes;
-        if (childNodes.length == 1 && childNodes[0].nodeType == 1 && childNodes[0].tagName.toLowerCase() == 'span') {
+        if (childNodes.length === 1 && childNodes[0].nodeType === 1 && childNodes[0].tagName.toLowerCase() === 'span') {
           let span = range.extractContents().childNodes[0];
           span.style.fontSize = value;
           range.insertNode(span);
@@ -183,16 +176,16 @@
           selection.removeAllRanges();
           selection.addRange(range);
         } else {
-          if (navigator.userAgent.indexOf('Chrome') != -1 && navigator.userAgent.indexOf('Edge') == -1) {
+          if (navigator.userAgent.indexOf('Chrome') !== -1 && navigator.userAgent.indexOf('Edge') === -1) {
             if (document.queryCommandSupported('styleWithCss')) {
               this.iframeDoc.execCommand('styleWithCss', false, true);
             }
             this.iframeDoc.execCommand('fontSize', false, 7);
             let container = range.commonAncestorContainer;
-            container.nodeType == 3 && (container = container.parentNode);
-            container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
+            container.nodeType === 3 && (container = container.parentNode);
+            container.tagName.toLowerCase() === 'span' && (container = container.parentNode);
             Array.prototype.forEach.call(container.getElementsByTagName('span'), function (span) {
-              if (span.style.fontSize.trim() == '-webkit-xxx-large' || span.style.fontSize.trim() == 'xx-large') {
+              if (span.style.fontSize.trim() === '-webkit-xxx-large' || span.style.fontSize.trim() === 'xx-large') {
                 span.style.fontSize = value;
               }
               span.normalize();
@@ -205,17 +198,17 @@
 
             let fontList = [], spanList = [];
             let container = range.commonAncestorContainer;
-            container.nodeType == 3 && (container = container.parentNode);
-            container.tagName.toLowerCase() == 'font' && (container = container.parentNode);
+            container.nodeType === 3 && (container = container.parentNode);
+            container.tagName.toLowerCase() === 'font' && (container = container.parentNode);
             fontList = container.getElementsByTagName('font');
             for (let i = 0; i < fontList.length; i++) {
               let font = fontList[i];
               let span = document.createElement('span');
               Array.prototype.forEach.call(font.attributes, function (attr) {
-                attr.nodeName == 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue);
+                attr.nodeName === 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue);
               });
               span.innerHTML = font.innerHTML;
-              span.querySelectorAll('span').length != 0 && veUtil.command.format(span, 'span', 'fontSize');
+              span.querySelectorAll('span').length !== 0 && veUtil.command.format(span, 'span', 'fontSize');
               span.normalize();
               font.parentNode.replaceChild(span, font);
               spanList.push(span);
@@ -249,9 +242,9 @@
         let nodeList = obj.getElementsByTagName(tagName);
         for (let i = 0; i < nodeList.length; i++) {
           let node = nodeList[i];
-          if (node.attributes.length == 1 && node.style.length != 0 && node.getAttribute('style').match(pattern[cssName]) != null) {
-            if (node.children.length == 0) {
-              if (node.style.length == 1) {
+          if (node.attributes.length === 1 && node.style.length !== 0 && node.getAttribute('style').match(pattern[cssName]) != null) {
+            if (node.children.length === 0) {
+              if (node.style.length === 1) {
                 let parent = node.parentNode;
                 parent.replaceChild(document.createTextNode(node.innerHTML), node);
                 parent.normalize();
@@ -264,7 +257,7 @@
             }
           }
         }
-        if (temp.length != 0) {
+        if (temp.length !== 0) {
           this.formatContent(obj, tagName, cssName);
         }
       },
@@ -274,8 +267,8 @@
         let range = this.getRange();
         if (!range)return;
         let container = range.commonAncestorContainer;
-        container.nodeType == 3 && (container = container.parentNode);
-        container.tagName.toLowerCase() == 'span' && (container = container.parentNode);
+        container.nodeType === 3 && (container = container.parentNode);
+        container.tagName.toLowerCase() === 'span' && (container = container.parentNode);
         this.formatContent(container, 'span', 'verticalAlign');
         container.normalize();
       },
@@ -284,7 +277,7 @@
         let oSel, oRange;
         if (this.iframeWin.getSelection) {
           oSel = this.iframeWin.getSelection();
-          if (oSel && oSel.rangeCount != 0) {
+          if (oSel && oSel.rangeCount !== 0) {
             oRange = oSel.getRangeAt(0);
           }
         }
@@ -316,10 +309,10 @@
       unlink () {
         let range = this.getRange();
         let container = range.commonAncestorContainer;
-        if (container.nodeType == 3) {
+        if (container.nodeType === 3) {
           container = container.parentNode;
         }
-        if (container.tagName == 'A') {
+        if (container.tagName === 'A') {
           let newRange = document.createRange();
           newRange.selectNode(container);
           this.setRange(newRange);

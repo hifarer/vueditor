@@ -13,17 +13,19 @@ export default {
 
   UPDATE_POPUP_DISPLAY ({ toolbar }, json) {
     for (let name in toolbar) {
-      if(json && json.name == name){
-        toolbar[name].showPopup = {
-          display: json.display,
-          left: json.left || 0,
-          top: json.top || 0
-        }
-      }else{
-        toolbar[name].showPopup = {
-          display: false,
-          left: 0,
-          top: 0
+      if(toolbar[name].showPopup){
+        if(json && json.name === name){
+          toolbar[name].showPopup = {
+            display: json.display,
+            left: json.left || 0,
+            top: json.top || 0
+          }
+        }else{
+          toolbar[name].showPopup = {
+            display: false,
+            left: 0,
+            top: 0
+          }
         }
       }
     }

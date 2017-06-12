@@ -90,6 +90,18 @@
         return this.$store.state.view
       }
     },
+    watch: {
+      'view': function (val) {
+        let states = {};
+        let json = Object.assign({}, btns, selects);
+        for(let name in json){
+          if(['sourceCode', 'markdown', 'fullScreen'].indexOf(name) === -1){
+            states[name] = val === 'design' ? 'default' : 'disabled';
+          }
+        }
+        this.$store.dispatch('updateButtonStates', states);
+      }
+    },
     methods: {
       btnHandler (event, name) {
         let btn = this.btns[name];
@@ -102,27 +114,46 @@
             this.updateStates(name);
           }
         }else{
-          this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
           this.updateStates(name);
         }
+        this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
       },
       selectHandler (event, name) {
         this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
-        this.updateStates();
+        this.updateStates(name);
       },
       showPopup (name, rect) {
-        this.$store.dispatch('updatePopupDisplay', {
+        this.$store.dispatch('updatePopupDisplay', this.states[name].showPopup ? {
           name,
           display: !this.states[name].showPopup.display,
           left: rect.left,
           top: rect.top
-        });
+        } : {});
       },
       updateStates (name) {
-        let state = {};
-        this.states[name].status === 'actived' ? state[name] = 'default' : state[name] = 'actived';
-        this.$store.dispatch('updateButtonStates', state);
+        let states = {};
+        let json = Object.assign({}, btns, selects);
+        for(let item in json){
+          if(this.list.indexOf(item) !== -1){
+            this.view === 'design' && (states[item] = 'default');
+          }
+        }
+        if(['sourceCode', 'markdown'].indexOf(name) !== -1){
+          states['sourceCode'] = 'default';
+          states['markdown'] = 'default';
+        }
+        if(this.states[name].status !== undefined){
+          this.states[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived';
+        }
+        this.$store.dispatch('updateButtonStates', states);
       }
+    },
+    beforeCreate () {
+      let arr = [];
+      for(let name in btns){
+        !btns[name].action && arr.push(name);
+      }
+      this.list = arr;
     }
   }
 </script>
