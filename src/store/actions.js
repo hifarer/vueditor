@@ -23,8 +23,8 @@ export const setFullScreen = ({ commit }, data) => {
   commit('SET_FULL_SCREEN', data)
 }
 
-export const exec = ({ commit }, data) => {
-  commit('EXEC', data)
+export const callMethod = ({ commit }, data) => {
+  commit('CALL_METHOD', data)
 }
 
 export const execCommand = ({ commit }, data) => {

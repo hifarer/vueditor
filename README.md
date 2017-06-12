@@ -160,11 +160,7 @@ Default value of the above fields:
 
 ## Change log
 
-0.2.5
-
-1. Add markdown support
-2. Add Full screen and fixed toolbar features
-3. Using CSS Modules to produce className
+See [change log](./docs/changelog.md)
 
 ## Bug confirmed
 
@@ -184,7 +180,3 @@ Default value of the above fields:
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2016 hifarer
-
-
-同一个按钮出现两次
-不同类型的插件

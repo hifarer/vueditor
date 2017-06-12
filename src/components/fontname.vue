@@ -29,7 +29,7 @@
 <script>
 
   export default {
-    data(){
+    data () {
       let arr = this.$parent.config.fontName;
       return {
         fonts: arr,
@@ -38,11 +38,11 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.fontName.showPopup;
+        return this.$store.state.toolbar.fontName.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val});
+      this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val})
     },
     methods: {
       clickHandler (font) {

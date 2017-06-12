@@ -16,14 +16,14 @@
 </style>
 
 <template>
-  <div class="ve-code" v-show="currentView == 'sourceCode'">
+  <div class="ve-code" v-show="view === 'sourceCode'">
     <textarea :class="$style.editor" ref="codemirror">{{content}}</textarea>
   </div>
 </template>
 
 <script>
 
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     data () {
@@ -31,17 +31,11 @@
         currentView: 'design'
       }
     },
-    computed: {
-      view: function () {
-        return this.$store.state.view;
-      },
-      content: function () {
-        return this.$store.state.content;
-      },
-      callee: function () {
-        return this.$store.state.callee;
-      }
-    },
+    computed: mapState([
+      'view',
+      'content',
+      'callee'
+    ]),
     watch: {
       'view': function (val) {
         if(val !== 'sourceCode' && this.currentView === 'sourceCode'){
@@ -56,12 +50,10 @@
         }
       }
     },
-    methods: Object.assign({}, 
-      mapActions([
-        'switchView',
-        'updateContent',
-        'updatePopupDisplay'
-      ])
-    )
+    methods: mapActions([
+      'switchView',
+      'updateContent',
+      'updatePopupDisplay'
+    ])
   }
 </script>

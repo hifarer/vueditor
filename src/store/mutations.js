@@ -5,17 +5,10 @@ export default {
     toolbar[name].value = value;
   },
 
-  UPDATE_BUTTON_STATES ({ toolbar, view }, data) {
-    let bool = view !== 'design';
-    for (let name in toolbar) {
-      bool && (toolbar[name].status = 'disabled');
-      if(data && data[name] !== undefined){
-        toolbar[name].status = data[name];
-      }
+  UPDATE_BUTTON_STATES ({ toolbar }, data) {
+    for (let name in data) {
+      toolbar[name].status = data[name];
     }
-    ['sourceCode', 'markdown', 'fullScreen'].forEach(item => {
-      toolbar[item] && (toolbar[item].status = 'default');
-    });
   },
 
   UPDATE_POPUP_DISPLAY ({ toolbar }, json) {
@@ -41,14 +34,14 @@ export default {
   },
 
   SWITCH_VIEW (state, data) {
-    state.currentView = data;
+    state.view = data;
   },
 
   SET_FULL_SCREEN (state, data){
     state.fullScreen = data;
   },
 
-  EXEC (state, data) {
+  CALL_METHOD (state, data) {
     state.callee = data
   },
 

@@ -49,22 +49,22 @@
     },
     computed: {
       fullScreen: function () {
-        return this.$store.state.fullScreen;
+        return this.$store.state.fullScreen
       },
       classNames: function () {
         let arr = (this.classList || []).concat();
         if(this.fullScreen){
           arr.push('ve-full-screen');
         }
-        return arr;
+        return arr
       }
     },
     methods: {
       setContent (content) {
-        this.$store.dispatch('updateContent', content);
+        this.$store.dispatch('updateContent', content)
       },
       getContent () {
-        return this.$store.state.content;
+        return this.$store.state.content
       }
     }
   }

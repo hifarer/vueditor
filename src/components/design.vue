@@ -1,6 +1,6 @@
 
 <template>
-  <div class="ve-design" v-show="view == 'design'">
+  <div class="ve-design" v-show="view === 'design'">
     <iframe src="about:blank" frameborder="0" @load="init"></iframe>
   </div>
 </template>
@@ -31,18 +31,16 @@
 
     watch: {
       'view': function (val) {
-        if (val == 'design') {
-          this.updateStates();
-        }else{
+        if (val !== 'design') {
           clearTimeout(this.timer);
           this.updateContent(this.iframeBody.innerHTML);
-          this.updateStates({});
         }
+        this.updateStates();
       },
       'content': function (val) {
         if (this.inited) {
           this.iframeBody.innerHTML != val && (this.iframeBody.innerHTML = val);
-          this.view == 'design' && this.updateStates();
+          this.view === 'design' && this.updateStates();
         } else {
           this.cache = val;
         }
@@ -56,7 +54,7 @@
       'updateContent',
       'updateButtonStates',
       'updatePopupDisplay',
-      'exec'
+      'callMethod'
     ]), {
       init (event) {
         this.iframeWin = event.target.contentWindow;
@@ -71,12 +69,16 @@
         this.addEvent();
       },
 
-      // content change, selection change, view change
-      updateStates (data) {
-        if(!data){
-          let json = {};
-          for (let name in this.states) {
-            if(['redo', 'undo'].indexOf(name) == -1){
+      // init, selection change, view change
+      updateStates () {
+        let json = {};
+        for (let name in this.states) {
+          if(this.view !== 'design'){
+            if(['sourceCode', 'markdown', 'fullScreen'].indexOf(name) === -1){
+              json[name] = 'disabled';
+            }
+          } else {
+            if(['redo', 'undo'].indexOf(name) === -1){
               if(this.iframeDoc.queryCommandSupported(name)){
                 json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default';
               }else{
@@ -84,16 +86,16 @@
               }
             }
           }
-          this.updateButtonStates(json);
-        }else{
-          this.updateButtonStates();
         }
+        this.updateButtonStates(json);
       },
 
       addEvent () {
         this.selectionChange();
         this.iframeDoc.addEventListener('click', () => {
           this.updatePopupDisplay();
+          // dispatch selectionchange event in order to throttle
+          this.iframeDoc.dispatchEvent(new Event('selectionchange'));
         }, false);
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false);
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false);
@@ -102,31 +104,31 @@
       keydownHandler (event) {
         if (event.ctrlKey && (event.keyCode == 89 || event.keyCode == 90)) {
           event.preventDefault();
-          event.keyCode == 89 && this.callAction({name: 'redo'});
-          event.keyCode == 90 && this.callAction({name: 'undo'});
+          event.keyCode == 89 && this.callMethod({name: 'redo'});
+          event.keyCode == 90 && this.callMethod({name: 'undo'});
         }
       },
 
       keyupHandler (event) {
         clearTimeout(this.timer);
-        this.timer = setTimeout(function () {
+        this.timer = setTimeout(() => {
           this.updateContent(this.iframeBody.innerHTML);
-        }.bind(this), 500);
+        }, 500);
       },
 
       selectionChange () {
         let timer = null;
-        this.iframeDoc.addEventListener('selectionchange', function () {
+        this.iframeDoc.addEventListener('selectionchange', () => {
           // throttle
           clearTimeout(timer);
           timer = setTimeout(() => {
             this.view == 'design' && this.updateStates();
           }, 300);
-        }.bind(this), false);
-        if (navigator.userAgent.indexOf('Firefox') !== -1) {
+        }, false);
+        if (!'onselectionchange' in document) {
           let oSel = this.iframeWin.getSelection();
           let focusOffset = -1;
-          setInterval(function () {
+          setInterval(() => {
             if (oSel && oSel.rangeCount) {
               if (focusOffset != oSel.focusOffset) {
                 focusOffset = oSel.focusOffset;
@@ -135,7 +137,7 @@
             } else {
               oSel = this.iframeWin.getSelection();
             }
-          }.bind(this), 300);
+          }, 300);
         }
       },
 

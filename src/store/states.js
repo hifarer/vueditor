@@ -35,17 +35,13 @@ export default function (config) {
       content: '',
       toolbar,
       fullScreen: false,
-      // rect: {
-      //   w: 0,
-      //   h: 0
-      // },
       command: {
         name: '',
         value: ''
       },
       callee: {
         name: '',
-        arguments: ''
+        params: ''
       }
     },
     actions,

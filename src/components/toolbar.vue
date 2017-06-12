@@ -47,7 +47,7 @@
 
       <a href="javascript:;"  
         v-if="item in btns" 
-        @click="btnHandler($event, item)" 
+        @click.stop="btnHandler($event, item)" 
         :title="lang[item].title"
         :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}" 
         unselectable="on">
@@ -56,7 +56,7 @@
 
       <a href="javascript:;" 
         v-if="item in selects" 
-        @click="selectHandler($event, item)" 
+        @click.stop="selectHandler($event, item)" 
         :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].className, 've-select']" 
         unselectable="on">
         <span>{{states[item].value}}</span><i :class="{'ve-triangle-down': !display, 've-triangle-up': display}"></i>
@@ -83,41 +83,45 @@
       }
     },
     computed: {
-      states () {
-        return this.$store.state.toolbar;
+      states: function () {
+        return this.$store.state.toolbar
+      },
+      view: function () {
+        return this.$store.state.view
       }
     },
     methods: {
       btnHandler (event, name) {
         let btn = this.btns[name];
-        if(this.states[name].status == 'disabled')return;
+        if(this.states[name].status === 'disabled')return;
         if(btn.action){
           if(btn.native){
             this.$store.dispatch('execCommand', { name: name, value: null });
           }else{
-            this.$store.dispatch('exec', { name: name, arguments: null });
+            this.$store.dispatch('callMethod', { name: name, params: null });
+            this.updateStates(name);
           }
         }else{
-          this.showPopup(name, event.currentTarget.getBoundingClientRect());
+          this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
+          this.updateStates(name);
         }
       },
       selectHandler (event, name) {
-        this.showPopup(name, event.currentTarget.getBoundingClientRect());
+        this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
+        this.updateStates();
       },
       showPopup (name, rect) {
-        let display = this.states[name].showPopup.display;
-        let json = {};
-        for(let item in btns){
-          !btns[item].action && (json[item] = 'default');
-        }
-        json[name] = 'actived';
         this.$store.dispatch('updatePopupDisplay', {
           name,
-          display: !display,
+          display: !this.states[name].showPopup.display,
           left: rect.left,
           top: rect.top
         });
-        this.$store.dispatch('updateButtonStates', json);
+      },
+      updateStates (name) {
+        let state = {};
+        this.states[name].status === 'actived' ? state[name] = 'default' : state[name] = 'actived';
+        this.$store.dispatch('updateButtonStates', state);
       }
     }
   }
