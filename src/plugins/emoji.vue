@@ -24,7 +24,7 @@
   <div class="ve-popover emoji" v-show="showPopup.display"
   :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
     <div class="ve-pop-arrow"></div>
-    <div class="ve-pop-header">{{lang.title}}</div>
+    <div class="ve-pop-header">Insert emoji</div>
     <div class="ve-pop-body">
       <div class="wrap" @click="insertItem">
         <a href="javascript:;" draggable="false" v-for="item in arr">
@@ -67,7 +67,8 @@
     },
     computed: {
       showPopup: function () {
-        return this.$store.state.toolbar.emoji.showPopup;
+        return {};
+        // return this.$store.state.toolbar.emoji.showPopup;
       }
     },
     methods: {

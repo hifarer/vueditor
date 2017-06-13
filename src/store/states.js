@@ -1,9 +1,10 @@
 
+import * as actions from './actions'
+import mutations from './mutations'
+import { btns, selects } from '../config/btns.js'
+
 export default function (config) {
 
-  let actions = require('./actions');
-  let mutations = require('./mutations');
-  let { btns, selects } = require('../config/btns.js');
   let toolbar = {};
 
   config.toolbar.forEach(function (name) {

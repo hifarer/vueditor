@@ -26,7 +26,7 @@
     data () {
       return {
         linkVal: '',
-        lang: this.$parent.lang.link
+        lang: this.$parent.config.lang.link
       }
     },
     computed: {

@@ -4,24 +4,27 @@ import Vuex from 'vuex'
 
 import en from './config/lang.js'
 import defaultConfig from './config/index.js'
-import { customBtns, selects } from './config/btns.js'
+// import { setCustom } from './config/btns.js'
 
 import app from './components/app.vue'
 import createStore from './store/states.js'
 
 function mixinConfig (opts) {
   let config = opts ? Object.assign({}, defaultConfig, opts) : defaultConfig;
-  let lang = config.lang || en;
+  !config.lang && (config.lan = en);
   let list = [
     'fontName', 'fontSize', 'format', 'foreColor', 'backColor', 'vetable', 'undo', 'velink',
-    'emoji', 'picture', 'sourceCode', 'markdown', 'fullScreen'
+    'picture', 'sourceCode', 'markdown', 'fullScreen'
   ];
+  let plugins = {};
   for(let name in config.plugins){
-    let data = config.plugins[name].data();
-    list.push(name);
-    // lang[name] = data.lang;
+    // let data = config.plugins[name].data();
+
+    // list.push(name);
+    // setCustom(name, data.btn);
+    // plugins[name] = data.btn;
+
     app.components[name] = config.plugins[name];
-    // customBtns[name] = {className: data.className};
     config.toolbar.indexOf(name) === -1 && config.toolbar.push(name);
   }
 
@@ -29,11 +32,9 @@ function mixinConfig (opts) {
     store: new Vuex.Store(createStore(config)),
     data: function () {
       return {
-        lang,
-        config,
         list,
-        id: config.id,
-        classList: config.classList,
+        config,
+        plugins
       };
     }
   });

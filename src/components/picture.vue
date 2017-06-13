@@ -34,7 +34,7 @@
   export default {
     data () {
       return {
-        lang: this.$parent.lang.picture
+        lang: this.$parent.config.lang.picture
       }
     },
     computed: {

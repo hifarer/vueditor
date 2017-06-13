@@ -45,7 +45,7 @@
   export default {
     data () {
       let tag = this.$options._componentTag;
-      let lang = this.$parent.lang[tag];
+      let lang = this.$parent.config.lang[tag];
       return {
         colors: [
           '#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF',

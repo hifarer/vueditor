@@ -1,6 +1,6 @@
 
 <template>
-  <div class="vueditor" :id="id" :class="classNames">
+  <div class="vueditor" :id="config.id" :class="[{'ve-full-screen': fullScreen}].concat(config.classList)">
     <toolbar></toolbar>
     <design></design>
     <template v-for="item in list">
@@ -32,31 +32,24 @@
 
   export default {
     components: {
-      toolbar,
-      design,
-      sourceCode,
+      'toolbar': toolbar,
+      'design': design,
+      'sourceCode': sourceCode,
       'foreColor': color,
       'backColor': color,
-      fontName,
-      fontSize,
-      format,
-      vetable,
-      undo,
-      velink,
-      picture,
-      markdown,
-      fullScreen
+      'fontName': fontName,
+      'fontSize': fontSize,
+      'format': format,
+      'vetable': vetable,
+      'undo': undo,
+      'velink': velink,
+      'picture': picture,
+      'markdown': markdown,
+      'fullScreen': fullScreen
     },
     computed: {
       fullScreen: function () {
         return this.$store.state.fullScreen
-      },
-      classNames: function () {
-        let arr = (this.classList || []).concat();
-        if(this.fullScreen){
-          arr.push('ve-full-screen');
-        }
-        return arr
       }
     },
     methods: {

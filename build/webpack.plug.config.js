@@ -24,23 +24,38 @@ module.exports = {
   },
 
   module: {
-    loaders: [
-      { test: /\.vue$/, loader: 'vue', exclude: /node_modules/ },
-      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.(css|less)$/, loader: 'stylecss!less!postcss' },
-      { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' }
+    rules: [
+      {
+        test: /\.vue$/, 
+        loader: 'vue-loader', 
+        exclude: /node_modules/, 
+        options: {
+          extractCSS: true,
+          preserveWhitespace: false,
+          postcss: [
+            autoprefixer({
+              browsers: ['last 3 versions']
+            })
+          ]
+        }
+      },
+      {
+        test: /\.js$/, 
+        loader: 'babel-loader', 
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(css|less)$/, 
+        loader: ExtractTextPlugin.extract({
+          use: 'css-loader!less-loader!postcss-loader',
+          fallback: 'style-loader'
+        })
+      },
+      {
+        test: /\.(png|jpg|gif)$/, 
+        loader: 'url-loader?limit=8192'
+      }
     ]
-  },
-
-  vue: {
-    loaders: {
-      css: 'style!css!postcss',
-      less: 'style!css!less!postcss'
-    }
-  },
-
-  postcss: function () {
-    return [autoprefixer({remove: false})];
   },
 
   plugins: [
@@ -49,7 +64,6 @@ module.exports = {
     //     warnings: false
     //   }
     // }),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {

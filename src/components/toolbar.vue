@@ -64,21 +64,25 @@
 
       <a href="javascript:;" class="ve-divider" v-if="item == 'divider' || item == '|'"></a>
 
+      <!--<slot :name="item" @click.stop="customHandler($event, item)"></slot>-->
+
+      <span @click.stop="customHandler($event, item)" v-if="item in $parent.plugins" v-html="$parent.plugins[item]"></span>
+
     </template>
   </div>
 </template>
 
 <script>
 
-  import { btns, selects, customs } from '../config/btns'
+  import { btns, selects } from '../config/btns.js'
 
   export default {
     data () {
       return {
         btns,
         selects,
-        customs,
-        lang: this.$parent.lang,
+        customs: this.$parent.config.plugins,
+        lang: this.$parent.config.lang,
         config: this.$parent.config.toolbar
       }
     },
@@ -121,6 +125,9 @@
       selectHandler (event, name) {
         this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
         this.updateStates(name);
+      },
+      customHandler (event, name) {
+        // alert(1);
       },
       showPopup (name, rect) {
         this.$store.dispatch('updatePopupDisplay', this.states[name].showPopup ? {

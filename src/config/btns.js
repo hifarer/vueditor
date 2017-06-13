@@ -40,10 +40,6 @@ export default {
     fontName: {className: 'font-select'},
     fontSize: {className: ''},
     format: {className: ''},
-  },
-
-  customs: {
-    
   }
 
 }

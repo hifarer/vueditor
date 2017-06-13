@@ -18,7 +18,7 @@
         timer: null,
         inited: false,
         cache: '',
-        lang: this.$parent.lang.design
+        lang: this.$parent.config.lang.design
       }
     },
 

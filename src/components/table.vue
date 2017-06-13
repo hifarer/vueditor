@@ -40,7 +40,7 @@
         num: 64,
         x: -1,
         y: -1,
-        lang: this.$parent.lang.table
+        lang: this.$parent.config.lang.table
       }
     },
     computed: {
