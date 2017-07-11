@@ -1,14 +1,14 @@
 
-var path = require('path');
-var express = require('express');
-var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
-var webpackConfig = require('./webpack.dev.config.js');
+const path = require('path');
+const express = require('express');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackConfig = require('./webpack.dev.config.js');
 
-var compiler = webpack(webpackConfig);
+const compiler = webpack(webpackConfig);
 
-var app = express();
+const app = express();
 
 app.use(express.static(path.join(__dirname, '../')));
 

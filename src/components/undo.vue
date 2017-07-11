@@ -1,95 +1,79 @@
-<template>
-  <div>
-    <a href="javascript:;" :title="lang.undo" :class="{'ve-disabled': undoState}" @click="undo">
-      <i class="icon-undo"></i>
-    </a>
-    <a href="javascript:;" :title="lang.redo" :class="{'ve-disabled': redoState}" @click="redo">
-      <i class="icon-repeat"></i>
-    </a>
-  </div>
-</template>
 
 <script>
 
-  import {mapActions} from 'vuex';
+  import { mapActions } from 'vuex'
 
   export default {
+    render: function () {
+      return '';
+    },
     data () {
       return {
         stack: [],
-        index: -1,
-        lang: this.$store.state.lang.undo
-      };
+        index: -1
+      }
     },
     computed: {
-      currentView () {
-        return this.$store.state.currentView;
+      view: function () {
+        return this.$store.state.view
       },
-      content () {
-        return this.$store.state.content;
+      content: function () {
+        return this.$store.state.content
       },
-      action: function () {
-        return this.$store.state.action;
-      },
-      undoState () {
-        return this.$store.state.toolbarStates.undo.disabled;
-      },
-      redoState () {
-        return this.$store.state.toolbarStates.redo.disabled;
+      callee: function () {
+        return this.$store.state.callee
       },
       canUndo: function () {
-        return this.index > 0;
+        return this.index > 0
       },
       canRedo: function () {
-        return this.index < this.stack.length - 1;
+        return this.index < this.stack.length - 1
       }
     },
     watch: {
-      'content': function (content) {
-        this.push(content);
-      },
-      'currentView': function (val) {
-        if (val == 'design') {
-          this.stack = [];
-          this.index = -1;
-          this.push(this.content, true);
+      'content': function (val) {
+        if(this.view === 'design'){
+          this.push(val);
         }
       },
-      'action': function (val) {
-        this[val]();
+      'view': function (val) {
+        if (val === 'design') {
+          this.stack = [];
+          this.index = -1;
+          this.push(this.content);
+        }
+      },
+      'callee': function ({ name, params}) {
+        if(['undo', 'redo'].indexOf(name) !== -1){
+          this[name]();
+        }
       }
     },
     methods: Object.assign({}, mapActions([
       'updateContent',
-      'updateToolbarDisabledStates'
+      'updateButtonStates'
     ]), {
       undo () {
         if (!this.canUndo)return;
         this.index--;
-        let content = this.stack[this.index];
-        this.updateContent(content);
+        this.updateContent(this.stack[this.index]);
       },
       redo () {
         if (!this.canRedo)return;
         this.index++;
-        let content = this.stack[this.index];
-        this.updateContent(content);
+        this.updateContent(this.stack[this.index]);
       },
-      push (content, isInit) {
+      push (content) {
         if (content != this.stack[this.index]) {
           this.stack = this.stack.slice(0, this.index + 1);
           this.stack.push(content);
           this.index++;
         }
-        let json = {undo: !this.canUndo, redo: !this.canRedo};
-        if (isInit || this.currentView == 'sourceCode') {
-          json = {undo: true, redo: true};
-        }
-        this.updateToolbarDisabledStates(json);
+        this.updateButtonStates({
+          undo: this.canUndo ? 'default' : 'disabled',
+          redo: this.canRedo ? 'default' : 'disabled'
+        });
       }
-    }),
-    mounted () {
-      this.push(this.content, true);
-    }
+    })
   }
 </script>
