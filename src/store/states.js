@@ -13,19 +13,9 @@ export default function (config) {
       if(name in selects){
         toolbar[name].value = '';
         toolbar[name].showPopup = false;
-        // toolbar[name].showPopup = {
-        //   display: false,
-        //   left: 0,
-        //   top: 0
-        // }
       }else {
         if (btns[name] && btns[name].action === undefined) {
           toolbar[name].showPopup = false;
-          // toolbar[name].showPopup = {
-          //   display: false,
-          //   left: 0,
-          //   top: 0
-          // }
         }
         toolbar[name].status = '';  // default disabled actived
       }

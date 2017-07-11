@@ -15,7 +15,7 @@ Vueditor
 
 ## 截图
 
-![vueditor](./vueditor.gif)
+![vueditor](../vueditor.gif)
 
 ## 特性
 
@@ -33,7 +33,7 @@ npm install vueditor
 
 ### Vue.use(Vueditor, config)
 
-适用于一下场景:
+适用于以下场景:
 
 1. 只需一个编辑器的情况
 2. 一个页面有多个编辑器但配置相同
@@ -126,7 +126,7 @@ inst.getContent();
 | toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
 | fontName              | `Object`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
 | fontSize              | `Array`    | font-size 选项 |
-| lang                  | `String`   | 界面语言, 默认英文, 使用中文查看 |
+| lang                  | `String`   | 界面语言, 默认英文, 要使用中文查看这里 |
 | uploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
 | id                    | `String`   | 容器id |
 | classList             | `Array`    | 容器className |
@@ -159,7 +159,9 @@ inst.getContent();
 
 ## 更新记录
 
-查看 [这里](./docs/changelog.md)
+查看[这里](./docs/changelog.md)
+
+## Bug确认
 
 ## TODO
 
