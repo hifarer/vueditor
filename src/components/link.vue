@@ -7,14 +7,13 @@
 </style>
 
 <template>
-  <div class="ve-popover" :class="$style.ctn" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  <div class="ve-popover" :class="$style.ctn" :style="style" v-show="showPopup">
     <div class="ve-pop-arrow"></div>
     <div class="ve-pop-header">{{lang.title}}</div>
     <div class="ve-pop-body">
       <div class="ve-input-box">
-        <input type="text" class="ve-input" v-model="linkVal">
-        <button class="ve-btn" @click="linkHandler">{{lang.ok}}</button>
+        <input type="text" class="ve-input" v-model="val">
+        <button type="button" class="ve-btn" @click="linkHandler">{{lang.ok}}</button>
       </div>
     </div>
   </div>
@@ -22,15 +21,18 @@
 
 <script>
 
+  import veMixin from '../mixins';
+
   export default {
+    mixins: [veMixin],
     data () {
       return {
-        linkVal: '',
+        val: '',
         lang: this.$parent.config.lang.link
       }
     },
     computed: {
-      showPopup:function () {
+      showPopup: function () {
         return this.$store.state.toolbar.link.showPopup;
       },
       callee: function () {
@@ -44,13 +46,13 @@
     },
     methods: {
       checkValid () {
-        let link = this.linkVal;
-        link.match(/^https?:\/\//igm) === null && (link = 'http://' + link);
-        return link;
+        let href = this.val;
+        href.match(/^https?:\/\//igm) === null && (href = 'http://' + href);
+        return href;
       },
       linkHandler () {
-        let link = this.checkValid();
-        this.$store.dispatch('execCommand', { name: 'createlink', value: link });
+        let href = this.checkValid();
+        this.$store.dispatch('execCommand', { name: 'createlink', value: href });
         this.$store.dispatch('updatePopupDisplay');
       },
       unLinkHandler () {

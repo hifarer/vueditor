@@ -37,7 +37,7 @@ export default {
   },
   fontName: {},
   fontSize: {},
-  format: {},
+  element: {},
   design: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
@@ -46,7 +46,7 @@ export default {
     ok: 'OK'
   },
   unLink: {
-    title: 'Cancel link'
+    title: 'unlink'
   },
   markdown: {
     title: 'markdown'
@@ -60,8 +60,8 @@ export default {
   sourceCode: {
     title: 'Source Code'
   },
-  fullScreen: {
-    title: 'Full Screen'
+  fullscreen: {
+    title: 'Fullscreen'
   },
   table: {title: 'Table'},
   undo: {title: 'Undo'},

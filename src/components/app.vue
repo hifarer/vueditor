@@ -1,17 +1,15 @@
 
 <template>
-  <div class="vueditor" :id="config.id" :class="[{'ve-full-screen': fullScreen}].concat(config.classList)">
-    <toolbar></toolbar>
-    <design></design>
+  <div class="vueditor" :id="config.id" :class="[{'ve-fullscreen': fullscreen}].concat(config.classList)">
+    <ve-toolbar></ve-toolbar>
+    <ve-design></ve-design>
     <template v-for="item in list">
-      <component v-if="config.toolbar.indexOf(item.replace('ve', '')) !== -1" :is="item"></component>
+      <component v-if="config.toolbar.indexOf(item) !== -1" :tagName="item" :is="'ve-' + item.toLowerCase()"></component>
     </template>
   </div>
 </template>
 
 <script>
-
-  // the component name can not be any of the html tagName
 
   import toolbar from './toolbar.vue'
   import design from './design.vue'
@@ -20,36 +18,36 @@
   import fontName from './fontname.vue'
   import fontSize from './fontsize.vue'
   import sourceCode from './sourcecode.vue'
-  import format from './format.vue'
-  import vetable from './table.vue'
+  import element from './element.vue'
+  import table from './table.vue'
   import undo from './undo.vue'
-  import velink from './link.vue'
+  import link from './link.vue'
   import picture from './picture.vue'
   import markdown from './markdown.vue'
-  import fullScreen from './fullscreen.vue'
+  import fullscreen from './fullscreen.vue'
 
   import '../style/style.less'
 
   export default {
     components: {
-      'toolbar': toolbar,
-      'design': design,
-      'sourceCode': sourceCode,
-      'foreColor': color,
-      'backColor': color,
-      'fontName': fontName,
-      'fontSize': fontSize,
-      'format': format,
-      'vetable': vetable,
-      'undo': undo,
-      'velink': velink,
-      'picture': picture,
-      'markdown': markdown,
-      'fullScreen': fullScreen
+      've-toolbar': toolbar,
+      've-design': design,
+      've-sourcecode': sourceCode,
+      've-forecolor': color,
+      've-backcolor': color,
+      've-fontname': fontName,
+      've-fontsize': fontSize,
+      've-element': element,
+      've-table': table,
+      've-link': link,
+      've-undo': undo,
+      've-picture': picture,
+      've-markdown': markdown,
+      've-fullscreen': fullscreen
     },
     computed: {
-      fullScreen: function () {
-        return this.$store.state.fullScreen
+      fullscreen: function () {
+        return this.$store.state.fullscreen
       }
     },
     methods: {

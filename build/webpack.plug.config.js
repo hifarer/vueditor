@@ -17,7 +17,7 @@ module.exports = {
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'js/emoji.min.js',
+    filename: 'plugins/emoji.min.js',
     library: 'emoji',
     libraryTarget: 'umd',
     umdNamedDefine: true

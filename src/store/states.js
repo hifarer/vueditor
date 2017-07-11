@@ -12,18 +12,20 @@ export default function (config) {
       toolbar[name] = {};
       if(name in selects){
         toolbar[name].value = '';
-        toolbar[name].showPopup = {
-          display: false,
-          left: 0,
-          top: 0
-        }
+        toolbar[name].showPopup = false;
+        // toolbar[name].showPopup = {
+        //   display: false,
+        //   left: 0,
+        //   top: 0
+        // }
       }else {
         if (btns[name] && btns[name].action === undefined) {
-          toolbar[name].showPopup = {
-            display: false,
-            left: 0,
-            top: 0
-          }
+          toolbar[name].showPopup = false;
+          // toolbar[name].showPopup = {
+          //   display: false,
+          //   left: 0,
+          //   top: 0
+          // }
         }
         toolbar[name].status = '';  // default disabled actived
       }
@@ -35,7 +37,13 @@ export default function (config) {
       view: 'design',
       content: '',
       toolbar,
-      fullScreen: false,
+      fullscreen: false,
+      rect: {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0
+      },
       command: {
         name: '',
         value: ''

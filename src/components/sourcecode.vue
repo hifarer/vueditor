@@ -17,7 +17,7 @@
 
 <template>
   <div class="ve-code" v-show="view === 'sourceCode'">
-    <textarea :class="$style.editor" ref="codemirror">{{content}}</textarea>
+    <textarea :class="$style.editor" ref="codemirror" v-model="content"></textarea>
   </div>
 </template>
 

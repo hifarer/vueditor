@@ -18,7 +18,7 @@ module.exports = {
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'js/vueditor.min.js',
+    filename: 'script/vueditor.min.js',
     library: 'Vueditor',
     libraryTarget: 'umd',
     umdNamedDefine: true
@@ -28,44 +28,46 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/, 
-        loader: 'vue-loader', 
-        exclude: /node_modules/, 
-        options: {
-          extractCSS: true,
-          preserveWhitespace: false,
-          postcss: [
-            autoprefixer({
-              browsers: ['last 3 versions']
-            })
-          ]
-        }
+        use: [{
+          loader: 'vue-loader',
+          options: {
+            extractCSS: true,
+            preserveWhitespace: false,
+            postcss: [
+              autoprefixer({
+                browsers: ['last 3 versions']
+              })
+            ]
+          }
+        }], 
+        exclude: /node_modules/
       },
       {
         test: /\.js$/, 
-        loader: 'babel-loader', 
+        use: 'babel-loader', 
         exclude: /node_modules/
       },
       {
         test: /\.(css|less)$/, 
-        loader: ExtractTextPlugin.extract({
-          use: 'css-loader!less-loader!postcss-loader',
-          fallback: 'style-loader'
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader!less-loader!postcss-loader'
         })
       },
       {
         test: /\.(png|jpg|gif)$/, 
-        loader: 'url-loader?limit=8192'
+        use: 'url-loader?limit=8192'
       }
     ]
   },
 
   plugins: [
-    new ExtractTextPlugin('css/vueditor.min.css'),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }),
+    new ExtractTextPlugin('style/vueditor.min.css'),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   }
+    // }),
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {

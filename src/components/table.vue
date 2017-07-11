@@ -21,11 +21,10 @@
 </style>
 
 <template>
-  <div class="ve-table" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  <div class="ve-table" v-show="showPopup" :style="style">
     <ul>
       <!--Vue.js 2.0 v-for i start with 1-->
-      <li v-for="i in num" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
+      <li v-for="i in num" :key="i" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
         <a href="javascript:;" :class="{'active': ((i-1)%8 <= x && parseInt((i-1)/8) <= y)}"></a>
       </li>
     </ul>
@@ -34,7 +33,10 @@
 
 <script>
 
+  import veMixin from '../mixins';
+
   export default {
+    mixins: [veMixin],
     data () {
       return {
         num: 64,
@@ -44,7 +46,7 @@
       }
     },
     computed: {
-      showPopup () {
+      showPopup: function () {
         return this.$store.state.toolbar.table.showPopup;
       }
     },

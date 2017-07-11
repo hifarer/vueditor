@@ -11,7 +11,7 @@ Vueditor
 
 浏览器兼容性: Chrome, Firefox, Safari, IE 9+.
 
-在线 [DEMO](http://hifarer.github.io/Vueditor/)
+在线 [DEMO](http://hifarer.github.io/vueditor/)
 
 ## 截图
 
@@ -19,17 +19,15 @@ Vueditor
 
 ## 特性
 
-- 无需 jQuery, Bootstrap 或其他任何字体文件支持。
-- 轻量级
-- 功能模块独立
-- 使用 npm + webpack + babel, ES2015
+- 轻量级, 无其他依赖
+- 插件支持
 
 ## 安装
 ```javascript
 npm install vueditor
 ```
 
-如果期望通过 script 标签引用, 只需添加 "vueditor.min.js", "vueditor.min.css" 到相关页面即可. 
+如果期望通过 script 标签引用, 只需添加 `vueditor.min.js`, `vueditor.min.css` 到相关页面即可. 
 
 ## 用法
 
@@ -45,7 +43,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
-import "vueditor/dist/css/vueditor.min.css"
+import 'vueditor/dist/css/vueditor.min.css'
 
 // 编辑器配置
 let config = {
@@ -53,19 +51,19 @@ let config = {
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
   fontName: [
-    {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    {val: 'arial black'}, 
+    {val: 'times new roman'}, 
+    {val: 'Courier New'}
   ],
   fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-  emoji: ["1f600", "1f601", "1f602", "1f923", "1f603"],
-  lang: 'en',
-  fileuploadUrl: ''
+  uploadUrl: ''
 };
 
 Vue.use(Vuex);
 Vue.use(Vueditor, config);
 // 创建根实例
 new Vue({
-    el: '#editor1'
+  el: '#editorContainer'
 });
 ```
 
@@ -83,7 +81,7 @@ new Vue({
 
 ```javascript
 let parent = new Vue({
-    el: '#editor1'
+  el: '#editorContainer'
 });
 let inst = parent.$children[0];
 inst.setContent('your content here');
@@ -100,21 +98,20 @@ inst.getContent();
   import Vuex from 'vuex'
   import {createEditor} from 'vueditor'
 
-  import "vueditor/dist/css/vueditor.min.css"
+  import 'vueditor/dist/css/vueditor.min.css'
   
   Vue.use(Vuex);
 
-  createEditor('#editor2', {
+  createEditor('#editorContainer', {
     toolbar: [
-        'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+      'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
     ],
-    lang: 'en',
-    fileuploadUrl: '',
+    uploadUrl: '',
     id: '',
     classList: []
   });
 ```
-注意这种用法会替换掉被初始化的那个元素，如果要添加样式到该元素可以在config里面加上`classList` 或 `id`来实现；`createEditor`返回一个Vueditor实例，通过实例可以获取和设置内容:
+注意这种用法会替换掉被初始化的那个元素，如果要添加样式到该元素可以在config里面加上`classList` 或 `id`来实现；`createEditor`返回一个Vueditor实例，通过该实例可以获取和设置内容:
 
 ```javascript
 let inst = createEditor(...);
@@ -129,9 +126,8 @@ inst.getContent();
 | toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
 | fontName              | `Object`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
 | fontSize              | `Array`    | font-size 选项 |
-| emoji                 | `Array`    | emoji 表情列表, 获取全部 [点击](http://unicode.org/emoji/charts/full-emoji-list.html) |
-| lang                  | `String`   | 界面语言, 默认中文, 使用英文 `lang: 'en'` |
-| fileUploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
+| lang                  | `String`   | 界面语言, 默认英文, 使用中文查看 |
+| uploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
 | id                    | `String`   | 容器id |
 | classList             | `Array`    | 容器className |
 
@@ -147,24 +143,15 @@ inst.getContent();
     'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
   ],
   fontName: [
-    {val: "宋体, SimSun", abbr: "宋体"}, {val: "黑体, SimHei", abbr: "黑体"},
-    {val: "楷体, SimKai", abbr: "楷体"}, {val: "微软雅黑, 'Microsoft YaHei'", abbr: "微软雅黑"},
-    {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    {val: 'arial black'}, 
+    {val: 'times new roman'}, 
+    {val: 'Courier New'}
   ],
   fontSize: [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
   ],
-  emoji: [
-    "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606", "1f609", "1f60a", "1f60b",
-    "1f60e", "1f60d", "1f618", "1f617", "1f619", "1f61a", "263a", "1f642", "1f917", "1f914", "1f610",
-    "1f611", "1f636", "1f644", "1f60f", "1f623", "1f625", "1f62e", "1f910", "1f62f", "1f62a", "1f62b",
-    "1f634", "1f60c", "1f913", "1f61b", "1f61c", "1f61d", "1f924", "1f612", "1f613", "1f614", "1f615",
-    "1f643", "1f911", "1f632", "2639", "1f641", "1f616", "1f61e", "1f61f", "1f624", "1f622", "1f62d",
-    "1f626", "1f627", "1f628", "1f629", "1f62c", "1f630", "1f631", "1f633", "1f635", "1f621", "1f620",
-    "1f607", "1f920", "1f921", "1f925", "1f637", "1f912", "1f915", "1f922", "1f927"
-  ],
   lang: 'cn',
-  fileuploadUrl: ''
+  uploadUrl: ''
   id: '',
   classList: []
 };
@@ -172,17 +159,13 @@ inst.getContent();
 
 ## 更新记录
 
-0.2.5
-
-1. 添加markdown支持
-2. 添加全屏及工具栏固定选项
-3. 使用CSS Modules生成className
+查看 [这里](./docs/changelog.md)
 
 ## TODO
 
 - [x] Markdown 支持
 - [x] 全屏及工具栏固定选项
-- [ ] 弹出菜单位置自适应
+- [x] 弹出菜单位置自适应
 - [ ] 表格高级设置
 - [ ] 代码高亮
 - [ ] 插件支持

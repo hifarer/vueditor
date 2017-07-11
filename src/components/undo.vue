@@ -4,6 +4,9 @@
   import { mapActions } from 'vuex'
 
   export default {
+    render: function () {
+      return '';
+    },
     data () {
       return {
         stack: [],

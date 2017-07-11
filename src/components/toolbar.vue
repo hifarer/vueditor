@@ -1,13 +1,13 @@
 
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
-    border-bottom: 1px solid #ddd;
-    user-select: none;
     display: table;
     width: 100%;
     font-size: 0;
     letter-spacing: -4px;
     background: #fff;
+    border-bottom: 1px solid #ddd;
+    user-select: none;
     a {
       position: relative;
       display: inline-block;
@@ -44,7 +44,6 @@
 <template>
   <div class="ve-toolbar" ref="toolbar">
     <template v-for="item in config">
-
       <a href="javascript:;"  
         v-if="item in btns" 
         @click.stop="btnHandler($event, item)" 
@@ -53,21 +52,14 @@
         unselectable="on">
         <i :class="[btns[item].className]"></i>
       </a>
-
       <a href="javascript:;" 
         v-if="item in selects" 
         @click.stop="selectHandler($event, item)" 
         :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].className, 've-select']" 
         unselectable="on">
-        <span>{{states[item].value}}</span><i :class="{'ve-triangle-down': !display, 've-triangle-up': display}"></i>
+        <span>{{states[item].value}}</span><i :class="{'ve-triangle-down': !states[item].display, 've-triangle-up': states[item].display}"></i>
       </a>
-
       <a href="javascript:;" class="ve-divider" v-if="item == 'divider' || item == '|'"></a>
-
-      <!--<slot :name="item" @click.stop="customHandler($event, item)"></slot>-->
-
-      <span @click.stop="customHandler($event, item)" v-if="item in $parent.plugins" v-html="$parent.plugins[item]"></span>
-
     </template>
   </div>
 </template>
@@ -76,14 +68,20 @@
 
   import { btns, selects } from '../config/btns.js'
 
+  let json = Object.assign({}, btns, selects);
+  // filter no action btn;
+  let arr = [];
+  for(let name in btns){
+    !btns[name].action && arr.push(name);
+  }
+
   export default {
     data () {
       return {
         btns,
         selects,
-        customs: this.$parent.config.plugins,
-        lang: this.$parent.config.lang,
-        config: this.$parent.config.toolbar
+        config: this.$parent.config.toolbar,
+        lang: this.$parent.config.lang
       }
     },
     computed: {
@@ -97,9 +95,8 @@
     watch: {
       'view': function (val) {
         let states = {};
-        let json = Object.assign({}, btns, selects);
         for(let name in json){
-          if(['sourceCode', 'markdown', 'fullScreen'].indexOf(name) === -1){
+          if(['sourceCode', 'markdown', 'fullscreen'].indexOf(name) === -1){
             states[name] = val === 'design' ? 'default' : 'disabled';
           }
         }
@@ -108,8 +105,8 @@
     },
     methods: {
       btnHandler (event, name) {
-        let btn = this.btns[name];
         if(this.states[name].status === 'disabled')return;
+        let btn = this.btns[name];
         if(btn.action){
           if(btn.native){
             this.$store.dispatch('execCommand', { name: name, value: null });
@@ -120,29 +117,32 @@
         }else{
           this.updateStates(name);
         }
-        this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
+        this.showPopup(name, event.currentTarget);
       },
       selectHandler (event, name) {
-        this.showPopup(name, {top: event.currentTarget.offsetTop, left: event.currentTarget.offsetLeft});
+        this.showPopup(name, event.currentTarget);
         this.updateStates(name);
       },
-      customHandler (event, name) {
-        // alert(1);
-      },
-      showPopup (name, rect) {
-        this.$store.dispatch('updatePopupDisplay', this.states[name].showPopup ? {
-          name,
-          display: !this.states[name].showPopup.display,
-          left: rect.left,
-          top: rect.top
-        } : {});
+      showPopup (name, obj) {
+        if(this.states[name].showPopup !== undefined){
+          this.$store.dispatch('updatePopupDisplay', {
+            name,
+            display: !this.states[name].showPopup
+          });
+          this.$store.dispatch('updateRect', {
+            left: obj.offsetLeft,
+            top: obj.offsetTop,
+            width: obj.offsetWidth,
+            height: obj.offsetHeight + parseInt(getComputedStyle(obj).marginTop) + parseInt(getComputedStyle(obj).marginBottom)
+          });
+        }
       },
       updateStates (name) {
         let states = {};
-        let json = Object.assign({}, btns, selects);
-        for(let item in json){
-          if(this.list.indexOf(item) !== -1){
-            this.view === 'design' && (states[item] = 'default');
+        // update no action btn status, no action means click on it will toggle a popover menu;
+        if(this.view === 'design'){
+          for(let item in json){
+            arr.indexOf(item) !== -1 && (states[item] = 'default');
           }
         }
         if(['sourceCode', 'markdown'].indexOf(name) !== -1){
@@ -154,13 +154,6 @@
         }
         this.$store.dispatch('updateButtonStates', states);
       }
-    },
-    beforeCreate () {
-      let arr = [];
-      for(let name in btns){
-        !btns[name].action && arr.push(name);
-      }
-      this.list = arr;
     }
   }
 </script>

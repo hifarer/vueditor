@@ -16,10 +16,9 @@
 </style>
 
 <template>
-  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup.display" 
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
+  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
     <ul>
-      <li v-for="font in fonts" @click="clickHandler(font)">
+      <li v-for="(font, index) in fonts" :key="index" @click="clickHandler(font)">
         <a href="javascript:;" :style="{fontFamily: font.val + ', sans-serif'}">{{font.abbr || font.val}}</a>
       </li>
     </ul>
@@ -28,7 +27,10 @@
 
 <script>
 
+  import veMixin from '../mixins';
+
   export default {
+    mixins: [veMixin],
     data () {
       let arr = this.$parent.config.fontName;
       return {

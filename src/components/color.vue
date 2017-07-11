@@ -26,14 +26,13 @@
 </style>
 
 <template>
-  <div class="ve-color-picker" :class="$style.ctn" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  <div class="ve-color-picker" :class="$style.ctn" v-show="showPopup" :style="style">
     <div class="ve-input-box">
       <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="color">
       <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
     </div>
     <ul>
-      <li v-for="color in colors" @click="clickHandler(color)">
+      <li v-for="(color, index) in colors" :key="index" @click="clickHandler(color)">
         <a href="javascript:;" :title="color" :style="{background: color}"></a>
       </li>
     </ul>
@@ -42,10 +41,12 @@
 
 <script>
 
+  import veMixin from '../mixins';
+
   export default {
+    mixins: [veMixin],
     data () {
-      let tag = this.$options._componentTag;
-      let lang = this.$parent.config.lang[tag];
+      let lang = this.$parent.config.lang[this.tagName];
       return {
         colors: [
           '#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF',
@@ -58,13 +59,12 @@
           '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
         ],
         color: '',
-        tag,
         lang
       }
     },
     computed: {
       showPopup (state) {
-        return this.$store.state.toolbar[this.tag].showPopup;
+        return this.$store.state.toolbar[this.tagName].showPopup;
       }
     },
     methods: {
@@ -84,7 +84,7 @@
         this.$store.dispatch('execCommand', {name: type, value: color});
       },
       clickHandler (color) {
-        this.setColor(this.tag, color);
+        this.setColor(this.tagName, color);
         this.updatePopupDisplay();
       },
       inputHandler () {
@@ -93,7 +93,7 @@
         if (!valid) {
           alert(this.lang.invalidColorCodeMsg);
         } else {
-          this.setColor(this.tag, color);
+          this.setColor(this.tagName, color);
           this.updatePopupDisplay();
         }
         this.color = '';

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Vueditor</title>
   <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
-  <link rel="stylesheet" type="text/css" href="./dist/css/vueditor.min.css">
+  <link rel="stylesheet" type="text/css" href="./dist/style/vueditor.min.css">
   <style>
     body {
       margin: 0;
@@ -22,23 +22,25 @@
 <body>
 
   <div id="github">
-    <a href="https://github.com/hifarer/Vueditor">Github</a>
+    <a href="https://github.com/hifarer/vueditor">Github</a>
   </div>
   <div id="editor1">
     <Vueditor></Vueditor>
   </div>
   <div id="editor2"></div>
 
-  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
-  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
-  <script src="./dist/js/lang.cn.js"></script>
-  <script src="./dist/js/emoji.min.js"></script>
-  <script src="./dist/js/vueditor.min.js"></script>
+  <!--<script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>-->
+  <script src="//cdn.bootcss.com/vue/2.0.5/vue.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.js"></script>
+  <script src="./dist/language/lang.cn.js"></script>
+  <script src="./dist/plugins/emoji.min.js"></script>
+  <script src="./dist/script/vueditor.min.js"></script>
   <script>
     Vue.use(Vueditor, {
       lang: lang,
       toolbar: [
-        'removeFormat', 'undo', 'redo', '|', 'format', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+        'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
         'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
         '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullScreen', 'sourceCode', 'markdown'
       ],
@@ -49,10 +51,10 @@
       ],
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
       uploadUrl: '',
-      plugins: {
-        // emoji loaded from script tag, line 35
-        emoji: emoji
-      }
+      // plugins: {
+      //   // emoji loaded from script tag, line 35
+      //   emoji: emoji
+      // }
     });
     let parent = new Vue({
       el: '#editor1'

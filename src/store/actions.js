@@ -11,6 +11,10 @@ export const updatePopupDisplay = ({ commit }, data) => {
   commit('UPDATE_POPUP_DISPLAY', data)
 }
 
+export const updateRect = ({ commit }, data) => {
+  commit('UPDATE_RECT', data)
+}
+
 export const updateContent = ({ commit }, data) => {
   commit('UPDATE_CONTENT', data)
 }

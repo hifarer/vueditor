@@ -42,8 +42,9 @@
   border: 1px solid #ddd;
   background: #fff;
   box-sizing: border-box;
+  position: relative;
 }
-.ve-full-screen {
+.ve-fullscreen {
   position: fixed;
   left: 0;
   top: 0;
@@ -90,6 +91,9 @@
 .ve-btn-box {
   float: right;
 }
+.ve-btn-box .ve-btn:not(:last-child) {
+  border-right: none;
+}
 .ve-input-box {
   display: flex;
   margin-bottom: 10px;
@@ -99,6 +103,29 @@
 }
 .ve-input-box .ve-btn {
   border-left: none;
+}
+.ve-btn {
+  display: inline-block;
+  margin: 0;
+  padding: 5px 15px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  color: #333;
+  outline: none;
+  background-color: #fff;
+  user-select: none;
+  line-height: 20px;
+  transition: all 500ms;
+}
+.ve-btn:hover {
+  color: #fff;
+  background: #42b983;
+  border-color: #42b983;
+}
+.ve-btn:hover + .ve-btn {
+  border-left-color: #42b983;
 }
 .ve-input {
   display: block;
@@ -110,20 +137,6 @@
   border: 1px solid #ccc;
   outline: none;
   box-sizing: border-box;
-}
-.ve-btn {
-  display: inline-block;
-  margin: 0;
-  padding: 5px 10px;
-  text-align: center;
-  white-space: nowrap;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  color: #333;
-  outline: none;
-  background-color: #fff;
-  user-select: none;
-  line-height: 20px;
 }
 .ve-select {
   position: relative;

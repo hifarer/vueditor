@@ -11,8 +11,8 @@
 </style>
 
 <template>
-  <div class="ve-dialog" v-show="showPopup.display" @click="hideDialog">
-    <div :class="$style.wrap" @click.stop>
+  <div class="ve-dialog" v-show="showPopup" @click="hideDialog">
+    <div :class="$style.wrap">
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">
         <form ref="form">
@@ -44,7 +44,7 @@
     },
     watch: {
       'showPopup': function (val) {
-        if(val.display){
+        if(val){
           document.body.classList.add('ve-fixed');
         }else{
           document.body.classList.remove('ve-fixed');

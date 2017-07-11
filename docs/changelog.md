@@ -1,4 +1,9 @@
 
+0.2.6
+
+1. Event throttle 
+2. Popup menu position auto adjust
+
 0.2.5
 
 1. Add markdown support

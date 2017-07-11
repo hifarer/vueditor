@@ -1,7 +1,7 @@
 
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
+const webpack = require('webpack');
+const path = require('path');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
 
@@ -16,7 +16,7 @@ module.exports = {
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'js/[name].min.js',
+    filename: 'script/[name].min.js',
     library: 'Vueditor',
     libraryTarget: 'umd',
     umdNamedDefine: true
@@ -26,40 +26,39 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/, 
-        loader: 'vue-loader', 
-        exclude: /node_modules/, 
-        options: {
-          extractCSS: true,
-          preserveWhitespace: false,
-          postcss: [
-            autoprefixer({
-              browsers: ['last 3 versions']
-            })
-          ]
-        }
+        use: [{
+          loader: 'vue-loader',
+          options: {
+            extractCSS: true,
+            preserveWhitespace: false,
+            postcss: [
+              autoprefixer({
+                browsers: ['last 3 versions']
+              })
+            ]
+          }
+        }], 
+        exclude: /node_modules/
       },
       {
         test: /\.js$/, 
-        loader: 'babel-loader', 
+        use: 'babel-loader', 
         exclude: /node_modules/
       },
       {
         test: /\.(css|less)$/, 
-        loader: ExtractTextPlugin.extract({
-          use: 'css-loader!less-loader!postcss-loader',
-          fallback: 'style-loader'
-        })
+        use: ['css-loader', 'less-loader', 'postcss-loader']
       },
       {
         test: /\.(png|jpg|gif)$/, 
-        loader: 'url-loader?limit=8192'
+        use: 'url-loader?limit=8192'
       }
     ]
   },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': '"development"'

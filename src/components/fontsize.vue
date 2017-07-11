@@ -16,10 +16,9 @@
 </style>
 
 <template>
-  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 31) + 'px'}">
+  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
     <ul>
-      <li v-for="size in fontSize" @click="clickHandler(size)">
+      <li v-for="(size, index) in fontSize" :key="index" @click="clickHandler(size)">
         <a href="javascript:;">{{size}}</a>
       </li>
     </ul>
@@ -28,7 +27,10 @@
 
 <script>
 
+  import veMixin from '../mixins';
+
   export default {
+    mixins: [veMixin],
     data () {
       let arr = this.$parent.config.fontSize;
       return {

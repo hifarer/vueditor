@@ -4,7 +4,7 @@ Vueditor
 [![vueditor](https://img.shields.io/npm/v/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![vueditor](https://img.shields.io/npm/l/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 
-[中文文档](./docs/CN.md)
+[中文文档](./docs/chinese.md)
 
 A wysiwyg editor written in Vue.js and Vuex.js, require Vue.js 2.0.0, Vuex.js 2.0.0 and above.
 
@@ -51,9 +51,9 @@ let config = {
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
   fontName: [
-    {val: "arial black"}, 
-    {val: "times new roman"}, 
-    {val: "Courier New"}
+    {val: 'arial black'}, 
+    {val: 'times new roman'}, 
+    {val: 'Courier New'}
   ],
   fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
   uploadUrl: ''
@@ -145,9 +145,9 @@ Default value of the above fields:
     'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'tables', '|', 'switchView'
   ],
   fontName: [
-    {val: "arial black"}, 
-    {val: "times new roman"}, 
-    {val: "Courier New"}
+    {val: 'arial black'}, 
+    {val: 'times new roman'}, 
+    {val: 'Courier New'}
   ],
   fontSize: [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
@@ -168,10 +168,10 @@ See [change log](./docs/changelog.md)
 
 - [x] Markdown support
 - [x] Full screen and fixed toolbar features
-- [ ] Popup menu position auto adjust
+- [x] Popup menu position auto adjust
 - [ ] Advanced table options
 - [ ] Code highlight
-- [x] Plugin support
+- [ ] Plugin support
 - [ ] XSS prevention
 - [ ] Test
 

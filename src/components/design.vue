@@ -65,6 +65,7 @@
           this.cache = '';
         }
         this.iframeDoc.designMode = 'on';
+        this.iframeBody.style.cssText = 'overflow-x: hidden;';
         this.addEvent();
       },
 
@@ -75,7 +76,7 @@
           if(['redo', 'undo'].indexOf(name) === -1){
             if(this.iframeDoc.queryCommandSupported(name)){
               json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default';
-            }else if (name !== 'fullScreen') {
+            } else if (name !== 'fullscreen') {
               json[name] = 'default';
             }
           }
@@ -84,14 +85,19 @@
       },
 
       addEvent () {
-        this.selectionChange();
+        let timer = null;
         this.iframeDoc.addEventListener('click', () => {
-          this.updatePopupDisplay();
+          // throttle
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            this.view === 'design' && this.updatePopupDisplay();
+          }, 200);
           // dispatch selectionchange event in order to throttle
           this.iframeDoc.dispatchEvent(new Event('selectionchange'));
         }, false);
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false);
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false);
+        this.selectionChange();
       },
 
       keydownHandler (event) {
@@ -116,7 +122,7 @@
           clearTimeout(timer);
           timer = setTimeout(() => {
             this.view === 'design' && this.updateStates();
-          }, 300);
+          }, 200);
         }, false);
         if (!'onselectionchange' in document) {
           let oSel = this.iframeWin.getSelection();
@@ -130,7 +136,7 @@
             } else {
               oSel = this.iframeWin.getSelection();
             }
-          }, 300);
+          }, 200);
         }
       },
 
@@ -208,7 +214,7 @@
                 attr.nodeName === 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue);
               });
               span.innerHTML = font.innerHTML;
-              span.querySelectorAll('span').length !== 0 && veUtil.command.format(span, 'span', 'fontSize');
+              span.querySelectorAll('span').length !== 0 && this.formatContent(span, 'span', 'fontSize');
               span.normalize();
               font.parentNode.replaceChild(span, font);
               spanList.push(span);

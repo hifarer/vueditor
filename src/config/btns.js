@@ -33,13 +33,13 @@ export default {
     table: {className: 'icon-table'},
     undo: {className: 'icon-undo', action: 'undo'},
     redo: {className: 'icon-repeat', action: 'redo'},
-    fullScreen: {className: 'icon-full-screen', action: 'fullScreen'}
+    fullscreen: {className: 'icon-fullscreen', action: 'fullscreen'}
   },
 
   selects: {
     fontName: {className: 'font-select'},
     fontSize: {className: ''},
-    format: {className: ''},
+    element: {className: ''},
   }
 
 }

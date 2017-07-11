@@ -11,24 +11,19 @@ export default {
     }
   },
 
-  UPDATE_POPUP_DISPLAY ({ toolbar }, json) {
+  UPDATE_POPUP_DISPLAY ({ toolbar }, data) {
     for (let name in toolbar) {
-      if(toolbar[name].showPopup){
-        if(json && json.name === name){
-          toolbar[name].showPopup = {
-            display: json.display,
-            left: json.left || 0,
-            top: json.top || 0
-          }
-        }else{
-          toolbar[name].showPopup = {
-            display: false,
-            left: 0,
-            top: 0
-          }
-        }
+      if(toolbar[name].showPopup === undefined)continue;
+      if(data && data.name === name){
+        toolbar[name].showPopup = data.display;
+      }else if(toolbar[name].showPopup !== false){
+        toolbar[name].showPopup = false;
       }
     }
+  },
+
+  UPDATE_RECT (state, data) {
+    state.rect = data
   },
 
   UPDATE_CONTENT (state, data) {
@@ -40,7 +35,7 @@ export default {
   },
 
   SET_FULL_SCREEN (state, data){
-    state.fullScreen = data;
+    state.fullscreen = data;
   },
 
   CALL_METHOD (state, data) {

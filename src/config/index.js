@@ -1,8 +1,8 @@
 export default {
   toolbar: [
-    'removeFormat', 'undo', '|', 'format', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+    'removeFormat', 'undo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
     'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-    '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'fullScreen', 'sourceCode', 'markdown'
+    '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'fullscreen', 'sourceCode', 'markdown'
   ],
   fontName: [
     {val: 'arial black'}, 
