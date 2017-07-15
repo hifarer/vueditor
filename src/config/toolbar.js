@@ -1,5 +1,5 @@
 
-export default {
+let toolbar = {
   
   btns: {
     
@@ -42,4 +42,13 @@ export default {
     element: {className: ''},
   }
 
+}
+
+export default {
+  addToolbar (name, type, data) {
+    type === 'btn' ? toolbar.btns[name] = data : toolbar.selects[name] = data;
+  },
+  getToolbar () {
+    return toolbar;
+  }
 }

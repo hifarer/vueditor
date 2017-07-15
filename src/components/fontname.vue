@@ -27,12 +27,13 @@
 
 <script>
 
-  import veMixin from '../mixins';
+  import veMixin from '../mixins'
+  import { getConfig } from '../config/'
 
   export default {
     mixins: [veMixin],
     data () {
-      let arr = this.$parent.config.fontName;
+      let arr = getConfig('fontName');
       return {
         fonts: arr,
         val: arr[0].abbr || arr[0].val

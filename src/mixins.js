@@ -1,7 +1,7 @@
 export default {
   props: ['tagName'],
   computed: {
-    // rect belong to the clicked toolbar button
+    // rect belong to the clicked toolbar element
     rect: function () {
       return this.$store.state.rect;
     },

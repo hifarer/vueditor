@@ -66,22 +66,21 @@
 
 <script>
 
-  import { btns, selects } from '../config/btns.js'
+  import { getToolbar } from '../config/toolbar.js'
+  import { getLang } from '../config/lang.js'
+  import { getConfig } from '../config/'
 
-  let json = Object.assign({}, btns, selects);
-  // filter no action btn;
+  let json = {};
   let arr = [];
-  for(let name in btns){
-    !btns[name].action && arr.push(name);
-  }
 
   export default {
     data () {
+      let {btns, selects} = getToolbar();
       return {
         btns,
         selects,
-        config: this.$parent.config.toolbar,
-        lang: this.$parent.config.lang
+        lang: getLang(),
+        config: getConfig('toolbar'),
       }
     },
     computed: {
@@ -101,6 +100,14 @@
           }
         }
         this.$store.dispatch('updateButtonStates', states);
+      }
+    },
+    beforeCreate () {
+      // filter no action btn;
+      let {btns, selects} = getToolbar();
+      json = Object.assign({}, btns, selects)
+      for(let name in btns){
+        !btns[name].action && arr.push(name);
       }
     },
     methods: {

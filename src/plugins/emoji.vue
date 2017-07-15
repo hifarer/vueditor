@@ -21,10 +21,10 @@
 </style>
 
 <template>
-  <div class="ve-popover emoji" v-show="showPopup.display"
-  :style="{left: showPopup.left + 'px', top: (showPopup.top + 36) + 'px'}">
+  <div class="ve-popover emoji" v-show="showPopup" 
+  :style="{left: rect.left + 'px', top: (rect.top + rect.height) + 'px'}">
     <div class="ve-pop-arrow"></div>
-    <div class="ve-pop-header">Insert emoji</div>
+    <div class="ve-pop-header">Insert Emoji</div>
     <div class="ve-pop-body">
       <div class="wrap" @click="insertItem">
         <a href="javascript:;" draggable="false" v-for="item in arr">
@@ -57,18 +57,15 @@
           '1f614', '1f615', '1f643', '1f911', '1f632', '2639', '1f641', '1f616', '1f61e', '1f61f', '1f624', '1f622', '1f62d', '1f626',
           '1f627', '1f628', '1f629', '1f62c', '1f630', '1f631', '1f633', '1f635', '1f621', '1f620', '1f607', '1f920', '1f921', '1f925',
           '1f637', '1f912', '1f915', '1f922', '1f927'
-        ],
-        // btn: '<a href="javascript:;" title="Insert emoji" unselectable="on"><i class="icon-smile-o"></i></a>',
-        btn: {
-          title: 'Insert emoji',
-          className: 'icon-smile-o'
-        }
+        ]
       }
     },
     computed: {
+      rect: function () {
+        return this.$store.state.rect;
+      },
       showPopup: function () {
-        return {};
-        // return this.$store.state.toolbar.emoji.showPopup;
+        return this.$store.state.toolbar.emoji.showPopup;
       }
     },
     methods: {

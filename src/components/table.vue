@@ -33,7 +33,8 @@
 
 <script>
 
-  import veMixin from '../mixins';
+  import veMixin from '../mixins'
+  import { getLang } from '../config/lang.js'
 
   export default {
     mixins: [veMixin],
@@ -42,7 +43,7 @@
         num: 64,
         x: -1,
         y: -1,
-        lang: this.$parent.config.lang.table
+        lang: getLang('table')
       }
     },
     computed: {

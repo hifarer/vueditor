@@ -29,15 +29,13 @@
   </div>
   <div id="editor2"></div>
 
-  <!--<script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
-  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>-->
-  <script src="//cdn.bootcss.com/vue/2.0.5/vue.js"></script>
-  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.js"></script>
+  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
   <script src="./dist/language/lang.cn.js"></script>
   <script src="./dist/plugins/emoji.min.js"></script>
   <script src="./dist/script/vueditor.min.js"></script>
   <script>
-    Vue.use(Vueditor, {
+    let config = {
       lang: lang,
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
@@ -45,26 +43,46 @@
         '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullScreen', 'sourceCode', 'markdown'
       ],
       fontName: [
-        {val: "arial black"}, 
-        {val: "times new roman"}, 
-        {val: "Courier New"}
+        {val: 'arial black'}, 
+        {val: 'times new roman'}, 
+        {val: 'Courier New'}
       ],
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
       uploadUrl: '',
-      // plugins: {
-      //   // emoji loaded from script tag, line 35
-      //   emoji: emoji
-      // }
-    });
+      plugins: {
+        // emoji loaded from script tag, line 35
+        emoji: {
+          // '<a href="javascript:;" title="Insert emoji" unselectable="on"><i class="icon-smile-o"></i></a>',
+          type: 'btn',
+          lang: {
+            title: 'emoji'
+          },
+          element: {
+            title: 'Insert emoji',
+            className: 'icon-smile-o'
+          },
+          component: emoji
+        }
+      }
+    };
+    Vue.use(Vueditor, config);
     let parent = new Vue({
       el: '#editor1'
     });
     let editor = parent.$children[0];
     editor.setContent(`fill your content here`);
-    editor.upload = function () {
-      return new Promise((resolve, reject) => {
-        resolve();
-      });
+    editor.upload = function (obj, callback) {
+      let formData = new FormData();
+      let xhr = new XMLHttpRequest();
+      formData.append('fieldName', obj.files[0]);
+      xhr.open('POST', config.uploadUrl);
+      xhr.send(formData);
+      xhr.onload = function () {
+        callback(xhr.responseText);
+      };
+      xhr.onerror = function (err) {
+        alert(err);
+      }
     }
     console.log(editor.getContent());
   </script>
