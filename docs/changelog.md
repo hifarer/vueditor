@@ -1,4 +1,8 @@
 
+0.2.7
+
+1. Support using custom define file upload function 
+
 0.2.6
 
 1. Event throttle 

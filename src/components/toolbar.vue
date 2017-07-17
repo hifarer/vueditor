@@ -66,22 +66,21 @@
 
 <script>
 
-  import { btns, selects } from '../config/btns.js'
+  import { getToolbar } from '../config/toolbar.js'
+  import { getLang } from '../config/lang.js'
+  import { getConfig } from '../config/'
 
-  let json = Object.assign({}, btns, selects);
-  // filter no action btn;
+  let json = {};
   let arr = [];
-  for(let name in btns){
-    !btns[name].action && arr.push(name);
-  }
 
   export default {
     data () {
+      let {btns, selects} = getToolbar();
       return {
         btns,
         selects,
-        config: this.$parent.config.toolbar,
-        lang: this.$parent.config.lang
+        lang: getLang(),
+        config: getConfig('toolbar'),
       }
     },
     computed: {
@@ -101,6 +100,14 @@
           }
         }
         this.$store.dispatch('updateButtonStates', states);
+      }
+    },
+    beforeCreate () {
+      // filter no action btn;
+      let {btns, selects} = getToolbar();
+      json = Object.assign({}, btns, selects)
+      for(let name in btns){
+        !btns[name].action && arr.push(name);
       }
     },
     methods: {
@@ -133,7 +140,7 @@
             left: obj.offsetLeft,
             top: obj.offsetTop,
             width: obj.offsetWidth,
-            height: obj.offsetHeight + parseInt(getComputedStyle(obj).marginTop) + parseInt(getComputedStyle(obj).marginBottom)
+            height: obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom)
           });
         }
       },
@@ -142,7 +149,9 @@
         // update no action btn status, no action means click on it will toggle a popover menu;
         if(this.view === 'design'){
           for(let item in json){
-            arr.indexOf(item) !== -1 && (states[item] = 'default');
+            if(this.states[item] && arr.indexOf(item) !== -1){
+              states[item] = 'default';
+            }
           }
         }
         if(['sourceCode', 'markdown'].indexOf(name) !== -1){

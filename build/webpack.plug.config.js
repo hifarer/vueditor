@@ -27,17 +27,20 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/, 
-        loader: 'vue-loader', 
-        exclude: /node_modules/, 
-        options: {
-          extractCSS: true,
-          preserveWhitespace: false,
-          postcss: [
-            autoprefixer({
-              browsers: ['last 3 versions']
-            })
-          ]
-        }
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              extractCSS: true,
+              preserveWhitespace: false,
+              postcss: [
+                autoprefixer({
+                  browsers: ['last 3 versions']
+                })
+              ]
+            }
+        }],
+        exclude: /node_modules/
       },
       {
         test: /\.js$/, 
@@ -46,10 +49,7 @@ module.exports = {
       },
       {
         test: /\.(css|less)$/, 
-        loader: ExtractTextPlugin.extract({
-          use: 'css-loader!less-loader!postcss-loader',
-          fallback: 'style-loader'
-        })
+        use: ['css-loader', 'less-loader', 'postcss-loader']
       },
       {
         test: /\.(png|jpg|gif)$/, 
@@ -59,11 +59,14 @@ module.exports = {
   },
 
   plugins: [
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {

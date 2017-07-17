@@ -42,11 +42,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
-import 'vueditor/dist/css/vueditor.min.css'
+import 'vueditor/dist/style/vueditor.min.css'
 
 // your config here
 let config = {
-  lang: 'en',
   toolbar: [
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
@@ -98,12 +97,11 @@ Call `createEditor` and pass specific config as parameter respectively for multi
   import Vuex from 'vuex'
   import { createEditor } from 'vueditor'
 
-  import 'vueditor/dist/css/vueditor.min.css'
+  import 'vueditor/dist/style/vueditor.min.css'
   
   Vue.use(Vuex);
 
   createEditor('#editorContainer', {
-    lang: 'en',
     toolbar: [
       'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
     ],
@@ -113,7 +111,7 @@ Call `createEditor` and pass specific config as parameter respectively for multi
   });
 ```
 
-The initialized element will be replaced in this case, you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a Vueditor instance, you can set and get content with it:
+The initialized element will be replaced in this case, you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a vueditor instance, you can set and get content with it:
 
 ```javascript
 let inst = createEditor(...);
@@ -121,11 +119,42 @@ inst.setContent('your content here');
 inst.getContent();
 ```
 
+#### File upload
+
+You can set `uploadUrl` attribute in config when you initialize an editor, all the upload stuffs will be handled automatically. If you perfer do it yourself or has some authrization to do before uploading, just add a function `upload` to the instance returned by `createEditor`. When an upload action triggered, vueditor will call this function instead of the build-in function. The upload function has two arguments: `obj` refer to the file input element, `callback` requires the uploaded file url as argument for inserting content to the editor, See the example below: 
+```javascript
+editor.upload = function (obj, callback) {
+  let formData = new FormData();
+  let xhr = new XMLHttpRequest();
+  formData.append('fieldName', obj.files[0]);
+  xhr.open('POST', 'upload/url');
+  xhr.send(formData);
+  xhr.onload = function () {
+    callback(xhr.responseText);
+  };
+  xhr.onerror = function (err) {
+    console.log(err);
+  }
+}
+```
+
+### language setting
+
+The editor's default language is English, to set to other language, you will need to translate for your own.
+The `dist/language` folder has an full example inside. Adding a script tag or use `import`, `require` to    
+bring the language object in, then make it an attribute of the config for initialize. See the example below:
+```javascript
+Vue.use(Vueditor, {
+  ...
+  lang: languageObject,
+});
+```
+
 ## Options for configuration:
 
 |          Name         |    Type    |                                                         Description                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| lang                  | `String`   | Interface language, default is English, to set to other language, see |
+| lang                  | `Object`   | Interface language, default is English |
 | toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
 | fontName              | `Object`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
 | fontSize              | `Array`    | The font-size select's options |

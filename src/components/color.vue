@@ -41,12 +41,12 @@
 
 <script>
 
-  import veMixin from '../mixins';
+  import veMixin from '../mixins'
+  import { getLang } from '../config/lang.js'
 
   export default {
     mixins: [veMixin],
     data () {
-      let lang = this.$parent.config.lang[this.tagName];
       return {
         colors: [
           '#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF',
@@ -59,7 +59,7 @@
           '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
         ],
         color: '',
-        lang
+        lang: getLang(this.tagName)
       }
     },
     computed: {

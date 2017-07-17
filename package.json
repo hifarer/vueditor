@@ -1,6 +1,6 @@
 {
   "name": "vueditor",
-  "version": "0.2.5",
+  "version": "0.2.7",
   "description": "a wysiwyg editor based on Vue.js and Vuex",
   "repository": {
     "type": "git",
@@ -16,8 +16,8 @@
   "dependencies": {
     "marked": "^0.3.6",
     "twemoji": "^2.3.0",
-    "vue": "~2.0.5",
-    "vuex": "~2.0.0"
+    "vue": "^2.0.5",
+    "vuex": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.1",

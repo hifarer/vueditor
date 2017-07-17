@@ -1,4 +1,5 @@
-export default {
+
+let config = {
   toolbar: [
     'removeFormat', 'undo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
     'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
@@ -14,3 +15,12 @@ export default {
   ],
   uploadUrl: ''
 };
+
+export default {
+  setConfig (data) {
+    config = data;
+  },
+  getConfig (name) {
+    return name ? config[name] : config;
+  }
+}

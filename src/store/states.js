@@ -1,13 +1,16 @@
 
 import * as actions from './actions'
 import mutations from './mutations'
-import { btns, selects } from '../config/btns.js'
+import { getToolbar } from '../config/toolbar.js'
+import { getConfig } from '../config/index.js'
 
-export default function (config) {
+export default function () {
 
   let toolbar = {};
+  let {btns, selects} = getToolbar();
+  let config = getConfig('toolbar');
 
-  config.toolbar.forEach(function (name) {
+  config.forEach(function (name) {
     if(name !== 'divider' && name !== '|'){
       toolbar[name] = {};
       if(name in selects){

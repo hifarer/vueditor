@@ -7,7 +7,8 @@
 </style>
 
 <template>
-  <div class="ve-popover" :class="$style.ctn" :style="style" v-show="showPopup">
+  <div class="ve-popover" :class="$style.ctn" 
+  :style="{left: rect.left + 'px', top: (rect.top + rect.height) + 'px'}" v-show="showPopup">
     <div class="ve-pop-arrow"></div>
     <div class="ve-pop-header">{{lang.title}}</div>
     <div class="ve-pop-body">
@@ -21,17 +22,19 @@
 
 <script>
 
-  import veMixin from '../mixins';
+  import { getLang } from '../config/lang.js'
 
   export default {
-    mixins: [veMixin],
     data () {
       return {
         val: '',
-        lang: this.$parent.config.lang.link
+        lang: getLang('link')
       }
     },
     computed: {
+      rect: function () {
+        return this.$store.state.rect;
+      },
       showPopup: function () {
         return this.$store.state.toolbar.link.showPopup;
       },

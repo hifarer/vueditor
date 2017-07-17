@@ -8,6 +8,7 @@
 <script>
 
   import { mapActions, mapState } from 'vuex'
+  import { getLang } from '../config/lang.js'
 
   export default {
     data () {
@@ -18,7 +19,7 @@
         timer: null,
         inited: false,
         cache: '',
-        lang: this.$parent.config.lang.design
+        lang: getLang('design')
       }
     },
 

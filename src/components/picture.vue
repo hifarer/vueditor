@@ -11,7 +11,7 @@
 </style>
 
 <template>
-  <div class="ve-dialog" v-show="showPopup" @click="hideDialog">
+  <div class="ve-dialog" v-show="showPopup" @click.self="hideDialog">
     <div :class="$style.wrap">
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">
@@ -31,10 +31,13 @@
 
 <script>
 
+  import { getLang } from '../config/lang.js'
+  import { getConfig } from '../config/'
+
   export default {
     data () {
       return {
-        lang: this.$parent.config.lang.picture
+        lang: getLang('picture')
       }
     },
     computed: {
@@ -59,7 +62,7 @@
         let url = '';
         let obj = this.$refs.file;
         let form = this.$refs.form;
-        let fileuploadUrl = this.$parent.config.fileuploadUrl;
+        let uploadUrl = getConfig('uploadUrl');
         if (navigator.userAgent.indexOf('MSIE') >= 1) { // IE
           url = obj.value;
         } else {
@@ -69,16 +72,14 @@
         }
         if (url) {
           if(this.$parent.upload){
-            this.$parent.upload(obj).then((href) => {
+            this.$parent.upload(obj, function (href) {
               this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${href}">`});
               this.hideDialog();
-            }, (err) => {
-              throw err;
             });
-          }else if(fileuploadUrl){
+          }else if(uploadUrl){
             let formData = new FormData(form);
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', fileuploadUrl);
+            xhr.open('POST', uploadUrl);
             xhr.send(formData);
             xhr.onload = function () {
               this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${xhr.responseText}">`});

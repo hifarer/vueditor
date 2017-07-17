@@ -1,5 +1,4 @@
-
-let lang = {
+const lang = {
   
   app: {},
 
@@ -66,13 +65,4 @@ let lang = {
   table: {title: 'Table'},
   undo: {title: 'Undo'},
   redo: {title: 'Redo'},
-}
-
-export default {
-  setLang (data) {
-    lang = data;
-  },
-  getLang (name) {
-    return name ? lang[name] : lang;
-  }
 }
