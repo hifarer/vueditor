@@ -70,7 +70,7 @@ let lang = {
 
 export default {
   setLang (data) {
-    lang = data;
+    data && (lang = data);
   },
   getLang (name) {
     return name ? lang[name] : lang;

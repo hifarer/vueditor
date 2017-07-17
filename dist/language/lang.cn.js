@@ -58,7 +58,7 @@ const lang = {
   sourceCode: {
     title: '源码'
   },
-  fullScreen: {
+  fullscreen: {
     title: '全屏'
   },
   table: {title: '表格'},
