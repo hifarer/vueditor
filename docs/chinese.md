@@ -43,7 +43,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
-import 'vueditor/dist/css/vueditor.min.css'
+import 'vueditor/dist/style/vueditor.min.css'
 
 // 编辑器配置
 let config = {
@@ -98,7 +98,7 @@ inst.getContent();
   import Vuex from 'vuex'
   import {createEditor} from 'vueditor'
 
-  import 'vueditor/dist/css/vueditor.min.css'
+  import 'vueditor/dist/style/vueditor.min.css'
   
   Vue.use(Vuex);
 
@@ -119,6 +119,34 @@ inst.setContent('your content here');
 inst.getContent();
 ```
 
+#### 文件上传
+在初始化时可以指定一个地址用于上传文件，程序会自动处理上传过程。但是有时候需要在上传时进行一些如认证之类的操作，这时就需要自己来实现一个上传函数。给vueditor实例添加一个名叫`upload`的方法，当进行上传操作时将会调用该方法。该方法有两个参数，第一个是上传文件的input元素对象，第二个参数是一个回调函数，回调函数接受上传后的文件地址作为参数用以插入到编辑器，示例如下：
+```javascript
+editor.upload = function (obj, callback) {
+  let formData = new FormData();
+  let xhr = new XMLHttpRequest();
+  formData.append('fieldName', obj.files[0]);
+  xhr.open('POST', 'upload/url');
+  xhr.send(formData);
+  xhr.onload = function () {
+    callback(xhr.responseText);
+  };
+  xhr.onerror = function (err) {
+    console.log(err);
+  }
+}
+```
+
+### 界面语言
+
+编辑器的默认语言为英语，如需设置成中文，需要引入`dist/language/lang.cn.js`, 使用script标签或者`import`, `require`都可以。引入以后在初始化编辑器作为配置的一部分传入，示例：
+```javascript
+Vue.use(Vueditor, {
+  ...
+  lang: languageObject,
+});
+```
+
 ## 可配置参数:
 
 |          名称         |    类型    |                                                         描述                                                         |
@@ -126,7 +154,7 @@ inst.getContent();
 | toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
 | fontName              | `Object`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
 | fontSize              | `Array`    | font-size 选项 |
-| lang                  | `String`   | 界面语言, 默认英文, 要使用中文查看这里 |
+| lang                  | `Object`   | 界面语言, 默认英文 |
 | uploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
 | id                    | `String`   | 容器id |
 | classList             | `Array`    | 容器className |
@@ -150,7 +178,6 @@ inst.getContent();
   fontSize: [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
   ],
-  lang: 'cn',
   uploadUrl: ''
   id: '',
   classList: []

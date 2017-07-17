@@ -140,7 +140,7 @@
             left: obj.offsetLeft,
             top: obj.offsetTop,
             width: obj.offsetWidth,
-            height: obj.offsetHeight + parseInt(getComputedStyle(obj).marginTop) + parseInt(getComputedStyle(obj).marginBottom)
+            height: obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom)
           });
         }
       },
@@ -149,7 +149,9 @@
         // update no action btn status, no action means click on it will toggle a popover menu;
         if(this.view === 'design'){
           for(let item in json){
-            arr.indexOf(item) !== -1 && (states[item] = 'default');
+            if(this.states[item] && arr.indexOf(item) !== -1){
+              states[item] = 'default';
+            }
           }
         }
         if(['sourceCode', 'markdown'].indexOf(name) !== -1){

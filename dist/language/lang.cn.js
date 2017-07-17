@@ -63,5 +63,5 @@ const lang = {
   },
   table: {title: '表格'},
   undo: {title: '撤销'},
-  redo: {title: '恢复'},
+  redo: {title: '恢复'}
 }
