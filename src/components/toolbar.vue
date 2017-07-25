@@ -68,14 +68,14 @@
 
   import { getToolbar } from '../config/toolbar.js'
   import { getLang } from '../config/lang.js'
-  import { getConfig } from '../config/'
+  import { getConfig } from '../config/index.js'
 
   let json = {};
   let arr = [];
+  let btns, selects;
 
   export default {
     data () {
-      let {btns, selects} = getToolbar();
       return {
         btns,
         selects,
@@ -103,8 +103,10 @@
       }
     },
     beforeCreate () {
-      // filter no action btn;
-      let {btns, selects} = getToolbar();
+      // filter no action button;
+      let temp = getToolbar();
+      btns = temp.btns;
+      selects = temp.selects;
       json = Object.assign({}, btns, selects)
       for(let name in btns){
         !btns[name].action && arr.push(name);

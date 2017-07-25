@@ -152,12 +152,13 @@ Vue.use(Vueditor, {
 |          名称         |    类型    |                                                         描述                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
 | toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
-| fontName              | `Object`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
+| fontName              | `Array`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
 | fontSize              | `Array`    | font-size 选项 |
 | lang                  | `Object`   | 界面语言, 默认英文 |
 | uploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
 | id                    | `String`   | 容器id |
 | classList             | `Array`    | 容器className |
+| plugins             | `Array`    | 插件 |
 
 
 以上可配置项的默认值

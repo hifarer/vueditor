@@ -156,11 +156,12 @@ Vue.use(Vueditor, {
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
 | lang                  | `Object`   | Interface language, default is English |
 | toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
-| fontName              | `Object`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
+| fontName              | `Array`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
 | fontSize              | `Array`    | The font-size select's options |
 | uploadUrl         | `String`   | File upload url, the return result of this must be a string refer to the uploaded file url, leave it empty will end up with local preview |
 | id                    | `String`   | id for the rendered editor element |
 | classList             | `Array`    | className for the rendered editor element |
+| plugins             | `Array`    | plugins for editor |
 
 
 Default value of the above fields:

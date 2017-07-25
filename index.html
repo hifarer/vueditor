@@ -35,8 +35,23 @@
   <script src="./dist/plugins/emoji.min.js"></script>
   <script src="./dist/script/vueditor.min.js"></script>
   <script>
-    let config = {
-      lang: lang,
+    let uploadUrl = '';
+    let plugins = [
+      {
+        name: 'emoji',
+        element: {
+          type: 'button',
+          lang: {
+            title: 'Emoji'
+          },
+          className: 'icon-smile-o'
+        },
+        // emoji loaded from script tag, line 35
+        component: emoji
+      }
+    ];
+    
+    Vue.use(Vueditor, {
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
         'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
@@ -48,54 +63,27 @@
         {val: 'Courier New'}
       ],
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-      uploadUrl: '',
-      plugins: {
-        // emoji loaded from script tag, line 35
-        emoji: {
-          type: 'btn',
-          lang: {
-            title: 'emoji'
-          },
-          element: {
-            title: 'Insert emoji',
-            className: 'icon-smile-o'
-          },
-          component: emoji
-        }
-      }
-    };
-    Vue.use(Vueditor, config);
+      uploadUrl: uploadUrl,
+      plugins: plugins
+    });
+
     let parent = new Vue({
       el: '#editor1'
     });
     let editor = parent.$children[0];
     editor.setContent(`fill your content here`);
-    editor.upload = function (obj, callback) {
-      let formData = new FormData();
-      let xhr = new XMLHttpRequest();
-      formData.append('fieldName', obj.files[0]);
-      xhr.open('POST', config.uploadUrl);
-      xhr.send(formData);
-      xhr.onload = function () {
-        callback(xhr.responseText);
-      };
-      xhr.onerror = function (err) {
-        alert(err);
-      }
-    }
-    console.log(editor.getContent());
   </script>
   <script>
     let inst = Vueditor.createEditor('#editor2', {
-      id: 'someid',
-      classList: ['someclass'],
+      lang: lang,
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
       ],
-      uploadUrl: ''
+      uploadUrl: '',
+      id: 'someid',
+      classList: ['someclass'],
     });
     inst.setContent('fill your content here');
-    console.log('the content you set is: "' + inst.getContent() + '"');
   </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 
-let toolbar = {
+let defaultToolbar = {
   
   btns: {
     
@@ -44,9 +44,23 @@ let toolbar = {
 
 }
 
+let toolbar = JSON.parse(JSON.stringify(defaultToolbar));
+
 export default {
-  addToolbar (name, type, data) {
-    type === 'btn' ? toolbar.btns[name] = data : toolbar.selects[name] = data;
+  resetToolbar () {
+    toolbar = JSON.parse(JSON.stringify(defaultToolbar));
+  },
+  modifyToolbar (name, element) {
+    if(element.type === 'button'){
+      toolbar.btns[name] = {
+        className: element.className
+      }
+      element.action && (toolbar.btns[name].action = element.action);
+    }else{
+      toolbar.selects[name] = {
+        className: element.className
+      }
+    }
   },
   getToolbar () {
     return toolbar;

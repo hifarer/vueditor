@@ -1,5 +1,5 @@
 
-let lang = {
+let defaultLang = {
   
   app: {},
 
@@ -68,11 +68,16 @@ let lang = {
   redo: {title: 'Redo'},
 }
 
+let lang = JSON.parse(JSON.stringify(defaultLang));
+
 export default {
   setLang (data) {
-    data && (lang = data);
+    data && (lang = data)
   },
   getLang (name) {
-    return name ? lang[name] : lang;
+    return name ? lang[name] : lang
+  },
+  getDefaultLang () {
+    return defaultLang
   }
 }
