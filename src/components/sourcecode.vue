@@ -14,7 +14,7 @@
 </style>
 <template>
   <div class="ve-code" v-show="currentView == 'sourceCode'">
-    <textarea ref="codemirror">{{content}}</textarea>
+    <textarea ref="codemirror" @input="inputHandler">{{content}}</textarea>
   </div>
 </template>
 
@@ -44,6 +44,10 @@
     methods: {
       updateContent (content) {
         this.$store.dispatch('updateContent', content);
+      },
+
+      inputHandler (e) {
+        this.updateContent(e.target.value)
       }
     }
   }
