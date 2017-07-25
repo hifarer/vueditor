@@ -70,12 +70,9 @@
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/index.js'
 
-  let json = {};
-  let arr = [];
-  let btns, selects;
-
   export default {
     data () {
+      let {btns, selects} = getToolbar();
       return {
         btns,
         selects,
@@ -94,22 +91,13 @@
     watch: {
       'view': function (val) {
         let states = {};
+        let json = Object.assign({}, this.btns, this.selects);
         for(let name in json){
           if(['sourceCode', 'markdown', 'fullscreen'].indexOf(name) === -1){
             states[name] = val === 'design' ? 'default' : 'disabled';
           }
         }
         this.$store.dispatch('updateButtonStates', states);
-      }
-    },
-    beforeCreate () {
-      // filter no action button;
-      let temp = getToolbar();
-      btns = temp.btns;
-      selects = temp.selects;
-      json = Object.assign({}, btns, selects)
-      for(let name in btns){
-        !btns[name].action && arr.push(name);
       }
     },
     methods: {
@@ -150,8 +138,8 @@
         let states = {};
         // update no action btn status, no action means click on it will toggle a popover menu;
         if(this.view === 'design'){
-          for(let item in json){
-            if(this.states[item] && arr.indexOf(item) !== -1){
+          for(let item in this.btns){
+            if(!this.btns[item].action && this.states[item]){
               states[item] = 'default';
             }
           }
