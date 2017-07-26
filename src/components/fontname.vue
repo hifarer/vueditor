@@ -1,14 +1,6 @@
 
-<style lang="less" rel="stylesheet/less">
-  .font-select {
-    width: 100px;
-    span {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-  .font-name {
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;
@@ -24,48 +16,43 @@
 </style>
 
 <template>
-  <div>
-    <a href="javascript:;" class="ve-select font-select" :class="{'ve-disabled': disabled}" @click="toggle">
-      <span>{{val || fonts[0].abbr || fonts[0].val}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
-    </a>
-    <div class="ve-toolbar-dropdown ve-select-dropdown font-name" v-show="display" :style="{left: left + 'px', top: top + 'px'}">
-      <ul>
-        <li v-for="font in fonts" @click="clickHandler(font)">
-          <a href="javascript:;" :style="{fontFamily: font.val + ', sans-serif'}">{{font.abbr || font.val}}</a>
-        </li>
-      </ul>
-    </div>
+  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
+    <ul>
+      <li v-for="(font, index) in fonts" :key="index" @click="clickHandler(font)">
+        <a href="javascript:;" :style="{fontFamily: font.val + ', sans-serif'}">{{font.abbr || font.val}}</a>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 
+  import veMixin from '../mixins'
+  import { getConfig } from '../config/'
+
   export default {
-    data(){
+    mixins: [veMixin],
+    data () {
+      let arr = getConfig('fontName');
       return {
-        fonts: this.$store.state.config.fontName,
-        val: ''
+        fonts: arr,
+        val: arr[0].abbr || arr[0].val
       }
     },
     computed: {
-      disabled () {
-        return this.$store.state.toolbarStates.fontName.disabled;
-      },
-      display () {
-        return this.$store.state.toolbarStates.fontName.showPopup;
+      showPopup () {
+        return this.$store.state.toolbar.fontName.showPopup
       }
     },
+    mounted () {
+      this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val})
+    },
     methods: {
-      updatePopupDisplay (current) {
-        this.$store.dispatch('updatePopupDisplay', current);
-      },
-      toggle () {
-        !this.disabled && this.updatePopupDisplay('fontName');
-      },
       clickHandler (font) {
         this.val = font.abbr || font.val;
         this.$store.dispatch('execCommand', {name: 'fontName', value: font.val + ', sans-serif'});
-        this.updatePopupDisplay();
+        this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val});
+        this.$store.dispatch('updatePopupDisplay');
       }
     }
   }

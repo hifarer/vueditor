@@ -3,76 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>Vueditor</title>
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" type="text/css" href="./dist/css/vueditor.min.css">
+  <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+  <link rel="stylesheet" type="text/css" href="./dist/style/vueditor.min.css">
   <style>
-    section {
-      width: 80%;
-      margin: 0 auto;
+    body {
+      margin: 0;
+      height: 2000px;
     }
-    header {
+    #github {
       text-align: right;
     }
-    #editor1, #someid {
-      height: 250px;
-      margin-top: 20px;
+    #editor1 {
+      width: 500px;
+      height: 500px;
     }
   </style>
 </head>
 <body>
 
-  <section>
-    <header>
-      <a href="https://github.com/hifarer/Vueditor">Github</a>
-    </header>
-    <div id="editor1">
-      <Vueditor></Vueditor>
-    </div>
-    <div id="editor2"></div>
-  </section>
+  <div id="github">
+    <a href="https://github.com/hifarer/vueditor">Github</a>
+  </div>
+  <div id="editor1">
+    <Vueditor></Vueditor>
+  </div>
+  <div id="editor2"></div>
 
-  <script src="//cdn.bootcss.com/vue/2.1.8/vue.min.js"></script>
-  <script src="//cdn.bootcss.com/vuex/2.1.1/vuex.min.js"></script>
-  <script src="./dist/js/vueditor.min.js"></script>
+  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
+  <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
+  <script src="./dist/language/lang.cn.js"></script>
+  <script src="./dist/plugins/emoji.min.js"></script>
+  <script src="./dist/script/vueditor.min.js"></script>
   <script>
+    let uploadUrl = '';
+    let plugins = [
+      {
+        name: 'emoji',
+        element: {
+          type: 'button',
+          lang: {
+            title: 'Emoji'
+          },
+          className: 'icon-smile-o'
+        },
+        // emoji loaded from script tag, line 35
+        component: emoji
+      }
+    ];
+    
     Vue.use(Vueditor, {
       toolbar: [
-        'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
-        'links', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
+        'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+        'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullscreen', 'sourceCode', 'markdown'
       ],
       fontName: [
-        {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+        {val: 'arial black'}, 
+        {val: 'times new roman'}, 
+        {val: 'Courier New'}
       ],
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-      emoji: [
-        "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606"
-      ],
-      lang: 'en',
-      mode: 'iframe',
-      iframePath: './dist/iframe/page.html',
-      fileuploadUrl: ''
+      uploadUrl: uploadUrl,
+      plugins: plugins
     });
+
     let parent = new Vue({
-        el: '#editor1'
+      el: '#editor1'
     });
-    let inst1 = parent.$children[0];
-    inst1.setContent('fill your content here');
-    console.log(inst1.getContent());
+    let editor = parent.$children[0];
+    editor.setContent(`fill your content here`);
   </script>
   <script>
-    // another usage
-    let inst2 = Vueditor.createEditor('#editor2', {
+    let inst = Vueditor.createEditor('#editor2', {
+      lang: lang,
       toolbar: [
-          'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
+        'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
       ],
-      mode: 'default',
-      fileuploadUrl: '',
+      uploadUrl: '',
+      id: 'someid',
       classList: ['someclass'],
-      id: 'someid'
     });
-    inst2.setContent('fill your content here');
-    console.log('the content you set is: "' + inst2.getContent() + '"');
+    inst.setContent('fill your content here');
   </script>
 </body>
 </html>

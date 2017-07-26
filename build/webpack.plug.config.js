@@ -3,21 +3,22 @@ const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 
+const pkg = require('../package.json');
+const banner = pkg.name + ' v' + pkg.version + '\n' + pkg.repository.url;
+
 module.exports = {
 
   context: __dirname,
 
   watch: true,
 
-  entry: {
-    vueditor: ['webpack-hot-middleware/client?path=/__webpack_hmr', '../src/main.js']
-  },
+  entry: '../src/plugins/emoji.vue',
 
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'script/[name].min.js',
-    library: 'Vueditor',
+    filename: 'plugins/emoji.min.js',
+    library: 'emoji',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -26,23 +27,24 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/, 
-        use: [{
-          loader: 'vue-loader',
-          options: {
-            extractCSS: true,
-            preserveWhitespace: false,
-            postcss: [
-              autoprefixer({
-                browsers: ['last 3 versions']
-              })
-            ]
-          }
-        }], 
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              extractCSS: true,
+              preserveWhitespace: false,
+              postcss: [
+                autoprefixer({
+                  browsers: ['last 3 versions']
+                })
+              ]
+            }
+        }],
         exclude: /node_modules/
       },
       {
         test: /\.js$/, 
-        use: 'babel-loader', 
+        loader: 'babel-loader', 
         exclude: /node_modules/
       },
       {
@@ -51,17 +53,24 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif)$/, 
-        use: 'url-loader?limit=8192'
+        loader: 'url-loader?limit=8192'
       }
     ]
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
+    new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': '"development"'
+        'NODE_ENV': '"production"'
       }
     })
   ],

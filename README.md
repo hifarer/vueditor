@@ -4,11 +4,13 @@ Vueditor
 [![vueditor](https://img.shields.io/npm/v/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![vueditor](https://img.shields.io/npm/l/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 
-A wysiwyg editor written in Vue.js and Vuex.js, only support Vue.js 2.x.x
+[中文文档](./docs/chinese.md)
+
+A wysiwyg editor written in Vue.js and Vuex.js, require Vue.js 2.0.0, Vuex.js 2.0.0 and above.
 
 Browser compatibility: Chrome, Firefox, Safari, IE 9+.
 
-Online [demo](http://hifarer.github.io/vueditor/)
+Online [DEMO](http://hifarer.github.io/vueditor/)
 
 ## Screenshot
 
@@ -16,17 +18,15 @@ Online [demo](http://hifarer.github.io/vueditor/)
 
 ## Features
 
-- No jQuery, Bootstrap or any other font file needed
-- Light weighted, 55kb for js and 50kb for css
-- Using .vue file development mode
-- Based on npm + webpack + babel, using ES2015
+- Light weighted, very few dependencies
+- Plugin support
 
 ## Installation
 ```javascript
 npm install vueditor
 ```
 
-If you prefer to use it via script tag, just add "vueditor.min.js", "vueditor.min.css" to your page. 
+If you prefer to use it via script tag, just add `vueditor.min.js`, `vueditor.min.css` to your page. 
 
 ## Usage
 
@@ -42,7 +42,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
-import "vueditor/dist/css/vueditor.min.css"
+import 'vueditor/dist/style/vueditor.min.css'
 
 // your config here
 let config = {
@@ -50,21 +50,19 @@ let config = {
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
   fontName: [
-    {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    {val: 'arial black'}, 
+    {val: 'times new roman'}, 
+    {val: 'Courier New'}
   ],
   fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-  emoji: ["1f600", "1f601", "1f602", "1f923", "1f603"],
-  lang: 'en',
-  mode: 'default',
-  iframePath: '',
-  fileuploadUrl: ''
+  uploadUrl: ''
 };
 
 Vue.use(Vuex);
 Vue.use(Vueditor, config);
 // create a root instance
 new Vue({
-    el: '#editor1'
+  el: '#editorContainer'
 });
 ```
 
@@ -82,11 +80,11 @@ To get and set content you need to acquire the Vueditor component, you can use `
 
 ```javascript
 let parent = new Vue({
-    el: '#editor1'
+  el: '#editor1'
 });
-let inst = parent.$children[0];
-inst.setContent('your content here');
-inst.getContent();
+let editor = parent.$children[0];
+editor.setContent('your content here');
+editor.getContent();
 ```
 
 ### createEditor(selector, config)
@@ -97,26 +95,23 @@ Call `createEditor` and pass specific config as parameter respectively for multi
 
   import Vue from 'vue'
   import Vuex from 'vuex'
-  import {createEditor} from 'vueditor'
+  import { createEditor } from 'vueditor'
 
-  import "vueditor/dist/css/vueditor.min.css"
+  import 'vueditor/dist/style/vueditor.min.css'
   
   Vue.use(Vuex);
 
-  createEditor('#editor2', {
+  createEditor('#editorContainer', {
     toolbar: [
-        'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+      'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
     ],
-    lang: 'en',
-    mode: 'default',
-    iframePath: '',
-    fileuploadUrl: '',
+    uploadUrl: '',
     id: '',
     classList: []
   });
 ```
 
-The initialized element will be replaced in this case, you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a Vueditor instance, you can set and get content with it:
+The initialized element will be replaced in this case, you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a vueditor instance, you can set and get content with it:
 
 ```javascript
 let inst = createEditor(...);
@@ -124,67 +119,91 @@ inst.setContent('your content here');
 inst.getContent();
 ```
 
-Options for configuration:
+#### File upload
+
+You can set `uploadUrl` attribute in config when you initialize an editor, all the upload stuffs will be handled automatically. If you perfer do it yourself or has some authrization to do before uploading, just add a function `upload` to the instance returned by `createEditor`. When an upload action triggered, vueditor will call this function instead of the build-in function. The upload function has two arguments: `obj` refer to the file input element, `callback` requires the uploaded file url as argument for inserting content to the editor, See the example below: 
+```javascript
+editor.upload = function (obj, callback) {
+  let formData = new FormData();
+  let xhr = new XMLHttpRequest();
+  formData.append('fieldName', obj.files[0]);
+  xhr.open('POST', 'upload/url');
+  xhr.send(formData);
+  xhr.onload = function () {
+    callback(xhr.responseText);
+  };
+  xhr.onerror = function (err) {
+    console.log(err);
+  }
+}
+```
+
+### language setting
+
+The editor's default language is English, to set to other language, you will need to translate for your own.
+The `dist/language` folder has an full example inside. Adding a script tag or use `import`, `require` to    
+bring the language object in, then make it an attribute of the config for initialize. See the example below:
+```javascript
+Vue.use(Vueditor, {
+  ...
+  lang: languageObject,
+});
+```
+
+## Options for configuration:
 
 |          Name         |    Type    |                                                         Description                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| toolbar               | `Object`   | Buttons on the toolbar, use `|` or `divider` as the separator for grouping |
-| fontName              | `Object`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
+| lang                  | `Object`   | Interface language, default is English |
+| toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
+| fontName              | `Array`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
 | fontSize              | `Array`    | The font-size select's options |
-| emoji                 | `Array`    | The emoji list, you can get full list [here](http://unicode.org/emoji/charts/full-emoji-list.html) |
-| lang                  | `String`   | Interface language, default is Chinese, to set to English use `lang: 'en'` |
-| mode                  | `String`   | Mode options:  `default`, `iframe` |
-| iframePath            | `String`   | If `mode` is set to `iframe`, specify a HTML file path here |
-| fileUploadUrl         | `String`   | File upload url, the return result must be a string refer to the uploaded image, leave it empty will end up with local preview |
+| uploadUrl         | `String`   | File upload url, the return result of this must be a string refer to the uploaded file url, leave it empty will end up with local preview |
 | id                    | `String`   | id for the rendered editor element |
 | classList             | `Array`    | className for the rendered editor element |
+| plugins             | `Array`    | plugins for editor |
 
 
 Default value of the above fields:
 
 ```javascript
-export default {
+{
   toolbar: [
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider',
     'bold', 'italic', 'underline', 'strikeThrough', 'links', 'divider', 'subscript', 'superscript',
     'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
-    'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'switchView'
+    'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'tables', '|', 'switchView'
   ],
   fontName: [
-    {val: "宋体, SimSun", abbr: "宋体"}, {val: "黑体, SimHei", abbr: "黑体"},
-    {val: "楷体, SimKai", abbr: "楷体"}, {val: "微软雅黑, 'Microsoft YaHei'", abbr: "微软雅黑"},
-    {val: "arial black"}, {val: "times new roman"}, {val: "Courier New"}
+    {val: 'arial black'}, 
+    {val: 'times new roman'}, 
+    {val: 'Courier New'}
   ],
   fontSize: [
     '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
   ],
-  emoji: [
-    "1f600", "1f601", "1f602", "1f923", "1f603", "1f604", "1f605", "1f606", "1f609", "1f60a", "1f60b",
-    "1f60e", "1f60d", "1f618", "1f617", "1f619", "1f61a", "263a", "1f642", "1f917", "1f914", "1f610",
-    "1f611", "1f636", "1f644", "1f60f", "1f623", "1f625", "1f62e", "1f910", "1f62f", "1f62a", "1f62b",
-    "1f634", "1f60c", "1f913", "1f61b", "1f61c", "1f61d", "1f924", "1f612", "1f613", "1f614", "1f615",
-    "1f643", "1f911", "1f632", "2639", "1f641", "1f616", "1f61e", "1f61f", "1f624", "1f622", "1f62d",
-    "1f626", "1f627", "1f628", "1f629", "1f62c", "1f630", "1f631", "1f633", "1f635", "1f621", "1f620",
-    "1f607", "1f920", "1f921", "1f925", "1f637", "1f912", "1f915", "1f922", "1f927"
-  ],
-  lang: 'cn',
-  mode: 'default',
-  iframePath: '',
-  fileuploadUrl: ''
+  uploadUrl: ''
   id: '',
   classList: []
 };
 ```
 
+## Change log
+
+See [change log](./docs/changelog.md)
+
+## Bug confirmed
+
 ## TODO
 
-- [ ] Popup menu position auto adjust
-- [ ] Full screen and fixed toolbar feature
+- [x] Markdown support
+- [x] Full screen and fixed toolbar features
+- [x] Popup menu position auto adjust
 - [ ] Advanced table options
 - [ ] Code highlight
-- [ ] Markdown support
 - [ ] Plugin support
 - [ ] XSS prevention
+- [ ] Test
 
 ## License
 

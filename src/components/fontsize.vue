@@ -1,6 +1,6 @@
 
-<style lang="less" rel="stylesheet/less">
-  .font-size {
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
     li {
       padding: 6px;
       border-bottom: 1px solid #ddd;
@@ -16,48 +16,43 @@
 </style>
 
 <template>
-  <div>
-    <a href="javascript:;" class="ve-select" :class="{'ve-disabled': disabled}" @click="toggle">
-      <span>{{val || fontSize[0]}}</span><i :class="{'triangle-down': !display, 'triangle-up': display}"></i>
-    </a>
-    <div class="ve-toolbar-dropdown ve-select-dropdown font-size" v-show="display">
-      <ul>
-        <li v-for="size in fontSize" @click="clickHandler(size)">
-          <a href="javascript:;">{{size}}</a>
-        </li>
-      </ul>
-    </div>
+  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
+    <ul>
+      <li v-for="(size, index) in fontSize" :key="index" @click="clickHandler(size)">
+        <a href="javascript:;">{{size}}</a>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 
+  import veMixin from '../mixins'
+  import { getConfig } from '../config/'
+
   export default {
+    mixins: [veMixin],
     data () {
+      let arr = getConfig('fontSize');
       return {
-        fontSize: this.$store.state.config.fontSize,
-        val: ''
+        fontSize: arr,
+        val: arr[0]
       }
     },
     computed: {
-      disabled () {
-        return this.$store.state.toolbarStates.fontSize.disabled;
-      },
-      display () {
-        return this.$store.state.toolbarStates.fontSize.showPopup;
+      showPopup () {
+        return this.$store.state.toolbar.fontSize.showPopup;
       }
     },
+    mounted () {
+      this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: this.val});
+    },
     methods: {
-      updatePopupDisplay (current) {
-        this.$store.dispatch('updatePopupDisplay', current);
-      },
-      toggle () {
-        !this.disabled && this.updatePopupDisplay('fontSize');
-      },
       clickHandler (size) {
         this.val = size;
         this.$store.dispatch('execCommand', {name: 'fontSize', value: size});
-        this.updatePopupDisplay();
+        this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: size});
+        this.$store.dispatch('updatePopupDisplay');
       }
     }
   }

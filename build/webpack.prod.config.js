@@ -1,58 +1,76 @@
 
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var style = new ExtractTextPlugin('css/vueditor.min.css');
+const webpack = require('webpack');
+const path = require('path');
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var pkg = require('../package.json');
-var banner = pkg.name + ' v' + pkg.version + '\n' + pkg.repository.url;
+const pkg = require('../package.json');
+const banner = pkg.name + ' v' + pkg.version + '\n' + pkg.repository.url;
 
 module.exports = {
 
   context: __dirname,
 
-  entry: {
-    vueditor: ['../src/js/main.js']
-  },
+  watch: true,
+
+  entry: '../src/main.js',
 
   output: {
     publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'js/[name].min.js',
+    filename: 'script/vueditor.min.js',
     library: 'Vueditor',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
 
   module: {
-    loaders: [
-      { test: /\.vue$/, loader: 'vue', exclude: /node_modules/ },
-      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.(css|less)$/, loader: style.extract('style-loader', 'css!less!postcss') },
-      { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192' }
+    rules: [
+      {
+        test: /\.vue$/, 
+        use: [{
+          loader: 'vue-loader',
+          options: {
+            extractCSS: true,
+            preserveWhitespace: false,
+            postcss: [
+              autoprefixer({
+                browsers: ['last 3 versions']
+              })
+            ]
+          }
+        }], 
+        exclude: /node_modules/
+      },
+      {
+        test: /\.js$/, 
+        use: 'babel-loader', 
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(css|less)$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader!less-loader!postcss-loader'
+        })
+      },
+      {
+        test: /\.(png|jpg|gif)$/, 
+        use: 'url-loader?limit=8192'
+      }
     ]
   },
 
-  vue: {
-    loaders: {
-      css: style.extract('style-loader', 'css!postcss'),
-      less: style.extract('style-loader', 'css!less!postcss')
-    }
-  },
-
-  postcss: function () {
-    return [autoprefixer({remove: false})];
-  },
-
   plugins: [
-    style,
+    new ExtractTextPlugin('style/vueditor.min.css'),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
     new webpack.BannerPlugin(banner),
     new webpack.DefinePlugin({
       'process.env': {

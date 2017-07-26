@@ -1,0 +1,326 @@
+
+@import "reset.less";
+
+.vueditor {
+  min-width: 300px;
+  min-height: 150px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  background: #fff;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ve-fullscreen {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.ve-design,
+.ve-code,
+.ve-md {
+  flex: 1;
+  overflow: hidden;
+}
+.ve-design {
+  position: relative;
+}
+.ve-design iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+}
+
+.ve-code {
+  /*safari*/
+  position: relative;
+  overflow-y: auto;
+}
+
+[class^=ve-triangle] {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-top: 4px solid;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  transition: 200ms;
+}
+.ve-triangle-down {
+  transform: rotate(0deg);
+}
+.ve-triangle-up {
+  transform: rotate(-180deg);
+}
+
+.ve-btn-box {
+  float: right;
+  .ve-btn:not(:last-child) {
+    border-right: none;
+  }
+}
+
+.ve-input-box {
+  display: flex;
+  margin-bottom: 10px;
+  .ve-input {
+    flex: 1;
+  }
+  .ve-btn {
+    border-left: none;
+  }
+}
+
+.ve-btn {
+  display: inline-block;
+  margin: 0;
+  padding: 5px 15px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  color: #333;
+  outline: none;
+  background-color: #fff;
+  user-select: none;
+  line-height: (32-2*1-5*2)*1px;
+  transition: all 500ms;
+}
+
+.ve-btn:hover {
+  color: #fff;
+  background: #42b983;
+  border-color: #42b983;
+}
+
+.ve-btn:hover + .ve-btn {
+    border-left-color: #42b983;
+}
+
+.ve-input {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 5px 10px;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.ve-select {
+  position: relative;
+  min-width: 60px;
+  line-height: 26px;
+  margin: 5px 5px 5px 0;
+  padding: 0 20px 0 10px!important;
+  border-right: 1px solid #ddd;
+  vertical-align: top;
+  span {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: initial;
+  }
+  i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -2px;
+  }
+  &:hover {
+    background: transparent!important;
+    color: #000;
+  }
+}
+
+.ve-dropdown {
+  width: 176px;
+  padding: 5px 10px;
+  position: absolute;
+  top: 36px;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.ve-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ve-popover {
+  font-size: 14px;
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  box-sizing: border-box;
+}
+.ve-pop-arrow {
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  margin-left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid rgba(0,0,0,.25);
+  &:after {
+    position: absolute;
+    left: -10px;
+    top: 1px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    content: "";
+    border-bottom: 10px solid #fff;
+  }
+}
+.ve-pop-header {
+  background: #f7f7f7;
+  padding: 8px 14px;
+  border-bottom: 1px solid #ebebeb;
+}
+.ve-pop-body {
+  padding: 8px;
+}
+
+.ve-fixed {
+  overflow: hidden;
+}
+
+.ve-dialog {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.ve-dialog-header {
+  background: #f7f7f7;
+  padding: 10px;
+}
+.ve-close {
+  float: right;
+}
+
+.ve-dialog-body {
+  padding: 10px;
+}
+.ve-dialog-footer {
+  padding: 10px;
+  overflow: hidden;
+}
+
+.ve-preview {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0;
+}
+.ve-preview img {
+  max-height: 300px;
+}
+
+.vueditor {
+  .icon-align-center {
+    background: url("../images/icon-align-center.png") no-repeat;
+  }
+  .icon-align-justify {
+    background: url("../images/icon-align-justify.png") no-repeat;
+  }
+  .icon-align-left {
+    background: url("../images/icon-align-left.png") no-repeat;
+  }
+  .icon-align-right {
+    background: url("../images/icon-align-right.png") no-repeat;
+  }
+  .icon-bold {
+    background: url("../images/icon-bold.png") no-repeat;
+  }
+  .icon-code {
+    background: url("../images/icon-code.png") no-repeat;
+  }
+  .icon-eraser {
+    background: url("../images/icon-eraser.png") no-repeat;
+  }
+  .icon-file-image-o {
+    background: url("../images/icon-file-image-o.png") no-repeat;
+  }
+  .icon-file-text-o {
+    background: url("../images/icon-file-text-o.png") no-repeat;
+  }
+  .icon-file-text {
+    background: url("../images/icon-file-text.png") no-repeat;
+  }
+  .icon-indent {
+    background: url("../images/icon-indent.png") no-repeat;
+  }
+  .icon-italic {
+    background: url("../images/icon-italic.png") no-repeat;
+  }
+  .icon-link {
+    background: url("../images/icon-link.png") no-repeat;
+  }
+  .icon-list-ol {
+    background: url("../images/icon-list-ol.png") no-repeat;
+  }
+  .icon-list-ul {
+    background: url("../images/icon-list-ul.png") no-repeat;
+  }
+  .icon-outdent {
+    background: url("../images/icon-outdent.png") no-repeat;
+  }
+  .icon-repeat {
+    background: url("../images/icon-repeat.png") no-repeat;
+  }
+  .icon-strikethrough {
+    background: url("../images/icon-strikethrough.png") no-repeat;
+  }
+  .icon-subscript {
+    background: url("../images/icon-subscript.png") no-repeat;
+  }
+  .icon-superscript {
+    background: url("../images/icon-superscript.png") no-repeat;
+  }
+  .icon-table {
+    background: url("../images/icon-table.png") no-repeat;
+  }
+  .icon-underline {
+    background: url("../images/icon-underline.png") no-repeat;
+  }
+  .icon-undo {
+    background: url("../images/icon-undo.png") no-repeat;
+  }
+  .icon-unlink {
+    background: url("../images/icon-unlink.png") no-repeat;
+  }
+  .icon-markdown {
+    background: url("../images/icon-markdown.png") no-repeat;
+  }
+  .icon-fullscreen {
+    background: url("../images/icon-fullscreen.png") no-repeat;
+  }
+  [class^=icon] {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-size: contain;
+    vertical-align: bottom;
+    opacity: 0.8;
+  }
+}
