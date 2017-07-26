@@ -35,7 +35,7 @@ const lang = {
   },
   fontName: {},
   fontSize: {},
-  format: {},
+  element: {},
   design: {
     ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
   },
