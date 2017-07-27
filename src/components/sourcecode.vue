@@ -45,6 +45,9 @@
       'code': function (val) {
         this.updateContent(val);
       },
+      'content': function (val) {
+        this.$store.dispatch('updateContent', val);
+      },
       'callee': function (val) {
         if(val.name === 'sourceCode'){
           this.switchView(this.view == 'sourceCode' ? 'design' : 'sourceCode');
