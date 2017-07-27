@@ -17,7 +17,7 @@
 
 <template>
   <div class="ve-code" v-show="view === 'sourceCode'">
-    <textarea :class="$style.editor" ref="codemirror" v-model="content"></textarea>
+    <textarea :class="$style.editor" v-model="code"></textarea>
   </div>
 </template>
 
@@ -28,7 +28,7 @@
   export default {
     data () {
       return {
-        currentView: 'design'
+        code: '',
       }
     },
     computed: mapState([
@@ -38,10 +38,12 @@
     ]),
     watch: {
       'view': function (val) {
-        if(val !== 'sourceCode' && this.currentView === 'sourceCode'){
-          this.updateContent(this.$refs.codemirror.value);
+        if(val === 'sourceCode'){
+          this.code = this.content;
         }
-        this.currentView = val;
+      },
+      'code': function (val) {
+        this.updateContent(val);
       },
       'callee': function (val) {
         if(val.name === 'sourceCode'){
