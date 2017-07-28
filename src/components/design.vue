@@ -126,39 +126,40 @@
           }, 200);
         }, false);
         if (!'onselectionchange' in document) {
-          let oSel = this.iframeWin.getSelection();
+          let sel = this.getSelection();
           let focusOffset = -1;
           setInterval(() => {
-            if (oSel && oSel.rangeCount) {
-              if (focusOffset !== oSel.focusOffset) {
-                focusOffset = oSel.focusOffset;
+            if (sel && sel.rangeCount) {
+              if (focusOffset !== sel.focusOffset) {
+                focusOffset = sel.focusOffset;
                 this.view === 'design' && this.updateStates();
               }
             } else {
-              oSel = this.iframeWin.getSelection();
+              sel = this.getSelection();
             }
           }, 200);
         }
       },
 
       exec (name, value) {
-        let range = this.getRange();
-        if (!range) return;
-        let container = range.commonAncestorContainer;
-        if(!this.$el.children[0].contains(container)){
-          return;
+        if(this[name]){
+          this[name](name, value);
+        }else{
+          let sel = this.getSelection();
+          let range = this.getRange();
+          if (!sel || !range)return;
+          if (document.queryCommandSupported('styleWithCss')) {
+            this.iframeDoc.execCommand('styleWithCss', false, true);
+          }
+          this.iframeDoc.execCommand(name, false, value)
         }
-        if (document.queryCommandSupported('styleWithCss')) {
-          this.iframeDoc.execCommand('styleWithCss', false, true);
-        }
-        this[name] ? this[name](name, value) : this.iframeDoc.execCommand(name, false, value);
         this.updateContent(this.iframeBody.innerHTML);
       },
 
       insertHTML (name, value) {
-        let oSel = this.iframeWin.getSelection();
-        let oRange = this.getRange();
-        if (!oRange)return;
+        let sel = this.getSelection();
+        let range = this.getRange();
+        if (!sel || !range)return;
         let node = null;
         let frag = this.iframeDoc.createDocumentFragment();
         let obj = this.iframeDoc.createElement('div');
@@ -167,17 +168,17 @@
           node = obj.firstChild;
           frag.appendChild(node);
         }
-        oRange.insertNode(frag);
-        oRange.setStartAfter(node);
-        oRange.collapse(true);
-        oSel.removeAllRanges();
-        oSel.addRange(oRange);
+        range.insertNode(frag);
+        range.setStartAfter(node);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
       },
 
       fontSize (name, value) {
-        let selection = this.iframeWin.getSelection();
+        let selection = this.getSelection();
         let range = this.getRange();
-        if (!range || range.collapsed) {
+        if (!selection || !range || range.collapsed) {
           return;
         }
         let childNodes = range.cloneContents().childNodes;
@@ -286,32 +287,31 @@
         container.normalize();
       },
 
-      getRange () {
-        let oSel, oRange;
-        if (this.iframeWin.getSelection) {
-          oSel = this.iframeWin.getSelection();
-          if (oSel && oSel.rangeCount !== 0) {
-            oRange = oSel.getRangeAt(0);
-          }
+      getSelection () {
+        if(this.iframeWin.getSelection){
+          return this.iframeWin.getSelection();
         }
-        return oRange;
+      },
+
+      getRange () {
+        let sel = this.getSelection(), range;
+        if (sel && sel.rangeCount !== 0) {
+          range = sel.getRangeAt(0);
+        }
+        return range;
       },
 
       setRange (range) {
-        let oSel;
-        if (this.iframeWin.getSelection) {
-          oSel = this.iframeWin.getSelection();
-          oSel.removeAllRanges();
-          oSel.addRange(range);
+        let sel = this.getSelection();
+        if (sel) {
+          sel.removeAllRanges();
+          sel.addRange(range);
         }
       },
 
       removeRange () {
-        let oSel;
-        if (this.iframeWin.getSelection) {
-          oSel = this.iframeWin.getSelection();
-          oSel.removeAllRanges();
-        }
+        let sel = this.getSelection();
+        sel && sel.removeAllRanges();
       },
 
       rangeValid () {

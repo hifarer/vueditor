@@ -7,7 +7,7 @@
     z-index: 1000;
     background: #fff;
     border: 1px solid #ccc;
-    li a {
+    li {
       width: 20px;
       height: 20px;
       margin: 1px;
@@ -24,8 +24,7 @@
   <div class="ve-table" v-show="showPopup" :style="style">
     <ul>
       <!--Vue.js 2.0 v-for i start with 1-->
-      <li v-for="i in num" :key="i" @mouseover="overHandler(i-1)" @click="clickHandler(i-1)">
-        <a href="javascript:;" :class="{'active': ((i-1)%8 <= x && parseInt((i-1)/8) <= y)}"></a>
+      <li v-for="i in num" :key="i" @mouseover="overHandler(i - 1)" @click="clickHandler" :class="{'active': ((i - 1) % 8 <= x && parseInt((i - 1) / 8) <= y)}">
       </li>
     </ul>
   </div>
@@ -56,8 +55,8 @@
         this.x = index % 8;
         this.y = parseInt(index / 8);
       },
-      clickHandler (index) {
-        let html = this.createTable(this.x + 1, this.y + 1);
+      clickHandler () {
+        let html = this.createTable(this.y + 1, this.x + 1);
         this.$store.dispatch('execCommand', { name: 'insertHTML', value: html });
         this.$store.dispatch('updatePopupDisplay');
       },

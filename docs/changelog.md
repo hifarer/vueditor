@@ -5,6 +5,7 @@
 2. add preview to picture upload
 3. add type check for initialize config
 4. fix content sync bug when switch to source code view
+5. fix wrong html table bug.
 
 0.2.8
 
