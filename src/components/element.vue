@@ -23,10 +23,9 @@
 </template>
 
 <script>
+  import veMixin from '../mixins'
 
-  import veMixin from '../mixins';
-
-  export default {
+export default {
     mixins: [veMixin],
     data () {
       return {
@@ -36,21 +35,20 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.element.showPopup;
+        return this.$store.state.toolbar.element.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'element', value: this.val});
+      this.$store.dispatch('updateSelectValue', {name: 'element', value: this.val})
     },
     methods: {
       selectItem (event) {
-        let tagName = event.target.innerHTML.trim();
-        this.val = tagName;
-        this.$store.dispatch('execCommand', {name: 'formatBlock', value: tagName});
-        this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName});
-        this.$store.dispatch('updatePopupDisplay');
+        let tagName = event.target.innerHTML.trim()
+        this.val = tagName
+        this.$store.dispatch('execCommand', {name: 'formatBlock', value: tagName})
+        this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName})
+        this.$store.dispatch('updatePopupDisplay')
       }
     }
   }
-
 </script>

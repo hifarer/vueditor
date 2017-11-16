@@ -26,14 +26,13 @@
 </template>
 
 <script>
-
   import veMixin from '../mixins'
   import { getConfig } from '../config/'
 
   export default {
     mixins: [veMixin],
     data () {
-      let arr = getConfig('fontSize');
+      let arr = getConfig('fontSize')
       return {
         fontSize: arr,
         val: arr[0]
@@ -41,18 +40,18 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.fontSize.showPopup;
+        return this.$store.state.toolbar.fontSize.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: this.val});
+      this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: this.val})
     },
     methods: {
       clickHandler (size) {
-        this.val = size;
-        this.$store.dispatch('execCommand', {name: 'fontSize', value: size});
-        this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: size});
-        this.$store.dispatch('updatePopupDisplay');
+        this.val = size
+        this.$store.dispatch('execCommand', {name: 'fontSize', value: size})
+        this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: size})
+        this.$store.dispatch('updatePopupDisplay')
       }
     }
   }

@@ -1,6 +1,6 @@
 
 let defaultLang = {
-  
+
   app: {},
 
   removeFormat: {title: 'Remove format'},
@@ -27,13 +27,13 @@ let defaultLang = {
     title: 'Text color',
     ok: 'ok',
     colorCode: 'Color code',
-    invalidColorCodeMsg: 'Please enter the correct color code',
+    invalidColorCodeMsg: 'Please enter the correct color code'
   },
   backColor: {
     title: 'Background color',
     ok: 'ok',
     colorCode: 'Color code',
-    invalidColorCodeMsg: 'Please enter the correct color code',
+    invalidColorCodeMsg: 'Please enter the correct color code'
   },
   fontName: {},
   fontSize: {},
@@ -65,10 +65,10 @@ let defaultLang = {
   },
   table: {title: 'Table'},
   undo: {title: 'Undo'},
-  redo: {title: 'Redo'},
+  redo: {title: 'Redo'}
 }
 
-let lang = JSON.parse(JSON.stringify(defaultLang));
+let lang = JSON.parse(JSON.stringify(defaultLang))
 
 export default {
   setLang (data) {

@@ -36,18 +36,17 @@
 </template>
 
 <script>
-
   // To get emoji list for Vueditor, open http://unicode.org/emoji/charts/full-emoji-list.html
   // and run the following code in console panel.
   // var arr = [];
   // [].forEach.call(document.querySelectorAll('.code'), function(node){
-  // 	  arr.push(node.children[0].getAttribute('name'))
+  //   arr.push(node.children[0].getAttribute('name'))
   // });
   // console.log(arr);
 
-  import twemoji from 'twemoji';
+  import twemoji from 'twemoji'
 
-  export default {
+export default {
     data () {
       return {
         arr: [
@@ -62,27 +61,27 @@
     },
     computed: {
       rect: function () {
-        return this.$store.state.rect;
+        return this.$store.state.rect
       },
       showPopup: function () {
-        return this.$store.state.toolbar.emoji.showPopup;
+        return this.$store.state.toolbar.emoji.showPopup
       }
     },
     methods: {
       convert (code) {
-        return twemoji.convert.fromCodePoint(code);
+        return twemoji.convert.fromCodePoint(code)
       },
       parseSrc (str) {
-        let div = document.createElement('div');
-        div.innerHTML = twemoji.parse(twemoji.convert.fromCodePoint(str));
-        return div.children[0].src;
+        let div = document.createElement('div')
+        div.innerHTML = twemoji.parse(twemoji.convert.fromCodePoint(str))
+        return div.children[0].src
       },
       insertItem (event) {
-        let obj = event.target;
-        if(obj.tagName.toLowerCase() == 'a'){
-          obj = obj.children[0];
+        let obj = event.target
+        if (obj.tagName.toLowerCase() === 'a') {
+          obj = obj.children[0]
         }
-        this.$store.dispatch('execCommand', {name: 'insertHTML', value: obj.outerHTML});
+        this.$store.dispatch('execCommand', {name: 'insertHTML', value: obj.outerHTML})
       }
     }
   }

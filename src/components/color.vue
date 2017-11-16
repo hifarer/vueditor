@@ -40,7 +40,6 @@
 </template>
 
 <script>
-
   import veMixin from '../mixins'
   import { getLang } from '../config/lang.js'
 
@@ -64,39 +63,39 @@
     },
     computed: {
       showPopup (state) {
-        return this.$store.state.toolbar[this.tagName].showPopup;
+        return this.$store.state.toolbar[this.tagName].showPopup
       }
     },
     methods: {
       updatePopupDisplay () {
-        this.$store.dispatch('updatePopupDisplay');
+        this.$store.dispatch('updatePopupDisplay')
       },
       checkValid (color) {
-        let sColor = color.replace(/\s+/g, '');
-        let hsl3 = /^#[0-9a-f]{3}$/i,
-            hsl6 = /^#[0-9a-f]{6}$/i,
-            rgb = /^rgb\(((\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5]),){2}(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\)$/;
+        let sColor = color.replace(/\s+/g, '')
+        let hsl3 = /^#[0-9a-f]{3}$/i
+        let hsl6 = /^#[0-9a-f]{6}$/i
+        let rgb = /^rgb\(((\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5]),){2}(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\)$/
         if (hsl3.test(sColor) || hsl6.test(sColor) || rgb.test(sColor)) {
-          return true;
+          return true
         }
       },
       setColor (type, color) {
-        this.$store.dispatch('execCommand', {name: type, value: color});
+        this.$store.dispatch('execCommand', {name: type, value: color})
       },
       clickHandler (color) {
-        this.setColor(this.tagName, color);
-        this.updatePopupDisplay();
+        this.setColor(this.tagName, color)
+        this.updatePopupDisplay()
       },
       inputHandler () {
-        let color = this.color;
-        let valid = this.checkValid(color);
+        let color = this.color
+        let valid = this.checkValid(color)
         if (!valid) {
-          alert(this.lang.invalidColorCodeMsg);
+          window.alert(this.lang.invalidColorCodeMsg)
         } else {
-          this.setColor(this.tagName, color);
-          this.updatePopupDisplay();
+          this.setColor(this.tagName, color)
+          this.updatePopupDisplay()
         }
-        this.color = '';
+        this.color = ''
       }
     }
   }

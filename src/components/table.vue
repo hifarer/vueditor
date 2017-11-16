@@ -31,7 +31,6 @@
 </template>
 
 <script>
-
   import veMixin from '../mixins'
   import { getLang } from '../config/lang.js'
 
@@ -47,37 +46,36 @@
     },
     computed: {
       showPopup: function () {
-        return this.$store.state.toolbar.table.showPopup;
+        return this.$store.state.toolbar.table.showPopup
       }
     },
     methods: {
       overHandler (index) {
-        this.x = index % 8;
-        this.y = parseInt(index / 8);
+        this.x = index % 8
+        this.y = parseInt(index / 8)
       },
       clickHandler () {
-        let html = this.createTable(this.y + 1, this.x + 1);
-        this.$store.dispatch('execCommand', { name: 'insertHTML', value: html });
-        this.$store.dispatch('updatePopupDisplay');
+        let html = this.createTable(this.y + 1, this.x + 1)
+        this.$store.dispatch('execCommand', { name: 'insertHTML', value: html })
+        this.$store.dispatch('updatePopupDisplay')
       },
       createTable (rows, cols) {
-        let oTable = document.createElement('table');
-        let oTbody = document.createElement('tbody');
-        oTable.style.cssText = 'border-collapse: collapse;';
-        oTable.appendChild(oTbody);
+        let oTable = document.createElement('table')
+        let oTbody = document.createElement('tbody')
+        oTable.style.cssText = 'border-collapse: collapse;'
+        oTable.appendChild(oTbody)
         for (let i = 0; i < rows; i++) {
-          let tr = document.createElement('tr');
+          let tr = document.createElement('tr')
           for (let j = 0; j < cols; j++) {
-            let td = document.createElement('td');
-            td.innerHTML = '<br>';
-            td.style.cssText = 'width: 50px; border: 1px #ddd solid;';
-            tr.appendChild(td);
+            let td = document.createElement('td')
+            td.innerHTML = '<br>'
+            td.style.cssText = 'width: 50px; border: 1px #ddd solid;'
+            tr.appendChild(td)
           }
-          oTbody.appendChild(tr);
+          oTbody.appendChild(tr)
         }
-        return oTable.outerHTML;
+        return oTable.outerHTML
       }
     }
   }
-
 </script>

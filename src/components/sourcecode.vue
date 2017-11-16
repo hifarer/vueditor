@@ -22,13 +22,12 @@
 </template>
 
 <script>
-
   import { mapActions, mapState } from 'vuex'
 
   export default {
     data () {
       return {
-        code: '',
+        code: ''
       }
     },
     computed: mapState([
@@ -38,20 +37,20 @@
     ]),
     watch: {
       'view': function (val) {
-        if(val === 'sourceCode'){
-          this.code = this.content;
+        if (val === 'sourceCode') {
+          this.code = this.content
         }
       },
       'code': function (val) {
-        this.updateContent(val);
+        this.updateContent(val)
       },
       'content': function (val) {
-        this.$store.dispatch('updateContent', val);
+        this.$store.dispatch('updateContent', val)
       },
       'callee': function (val) {
-        if(val.name === 'sourceCode'){
-          this.switchView(this.view == 'sourceCode' ? 'design' : 'sourceCode');
-          this.updatePopupDisplay();
+        if (val.name === 'sourceCode') {
+          this.switchView(this.view === 'sourceCode' ? 'design' : 'sourceCode')
+          this.updatePopupDisplay()
         }
       }
     },

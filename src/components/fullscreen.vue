@@ -2,20 +2,20 @@
 <script>
   export default {
     render: function () {
-      return '';
+      return ''
     },
     computed: {
       callee: function () {
-        return this.$store.state.callee;
+        return this.$store.state.callee
       },
       fullscreen: function () {
-        return this.$store.state.fullscreen;
+        return this.$store.state.fullscreen
       }
     },
     watch: {
       'callee': function (val) {
-        if(val.name === 'fullscreen'){
-          this.$store.dispatch('setFullScreen', !this.fullscreen);
+        if (val.name === 'fullscreen') {
+          this.$store.dispatch('setFullScreen', !this.fullscreen)
         }
       }
     }

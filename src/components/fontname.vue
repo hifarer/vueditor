@@ -26,14 +26,13 @@
 </template>
 
 <script>
-
   import veMixin from '../mixins'
   import { getConfig } from '../config/'
 
   export default {
     mixins: [veMixin],
     data () {
-      let arr = getConfig('fontName');
+      let arr = getConfig('fontName')
       return {
         fonts: arr,
         val: arr[0].abbr || arr[0].val
@@ -49,10 +48,10 @@
     },
     methods: {
       clickHandler (font) {
-        this.val = font.abbr || font.val;
-        this.$store.dispatch('execCommand', {name: 'fontName', value: font.val + ', sans-serif'});
-        this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val});
-        this.$store.dispatch('updatePopupDisplay');
+        this.val = font.abbr || font.val
+        this.$store.dispatch('execCommand', {name: 'fontName', value: font.val + ', sans-serif'})
+        this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val})
+        this.$store.dispatch('updatePopupDisplay')
       }
     }
   }

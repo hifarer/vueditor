@@ -1,5 +1,4 @@
 const lang = {
-  
   app: {},
 
   removeFormat: {title: 'Remove format'},
@@ -64,5 +63,5 @@ const lang = {
   },
   table: {title: 'Table'},
   undo: {title: 'Undo'},
-  redo: {title: 'Redo'},
+  redo: {title: 'Redo'}
 }

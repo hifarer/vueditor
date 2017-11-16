@@ -65,19 +65,18 @@
 </template>
 
 <script>
-
   import { getToolbar } from '../config/toolbar.js'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/index.js'
 
   export default {
     data () {
-      let {btns, selects} = getToolbar();
+      let {btns, selects} = getToolbar()
       return {
         btns,
         selects,
         lang: getLang(),
-        config: getConfig('toolbar'),
+        config: getConfig('toolbar')
       }
     },
     computed: {
@@ -90,68 +89,68 @@
     },
     watch: {
       'view': function (val) {
-        let states = {};
-        let json = Object.assign({}, this.btns, this.selects);
-        for(let name in json){
-          if(['sourceCode', 'markdown', 'fullscreen'].indexOf(name) === -1){
-            states[name] = val === 'design' ? 'default' : 'disabled';
+        let states = {}
+        let json = Object.assign({}, this.btns, this.selects)
+        for (let name in json) {
+          if (['sourceCode', 'markdown', 'fullscreen'].indexOf(name) === -1) {
+            states[name] = val === 'design' ? 'default' : 'disabled'
           }
         }
-        this.$store.dispatch('updateButtonStates', states);
+        this.$store.dispatch('updateButtonStates', states)
       }
     },
     methods: {
       btnHandler (event, name) {
-        if(this.states[name].status === 'disabled')return;
-        let btn = this.btns[name];
-        if(btn.action){
-          if(btn.native){
-            this.$store.dispatch('execCommand', { name: name, value: null });
-          }else{
-            this.$store.dispatch('callMethod', { name: name, params: null });
-            this.updateStates(name);
+        if (this.states[name].status === 'disabled') return
+        let btn = this.btns[name]
+        if (btn.action) {
+          if (btn.native) {
+            this.$store.dispatch('execCommand', { name: name, value: null })
+          } else {
+            this.$store.dispatch('callMethod', { name: name, params: null })
+            this.updateStates(name)
           }
-        }else{
-          this.updateStates(name);
+        } else {
+          this.updateStates(name)
         }
-        this.showPopup(name, event.currentTarget);
+        this.showPopup(name, event.currentTarget)
       },
       selectHandler (event, name) {
-        this.showPopup(name, event.currentTarget);
-        this.updateStates(name);
+        this.showPopup(name, event.currentTarget)
+        this.updateStates(name)
       },
       showPopup (name, obj) {
-        if(this.states[name].showPopup !== undefined){
+        if (this.states[name].showPopup !== undefined) {
           this.$store.dispatch('updatePopupDisplay', {
             name,
             display: !this.states[name].showPopup
-          });
+          })
           this.$store.dispatch('updateRect', {
             left: obj.offsetLeft,
             top: obj.offsetTop,
             width: obj.offsetWidth,
-            height: obj.offsetHeight + parseInt(getComputedStyle(obj).marginBottom)
-          });
+            height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
+          })
         }
       },
       updateStates (name) {
-        let states = {};
+        let states = {}
         // update no action btn status, no action means click on it will toggle a popover menu;
-        if(this.view === 'design'){
-          for(let item in this.btns){
-            if(!this.btns[item].action && this.states[item]){
-              states[item] = 'default';
+        if (this.view === 'design') {
+          for (let item in this.btns) {
+            if (!this.btns[item].action && this.states[item]) {
+              states[item] = 'default'
             }
           }
         }
-        if(['sourceCode', 'markdown'].indexOf(name) !== -1){
-          states['sourceCode'] = 'default';
-          states['markdown'] = 'default';
+        if (['sourceCode', 'markdown'].indexOf(name) !== -1) {
+          states['sourceCode'] = 'default'
+          states['markdown'] = 'default'
         }
-        if(this.states[name].status !== undefined){
-          this.states[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived';
+        if (this.states[name].status !== undefined) {
+          this.states[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived'
         }
-        this.$store.dispatch('updateButtonStates', states);
+        this.$store.dispatch('updateButtonStates', states)
       }
     }
   }

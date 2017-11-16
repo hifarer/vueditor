@@ -1,8 +1,8 @@
 
 let defaultToolbar = {
-  
+
   btns: {
-    
+
     removeFormat: {className: 'icon-eraser', action: 'removeFormat', native: true},
 
     bold: {className: 'icon-bold', action: 'bold', native: true},
@@ -39,30 +39,30 @@ let defaultToolbar = {
   selects: {
     fontName: {className: 'font-select'},
     fontSize: {className: ''},
-    element: {className: ''},
+    element: {className: ''}
   }
 
 }
 
-let toolbar = JSON.parse(JSON.stringify(defaultToolbar));
+let toolbar = JSON.parse(JSON.stringify(defaultToolbar))
 
 export default {
   resetToolbar () {
-    toolbar = JSON.parse(JSON.stringify(defaultToolbar));
+    toolbar = JSON.parse(JSON.stringify(defaultToolbar))
   },
   modifyToolbar (name, element) {
-    if(element.type === 'button'){
+    if (element.type === 'button') {
       toolbar.btns[name] = {
         className: element.className
       }
-      element.action && (toolbar.btns[name].action = element.action);
-    }else{
+      element.action && (toolbar.btns[name].action = element.action)
+    } else {
       toolbar.selects[name] = {
         className: element.className
       }
     }
   },
   getToolbar () {
-    return toolbar;
+    return toolbar
   }
 }

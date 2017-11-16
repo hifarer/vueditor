@@ -1,7 +1,7 @@
 
-const webpack = require('webpack');
-const path = require('path');
-const autoprefixer = require('autoprefixer');
+const webpack = require('webpack')
+const path = require('path')
+const autoprefixer = require('autoprefixer')
 
 module.exports = {
 
@@ -25,7 +25,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.vue$/, 
+        test: /\.vue$/,
         use: [{
           loader: 'vue-loader',
           options: {
@@ -37,20 +37,20 @@ module.exports = {
               })
             ]
           }
-        }], 
+        }],
         exclude: /node_modules/
       },
       {
-        test: /\.js$/, 
-        use: 'babel-loader', 
+        test: /\.js$/,
+        use: 'babel-loader',
         exclude: /node_modules/
       },
       {
-        test: /\.(css|less)$/, 
+        test: /\.(css|less)$/,
         use: ['css-loader', 'less-loader', 'postcss-loader']
       },
       {
-        test: /\.(png|jpg|gif)$/, 
+        test: /\.(png|jpg|gif)$/,
         use: 'url-loader?limit=8192'
       }
     ]
@@ -71,14 +71,14 @@ module.exports = {
       commonjs: 'vue',
       commonjs2: 'vue',
       amd: 'vue',
-      root: 'Vue',
+      root: 'Vue'
     },
     vuex: {
       commonjs: 'vuex',
       commonjs2: 'vuex',
       amd: 'vuex',
-      root: 'Vuex',
+      root: 'Vuex'
     }
   }
 
-};
+}

@@ -21,7 +21,6 @@
 </template>
 
 <script>
-
   import { getLang } from '../config/lang.js'
 
   export default {
@@ -33,33 +32,33 @@
     },
     computed: {
       rect: function () {
-        return this.$store.state.rect;
+        return this.$store.state.rect
       },
       showPopup: function () {
-        return this.$store.state.toolbar.link.showPopup;
+        return this.$store.state.toolbar.link.showPopup
       },
       callee: function () {
-        return this.$store.state.callee;
+        return this.$store.state.callee
       }
     },
     watch: {
       'callee': function (val) {
-        val.name == 'unLink' && this.unLinkHandler();
+        val.name === 'unLink' && this.unLinkHandler()
       }
     },
     methods: {
       checkValid () {
-        let href = this.val;
-        href.match(/^https?:\/\//igm) === null && (href = 'http://' + href);
-        return href;
+        let href = this.val
+        href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
+        return href
       },
       linkHandler () {
-        let href = this.checkValid();
-        this.$store.dispatch('execCommand', { name: 'createlink', value: href });
-        this.$store.dispatch('updatePopupDisplay');
+        let href = this.checkValid()
+        this.$store.dispatch('execCommand', { name: 'createlink', value: href })
+        this.$store.dispatch('updatePopupDisplay')
       },
       unLinkHandler () {
-        this.$store.dispatch('execCommand', { name: 'unlink', value: null });
+        this.$store.dispatch('execCommand', { name: 'unlink', value: null })
       }
     }
   }

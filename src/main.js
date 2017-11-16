@@ -10,11 +10,11 @@ import app from './components/app.vue'
 import createStore from './store/states.js'
 
 function isArray (obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
+  return Object.prototype.toString.call(obj) === '[object Array]'
 }
 
 function isObject (obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]';
+  return Object.prototype.toString.call(obj) === '[object Object]'
 }
 
 function checkConfig (config) {
@@ -27,56 +27,55 @@ function checkConfig (config) {
     id: 'string',
     classList: 'array.string',
     plugins: 'array.object'
-  };
-  let retData = {valid: true, info: ''};
-  for(let name in config){
-    let types = '';
-    if(isArray(config[name])){
-      types += 'array';
-      isObject(config[name][0]) ? types += '.object' : types += '.string';
-    }else if(isObject(config[name])){
-      types = 'object';
-    }else{
-      types = 'string';
+  }
+  let retData = {valid: true, info: ''}
+  for (let name in config) {
+    let types = ''
+    if (isArray(config[name])) {
+      types += 'array'
+      isObject(config[name][0]) ? types += '.object' : types += '.string'
+    } else if (isObject(config[name])) {
+      types = 'object'
+    } else {
+      types = 'string'
     }
-    if(proto[name] && proto[name] !== types){
+    if (proto[name] && proto[name] !== types) {
       retData = {
-        valid: false, 
+        valid: false,
         info: 'invalid configuration, the ' + name + ' attribute requires type ' + proto[name] + ' but received ' + types
-      };
-      break;
+      }
+      break
     }
   }
-  return retData;
+  return retData
 }
 
 function mixinConfig (opts) {
-
-  let defaultConf = getDefaultConf();
-  let config = opts ? Object.assign({}, defaultConf, opts) : defaultConf;
-  let lang = config.lang || getDefaultLang();
+  let defaultConf = getDefaultConf()
+  let config = opts ? Object.assign({}, defaultConf, opts) : defaultConf
+  let lang = config.lang || getDefaultLang()
   let list = [
     'fontName', 'fontSize', 'element', 'foreColor', 'backColor', 'undo', 'table', 'link',
     'picture', 'sourceCode', 'markdown', 'fullscreen'
-  ];
+  ]
   // type check for config
-  let typeInfo = checkConfig(config);
-  if(!typeInfo.valid){
-    throw new Error(typeInfo.info);
+  let typeInfo = checkConfig(config)
+  if (!typeInfo.valid) {
+    throw new Error(typeInfo.info)
   }
-  
-  resetToolbar();
+
+  resetToolbar()
 
   config.plugins && config.plugins.forEach(({ name, element, component }) => {
-    list.push(name);
-    app.components['ve-' + name] = component;
-    config.toolbar.indexOf(name) === -1 && config.toolbar.push(name);
-    lang[name] = element.lang;
-    modifyToolbar(name, element);
-  });
+    list.push(name)
+    app.components['ve-' + name] = component
+    config.toolbar.indexOf(name) === -1 && config.toolbar.push(name)
+    lang[name] = element.lang
+    modifyToolbar(name, element)
+  })
 
-  setConfig(config);
-  setLang(lang);
+  setConfig(config)
+  setLang(lang)
 
   return Object.assign({}, app, {
     store: new Vuex.Store(createStore()),
@@ -86,17 +85,17 @@ function mixinConfig (opts) {
         config
       }
     }
-  });
+  })
 }
 
 const install = function (Vue, opts) {
-  Vue.component('Vueditor', mixinConfig(opts));
-};
+  Vue.component('Vueditor', mixinConfig(opts))
+}
 
 const createEditor = function (el, opts) {
-  let Editor = Vue.extend(mixinConfig(opts));
-  return new Editor().$mount(el);
-};
+  let Editor = Vue.extend(mixinConfig(opts))
+  return new Editor().$mount(el)
+}
 
 export default {
   install,

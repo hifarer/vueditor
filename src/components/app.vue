@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
   import toolbar from './toolbar.vue'
   import design from './design.vue'
   
