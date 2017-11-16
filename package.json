@@ -1,6 +1,6 @@
 {
   "name": "vueditor",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "a wysiwyg editor based on Vue.js and Vuex",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
     "dev": "webpack --config ./build/webpack.dev.config.js  --progress --hide-modules",
     "build": "webpack --config ./build/webpack.prod.config.js --progress --hide-modules",
     "plugin": "webpack --config ./build/webpack.plug.config.js --progress --hide-modules",
-    "eslint": "eslint --fix ./src/ --ext .vue,.js"
+    "eslint": "eslint --fix --ext .vue,.js ./src/"
   },
   "dependencies": {
     "marked": "^0.3.6",

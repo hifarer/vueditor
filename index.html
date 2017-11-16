@@ -35,7 +35,7 @@
   <script src="./dist/plugins/emoji.min.js"></script>
   <script src="./dist/script/vueditor.min.js"></script>
   <script>
-    let uploadUrl = '';
+    let uploadUrl = ''
     let plugins = [
       {
         name: 'emoji',
@@ -49,8 +49,8 @@
         // emoji loaded from script tag, line 35
         component: emoji
       }
-    ];
-    
+    ]
+
     Vue.use(Vueditor, {
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
@@ -58,20 +58,20 @@
         '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullscreen', 'sourceCode', 'markdown'
       ],
       fontName: [
-        {val: 'arial black'}, 
-        {val: 'times new roman'}, 
+        {val: 'arial black'},
+        {val: 'times new roman'},
         {val: 'Courier New'}
       ],
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
       uploadUrl: uploadUrl,
       plugins: plugins
-    });
+    })
 
     let parent = new Vue({
       el: '#editor1'
-    });
-    let editor = parent.$children[0];
-    editor.setContent(`fill your content here`);
+    })
+    let editor = parent.$children[0]
+    editor.setContent(`fill your content here`)
   </script>
   <script>
     let inst = Vueditor.createEditor('#editor2', {
@@ -81,9 +81,9 @@
       ],
       uploadUrl: '',
       id: 'someid',
-      classList: ['someclass'],
-    });
-    inst.setContent('fill your content here');
+      classList: ['someclass']
+    })
+    inst.setContent('fill your content here')
   </script>
 </body>
 </html>
