@@ -37,6 +37,7 @@ const lang = {
 
   fontName: {},
   fontSize: {},
+  code: {},
   element: {},
 
   design: {

@@ -39,7 +39,8 @@ let defaultToolbar = {
   selects: {
     fontName: {className: 'font-select'},
     fontSize: {className: ''},
-    element: {className: ''}
+    element: {className: ''},
+    code: {className: 'code-select'}
   }
 
 }

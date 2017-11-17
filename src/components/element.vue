@@ -1,8 +1,9 @@
 
 <style module lang="less" rel="stylesheet/less">
   .ctn {
-    a {
+    li {
       display: block;
+      cursor: pointer;
       padding: 6px;
       border-bottom: 1px solid #ddd;
       &:last-child {
@@ -18,14 +19,16 @@
 
 <template>
   <div class="ve-dropdown" :class="$style.ctn" @click="selectItem" v-show="showPopup" :style="style">
-    <a href="javascript:;" v-for="(item, index) in arr" :key="index">{{item}}</a>
+    <ul>
+      <li v-for="(item, index) in arr" :key="index">{{item}}</li>
+    </ul>
   </div>
 </template>
 
 <script>
   import veMixin from '../mixins'
 
-export default {
+  export default {
     mixins: [veMixin],
     data () {
       return {

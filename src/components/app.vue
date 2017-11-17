@@ -17,6 +17,7 @@
   import fontName from './fontname.vue'
   import fontSize from './fontsize.vue'
   import sourceCode from './sourcecode.vue'
+  import code from './code.vue'
   import element from './element.vue'
   import table from './table.vue'
   import undo from './undo.vue'
@@ -32,6 +33,7 @@
       've-toolbar': toolbar,
       've-design': design,
       've-sourcecode': sourceCode,
+      've-code': code,
       've-forecolor': color,
       've-backcolor': color,
       've-fontname': fontName,

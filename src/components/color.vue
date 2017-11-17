@@ -10,8 +10,9 @@
     li {
       margin: 1px;
       float: left;
-      a {
+      span {
         display: block;
+        cursor: pointer;
         width: 20px;
         height: 20px;
       }
@@ -33,7 +34,7 @@
     </div>
     <ul>
       <li v-for="(color, index) in colors" :key="index" @click="clickHandler(color)">
-        <a href="javascript:;" :title="color" :style="{background: color}"></a>
+        <span :title="color" :style="{background: color}"></span>
       </li>
     </ul>
   </div>

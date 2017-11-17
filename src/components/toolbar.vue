@@ -8,13 +8,14 @@
     background: #fff;
     border-bottom: 1px solid #ddd;
     user-select: none;
-    a {
+    div {
+      cursor: pointer;
       position: relative;
       display: inline-block;
       padding: 10px 12px;
       color: rgba(0, 0, 0, 0.6);
     }
-    a.ve-divider {
+    div.ve-divider {
       width: 0;
       height: 26px;
       margin: 5px;
@@ -22,11 +23,11 @@
       border-right: 1px solid #ddd;
       vertical-align: top;
     }
-    a.ve-active {
+    div.ve-active {
       background: #eee;
       color: #000;
     }
-    a:not(.ve-disabled):hover {
+    div:not(.ve-disabled):hover {
       background: #eee;
       color: #000;
     }
@@ -39,27 +40,28 @@
       text-overflow: ellipsis;
     }
   }
+  .code-select {
+    width: 80px;
+  }
 </style>
 
 <template>
   <div class="ve-toolbar" ref="toolbar">
     <template v-for="item in config">
-      <a href="javascript:;"  
-        v-if="item in btns" 
-        @click.stop="btnHandler($event, item)" 
+      <div v-if="item in btns" 
+        @click.stop.prevent="btnHandler($event, item)" 
         :title="lang[item].title"
         :class="{'ve-active': states[item].status == 'actived', 've-disabled': states[item].status == 'disabled'}" 
         unselectable="on">
         <i :class="[btns[item].className]"></i>
-      </a>
-      <a href="javascript:;" 
-        v-if="item in selects" 
-        @click.stop="selectHandler($event, item)" 
+      </div>
+      <div v-if="item in selects" 
+        @click.stop.prevent="selectHandler($event, item)" 
         :class="[{'ve-disabled': states[item].status == 'disabled'}, selects[item].className, 've-select']" 
         unselectable="on">
         <span>{{states[item].value}}</span><i :class="{'ve-triangle-down': !states[item].display, 've-triangle-up': states[item].display}"></i>
-      </a>
-      <a href="javascript:;" class="ve-divider" v-if="item == 'divider' || item == '|'"></a>
+      </div>
+      <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
     </template>
   </div>
 </template>

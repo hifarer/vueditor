@@ -2,6 +2,7 @@
 <style module lang="less" rel="stylesheet/less">
   .ctn {
     li {
+      cursor: pointer;
       padding: 6px;
       border-bottom: 1px solid #ddd;
       &:last-child {
@@ -18,9 +19,7 @@
 <template>
   <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
     <ul>
-      <li v-for="(font, index) in fonts" :key="index" @click="clickHandler(font)">
-        <a href="javascript:;" :style="{fontFamily: font.val + ', sans-serif'}">{{font.abbr || font.val}}</a>
-      </li>
+      <li v-for="(font, index) in fonts" :key="index" @click="clickHandler(font)" :style="{fontFamily: font.val + ', sans-serif'}">{{font.abbr || font.val}}</li>
     </ul>
   </div>
 </template>

@@ -2,9 +2,9 @@
 <style module lang="less" rel="stylesheet/less">
   .ctn {
     li {
-      cursor: pointer;
       padding: 6px;
       border-bottom: 1px solid #ddd;
+      cursor: pointer;
       &:last-child {
         border-bottom: none;
       }
@@ -19,7 +19,7 @@
 <template>
   <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
     <ul>
-      <li v-for="(size, index) in fontSize" :key="index" @click="clickHandler(size)">{{size}}</li>
+      <li v-for="(type, index) in code" :key="index" @click="clickHandler(type)">{{type}}</li>
     </ul>
   </div>
 </template>
@@ -31,25 +31,26 @@
   export default {
     mixins: [veMixin],
     data () {
-      let arr = getConfig('fontSize')
+      let { type, pattern } = getConfig('code')
       return {
-        fontSize: arr,
-        val: arr[0]
+        code: type,
+        val: type[0],
+        tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
       }
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.fontSize.showPopup
+        return this.$store.state.toolbar.code.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: this.val})
+      this.$store.dispatch('updateSelectValue', {name: 'code', value: this.val})
     },
     methods: {
-      clickHandler (size) {
-        this.val = size
-        this.$store.dispatch('execCommand', {name: 'fontSize', value: size})
-        this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: size})
+      clickHandler (type) {
+        this.val = type
+        this.$store.dispatch('execCommand', {name: 'insertHTML', value: this.tpl.replace(/#type#/igm, type)})
+        this.$store.dispatch('updateSelectValue', {name: 'code', value: type})
         this.$store.dispatch('updatePopupDisplay')
       }
     }

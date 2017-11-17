@@ -66,6 +66,7 @@
         }
         this.iframeDoc.designMode = 'on'
         this.iframeBody.style.cssText = 'overflow-x: hidden;'
+        this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0;}</style>')
         this.addEvent()
       },
 
@@ -141,6 +142,7 @@
       },
 
       exec (name, value) {
+        this.iframeWin.focus()
         if (this[name]) {
           this[name](name, value)
         } else {
@@ -159,6 +161,7 @@
         let sel = this.getSelection()
         let range = this.getRange()
         if (!sel || !range) return
+        range.deleteContents()
         let node = null
         let frag = this.iframeDoc.createDocumentFragment()
         let obj = this.iframeDoc.createElement('div')
@@ -168,7 +171,11 @@
           frag.appendChild(node)
         }
         range.insertNode(frag)
-        range.setStartAfter(node)
+        if (node.hasChildNodes() && node.childNodes[0].nodeType === 1) {
+          range.setStartBefore(node.childNodes[0])
+        } else {
+          range.setStartAfter(node)
+        }
         range.collapse(true)
         sel.removeAllRanges()
         sel.addRange(range)

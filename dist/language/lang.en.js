@@ -35,6 +35,7 @@ const lang = {
   },
   fontName: {},
   fontSize: {},
+  code: {},
   element: {},
   design: {
     ieMsg: 'You must select a text to use this feature in IE browser'
