@@ -19,6 +19,7 @@ Online [DEMO](http://hifarer.github.io/vueditor/)
 
 ## Features
 
+- Customizable
 - Light weighted, very few dependencies
 - Plugin support
 
@@ -27,7 +28,7 @@ Online [DEMO](http://hifarer.github.io/vueditor/)
 npm install vueditor
 ```
 
-If you prefer to use it via script tag, just add `vueditor.min.js`, `vueditor.min.css` to your page. 
+If you prefer to use it via script tag, download the last release package and add `vueditor.min.js`, `vueditor.min.css` to your page. 
 
 ## Usage
 
@@ -155,6 +156,7 @@ Vue.use(Vueditor, {
 
 |          Name         |    Type    |                                                         Description                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
+| spellcheck            | `Boolean`  | Check spell or not, default is false |
 | lang                  | `Object`   | Interface language, default is English |
 | toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
 | fontName              | `Array`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |

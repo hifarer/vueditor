@@ -1,4 +1,13 @@
 
+0.3.1
+
+1. fix error on switching to source code when disabled some buttons
+2. add `spellcheck` config option
+
+0.3.0
+
+1. fix vuex dependency problem
+
 0.2.9
 
 1. fix editor's configuration could affect each other bug.

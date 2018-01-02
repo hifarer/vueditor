@@ -27,9 +27,12 @@
       background: #eee;
       color: #000;
     }
-    div:not(.ve-disabled):hover {
+    div:hover {
       background: #eee;
-      color: #000;
+    }
+    div.ve-disabled {
+      background: transparent;
+      color: rgba(0,0,0,.6);
     }
   }
   .font-select {
@@ -67,8 +70,8 @@
 </template>
 
 <script>
-  import { getToolbar } from '../config/toolbar.js'
   import { getLang } from '../config/lang.js'
+  import { getToolbar } from '../config/toolbar.js'
   import { getConfig } from '../config/index.js'
 
   export default {
@@ -92,12 +95,12 @@
     watch: {
       'view': function (val) {
         let states = {}
-        let json = Object.assign({}, this.btns, this.selects)
-        for (let name in json) {
-          if (['sourceCode', 'markdown', 'fullscreen'].indexOf(name) === -1) {
-            states[name] = val === 'design' ? 'default' : 'disabled'
+        let exArr = ['sourceCode', 'markdown', 'fullscreen', 'divider', '|']
+        this.config.forEach(item => {
+          if (exArr.indexOf(item) === -1) {
+            states[item] = val === 'design' ? 'default' : 'disabled'
           }
-        }
+        })
         this.$store.dispatch('updateButtonStates', states)
       }
     },
@@ -110,48 +113,40 @@
             this.$store.dispatch('execCommand', { name: name, value: null })
           } else {
             this.$store.dispatch('callMethod', { name: name, params: null })
-            this.updateStates(name)
           }
-        } else {
-          this.updateStates(name)
         }
+        this.updateStates(name)
         this.showPopup(name, event.currentTarget)
       },
       selectHandler (event, name) {
-        this.showPopup(name, event.currentTarget)
+        if (this.states[name].status === 'disabled') return
         this.updateStates(name)
+        this.showPopup(name, event.currentTarget)
       },
       showPopup (name, obj) {
-        if (this.states[name].showPopup !== undefined) {
-          this.$store.dispatch('updatePopupDisplay', {
-            name,
-            display: !this.states[name].showPopup
-          })
-          this.$store.dispatch('updateRect', {
-            left: obj.offsetLeft,
-            top: obj.offsetTop,
-            width: obj.offsetWidth,
-            height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
-          })
-        }
+        this.$store.dispatch('updatePopupDisplay', this.states[name].showPopup !== undefined ? {name, display: !this.states[name].showPopup} :  {} )
+        this.$store.dispatch('updateRect', {
+          left: obj.offsetLeft,
+          top: obj.offsetTop,
+          width: obj.offsetWidth,
+          height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
+        })
       },
       updateStates (name) {
         let states = {}
         // update no action btn status, no action means click on it will toggle a popover menu;
         if (this.view === 'design') {
           for (let item in this.btns) {
-            if (!this.btns[item].action && this.states[item]) {
+            if (!this.btns[item].action && this.states[item] && this.states[item].status === 'actived') {
               states[item] = 'default'
             }
           }
         }
         if (['sourceCode', 'markdown'].indexOf(name) !== -1) {
-          states['sourceCode'] = 'default'
-          states['markdown'] = 'default'
+          this.states['sourceCode'] && (states['sourceCode'] = 'default')
+          this.states['markdown'] && (states['markdown'] = 'default')
         }
-        if (this.states[name].status !== undefined) {
-          this.states[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived'
-        }
+        this.states[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived'
         this.$store.dispatch('updateButtonStates', states)
       }
     }

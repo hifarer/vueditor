@@ -19,8 +19,8 @@ export default function () {
         if (btns[name] && btns[name].action === undefined) {
           toolbar[name].showPopup = false
         }
-        toolbar[name].status = '' // default disabled actived
       }
+      toolbar[name].status = '' // default disabled actived
     }
   })
 

@@ -8,6 +8,7 @@
 <script>
   import { mapActions, mapState } from 'vuex'
   import { getLang } from '../config/lang.js'
+  import { getConfig } from '../config/'
 
   export default {
     data () {
@@ -65,6 +66,7 @@
           this.cache = ''
         }
         this.iframeDoc.designMode = 'on'
+        this.iframeBody.spellcheck = getConfig('spellcheck')
         this.iframeBody.style.cssText = 'overflow-x: hidden;'
         this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0;}</style>')
         this.addEvent()
@@ -74,11 +76,9 @@
       updateStates () {
         let json = {}
         for (let name in this.states) {
-          if (['redo', 'undo'].indexOf(name) === -1) {
+          if (['redo', 'undo', 'fullscreen'].indexOf(name) === -1) {
             if (this.iframeDoc.queryCommandSupported(name)) {
               json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default'
-            } else if (name !== 'fullscreen') {
-              json[name] = 'default'
             }
           }
         }
@@ -93,7 +93,7 @@
           timer = setTimeout(() => {
             this.view === 'design' && this.updatePopupDisplay()
           }, 200)
-          // dispatch selectionchange event in order to throttle
+          // dispatch selectionchange event for throttling
           this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
         }, false)
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
@@ -153,6 +153,7 @@
             this.iframeDoc.execCommand('styleWithCss', false, true)
           }
           this.iframeDoc.execCommand(name, false, value)
+          // todo 当没有选择内容时，点击加粗等按钮还是会失去焦点
         }
         this.updateContent(this.iframeBody.innerHTML)
       },

@@ -7,7 +7,9 @@ export default {
 
   UPDATE_BUTTON_STATES ({ toolbar }, data) {
     for (let name in data) {
-      toolbar[name].status = data[name]
+      if (toolbar[name]) {
+        toolbar[name].status = data[name]
+      }
     }
   },
 
