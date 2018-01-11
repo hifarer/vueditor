@@ -1,6 +1,8 @@
 
 let defaultConf = {
-  spellcheck: true,
+  spellcheck: false,
+  noFormatPaste: true,
+  pasteUpload: false,
   toolbar: [
     'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
     'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',

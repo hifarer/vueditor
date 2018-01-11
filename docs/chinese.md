@@ -153,6 +153,8 @@ Vue.use(Vueditor, {
 |          名称         |    类型    |                                                         描述                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
 | spellcheck            | `Boolean` | 是否打开拼写检查, 默认关闭 |
+| noFormatPaste         | `Boolean` | 是否开启无格式粘贴模式, 默认打开 |
+| pasteUpload           | `Boolean` | 是否开启粘贴自动上传图片功能，默认关闭，将使用`uploadUrl`作为上传接口，服务端需要接受处理base64字符串，字段名`imageData` |
 | toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
 | fontName              | `Array`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
 | fontSize              | `Array`    | font-size 选项 |

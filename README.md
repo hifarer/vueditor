@@ -157,6 +157,8 @@ Vue.use(Vueditor, {
 |          Name         |    Type    |                                                         Description                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
 | spellcheck            | `Boolean`  | Check spell or not, default is false |
+| noFormatPaste         | `Boolean`  | Determine paste format, default is true |
+| pasteUpload           | `Boolean`  | Whether to upload clipbord image or not, default is false, will use `uploadUrl` as upload url, the server side need to able to handle base 64 string, the field name is `imageData` |
 | lang                  | `Object`   | Interface language, default is English |
 | toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
 | fontName              | `Array`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |

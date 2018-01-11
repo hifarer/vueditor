@@ -15,7 +15,7 @@
     "eslint": "eslint --fix --ext .vue,.js ./src/"
   },
   "dependencies": {
-    "marked": "^0.3.6",
+    "marked": "^0.3.9",
     "twemoji": "^2.4.1",
     "vue": ">=2.0.5",
     "vuex": ">=2.0.0"

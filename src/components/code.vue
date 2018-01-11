@@ -49,7 +49,7 @@
     methods: {
       clickHandler (type) {
         this.val = type
-        this.$store.dispatch('execCommand', {name: 'insertHTML', value: this.tpl.replace(/#type#/igm, type)})
+        this.$store.dispatch('execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
         this.$store.dispatch('updateSelectValue', {name: 'code', value: type})
         this.$store.dispatch('updatePopupDisplay')
       }

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="ve-design" v-show="view === 'design'">
+  <div class="ve-design" v-show="view === 'design' || view === 'codesnippet'">
     <iframe src="about:blank" frameborder="0" @load="init"></iframe>
   </div>
 </template>
@@ -19,7 +19,8 @@
         timer: null,
         inited: false,
         cache: '',
-        lang: getLang('design')
+        lang: getLang('design'),
+        config: getConfig()
       }
     },
 
@@ -54,7 +55,8 @@
       'updateContent',
       'updateButtonStates',
       'updatePopupDisplay',
-      'callMethod'
+      'callMethod',
+      'switchView'
     ]), {
       init (event) {
         this.iframeWin = event.target.contentWindow
@@ -66,7 +68,7 @@
           this.cache = ''
         }
         this.iframeDoc.designMode = 'on'
-        this.iframeBody.spellcheck = getConfig('spellcheck')
+        this.iframeBody.spellcheck = this.config.spellcheck
         this.iframeBody.style.cssText = 'overflow-x: hidden;'
         this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0;}</style>')
         this.addEvent()
@@ -98,6 +100,7 @@
         }, false)
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false)
+        this.config.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
         this.selectionChange()
       },
 
@@ -107,6 +110,67 @@
           event.keyCode === 89 && this.callMethod({name: 'redo'})
           event.keyCode === 90 && this.callMethod({name: 'undo'})
         }
+        if (event.keyCode === 13) {
+          event.preventDefault()
+          let range = this.getRange()
+          if (!range) return
+          let container = range.commonAncestorContainer
+          container.nodeType === 3 && (container = container.parentNode)
+          let excludeTags = ['code', 'td']
+          let includeTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+          let bool = false
+          let arr = []
+          let child = container
+          let tagName = child.tagName.toLowerCase()
+          arr.push(tagName)
+          while (tagName !== 'body' && this.iframeBody.contains(container)) {
+            container = container.parentNode
+            tagName = container.tagName.toLowerCase()
+            arr.push(tagName)
+          }
+          // 路径中包括excludeTags也不行, 但如果是 td 包括 p 是可以的
+          let includeIndex = -1
+          let excludeIndex = -1
+          arr.forEach((tag, i) => {
+            if (includeTags.indexOf(tag) !== -1 && includeIndex === -1) {
+              includeIndex = i
+            }
+            if (excludeTags.indexOf(tag) !== -1 && excludeIndex === -1) {
+              excludeIndex = i
+            }
+          })
+          if (excludeIndex !== -1) {
+            if (includeIndex === -1 || (includeIndex !== -1 && includeIndex > excludeIndex)) {
+              bool = true
+            }
+          }
+          if (bool) {
+            let br = this.iframeDoc.createElement('br')
+            range.insertNode(br)
+            br.insertAdjacentHTML('afterend', '&#8203;')
+            range.setStartAfter(br.nextSibling)
+          } else {
+            if (range.collapsed) {
+              range.setEndAfter(child)
+            } else {
+              range.setStart(range.startContainer, range.startOffset)
+              range.setEndAfter(child)
+            }
+            // 如果后面没有文本内容了，生成新的p，如果有截断当前的元素
+            if (range.toString() !== '') {
+              if (child.nextElementSibling !== null) {
+                child.parentNode.insertBefore(range.extractContents(), child.nextElementSibling)
+              } else {
+                child.parentNode.appendChild(range.extractContents())
+              }
+              child.innerHTML === '' && (child.innerHTML = '<br>')
+            } else {
+              child.insertAdjacentHTML('afterend', '<p><br></p>')
+            }
+            range.setStart(child.nextElementSibling, 0)
+          }
+          range.collapse(true)
+        }
       },
 
       keyupHandler (event) {
@@ -115,6 +179,51 @@
           this.updateContent(this.iframeBody.innerHTML)
         }, 500)
       },
+  
+      // 无格式粘贴
+      pasteHandler (event) {
+        event.preventDefault()
+        let range = this.getRange()
+        if (!range) return
+        let container = range.commonAncestorContainer
+        container.nodeType === 3 && (container = container.parentNode)
+  
+        let clipboardData = event.clipboardData || window.clipboardData
+        let text = clipboardData.getData('text/plain') || clipboardData.getData('Text')
+        let arr = text.replace(/(<|>)/igm, function (data) {
+          return data.replace('<', '&lt;').replace('>', '&gt;')
+        }).split('\n')
+
+        this.insertHTML('', arr.shift())
+        arr.forEach(item => {
+          if (item.match(/\S/mg) !== null) {
+            this.insertHTML('', '<br>' + item)
+          }
+        })
+
+        if (this.config.pasteUpload && clipboardData.items) {
+          this.pasteUpload(clipboardData.items)
+        }
+      },
+
+      pasteUpload (arr) {
+        let self = this
+        Array.prototype.forEach.call(arr, item => {
+          if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
+            let reader = new window.FileReader()
+            reader.readAsDataURL(item.getAsFile())
+            reader.onload = function (e) {
+              let base64Str = e.target.result.replace('+', '%2B')
+              let xhr = new window.XMLHttpRequest()
+              xhr.open('POST', self.config.uploadUrl)
+              xhr.send({ imageData: base64Str })
+              xhr.onload = function () {
+                self.insertHTML('', `<img src="${xhr.responseText}">`)
+              }
+            }
+          }
+        })
+      },
 
       selectionChange () {
         let timer = null
@@ -122,6 +231,7 @@
           // throttle
           clearTimeout(timer)
           timer = setTimeout(() => {
+            this.checkElement()
             this.view === 'design' && this.updateStates()
           }, 200)
         }, false)
@@ -133,6 +243,7 @@
               if (focusOffset !== sel.focusOffset) {
                 focusOffset = sel.focusOffset
                 this.view === 'design' && this.updateStates()
+                this.checkElement()
               }
             } else {
               sel = this.getSelection()
@@ -141,8 +252,61 @@
         }
       },
 
+      checkElement () {
+        let range = this.getRange()
+        if (!range) return
+        let tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        let container = range.commonAncestorContainer
+        container.nodeType === 3 && (container = container.parentNode)
+        let { pattern } = this.config.code
+        if (container.tagName.toLowerCase() === 'code') {
+          let value = pattern.value.replace(/#type#/, '')
+          value = container.getAttribute(pattern.attr).replace(value, '')
+          this.$store.dispatch('updateSelectValue', {name: 'code', value: value})
+          this.view === 'design' && this.switchView('codesnippet')
+        } else {
+          // tagname fontsize fontfamily
+          let style = window.getComputedStyle(container)
+          let unit = this.config.fontSize[0].match(/[a-z]+/ig)[0]
+          let fontName = style['fontFamily'].replace(', sans-serif', '').replace(/"/g, '')
+          let tagName = container.tagName.toLowerCase()
+
+          while (this.iframeBody.contains(container) && tagName !== 'body' && tags.indexOf(tagName) === -1) {
+            container = container.parentNode
+            tagName = container.tagName.toLowerCase()
+          }
+          // 解决文字直接写到body里
+          if (tagName === 'body' && range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
+            let offset = range.startOffset
+            let obj = this.iframeDoc.createElement('p')
+            obj.innerHTML = range.startContainer.nodeValue
+            range.startContainer.parentNode.replaceChild(obj, range.startContainer)
+            range.setStart(obj.childNodes[0], offset)
+            range.collapse(true)
+            tagName = 'p'
+          }
+
+          if (this.config.toolbar.indexOf('element') !== -1 && tags.indexOf(tagName) !== -1) {
+            this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName})
+          }
+          if (this.config.toolbar.indexOf('fontName') !== -1) {
+            this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.$store.dispatch('updateSelectValue', {name: 'fontName', value: fontName})
+          }
+          if (this.config.toolbar.indexOf('fontSize') !== -1) {
+            if (unit === 'px') {
+              this.config.fontSize.indexOf(style['fontSize']) !== -1 && this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: style['fontSize']})
+            }
+            if (unit === 'rem') {
+              let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
+              let remFontSize = (parseInt(style['fontSize']) / rootFontSize).toFixed(1) + 'rem'
+              this.config.fontSize.indexOf(remFontSize) !== -1 && this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: remFontSize})
+            }
+          }
+          this.view !== 'design' && this.switchView('design')
+        }
+      },
+
       exec (name, value) {
-        this.iframeWin.focus()
         if (this[name]) {
           this[name](name, value)
         } else {
@@ -153,15 +317,16 @@
             this.iframeDoc.execCommand('styleWithCss', false, true)
           }
           this.iframeDoc.execCommand(name, false, value)
-          // todo 当没有选择内容时，点击加粗等按钮还是会失去焦点
+          this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
         }
+        this.iframeBody.focus()
         this.updateContent(this.iframeBody.innerHTML)
       },
 
       insertHTML (name, value) {
         let sel = this.getSelection()
         let range = this.getRange()
-        if (!sel || !range) return
+        if (!sel || !range || !value) return
         range.deleteContents()
         let node = null
         let frag = this.iframeDoc.createDocumentFragment()
@@ -173,7 +338,7 @@
         }
         range.insertNode(frag)
         if (node.hasChildNodes() && node.childNodes[0].nodeType === 1) {
-          range.setStartBefore(node.childNodes[0])
+          range.setStart(node.childNodes[0], 0)
         } else {
           range.setStartAfter(node)
         }
@@ -241,6 +406,23 @@
             selection.removeAllRanges()
             selection.addRange(range)
           }
+        }
+        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      },
+
+      insertCodeBlock (name, value) {
+        let range = this.getRange()
+        if (!range) return
+        let { pattern } = this.config.code
+        let tempDiv = document.createElement('div')
+        tempDiv.innerHTML = value
+        let attrValue = tempDiv.getElementsByTagName('code')[0].getAttribute(pattern.attr)
+        let container = range.commonAncestorContainer
+        container.nodeType === 3 && (container = container.parentNode)
+        if (container.tagName.toLowerCase() === 'code') {
+          container.setAttribute(pattern.attr, attrValue)
+        } else {
+          this.insertHTML(name, value)
         }
       },
 
