@@ -76,10 +76,10 @@
         let uploadUrl = this.uploadUrl
         if (this.url) {
           if (this.$parent.upload) {
-            this.$parent.upload(obj, function (href) {
+            this.$parent.upload(obj, href => {
               this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${href}">`})
               this.hideDialog()
-            }.bind(this))
+            })
           } else if (uploadUrl) {
             let formData = new window.FormData(form)
             let xhr = new window.XMLHttpRequest()

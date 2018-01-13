@@ -255,7 +255,7 @@
       checkElement () {
         let range = this.getRange()
         if (!range) return
-        let tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        let tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table']
         let container = range.commonAncestorContainer
         container.nodeType === 3 && (container = container.parentNode)
         let { pattern } = this.config.code
@@ -271,23 +271,23 @@
           let fontName = style['fontFamily'].replace(', sans-serif', '').replace(/"/g, '')
           let tagName = container.tagName.toLowerCase()
 
-          while (this.iframeBody.contains(container) && tagName !== 'body' && tags.indexOf(tagName) === -1) {
-            container = container.parentNode
-            tagName = container.tagName.toLowerCase()
-          }
           // 解决文字直接写到body里
           if (tagName === 'body' && range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
             let offset = range.startOffset
             let obj = this.iframeDoc.createElement('p')
-            obj.innerHTML = range.startContainer.nodeValue
+            obj.innerText = range.startContainer.nodeValue
             range.startContainer.parentNode.replaceChild(obj, range.startContainer)
             range.setStart(obj.childNodes[0], offset)
             range.collapse(true)
             tagName = 'p'
           }
 
-          if (this.config.toolbar.indexOf('element') !== -1 && tags.indexOf(tagName) !== -1) {
-            this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName})
+          if (this.config.toolbar.indexOf('element') !== -1) {
+            while (this.iframeBody.contains(container) && tagName !== 'body' && tags.indexOf(tagName) === -1) {
+              container = container.parentNode
+              tagName = container.tagName.toLowerCase()
+            }
+            tags.indexOf(tagName) !== -1 && this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName})
           }
           if (this.config.toolbar.indexOf('fontName') !== -1) {
             this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.$store.dispatch('updateSelectValue', {name: 'fontName', value: fontName})
@@ -324,9 +324,8 @@
       },
 
       insertHTML (name, value) {
-        let sel = this.getSelection()
         let range = this.getRange()
-        if (!sel || !range || !value) return
+        if (!range || !value) return
         range.deleteContents()
         let node = null
         let frag = this.iframeDoc.createDocumentFragment()
@@ -338,13 +337,14 @@
         }
         range.insertNode(frag)
         if (node.hasChildNodes() && node.childNodes[0].nodeType === 1) {
-          range.setStart(node.childNodes[0], 0)
+          while(node.hasChildNodes() && node.childNodes[0].nodeType === 1){
+            node = node.childNodes[0]
+          }
+          node.tagName.toLowerCase() === 'br' ? range.selectNode(node) : range.setStart(node, 0)
         } else {
           range.setStartAfter(node)
+          range.collapse(true)
         }
-        range.collapse(true)
-        sel.removeAllRanges()
-        sel.addRange(range)
       },
 
       fontSize (name, value) {
