@@ -112,65 +112,69 @@
         }
         if (event.keyCode === 13) {
           event.preventDefault()
-          let range = this.getRange()
-          if (!range) return
-          let container = range.commonAncestorContainer
-          container.nodeType === 3 && (container = container.parentNode)
-          let excludeTags = ['code', 'td']
-          let includeTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-          let bool = false
-          let arr = []
-          let child = container
-          let tagName = child.tagName.toLowerCase()
-          arr.push(tagName)
-          while (tagName !== 'body' && this.iframeBody.contains(container)) {
-            container = container.parentNode
-            tagName = container.tagName.toLowerCase()
-            arr.push(tagName)
-          }
-          // 路径中包括excludeTags也不行, 但如果是 td 包括 p 是可以的
-          let includeIndex = -1
-          let excludeIndex = -1
-          arr.forEach((tag, i) => {
-            if (includeTags.indexOf(tag) !== -1 && includeIndex === -1) {
-              includeIndex = i
-            }
-            if (excludeTags.indexOf(tag) !== -1 && excludeIndex === -1) {
-              excludeIndex = i
-            }
-          })
-          if (excludeIndex !== -1) {
-            if (includeIndex === -1 || (includeIndex !== -1 && includeIndex > excludeIndex)) {
-              bool = true
-            }
-          }
-          if (bool) {
-            let br = this.iframeDoc.createElement('br')
-            range.insertNode(br)
-            br.insertAdjacentHTML('afterend', '&#8203;')
-            range.setStartAfter(br.nextSibling)
-          } else {
-            if (range.collapsed) {
-              range.setEndAfter(child)
-            } else {
-              range.setStart(range.startContainer, range.startOffset)
-              range.setEndAfter(child)
-            }
-            // 如果后面没有文本内容了，生成新的p，如果有截断当前的元素
-            if (range.toString() !== '') {
-              if (child.nextElementSibling !== null) {
-                child.parentNode.insertBefore(range.extractContents(), child.nextElementSibling)
-              } else {
-                child.parentNode.appendChild(range.extractContents())
-              }
-              child.innerHTML === '' && (child.innerHTML = '<br>')
-            } else {
-              child.insertAdjacentHTML('afterend', '<p><br></p>')
-            }
-            range.setStart(child.nextElementSibling, 0)
-          }
-          range.collapse(true)
+          this.enterHandler()
         }
+      },
+
+      enterHandler () {
+        let range = this.getRange()
+        if (!range) return
+        let container = range.commonAncestorContainer
+        container.nodeType === 3 && (container = container.parentNode)
+        let excludeTags = ['code', 'td']
+        let includeTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        let bool = false
+        let arr = []
+        let child = container
+        let tagName = child.tagName.toLowerCase()
+        arr.push(tagName)
+        while (tagName !== 'body' && this.iframeBody.contains(container)) {
+          container = container.parentNode
+          tagName = container.tagName.toLowerCase()
+          arr.push(tagName)
+        }
+        // 路径中包括excludeTags也不行, 但如果是 td 包括 p 是可以的
+        let includeIndex = -1
+        let excludeIndex = -1
+        arr.forEach((tag, i) => {
+          if (includeTags.indexOf(tag) !== -1 && includeIndex === -1) {
+            includeIndex = i
+          }
+          if (excludeTags.indexOf(tag) !== -1 && excludeIndex === -1) {
+            excludeIndex = i
+          }
+        })
+        if (excludeIndex !== -1) {
+          if (includeIndex === -1 || (includeIndex !== -1 && includeIndex > excludeIndex)) {
+            bool = true
+          }
+        }
+        if (bool) {
+          let br = this.iframeDoc.createElement('br')
+          range.insertNode(br)
+          br.insertAdjacentHTML('afterend', '&#8203;')
+          range.setStartAfter(br.nextSibling)
+        } else {
+          if (range.collapsed) {
+            range.setEndAfter(child)
+          } else {
+            range.setStart(range.startContainer, range.startOffset)
+            range.setEndAfter(child)
+          }
+          // 如果后面没有文本内容了，生成新的p，如果有截断当前的元素
+          if (range.toString() !== '') {
+            if (child.nextElementSibling !== null) {
+              child.parentNode.insertBefore(range.extractContents(), child.nextElementSibling)
+            } else {
+              child.parentNode.appendChild(range.extractContents())
+            }
+            child.innerHTML === '' && (child.innerHTML = '<br>')
+          } else {
+            child.insertAdjacentHTML('afterend', '<p><br></p>')
+          }
+          range.setStart(child.nextElementSibling, 0)
+        }
+        range.collapse(true)
       },
 
       keyupHandler (event) {
@@ -207,7 +211,7 @@
       },
 
       pasteUpload (arr) {
-        let self = this
+        let _this = this
         Array.prototype.forEach.call(arr, item => {
           if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
             let reader = new window.FileReader()
@@ -215,10 +219,10 @@
             reader.onload = function (e) {
               let base64Str = e.target.result.replace('+', '%2B')
               let xhr = new window.XMLHttpRequest()
-              xhr.open('POST', self.config.uploadUrl)
+              xhr.open('POST', _this.config.uploadUrl)
               xhr.send({ imageData: base64Str })
               xhr.onload = function () {
-                self.insertHTML('', `<img src="${xhr.responseText}">`)
+                _this.insertHTML('', `<img src="${xhr.responseText}">`)
               }
             }
           }
@@ -261,8 +265,14 @@
         let { pattern } = this.config.code
         if (container.tagName.toLowerCase() === 'code') {
           let value = pattern.value.replace(/#type#/, '')
-          value = container.getAttribute(pattern.attr).replace(value, '')
-          this.$store.dispatch('updateSelectValue', {name: 'code', value: value})
+          value = (container.getAttribute(pattern.attr) || '').replace(value, '')
+          this.$store.dispatch('updateSelectValue', {name: 'code', value: value || '--'})
+          this.view === 'design' && this.switchView('codesnippet')
+        } else if (container.tagName.toLowerCase() === 'pre') {
+          // 解决文字直接写到pre里
+          if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
+            this.wrapTextNode(range, 'code')
+          }
           this.view === 'design' && this.switchView('codesnippet')
         } else {
           // tagname fontsize fontfamily
@@ -271,15 +281,12 @@
           let fontName = style['fontFamily'].replace(', sans-serif', '').replace(/"/g, '')
           let tagName = container.tagName.toLowerCase()
 
-          // 解决文字直接写到body里
-          if (tagName === 'body' && range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
-            let offset = range.startOffset
-            let obj = this.iframeDoc.createElement('p')
-            obj.innerText = range.startContainer.nodeValue
-            range.startContainer.parentNode.replaceChild(obj, range.startContainer)
-            range.setStart(obj.childNodes[0], offset)
-            range.collapse(true)
-            tagName = 'p'
+          if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
+            // 解决文字直接写到body里
+            if(tagName === 'body'){
+              this.wrapTextNode(range, 'p')
+              tagName = 'p'
+            }
           }
 
           if (this.config.toolbar.indexOf('element') !== -1) {
@@ -304,6 +311,15 @@
           }
           this.view !== 'design' && this.switchView('design')
         }
+      },
+
+      wrapTextNode (range, tagName) {
+        let offset = range.startOffset
+        let obj = this.iframeDoc.createElement(tagName)
+        obj.innerText = range.startContainer.nodeValue
+        range.startContainer.parentNode.replaceChild(obj, range.startContainer)
+        range.setStart(obj.childNodes[0], offset)
+        range.collapse(true)
       },
 
       exec (name, value) {
@@ -421,6 +437,8 @@
         container.nodeType === 3 && (container = container.parentNode)
         if (container.tagName.toLowerCase() === 'code') {
           container.setAttribute(pattern.attr, attrValue)
+        } else if (container.tagName.toLowerCase() === 'pre') {
+          this.insertHTML(name, tempDiv.getElementsByTagName('code')[0].outerHTML)
         } else {
           this.insertHTML(name, value)
         }
