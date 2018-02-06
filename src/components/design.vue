@@ -110,9 +110,13 @@
           event.keyCode === 89 && this.callMethod({name: 'redo'})
           event.keyCode === 90 && this.callMethod({name: 'undo'})
         }
-        if (event.keyCode === 13) {
-          event.preventDefault()
-          this.enterHandler()
+        if (event.keyCode === 13 && this.getRange()) {
+          let container = this.getRange().commonAncestorContainer
+          container.nodeType === 3 && (container = container.parentNode)
+          if (['code', 'td', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].indexOf( container.tagName.toLowerCase() ) !== -1 ) {
+            event.preventDefault()
+            this.enterHandler()
+          }
         }
       },
 
@@ -122,7 +126,7 @@
         let container = range.commonAncestorContainer
         container.nodeType === 3 && (container = container.parentNode)
         let excludeTags = ['code', 'td']
-        let includeTags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        let includeTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         let bool = false
         let arr = []
         let child = container
@@ -155,19 +159,14 @@
           br.insertAdjacentHTML('afterend', '&#8203;')
           range.setStartAfter(br.nextSibling)
         } else {
-          if (range.collapsed) {
-            range.setEndAfter(child)
-          } else {
-            range.setStart(range.startContainer, range.startOffset)
-            range.setEndAfter(child)
+          if (!range.collapsed) {
+            range.deleteContents()
           }
           // 如果后面没有文本内容了，生成新的p，如果有截断当前的元素
+          range.setEndAfter(child)
           if (range.toString() !== '') {
-            if (child.nextElementSibling !== null) {
-              child.parentNode.insertBefore(range.extractContents(), child.nextElementSibling)
-            } else {
-              child.parentNode.appendChild(range.extractContents())
-            }
+            // if child.nextElementSibling === null insertBefore equals appendChild
+            child.parentNode.insertBefore(range.extractContents(), child.nextElementSibling)
             child.innerHTML === '' && (child.innerHTML = '<br>')
           } else {
             child.insertAdjacentHTML('afterend', '<p><br></p>')

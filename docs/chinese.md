@@ -210,4 +210,4 @@ Vue.use(Vueditor, {
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2016 hifarer
+Copyright (c) 2016-2018 hifarer
