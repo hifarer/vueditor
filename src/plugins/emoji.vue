@@ -46,7 +46,7 @@
 
   import twemoji from 'twemoji'
 
-export default {
+  export default {
     data () {
       return {
         arr: [

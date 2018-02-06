@@ -140,11 +140,13 @@ editor.upload = function (obj, callback) {
 
 ### 界面语言
 
-编辑器的默认语言为英语，如需设置成中文，需要引入`dist/language/lang.cn.js`, 使用script标签或者`import`, `require`都可以。引入以后在初始化编辑器作为配置的一部分传入，示例：
+编辑器的默认语言为英语，如需设置成中文，需要引入`dist/language/lang.cn.js`, 使用script标签或者`import`, `require`都可以。引入以后在初始化编辑器作为配置的一部分传入，webpack import(需要安装exports-loader)示例：
 ```javascript
+import lang from 'exports-loader?lang!vueditor/dist/language/lang.cn.js'
+
 Vue.use(Vueditor, {
   ...
-  lang: languageObject,
+  lang: lang,
 });
 ```
 

@@ -144,11 +144,12 @@ editor.upload = function (obj, callback) {
 
 The editor's default language is English, to set to other language, you will need to translate for your own.
 The `dist/language` folder has an full example inside. Adding a script tag or use `import`, `require` to    
-bring the language object in, then make it an attribute of the config for initialize. See the example below:
+bring the language object in, then make it an attribute of the config for initialize. See the example for webpack import(with exports-loader installed) below:
 ```javascript
+import lang from 'exports-loader?lang!vueditor/dist/language/lang.cn.js'
 Vue.use(Vueditor, {
   ...
-  lang: languageObject,
+  lang: lang,
 });
 ```
 
