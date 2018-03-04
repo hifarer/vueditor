@@ -38,19 +38,19 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.element.showPopup
+        return this.$store.state.vueditor.toolbar.element.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'element', value: this.val})
+      this.$store.dispatch('vueditor/updateSelectValue', {name: 'element', value: this.val})
     },
     methods: {
       selectItem (event) {
         let tagName = event.target.innerHTML.trim()
         this.val = tagName
-        this.$store.dispatch('execCommand', {name: 'formatBlock', value: tagName})
-        this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName})
-        this.$store.dispatch('updatePopupDisplay')
+        this.$store.dispatch('vueditor/execCommand', {name: 'formatBlock', value: tagName})
+        this.$store.dispatch('vueditor/updateSelectValue', {name: 'element', value: tagName})
+        this.$store.dispatch('vueditor/updatePopupDisplay')
       }
     }
   }

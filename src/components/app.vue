@@ -10,6 +10,7 @@
 </template>
 
 <script>
+
   import toolbar from './toolbar.vue'
   import design from './design.vue'
   
@@ -48,15 +49,15 @@
     },
     computed: {
       fullscreen: function () {
-        return this.$store.state.fullscreen
+        return this.$store.state.vueditor.fullscreen
       }
     },
     methods: {
       setContent (content) {
-        this.$store.dispatch('updateContent', content)
+        this.$store.dispatch('vueditor/updateContent', content)
       },
       getContent () {
-        return this.$store.state.content
+        return this.$store.state.vueditor.content
       }
     }
   }

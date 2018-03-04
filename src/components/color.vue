@@ -41,9 +41,10 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import veMixin from '../mixins'
   import { getLang } from '../config/lang.js'
-
+  
   export default {
     mixins: [veMixin],
     data () {
@@ -64,13 +65,14 @@
     },
     computed: {
       showPopup (state) {
-        return this.$store.state.toolbar[this.tagName].showPopup
+        return this.$store.state.vueditor.toolbar[this.tagName].showPopup
       }
     },
     methods: {
-      updatePopupDisplay () {
-        this.$store.dispatch('updatePopupDisplay')
-      },
+      ...mapActions('vueditor',[
+        'updatePopupDisplay',
+        'execCommand'
+      ]),
       checkValid (color) {
         let sColor = color.replace(/\s+/g, '')
         let hsl3 = /^#[0-9a-f]{3}$/i
@@ -81,7 +83,7 @@
         }
       },
       setColor (type, color) {
-        this.$store.dispatch('execCommand', {name: type, value: color})
+        this.execCommand({name: type, value: color})
       },
       clickHandler (color) {
         this.setColor(this.tagName, color)

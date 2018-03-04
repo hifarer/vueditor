@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vueditor</title>
+  <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+</head>
+<body>
+
+  <div id="editor">
+    <Vueditor></Vueditor>
+  </div>
+
+  <div id="box"></div>
+
+  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
+  <script src="https://cdn.staticfile.org/vuex/2.1.0/vuex.js"></script>
+  <script src="./dist/script/vueditor.js"></script>
+  <script>
+
+    const store = new Vuex.Store({
+      state: {
+        count: 0
+      },
+      mutations: {
+        increment (state) {
+          state.count++
+        }
+      }
+    })
+
+    const opts = {
+      toolbar: [
+        'removeFormat', 'undo', 'redo', '|', 'code', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
+        'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullscreen', 'sourceCode', 'markdown'
+      ],
+      fontName: [
+        { val: 'arial black' },
+        { val: 'times new roman' },
+        { val: 'Courier New' }
+      ],
+      fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem']
+    }
+
+    Vue.use(Vueditor, {store, opts})
+
+    let parent = new Vue({
+      el: '#editor',
+      store
+    })
+    let editor = parent.$children[0]
+    editor.setContent('fill your content here')
+
+    // let inst = Vueditor.createEditor('#box', {
+    //   toolbar: [
+    //     'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
+    //   ]
+    // })
+    // inst.setContent('fill your content here')
+
+  </script>
+</body>
+</html>

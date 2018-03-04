@@ -70,10 +70,12 @@
 </template>
 
 <script>
+  
+  import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
-  import { getToolbar } from '../config/toolbar.js'
   import { getConfig } from '../config/index.js'
-
+  import { getToolbar } from '../config/toolbar.js'
+  
   export default {
     data () {
       let {btns, selects} = getToolbar()
@@ -84,14 +86,10 @@
         config: getConfig('toolbar')
       }
     },
-    computed: {
-      states: function () {
-        return this.$store.state.toolbar
-      },
-      view: function () {
-        return this.$store.state.view
-      }
-    },
+    computed: mapState('vueditor', {
+      states: state => state.toolbar,
+      view: state => state.view
+    }),
     watch: {
       'view': function (val) {
         let states = {}
@@ -104,18 +102,25 @@
         if (val === 'codesnippet') {
           states.code !== undefined && (states.code = 'default')
         }
-        this.$store.dispatch('updateButtonStates', states)
+        this.updateButtonStates(states)
       }
     },
     methods: {
+      ...mapActions('vueditor', [
+        'execCommand',
+        'callMethod',
+        'updateRect',
+        'updateButtonStates',
+        'updatePopupDisplay'
+      ]),
       btnHandler (event, name) {
         if (this.states[name].status === 'disabled') return
         let btn = this.btns[name]
         if (btn.action) {
           if (btn.native) {
-            this.$store.dispatch('execCommand', { name: name, value: null })
+            this.execCommand({ name: name, value: null })
           } else {
-            this.$store.dispatch('callMethod', { name: name, params: null })
+            this.callMethod({ name: name, params: null })
           }
         }
         this.updateStates(name)
@@ -127,8 +132,8 @@
         this.showPopup(name, event.currentTarget)
       },
       showPopup (name, obj) {
-        this.$store.dispatch('updatePopupDisplay', this.states[name].showPopup !== undefined ? {name, display: !this.states[name].showPopup} : {})
-        this.$store.dispatch('updateRect', {
+        this.updatePopupDisplay(this.states[name].showPopup !== undefined ? {name, display: !this.states[name].showPopup} : {})
+        this.updateRect({
           left: obj.offsetLeft,
           top: obj.offsetTop,
           width: obj.offsetWidth,
@@ -150,7 +155,7 @@
           this.states['markdown'] && (states['markdown'] = 'default')
         }
         this.states[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived'
-        this.$store.dispatch('updateButtonStates', states)
+        this.updateButtonStates(states)
       }
     }
   }

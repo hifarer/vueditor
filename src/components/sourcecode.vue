@@ -22,7 +22,8 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
+  
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     data () {
@@ -30,11 +31,11 @@
         code: ''
       }
     },
-    computed: mapState([
-      'view',
-      'content',
-      'callee'
-    ]),
+    computed: mapState('vueditor', {
+      view: state => state.view,
+      content: state => state.content,
+      callee: state => state.callee
+    }),
     watch: {
       'view': function (val) {
         if (val === 'sourceCode') {
@@ -45,7 +46,7 @@
         this.updateContent(val)
       },
       'content': function (val) {
-        this.$store.dispatch('updateContent', val)
+        this.updateContent(val)
       },
       'callee': function (val) {
         if (val.name === 'sourceCode') {
@@ -54,7 +55,7 @@
         }
       }
     },
-    methods: mapActions([
+    methods: mapActions('vueditor', [
       'switchView',
       'updateContent',
       'updatePopupDisplay'

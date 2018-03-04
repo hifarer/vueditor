@@ -40,18 +40,18 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.code.showPopup
+        return this.$store.state.vueditor.toolbar.code.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'code', value: this.val})
+      this.$store.dispatch('vueditor/updateSelectValue', {name: 'code', value: this.val})
     },
     methods: {
       clickHandler (type) {
         this.val = type
-        this.$store.dispatch('execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
-        this.$store.dispatch('updateSelectValue', {name: 'code', value: type})
-        this.$store.dispatch('updatePopupDisplay')
+        this.$store.dispatch('vueditor/execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
+        this.$store.dispatch('vueditor/updateSelectValue', {name: 'code', value: type})
+        this.$store.dispatch('vueditor/updatePopupDisplay')
       }
     }
   }

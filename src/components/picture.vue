@@ -31,6 +31,8 @@
 </template>
 
 <script>
+
+  import { mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/'
 
@@ -44,7 +46,7 @@
     },
     computed: {
       showPopup: function () {
-        return this.$store.state.toolbar.picture.showPopup
+        return this.$store.state.vueditor.toolbar.picture.showPopup
       }
     },
     watch: {
@@ -57,8 +59,12 @@
       }
     },
     methods: {
+      ...mapActions('vueditor', [
+        'execCommand',
+        'updatePopupDisplay'
+      ]),
       hideDialog () {
-        this.$store.dispatch('updatePopupDisplay')
+        this.updatePopupDisplay()
       },
       changeHandler () {
         let obj = this.$refs.file
@@ -77,7 +83,7 @@
         if (this.url) {
           if (this.$parent.upload) {
             this.$parent.upload(obj, href => {
-              this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${href}">`})
+              this.execCommand({name: 'insertHTML', value: `<img src="${href}">`})
               this.hideDialog()
             })
           } else if (uploadUrl) {
@@ -86,14 +92,14 @@
             xhr.open('POST', uploadUrl)
             xhr.send(formData)
             xhr.onload = function () {
-              this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${xhr.responseText}">`})
+              this.execCommand({name: 'insertHTML', value: `<img src="${xhr.responseText}">`})
               this.hideDialog()
             }.bind(this)
             xhr.onerror = function (err) {
               window.alert(err)
             }
           } else {
-            this.$store.dispatch('execCommand', {name: 'insertHTML', value: `<img src="${this.url}">`})
+            this.execCommand({name: 'insertHTML', value: `<img src="${this.url}">`})
             this.hideDialog()
           }
         } else {

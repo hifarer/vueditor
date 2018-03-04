@@ -1,7 +1,6 @@
 
 const webpack = require('webpack')
 const path = require('path')
-const autoprefixer = require('autoprefixer')
 
 module.exports = {
 
@@ -10,34 +9,21 @@ module.exports = {
   watch: true,
 
   entry: {
-    vueditor: ['webpack-hot-middleware/client?path=/__webpack_hmr', '../src/main.js']
+    vueditor: '../src/main.js'
   },
 
   output: {
-    publicPath: '/',
     path: path.join(__dirname, '../dist'),
-    filename: 'script/[name].min.js',
+    filename: 'script/[name].js',
     library: 'Vueditor',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    libraryTarget: 'umd'
   },
 
   module: {
     rules: [
       {
         test: /\.vue$/,
-        use: [{
-          loader: 'vue-loader',
-          options: {
-            extractCSS: true,
-            preserveWhitespace: false,
-            postcss: [
-              autoprefixer({
-                browsers: ['last 3 versions']
-              })
-            ]
-          }
-        }],
+        use: 'vue-loader',
         exclude: /node_modules/
       },
       {
@@ -47,7 +33,7 @@ module.exports = {
       },
       {
         test: /\.(css|less)$/,
-        use: ['css-loader', 'less-loader', 'postcss-loader']
+        use: ['style-loader', 'css-loader', 'less-loader']
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -57,8 +43,6 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': '"development"'

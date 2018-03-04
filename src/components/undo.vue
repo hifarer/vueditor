@@ -1,6 +1,7 @@
 
 <script>
-  import { mapActions } from 'vuex'
+  
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     render: function () {
@@ -13,15 +14,11 @@
       }
     },
     computed: {
-      view: function () {
-        return this.$store.state.view
-      },
-      content: function () {
-        return this.$store.state.content
-      },
-      callee: function () {
-        return this.$store.state.callee
-      },
+      ...mapState('vueditor', {
+        view: state => state.view,
+        content: state => state.content,
+        callee: state => state.callee
+      }),
       canUndo: function () {
         return this.index > 0
       },
@@ -48,10 +45,11 @@
         }
       }
     },
-    methods: Object.assign({}, mapActions([
-      'updateContent',
-      'updateButtonStates'
-    ]), {
+    methods: {
+      ...mapActions('vueditor', [
+        'updateContent',
+        'updateButtonStates'
+      ]),
       undo () {
         if (!this.canUndo) return
         this.index--
@@ -73,6 +71,6 @@
           redo: this.canRedo ? 'default' : 'disabled'
         })
       }
-    })
+    }
   }
 </script>

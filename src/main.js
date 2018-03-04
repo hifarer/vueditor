@@ -78,7 +78,6 @@ function mixinConfig (opts) {
   setLang(lang)
 
   return Object.assign({}, app, {
-    store: new Vuex.Store(createStore()),
     data: function () {
       return {
         list,
@@ -88,16 +87,32 @@ function mixinConfig (opts) {
   })
 }
 
-const install = function (Vue, opts) {
-  Vue.component('Vueditor', mixinConfig(opts))
+const install = function (Vue, obj) {
+  if (obj.store) {
+    let {store, opts} = obj
+    store.registerModule('vueditor', createStore())
+    Vue.component('Vueditor', mixinConfig(opts))
+  } else {
+    Vue.component('Vueditor', mixinConfig(obj))
+  }
 }
 
+const getVuexModule = function () {
+  return createStore()
+}
+
+// Create a 'subclass' of the base Vue constructor
 const createEditor = function (el, opts) {
-  let Editor = Vue.extend(mixinConfig(opts))
+  let obj = mixinConfig(opts)
+  obj.store = new Vuex.Store(createStore())
+  let Editor = Vue.extend(obj)
   return new Editor().$mount(el)
 }
 
 export default {
   install,
+  getVuexModule,
   createEditor
 }
+
+Vue.config.devtools = true

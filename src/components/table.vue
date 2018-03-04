@@ -31,6 +31,8 @@
 </template>
 
 <script>
+
+  import { mapState, mapActions } from 'vuex'
   import veMixin from '../mixins'
   import { getLang } from '../config/lang.js'
 
@@ -46,18 +48,22 @@
     },
     computed: {
       showPopup: function () {
-        return this.$store.state.toolbar.table.showPopup
+        return this.$store.state.vueditor.toolbar.table.showPopup
       }
     },
     methods: {
+      ...mapActions('vueditor', [
+        'execCommand',
+        'updatePopupDisplay'
+      ]),
       overHandler (index) {
         this.x = index % 8
         this.y = parseInt(index / 8)
       },
       clickHandler () {
         let html = this.createTable(this.y + 1, this.x + 1)
-        this.$store.dispatch('execCommand', { name: 'insertHTML', value: html })
-        this.$store.dispatch('updatePopupDisplay')
+        this.execCommand({ name: 'insertHTML', value: html })
+        this.updatePopupDisplay()
       },
       createTable (rows, cols) {
         let oTable = document.createElement('table')

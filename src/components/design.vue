@@ -6,10 +6,11 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
+
+  import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/'
-
+  
   export default {
     data () {
       return {
@@ -24,11 +25,11 @@
       }
     },
 
-    computed: mapState({
-      view: 'view',
-      content: 'content',
-      command: 'command',
-      states: 'toolbar'
+    computed: mapState('vueditor', {
+      view: state => state.view,
+      content: state => state.content,
+      command: state => state.command,
+      states: state => state.toolbar
     }),
 
     watch: {
@@ -51,13 +52,15 @@
       }
     },
 
-    methods: Object.assign({}, mapActions([
-      'updateContent',
-      'updateButtonStates',
-      'updatePopupDisplay',
-      'callMethod',
-      'switchView'
-    ]), {
+    methods: {
+      ...mapActions('vueditor', [
+        'updateContent',
+        'updateSelectValue',
+        'updateButtonStates',
+        'updatePopupDisplay',
+        'callMethod',
+        'switchView'
+      ]),
       init (event) {
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
@@ -265,7 +268,7 @@
         if (container.tagName.toLowerCase() === 'code') {
           let value = pattern.value.replace(/#type#/, '')
           value = (container.getAttribute(pattern.attr) || '').replace(value, '')
-          this.$store.dispatch('updateSelectValue', {name: 'code', value: value || '--'})
+          this.updateSelectValue({name: 'code', value: value || '--'})
           this.view === 'design' && this.switchView('codesnippet')
         } else if (container.tagName.toLowerCase() === 'pre') {
           // 解决文字直接写到pre里
@@ -293,19 +296,19 @@
               container = container.parentNode
               tagName = container.tagName.toLowerCase()
             }
-            tags.indexOf(tagName) !== -1 && this.$store.dispatch('updateSelectValue', {name: 'element', value: tagName})
+            tags.indexOf(tagName) !== -1 && this.updateSelectValue({name: 'element', value: tagName})
           }
           if (this.config.toolbar.indexOf('fontName') !== -1) {
-            this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.$store.dispatch('updateSelectValue', {name: 'fontName', value: fontName})
+            this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.updateSelectValue({name: 'fontName', value: fontName})
           }
           if (this.config.toolbar.indexOf('fontSize') !== -1) {
             if (unit === 'px') {
-              this.config.fontSize.indexOf(style['fontSize']) !== -1 && this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: style['fontSize']})
+              this.config.fontSize.indexOf(style['fontSize']) !== -1 && this.updateSelectValue({name: 'fontSize', value: style['fontSize']})
             }
             if (unit === 'rem') {
               let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
               let remFontSize = (parseInt(style['fontSize']) / rootFontSize).toFixed(1) + 'rem'
-              this.config.fontSize.indexOf(remFontSize) !== -1 && this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: remFontSize})
+              this.config.fontSize.indexOf(remFontSize) !== -1 && this.updateSelectValue({name: 'fontSize', value: remFontSize})
             }
           }
           this.view !== 'design' && this.switchView('design')
@@ -544,6 +547,6 @@
         }
       }
 
-    })
+    }
   }
 </script>

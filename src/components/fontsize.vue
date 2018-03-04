@@ -39,18 +39,18 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.fontSize.showPopup
+        return this.$store.state.vueditor.toolbar.fontSize.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: this.val})
+      this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontSize', value: this.val})
     },
     methods: {
       clickHandler (size) {
         this.val = size
-        this.$store.dispatch('execCommand', {name: 'fontSize', value: size})
-        this.$store.dispatch('updateSelectValue', {name: 'fontSize', value: size})
-        this.$store.dispatch('updatePopupDisplay')
+        this.$store.dispatch('vueditor/execCommand', {name: 'fontSize', value: size})
+        this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontSize', value: size})
+        this.$store.dispatch('vueditor/updatePopupDisplay')
       }
     }
   }

@@ -39,18 +39,18 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.toolbar.fontName.showPopup
+        return this.$store.state.vueditor.toolbar.fontName.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val})
+      this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontName', value: this.val})
     },
     methods: {
       clickHandler (font) {
         this.val = font.abbr || font.val
-        this.$store.dispatch('execCommand', {name: 'fontName', value: font.val + ', sans-serif'})
-        this.$store.dispatch('updateSelectValue', {name: 'fontName', value: this.val})
-        this.$store.dispatch('updatePopupDisplay')
+        this.$store.dispatch('vueditor/execCommand', {name: 'fontName', value: font.val + ', sans-serif'})
+        this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontName', value: this.val})
+        this.$store.dispatch('vueditor/updatePopupDisplay')
       }
     }
   }

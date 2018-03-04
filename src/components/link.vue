@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import { getLang } from '../config/lang.js'
 
   export default {
@@ -30,17 +31,11 @@
         lang: getLang('link')
       }
     },
-    computed: {
-      rect: function () {
-        return this.$store.state.rect
-      },
-      showPopup: function () {
-        return this.$store.state.toolbar.link.showPopup
-      },
-      callee: function () {
-        return this.$store.state.callee
-      }
-    },
+    computed: mapState('vueditor', {
+      rect: state => state.rect,
+      callee: state => state.callee,
+      showPopup: state => state.toolbar.link.showPopup
+    }),
     watch: {
       'callee': function (val) {
         val.name === 'unLink' && this.unLinkHandler()
@@ -54,11 +49,11 @@
       },
       linkHandler () {
         let href = this.checkValid()
-        this.$store.dispatch('execCommand', { name: 'createlink', value: href })
-        this.$store.dispatch('updatePopupDisplay')
+        this.$store.dispatch('vueditor/execCommand', { name: 'createlink', value: href })
+        this.$store.dispatch('vueditor/updatePopupDisplay')
       },
       unLinkHandler () {
-        this.$store.dispatch('execCommand', { name: 'unlink', value: null })
+        this.$store.dispatch('vueditor/execCommand', { name: 'unlink', value: null })
       }
     }
   }
