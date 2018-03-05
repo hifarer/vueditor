@@ -87,14 +87,8 @@ function mixinConfig (opts) {
   })
 }
 
-const install = function (Vue, obj) {
-  if (obj.store) {
-    let {store, opts} = obj
-    store.registerModule('vueditor', createStore())
-    Vue.component('Vueditor', mixinConfig(opts))
-  } else {
-    Vue.component('Vueditor', mixinConfig(obj))
-  }
+const install = function (Vue, opts) {
+  Vue.component('Vueditor', mixinConfig(opts))
 }
 
 const getVuexModule = function () {

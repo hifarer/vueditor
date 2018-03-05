@@ -35,8 +35,10 @@
 
   import { mapState, mapActions } from 'vuex'
   import marked from 'marked'
+  import vuexMixin from '../mixins/vuex'
 
   export default {
+    mixins: [vuexMixin],
     data () {
       return {
         md: '',
@@ -46,11 +48,17 @@
         currentView: 'design'
       }
     },
-    computed: mapState('vueditor', {
-      view: state => state.view,
-      content: state => state.content,
-      callee: state => state.callee
-    }),
+    computed: {
+      view () {
+        return this.editorState.view
+      },
+      content () {
+        return this.editorState.content
+      },
+      callee () {
+        return this.editorState.callee
+      }
+    },
     watch: {
       'view': function (val) {
         if (val !== 'markdown' && this.currentView === 'markdown') {
@@ -69,11 +77,15 @@
       }
     },
     methods: {
-      ...mapActions('vueditor', [
-        'switchView',
-        'updateContent',
-        'updatePopupDisplay'
-      ]),
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      updateContent (data) {
+        this.$store.dispatch(this.getActionPath('updateContent'), data)
+      },
+      switchView (data) {
+        this.$store.dispatch(this.getActionPath('switchView'), data)
+      },
       init (event) {
         this.el = event.target
         this.doc = event.target.contentDocument

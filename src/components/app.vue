@@ -11,6 +11,8 @@
 
 <script>
 
+  import { mapState } from 'vuex'
+
   import toolbar from './toolbar.vue'
   import design from './design.vue'
   
@@ -27,9 +29,12 @@
   import markdown from './markdown.vue'
   import fullscreen from './fullscreen.vue'
 
+  import createStore from '../store/states.js'
+
   import '../style/style.less'
 
   export default {
+    props: ['moduleName'],
     components: {
       've-toolbar': toolbar,
       've-design': design,
@@ -47,18 +52,30 @@
       've-markdown': markdown,
       've-fullscreen': fullscreen
     },
-    computed: {
-      fullscreen: function () {
-        return this.$store.state.vueditor.fullscreen
+    computed: mapState({
+      content (state) {
+        return this.moduleName ? state[this.moduleName].content : state.content
+      },
+      fullscreen (state) {
+        return this.moduleName ? state[this.moduleName].fullscreen : state.fullscreen
       }
-    },
+    }),
     methods: {
       setContent (content) {
-        this.$store.dispatch('vueditor/updateContent', content)
+        let path = this.moduleName ? this.moduleName + '/updateContent' : 'updateContent'
+        this.$store.dispatch(path, content)
       },
       getContent () {
-        return this.$store.state.vueditor.content
+        return this.content
       }
+    },
+    created () {
+      let vuexModule = createStore()
+      // let { state } = vuexModule
+      // vuexModule.state = () => {
+      //   return JSON.parse(JSON.stringify(state))
+      // }
+      this.$store.registerModule(this.moduleName, vuexModule)
     }
   }
 </script>

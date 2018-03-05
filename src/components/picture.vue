@@ -32,11 +32,13 @@
 
 <script>
 
+  import vuexMixin from '../mixins/vuex'
   import { mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/'
 
   export default {
+    mixins: [vuexMixin],
     data () {
       return {
         url: '',
@@ -46,7 +48,7 @@
     },
     computed: {
       showPopup: function () {
-        return this.$store.state.vueditor.toolbar.picture.showPopup
+        return this.editorState.toolbar.picture.showPopup
       }
     },
     watch: {
@@ -59,10 +61,12 @@
       }
     },
     methods: {
-      ...mapActions('vueditor', [
-        'execCommand',
-        'updatePopupDisplay'
-      ]),
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.getActionPath('execCommand'), data)
+      },
       hideDialog () {
         this.updatePopupDisplay()
       },

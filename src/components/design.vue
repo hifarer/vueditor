@@ -10,8 +10,10 @@
   import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/'
+  import vuexMixin from '../mixins/vuex'
   
   export default {
+    mixins: [vuexMixin],
     data () {
       return {
         iframeWin: null,
@@ -25,12 +27,20 @@
       }
     },
 
-    computed: mapState('vueditor', {
-      view: state => state.view,
-      content: state => state.content,
-      command: state => state.command,
-      states: state => state.toolbar
-    }),
+    computed: {
+      view () {
+        return this.editorState.view
+      },
+      content () {
+        return this.editorState.content
+      },
+      command () {
+        return this.editorState.command
+      },
+      states () {
+        return this.editorState.states
+      }
+    },
 
     watch: {
       'view': function (val) {
@@ -53,14 +63,24 @@
     },
 
     methods: {
-      ...mapActions('vueditor', [
-        'updateContent',
-        'updateSelectValue',
-        'updateButtonStates',
-        'updatePopupDisplay',
-        'callMethod',
-        'switchView'
-      ]),
+      updateContent (data) {
+        this.$store.dispatch(this.getActionPath('updateContent'), data)
+      },
+      updateSelectValue (data) {
+        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+      },
+      updateButtonStates (data) {
+        this.$store.dispatch(this.getActionPath('updateButtonStates'), data)
+      },
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      callMethod (data) {
+        this.$store.dispatch(this.getActionPath('callMethod'), data)
+      },
+      switchView (data) {
+        this.$store.dispatch(this.getActionPath('switchView'), data)
+      },
       init (event) {
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
@@ -498,7 +518,7 @@
       },
 
       getSelection () {
-        if (this.iframeWin.getSelection) {
+        if (this.iframeWin && this.iframeWin.getSelection) {
           return this.iframeWin.getSelection()
         }
       },

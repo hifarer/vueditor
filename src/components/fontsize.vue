@@ -25,11 +25,14 @@
 </template>
 
 <script>
-  import veMixin from '../mixins'
+  
+  import rectMixin from '../mixins/rect'
+  import vuexMixin from '../mixins/vuex'
+  import { mapActions } from 'vuex'
   import { getConfig } from '../config/'
 
   export default {
-    mixins: [veMixin],
+    mixins: [rectMixin, vuexMixin],
     data () {
       let arr = getConfig('fontSize')
       return {
@@ -39,18 +42,27 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.vueditor.toolbar.fontSize.showPopup
+        return this.editorState.toolbar.fontSize.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontSize', value: this.val})
+      this.updateSelectValue({name: 'fontSize', value: this.val})
     },
     methods: {
+      updateSelectValue (data) {
+        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+      },
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.getActionPath('execCommand'), data)
+      },
       clickHandler (size) {
         this.val = size
-        this.$store.dispatch('vueditor/execCommand', {name: 'fontSize', value: size})
-        this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontSize', value: size})
-        this.$store.dispatch('vueditor/updatePopupDisplay')
+        this.execCommand({name: 'fontSize', value: size})
+        this.updateSelectValue({name: 'fontSize', value: size})
+        this.updatePopupDisplay()
       }
     }
   }

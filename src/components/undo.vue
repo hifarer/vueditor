@@ -1,10 +1,12 @@
 
 <script>
   
+  import vuexMixin from '../mixins/vuex'
   import { mapState, mapActions } from 'vuex'
 
   export default {
-    render: function () {
+    mixins: [vuexMixin],
+    render () {
       return ''
     },
     data () {
@@ -14,11 +16,15 @@
       }
     },
     computed: {
-      ...mapState('vueditor', {
-        view: state => state.view,
-        content: state => state.content,
-        callee: state => state.callee
-      }),
+      content () {
+        return this.editorState.content
+      },
+      callee () {
+        return this.editorState.callee
+      },
+      view () {
+        return this.editorState.view
+      },
       canUndo: function () {
         return this.index > 0
       },
@@ -46,10 +52,12 @@
       }
     },
     methods: {
-      ...mapActions('vueditor', [
-        'updateContent',
-        'updateButtonStates'
-      ]),
+      updateButtonStates (data) {
+        this.$store.dispatch(this.getActionPath('updateButtonStates'), data)
+      },
+      updateContent (data) {
+        this.$store.dispatch(this.getActionPath('updateContent'), data)
+      },
       undo () {
         if (!this.canUndo) return
         this.index--

@@ -2,20 +2,31 @@
 <script>
 
   import { mapState } from 'vuex'
+  import vuexMixin from '../mixins/vuex'
 
   export default {
-    render: function () {
+    mixins: [vuexMixin],
+    render () {
       return ''
     },
-    computed: mapState('vueditor', {
-      fullscreen: state => state.fullscreen,
-      callee: state => state.callee
-    }),
+    computed: {
+      fullscreen () {
+        return this.editorState.fullscreen
+      },
+      callee () {
+        return this.editorState.callee
+      }
+    },
     watch: {
       'callee': function (val) {
         if (val.name === 'fullscreen') {
-          this.$store.dispatch('vueditor/setFullScreen', !this.fullscreen)
+          this.setFullScreen(!this.fullscreen)
         }
+      }
+    },
+    methods: {
+      setFullScreen (bool) {
+        this.$store.dispatch(this.getActionPath('setFullScreen'), bool)
       }
     }
   }

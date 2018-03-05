@@ -25,11 +25,13 @@
 </template>
 
 <script>
-  import veMixin from '../mixins'
+  
+  import rectMixin from '../mixins/rect'
+  import vuexMixin from '../mixins/vuex'
   import { getConfig } from '../config/'
 
   export default {
-    mixins: [veMixin],
+    mixins: [rectMixin, vuexMixin],
     data () {
       let { type, pattern } = getConfig('code')
       return {
@@ -40,18 +42,18 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.vueditor.toolbar.code.showPopup
+        return this.editorState.toolbar.code.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('vueditor/updateSelectValue', {name: 'code', value: this.val})
+      this.$store.dispatch(this.getActionPath('updateSelectValue'), {name: 'code', value: this.val})
     },
     methods: {
       clickHandler (type) {
         this.val = type
-        this.$store.dispatch('vueditor/execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
-        this.$store.dispatch('vueditor/updateSelectValue', {name: 'code', value: type})
-        this.$store.dispatch('vueditor/updatePopupDisplay')
+        this.$store.dispatch(this.getActionPath('execCommand'), {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
+        this.$store.dispatch(this.getActionPath('updateSelectValue'), {name: 'code', value: type})
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'))
       }
     }
   }

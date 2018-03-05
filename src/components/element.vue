@@ -26,10 +26,13 @@
 </template>
 
 <script>
-  import veMixin from '../mixins'
+  
+  import rectMixin from '../mixins/rect'
+  import vuexMixin from '../mixins/vuex'
+  import { mapActions } from 'vuex'
 
   export default {
-    mixins: [veMixin],
+    mixins: [rectMixin, vuexMixin],
     data () {
       return {
         arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -38,19 +41,28 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.vueditor.toolbar.element.showPopup
+        return this.editorState.toolbar.element.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('vueditor/updateSelectValue', {name: 'element', value: this.val})
+      this.updateSelectValue({name: 'element', value: this.val})
     },
     methods: {
+      updateSelectValue (data) {
+        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+      },
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.getActionPath('execCommand'), data)
+      },
       selectItem (event) {
         let tagName = event.target.innerHTML.trim()
         this.val = tagName
-        this.$store.dispatch('vueditor/execCommand', {name: 'formatBlock', value: tagName})
-        this.$store.dispatch('vueditor/updateSelectValue', {name: 'element', value: tagName})
-        this.$store.dispatch('vueditor/updatePopupDisplay')
+        this.execCommand({name: 'formatBlock', value: tagName})
+        this.updateSelectValue({name: 'element', value: tagName})
+        this.updatePopupDisplay()
       }
     }
   }

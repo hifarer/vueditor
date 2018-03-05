@@ -25,7 +25,7 @@ export default function () {
   })
 
   return {
-    namespaced: true,
+    // namespaced: true,
     state: {
       view: 'design',
       content: '',

@@ -71,12 +71,14 @@
 
 <script>
   
+  import vuexMixin from '../mixins/vuex'
   import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/index.js'
   import { getToolbar } from '../config/toolbar.js'
   
   export default {
+    mixins: [vuexMixin],
     data () {
       let {btns, selects} = getToolbar()
       return {
@@ -86,10 +88,17 @@
         config: getConfig('toolbar')
       }
     },
-    computed: mapState('vueditor', {
-      states: state => state.toolbar,
-      view: state => state.view
-    }),
+    computed: {
+      states () {
+        return this.editorState.toolbar
+      },
+      view () {
+        return this.editorState.view
+      }
+    },
+    created () {
+      console.log(this)
+    },
     watch: {
       'view': function (val) {
         let states = {}
@@ -106,13 +115,21 @@
       }
     },
     methods: {
-      ...mapActions('vueditor', [
-        'execCommand',
-        'callMethod',
-        'updateRect',
-        'updateButtonStates',
-        'updatePopupDisplay'
-      ]),
+      updateButtonStates (data) {
+        this.$store.dispatch(this.getActionPath('updateButtonStates'), data)
+      },
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      callMethod (data) {
+        this.$store.dispatch(this.getActionPath('callMethod'), data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.getActionPath('execCommand'), data)
+      },
+      updateRect (data) {
+        this.$store.dispatch(this.getActionPath('updateRect'), data)
+      },
       btnHandler (event, name) {
         if (this.states[name].status === 'disabled') return
         let btn = this.btns[name]

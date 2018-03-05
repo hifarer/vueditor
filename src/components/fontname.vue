@@ -25,11 +25,14 @@
 </template>
 
 <script>
-  import veMixin from '../mixins'
+  
+  import rectMixin from '../mixins/rect'
+  import vuexMixin from '../mixins/vuex'
+  import { mapActions } from 'vuex'
   import { getConfig } from '../config/'
 
   export default {
-    mixins: [veMixin],
+    mixins: [rectMixin, vuexMixin],
     data () {
       let arr = getConfig('fontName')
       return {
@@ -39,18 +42,27 @@
     },
     computed: {
       showPopup () {
-        return this.$store.state.vueditor.toolbar.fontName.showPopup
+        return this.editorState.toolbar.fontName.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontName', value: this.val})
+      this.updateSelectValue({name: 'fontName', value: this.val})
     },
     methods: {
+      updateSelectValue (data) {
+        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+      },
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.getActionPath('execCommand'), data)
+      },
       clickHandler (font) {
         this.val = font.abbr || font.val
-        this.$store.dispatch('vueditor/execCommand', {name: 'fontName', value: font.val + ', sans-serif'})
-        this.$store.dispatch('vueditor/updateSelectValue', {name: 'fontName', value: this.val})
-        this.$store.dispatch('vueditor/updatePopupDisplay')
+        this.execCommand({name: 'fontName', value: font.val + ', sans-serif'})
+        this.updateSelectValue({name: 'fontName', value: this.val})
+        this.updatePopupDisplay()
       }
     }
   }

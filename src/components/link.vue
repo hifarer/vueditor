@@ -21,27 +21,42 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  
+  import vuexMixin from '../mixins/vuex'
+  import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
 
   export default {
+    mixins: [vuexMixin],
     data () {
       return {
         val: '',
         lang: getLang('link')
       }
     },
-    computed: mapState('vueditor', {
-      rect: state => state.rect,
-      callee: state => state.callee,
-      showPopup: state => state.toolbar.link.showPopup
-    }),
+    computed: {
+      rect () {
+        return this.editorState.rect
+      },
+      callee () {
+        return this.editorState.callee
+      },
+      showPopup () {
+        return this.editorState.toolbar.link.showPopup
+      }
+    },
     watch: {
       'callee': function (val) {
         val.name === 'unLink' && this.unLinkHandler()
       }
     },
     methods: {
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.getActionPath('execCommand'), data)
+      },
       checkValid () {
         let href = this.val
         href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
@@ -49,11 +64,11 @@
       },
       linkHandler () {
         let href = this.checkValid()
-        this.$store.dispatch('vueditor/execCommand', { name: 'createlink', value: href })
-        this.$store.dispatch('vueditor/updatePopupDisplay')
+        this.execCommand({ name: 'createlink', value: href })
+        this.updatePopupDisplay()
       },
       unLinkHandler () {
-        this.$store.dispatch('vueditor/execCommand', { name: 'unlink', value: null })
+        this.execCommand({ name: 'unlink', value: null })
       }
     }
   }

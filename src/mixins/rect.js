@@ -2,10 +2,10 @@ export default {
   props: ['tagName'],
   computed: {
     // rect belong to the clicked toolbar element
-    rect: function () {
-      return this.$store.state.vueditor.rect
+    rect () {
+      return this.editorState.rect
     },
-    style: function () {
+    style () {
       if (!this.showPopup) {
         return {left: 0, top: 0}
       }

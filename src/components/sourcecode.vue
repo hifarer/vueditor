@@ -23,19 +23,27 @@
 
 <script>
   
+  import vuexMixin from '../mixins/vuex'
   import { mapState, mapActions } from 'vuex'
 
   export default {
+    mixins: [vuexMixin],
     data () {
       return {
         code: ''
       }
     },
-    computed: mapState('vueditor', {
-      view: state => state.view,
-      content: state => state.content,
-      callee: state => state.callee
-    }),
+    computed: {
+      view () {
+        this.editorState.view
+      },
+      content () {
+        this.editorState.content
+      },
+      callee () {
+        this.editorState.callee
+      }
+    },
     watch: {
       'view': function (val) {
         if (val === 'sourceCode') {
@@ -55,10 +63,16 @@
         }
       }
     },
-    methods: mapActions('vueditor', [
-      'switchView',
-      'updateContent',
-      'updatePopupDisplay'
-    ])
+    methods: {
+      updatePopupDisplay (data) {
+        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+      },
+      updateContent (data) {
+        this.$store.dispatch(this.getActionPath('updateContent'), data)
+      },
+      switchView (data) {
+        this.$store.dispatch(this.getActionPath('switchView'), data)
+      }
+    }
   }
 </script>
