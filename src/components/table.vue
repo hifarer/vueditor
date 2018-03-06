@@ -32,13 +32,11 @@
 
 <script>
 
-  import { mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
 
   export default {
-    mixins: [rectMixin, vuexMixin],
     data () {
       return {
         num: 64,
@@ -47,17 +45,18 @@
         lang: getLang('table')
       }
     },
+    mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup: function () {
-        return this.editorState.toolbar.table.showPopup
+        return this.mstates.toolbar.table.showPopup
       }
     },
     methods: {
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       execCommand (data) {
-        this.$store.dispatch(this.getActionPath('execCommand'), data)
+        this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       overHandler (index) {
         this.x = index % 8

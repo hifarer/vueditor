@@ -3,7 +3,7 @@ export default {
   computed: {
     // rect belong to the clicked toolbar element
     rect () {
-      return this.editorState.rect
+      return this.mstates.rect
     },
     style () {
       if (!this.showPopup) {

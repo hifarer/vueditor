@@ -24,24 +24,23 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
-  import { mapState, mapActions } from 'vuex'
 
   export default {
-    mixins: [vuexMixin],
     data () {
       return {
         code: ''
       }
     },
+    mixins: [vuexMixin],
     computed: {
       view () {
-        this.editorState.view
+        return this.mstates.view
       },
       content () {
-        this.editorState.content
+        return this.mstates.content
       },
       callee () {
-        this.editorState.callee
+        return this.mstates.callee
       }
     },
     watch: {
@@ -65,13 +64,13 @@
     },
     methods: {
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       updateContent (data) {
-        this.$store.dispatch(this.getActionPath('updateContent'), data)
+        this.$store.dispatch(this.mpath + 'updateContent', data)
       },
       switchView (data) {
-        this.$store.dispatch(this.getActionPath('switchView'), data)
+        this.$store.dispatch(this.mpath + 'switchView', data)
       }
     }
   }

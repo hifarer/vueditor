@@ -1,6 +1,6 @@
 
-export const updateSelectValue = ({ commit }, data) => {
-  commit('UPDATE_SELECT_VALUE', data)
+export const updateSelectValue = (context, data) => {
+  context.commit('UPDATE_SELECT_VALUE', data)
 }
 
 export const updateButtonStates = ({ commit }, data) => {

@@ -8,14 +8,12 @@
 <body>
 
   <div id="editor">
-    <Vueditor module-name="one"></Vueditor>
-    <Vueditor module-name="two"></Vueditor>
+    <Vueditor></Vueditor>
+    <Vueditor></Vueditor>
   </div>
 
-  <div id="box"></div>
-
-  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
-  <script src="https://cdn.staticfile.org/vuex/2.0.0/vuex.min.js"></script>
+  <script src="https://cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
+  <script src="https://cdn.bootcss.com/vuex/2.1.0/vuex.min.js"></script>
   <script src="./dist/script/vueditor.js"></script>
   <script>
 
@@ -44,24 +42,17 @@
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem']
     }
 
-    Vue.use(Vueditor, {store, opts})
+    Vue.use(Vueditor, opts)
 
     let parent = new Vue({
       el: '#editor',
       store
     })
     let editor = parent.$children[0]
-    editor.setContent('fill your content here')
+    editor.setContent('content one')
 
     let editor1 = parent.$children[1]
-    editor1.setContent('fill your content here1')
-
-    // let inst = Vueditor.createEditor('#box', {
-    //   toolbar: [
-    //     'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
-    //   ]
-    // })
-    // inst.setContent('fill your content here')
+    editor1.setContent('content two')
 
   </script>
 </body>

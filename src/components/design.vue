@@ -7,13 +7,11 @@
 
 <script>
 
-  import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/'
   import vuexMixin from '../mixins/vuex'
   
   export default {
-    mixins: [vuexMixin],
     data () {
       return {
         iframeWin: null,
@@ -26,19 +24,21 @@
         config: getConfig()
       }
     },
+    
+    mixins: [vuexMixin],
 
     computed: {
       view () {
-        return this.editorState.view
+        return this.mstates.view
       },
       content () {
-        return this.editorState.content
+        return this.mstates.content
       },
       command () {
-        return this.editorState.command
+        return this.mstates.command
       },
       states () {
-        return this.editorState.states
+        return this.mstates.states
       }
     },
 
@@ -64,22 +64,22 @@
 
     methods: {
       updateContent (data) {
-        this.$store.dispatch(this.getActionPath('updateContent'), data)
+        this.$store.dispatch(this.mpath + 'updateContent', data)
       },
       updateSelectValue (data) {
-        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+        this.$store.dispatch(this.mpath + 'updateSelectValue', data)
       },
       updateButtonStates (data) {
-        this.$store.dispatch(this.getActionPath('updateButtonStates'), data)
+        this.$store.dispatch(this.mpath + 'updateButtonStates', data)
       },
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       callMethod (data) {
-        this.$store.dispatch(this.getActionPath('callMethod'), data)
+        this.$store.dispatch(this.mpath + 'callMethod', data)
       },
       switchView (data) {
-        this.$store.dispatch(this.getActionPath('switchView'), data)
+        this.$store.dispatch(this.mpath + 'switchView', data)
       },
       init (event) {
         this.iframeWin = event.target.contentWindow

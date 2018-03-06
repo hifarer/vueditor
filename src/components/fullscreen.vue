@@ -1,7 +1,6 @@
 
 <script>
 
-  import { mapState } from 'vuex'
   import vuexMixin from '../mixins/vuex'
 
   export default {
@@ -11,10 +10,10 @@
     },
     computed: {
       fullscreen () {
-        return this.editorState.fullscreen
+        return this.mstates.fullscreen
       },
       callee () {
-        return this.editorState.callee
+        return this.mstates.callee
       }
     },
     watch: {
@@ -26,7 +25,7 @@
     },
     methods: {
       setFullScreen (bool) {
-        this.$store.dispatch(this.getActionPath('setFullScreen'), bool)
+        this.$store.dispatch(this.mpath + 'setFullScreen', bool)
       }
     }
   }

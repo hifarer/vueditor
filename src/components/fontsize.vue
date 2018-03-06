@@ -28,11 +28,9 @@
   
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
-  import { mapActions } from 'vuex'
   import { getConfig } from '../config/'
 
   export default {
-    mixins: [rectMixin, vuexMixin],
     data () {
       let arr = getConfig('fontSize')
       return {
@@ -40,9 +38,10 @@
         val: arr[0]
       }
     },
+    mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.editorState.toolbar.fontSize.showPopup
+        return this.mstates.toolbar.fontSize.showPopup
       }
     },
     mounted () {
@@ -50,13 +49,13 @@
     },
     methods: {
       updateSelectValue (data) {
-        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+        this.$store.dispatch(this.mpath + 'updateSelectValue', data)
       },
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       execCommand (data) {
-        this.$store.dispatch(this.getActionPath('execCommand'), data)
+        this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       clickHandler (size) {
         this.val = size

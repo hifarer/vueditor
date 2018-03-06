@@ -31,7 +31,6 @@
   import { getConfig } from '../config/'
 
   export default {
-    mixins: [rectMixin, vuexMixin],
     data () {
       let { type, pattern } = getConfig('code')
       return {
@@ -40,20 +39,21 @@
         tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
       }
     },
+    mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.editorState.toolbar.code.showPopup
+        return this.mstates.toolbar.code.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch(this.getActionPath('updateSelectValue'), {name: 'code', value: this.val})
+      this.$store.dispatch(this.mpath + 'updateSelectValue', {name: 'code', value: this.val})
     },
     methods: {
       clickHandler (type) {
         this.val = type
-        this.$store.dispatch(this.getActionPath('execCommand'), {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
-        this.$store.dispatch(this.getActionPath('updateSelectValue'), {name: 'code', value: type})
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'))
+        this.$store.dispatch(this.mpath + 'execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
+        this.$store.dispatch(this.mpath + 'updateSelectValue', {name: 'code', value: type})
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay')
       }
     }
   }

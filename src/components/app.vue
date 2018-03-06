@@ -11,8 +11,6 @@
 
 <script>
 
-  import { mapState } from 'vuex'
-
   import toolbar from './toolbar.vue'
   import design from './design.vue'
   
@@ -30,11 +28,11 @@
   import fullscreen from './fullscreen.vue'
 
   import createStore from '../store/states.js'
+  import { createNonceStr } from '../util'
 
   import '../style/style.less'
 
   export default {
-    props: ['moduleName'],
     components: {
       've-toolbar': toolbar,
       've-design': design,
@@ -52,17 +50,19 @@
       've-markdown': markdown,
       've-fullscreen': fullscreen
     },
-    computed: mapState({
-      content (state) {
-        return this.moduleName ? state[this.moduleName].content : state.content
+    computed: {
+      content () {
+        let states = this.namespace ? this.$store.state[this.namespace] : this.$store.state
+        return states.content
       },
-      fullscreen (state) {
-        return this.moduleName ? state[this.moduleName].fullscreen : state.fullscreen
+      fullscreen () {
+        let states = this.namespace ? this.$store.state[this.namespace] : this.$store.state
+        return states.fullscreen
       }
-    }),
+    },
     methods: {
       setContent (content) {
-        let path = this.moduleName ? this.moduleName + '/updateContent' : 'updateContent'
+        let path = this.namespace ? this.namespace + '/updateContent' : 'updateContent'
         this.$store.dispatch(path, content)
       },
       getContent () {
@@ -70,12 +70,8 @@
       }
     },
     created () {
-      let vuexModule = createStore()
-      // let { state } = vuexModule
-      // vuexModule.state = () => {
-      //   return JSON.parse(JSON.stringify(state))
-      // }
-      this.$store.registerModule(this.moduleName, vuexModule)
+      this.namespace = createNonceStr()
+      this.$store.registerModule(this.namespace, createStore())
     }
   }
 </script>

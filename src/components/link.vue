@@ -23,7 +23,6 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
-  import { mapState, mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
 
   export default {
@@ -36,13 +35,13 @@
     },
     computed: {
       rect () {
-        return this.editorState.rect
+        return this.mstates.rect
       },
       callee () {
-        return this.editorState.callee
+        return this.mstates.callee
       },
       showPopup () {
-        return this.editorState.toolbar.link.showPopup
+        return this.mstates.toolbar.link.showPopup
       }
     },
     watch: {
@@ -52,10 +51,10 @@
     },
     methods: {
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       execCommand (data) {
-        this.$store.dispatch(this.getActionPath('execCommand'), data)
+        this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       checkValid () {
         let href = this.val

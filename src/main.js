@@ -98,6 +98,7 @@ const getVuexModule = function () {
 // Create a 'subclass' of the base Vue constructor
 const createEditor = function (el, opts) {
   let obj = mixinConfig(opts)
+  obj.created = function () {}
   obj.store = new Vuex.Store(createStore())
   let Editor = Vue.extend(obj)
   return new Editor().$mount(el)

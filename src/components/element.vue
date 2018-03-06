@@ -29,19 +29,18 @@
   
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
-  import { mapActions } from 'vuex'
 
   export default {
-    mixins: [rectMixin, vuexMixin],
     data () {
       return {
         arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         val: 'p'
       }
     },
+    mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.editorState.toolbar.element.showPopup
+        return this.mstates.toolbar.element.showPopup
       }
     },
     mounted () {
@@ -49,13 +48,13 @@
     },
     methods: {
       updateSelectValue (data) {
-        this.$store.dispatch(this.getActionPath('updateSelectValue'), data)
+        this.$store.dispatch(this.mpath + 'updateSelectValue', data)
       },
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       execCommand (data) {
-        this.$store.dispatch(this.getActionPath('execCommand'), data)
+        this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       selectItem (event) {
         let tagName = event.target.innerHTML.trim()

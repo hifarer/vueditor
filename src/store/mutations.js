@@ -41,6 +41,7 @@ export default {
   },
 
   CALL_METHOD (state, data) {
+    console.log(data)
     state.callee = data
   },
 

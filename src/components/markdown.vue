@@ -33,7 +33,6 @@
 
 <script>
 
-  import { mapState, mapActions } from 'vuex'
   import marked from 'marked'
   import vuexMixin from '../mixins/vuex'
 
@@ -50,13 +49,13 @@
     },
     computed: {
       view () {
-        return this.editorState.view
+        return this.mstates.view
       },
       content () {
-        return this.editorState.content
+        return this.mstates.content
       },
       callee () {
-        return this.editorState.callee
+        return this.mstates.callee
       }
     },
     watch: {
@@ -78,13 +77,13 @@
     },
     methods: {
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       updateContent (data) {
-        this.$store.dispatch(this.getActionPath('updateContent'), data)
+        this.$store.dispatch(this.mpath + 'updateContent', data)
       },
       switchView (data) {
-        this.$store.dispatch(this.getActionPath('switchView'), data)
+        this.$store.dispatch(this.mpath + 'switchView', data)
       },
       init (event) {
         this.el = event.target

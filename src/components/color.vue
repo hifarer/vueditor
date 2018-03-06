@@ -42,13 +42,11 @@
 
 <script>
   
-  import { mapActions } from 'vuex'
   import { getLang } from '../config/lang.js'
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
   
   export default {
-    mixins: [rectMixin, vuexMixin],
     data () {
       return {
         colors: [
@@ -65,17 +63,18 @@
         lang: getLang(this.tagName)
       }
     },
+    mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.editorState.toolbar[this.tagName].showPopup
+        return this.mstates.toolbar[this.tagName].showPopup
       }
     },
     methods: {
       updatePopupDisplay (data) {
-        this.$store.dispatch(this.getActionPath('updatePopupDisplay'), data)
+        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
       },
       execCommand (data) {
-        this.$store.dispatch(this.getActionPath('execCommand'), data)
+        this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       checkValid (color) {
         let sColor = color.replace(/\s+/g, '')
