@@ -48,12 +48,12 @@
     mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup: function () {
-        return this.mstates.toolbar.table.showPopup
+        return this.mstates.table.showPopup
       }
     },
     methods: {
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -65,7 +65,7 @@
       clickHandler () {
         let html = this.createTable(this.y + 1, this.x + 1)
         this.execCommand({ name: 'insertHTML', value: html })
-        this.updatePopupDisplay()
+        this.setPopupDisplay()
       },
       createTable (rows, cols) {
         let oTable = document.createElement('table')

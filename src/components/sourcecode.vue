@@ -50,27 +50,27 @@
         }
       },
       'code': function (val) {
-        this.updateContent(val)
+        this.setContent(val)
       },
       'content': function (val) {
-        this.updateContent(val)
+        this.setContent(val)
       },
       'callee': function (val) {
         if (val.name === 'sourceCode') {
-          this.switchView(this.view === 'sourceCode' ? 'design' : 'sourceCode')
-          this.updatePopupDisplay()
+          this.setView(this.view === 'sourceCode' ? 'design' : 'sourceCode')
+          this.setPopupDisplay()
         }
       }
     },
     methods: {
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
-      updateContent (data) {
-        this.$store.dispatch(this.mpath + 'updateContent', data)
+      setContent (data) {
+        this.$store.dispatch(this.mpath + 'setContent', data)
       },
-      switchView (data) {
-        this.$store.dispatch(this.mpath + 'switchView', data)
+      setView (data) {
+        this.$store.dispatch(this.mpath + 'setView', data)
       }
     }
   }

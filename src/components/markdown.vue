@@ -37,7 +37,6 @@
   import vuexMixin from '../mixins/vuex'
 
   export default {
-    mixins: [vuexMixin],
     data () {
       return {
         md: '',
@@ -47,6 +46,7 @@
         currentView: 'design'
       }
     },
+    mixins: [vuexMixin],
     computed: {
       view () {
         return this.mstates.view
@@ -61,7 +61,7 @@
     watch: {
       'view': function (val) {
         if (val !== 'markdown' && this.currentView === 'markdown') {
-          this.updateContent(this.doc.body.innerHTML)
+          this.setContent(this.doc.body.innerHTML)
         } else {
           this.md = this.content
           this.update()
@@ -70,20 +70,20 @@
       },
       'callee': function (val) {
         if (val.name === 'markdown') {
-          this.switchView(this.view === 'markdown' ? 'design' : 'markdown')
-          this.updatePopupDisplay()
+          this.setView(this.view === 'markdown' ? 'design' : 'markdown')
+          this.setPopupDisplay()
         }
       }
     },
     methods: {
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
-      updateContent (data) {
-        this.$store.dispatch(this.mpath + 'updateContent', data)
+      setContent (data) {
+        this.$store.dispatch(this.mpath + 'setContent', data)
       },
-      switchView (data) {
-        this.$store.dispatch(this.mpath + 'switchView', data)
+      setView (data) {
+        this.$store.dispatch(this.mpath + 'setView', data)
       },
       init (event) {
         this.el = event.target

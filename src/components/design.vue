@@ -46,7 +46,7 @@
       'view': function (val) {
         if (val !== 'design') {
           clearTimeout(this.timer)
-          this.updateContent(this.iframeBody.innerHTML)
+          this.setContent(this.iframeBody.innerHTML)
         }
       },
       'content': function (val) {
@@ -63,23 +63,23 @@
     },
 
     methods: {
-      updateContent (data) {
-        this.$store.dispatch(this.mpath + 'updateContent', data)
+      setContent (data) {
+        this.$store.dispatch(this.mpath + 'setContent', data)
       },
-      updateSelectValue (data) {
-        this.$store.dispatch(this.mpath + 'updateSelectValue', data)
+      setSelectValue (data) {
+        this.$store.dispatch(this.mpath + 'setSelectValue', data)
       },
-      updateButtonStates (data) {
-        this.$store.dispatch(this.mpath + 'updateButtonStates', data)
+      setButtonStates (data) {
+        this.$store.dispatch(this.mpath + 'setButtonStates', data)
       },
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       callMethod (data) {
         this.$store.dispatch(this.mpath + 'callMethod', data)
       },
-      switchView (data) {
-        this.$store.dispatch(this.mpath + 'switchView', data)
+      setView (data) {
+        this.$store.dispatch(this.mpath + 'setView', data)
       },
       init (event) {
         this.iframeWin = event.target.contentWindow
@@ -107,7 +107,7 @@
             }
           }
         }
-        this.updateButtonStates(json)
+        this.setButtonStates(json)
       },
 
       addEvent () {
@@ -116,7 +116,7 @@
           // throttle
           clearTimeout(timer)
           timer = setTimeout(() => {
-            this.view === 'design' && this.updatePopupDisplay()
+            this.view === 'design' && this.setPopupDisplay()
           }, 200)
           // dispatch selectionchange event for throttling
           this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
@@ -202,7 +202,7 @@
       keyupHandler (event) {
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
-          this.updateContent(this.iframeBody.innerHTML)
+          this.setContent(this.iframeBody.innerHTML)
         }, 500)
       },
   
@@ -288,14 +288,14 @@
         if (container.tagName.toLowerCase() === 'code') {
           let value = pattern.value.replace(/#type#/, '')
           value = (container.getAttribute(pattern.attr) || '').replace(value, '')
-          this.updateSelectValue({name: 'code', value: value || '--'})
-          this.view === 'design' && this.switchView('codesnippet')
+          this.setSelectValue({name: 'code', value: value || '--'})
+          this.view === 'design' && this.setView('codesnippet')
         } else if (container.tagName.toLowerCase() === 'pre') {
           // 解决文字直接写到pre里
           if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
             this.wrapTextNode(range, 'code')
           }
-          this.view === 'design' && this.switchView('codesnippet')
+          this.view === 'design' && this.setView('codesnippet')
         } else {
           // tagname fontsize fontfamily
           let style = window.getComputedStyle(container)
@@ -316,22 +316,22 @@
               container = container.parentNode
               tagName = container.tagName.toLowerCase()
             }
-            tags.indexOf(tagName) !== -1 && this.updateSelectValue({name: 'element', value: tagName})
+            tags.indexOf(tagName) !== -1 && this.setSelectValue({name: 'element', value: tagName})
           }
           if (this.config.toolbar.indexOf('fontName') !== -1) {
-            this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.updateSelectValue({name: 'fontName', value: fontName})
+            this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.setSelectValue({name: 'fontName', value: fontName})
           }
           if (this.config.toolbar.indexOf('fontSize') !== -1) {
             if (unit === 'px') {
-              this.config.fontSize.indexOf(style['fontSize']) !== -1 && this.updateSelectValue({name: 'fontSize', value: style['fontSize']})
+              this.config.fontSize.indexOf(style['fontSize']) !== -1 && this.setSelectValue({name: 'fontSize', value: style['fontSize']})
             }
             if (unit === 'rem') {
               let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
               let remFontSize = (parseInt(style['fontSize']) / rootFontSize).toFixed(1) + 'rem'
-              this.config.fontSize.indexOf(remFontSize) !== -1 && this.updateSelectValue({name: 'fontSize', value: remFontSize})
+              this.config.fontSize.indexOf(remFontSize) !== -1 && this.setSelectValue({name: 'fontSize', value: remFontSize})
             }
           }
-          this.view !== 'design' && this.switchView('design')
+          this.view !== 'design' && this.setView('design')
         }
       },
 
@@ -358,7 +358,7 @@
           this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
         }
         this.iframeBody.focus()
-        this.updateContent(this.iframeBody.innerHTML)
+        this.setContent(this.iframeBody.innerHTML)
       },
 
       insertHTML (name, value) {

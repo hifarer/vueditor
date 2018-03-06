@@ -26,13 +26,13 @@
   import { getLang } from '../config/lang.js'
 
   export default {
-    mixins: [vuexMixin],
     data () {
       return {
         val: '',
         lang: getLang('link')
       }
     },
+    mixins: [vuexMixin],
     computed: {
       rect () {
         return this.mstates.rect
@@ -41,7 +41,7 @@
         return this.mstates.callee
       },
       showPopup () {
-        return this.mstates.toolbar.link.showPopup
+        return this.mstates.link.showPopup
       }
     },
     watch: {
@@ -50,8 +50,8 @@
       }
     },
     methods: {
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -64,7 +64,7 @@
       linkHandler () {
         let href = this.checkValid()
         this.execCommand({ name: 'createlink', value: href })
-        this.updatePopupDisplay()
+        this.setPopupDisplay()
       },
       unLinkHandler () {
         this.execCommand({ name: 'unlink', value: null })

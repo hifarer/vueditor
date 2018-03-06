@@ -42,18 +42,18 @@
     mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.mstates.toolbar.code.showPopup
+        return this.mstates.code.showPopup
       }
     },
     mounted () {
-      this.$store.dispatch(this.mpath + 'updateSelectValue', {name: 'code', value: this.val})
+      this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: this.val})
     },
     methods: {
       clickHandler (type) {
         this.val = type
         this.$store.dispatch(this.mpath + 'execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
-        this.$store.dispatch(this.mpath + 'updateSelectValue', {name: 'code', value: type})
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay')
+        this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: type})
+        this.$store.dispatch(this.mpath + 'setPopupDisplay')
       }
     }
   }

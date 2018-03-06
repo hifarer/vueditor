@@ -1,47 +1,46 @@
 
 export default {
 
-  UPDATE_SELECT_VALUE ({ toolbar }, { name, value }) {
-    toolbar[name].value = value
+  SET_SELECT_VALUE (state, { name, value }) {
+    state[name].value = value
   },
 
-  UPDATE_BUTTON_STATES ({ toolbar }, data) {
+  SET_BUTTON_STATES (state, data) {
     for (let name in data) {
-      if (toolbar[name]) {
-        toolbar[name].status = data[name]
+      if (state[name]) {
+        state[name].status = data[name]
       }
     }
   },
 
-  UPDATE_POPUP_DISPLAY ({ toolbar }, data) {
-    for (let name in toolbar) {
-      if (toolbar[name].showPopup === undefined) continue
+  SET_POPUP_DISPLAY (state, data) {
+    for (let name in state) {
+      if (state[name].showPopup === undefined) continue
       if (data && data.name === name) {
-        toolbar[name].showPopup = data.display
-      } else if (toolbar[name].showPopup !== false) {
-        toolbar[name].showPopup = false
+        state[name].showPopup = data.display
+      } else if (state[name].showPopup !== false) {
+        state[name].showPopup = false
       }
     }
-  },
-
-  UPDATE_RECT (state, data) {
-    state.rect = data
-  },
-
-  UPDATE_CONTENT (state, data) {
-    state.content = data
-  },
-
-  SWITCH_VIEW (state, data) {
-    state.view = data
   },
 
   SET_FULL_SCREEN (state, data) {
     state.fullscreen = data
   },
 
+  SET_CONTENT (state, data) {
+    state.content = data
+  },
+
+  SET_RECT (state, data) {
+    state.rect = data
+  },
+
+  SET_VIEW (state, data) {
+    state.view = data
+  },
+
   CALL_METHOD (state, data) {
-    console.log(data)
     state.callee = data
   },
 

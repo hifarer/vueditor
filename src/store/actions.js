@@ -1,30 +1,30 @@
 
-export const updateSelectValue = (context, data) => {
-  context.commit('UPDATE_SELECT_VALUE', data)
+export const setSelectValue = (context, data) => {
+  context.commit('SET_SELECT_VALUE', data)
 }
 
-export const updateButtonStates = ({ commit }, data) => {
-  commit('UPDATE_BUTTON_STATES', data)
+export const setButtonStates = ({ commit }, data) => {
+  commit('SET_BUTTON_STATES', data)
 }
 
-export const updatePopupDisplay = ({ commit }, data) => {
-  commit('UPDATE_POPUP_DISPLAY', data)
-}
-
-export const updateRect = ({ commit }, data) => {
-  commit('UPDATE_RECT', data)
-}
-
-export const updateContent = ({ commit }, data) => {
-  commit('UPDATE_CONTENT', data)
-}
-
-export const switchView = ({commit}, data) => {
-  commit('SWITCH_VIEW', data)
+export const setPopupDisplay = ({ commit }, data) => {
+  commit('SET_POPUP_DISPLAY', data)
 }
 
 export const setFullScreen = ({ commit }, data) => {
   commit('SET_FULL_SCREEN', data)
+}
+
+export const setContent = ({ commit }, data) => {
+  commit('SET_CONTENT', data)
+}
+
+export const setRect = ({ commit }, data) => {
+  commit('SET_RECT', data)
+}
+
+export const setView = ({commit}, data) => {
+  commit('SET_VIEW', data)
 }
 
 export const callMethod = ({ commit }, data) => {

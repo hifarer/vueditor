@@ -27,7 +27,7 @@
   import markdown from './markdown.vue'
   import fullscreen from './fullscreen.vue'
 
-  import createStore from '../store/states.js'
+  import createStore from '../store/index.js'
   import { createNonceStr } from '../util'
 
   import '../style/style.less'
@@ -62,7 +62,7 @@
     },
     methods: {
       setContent (content) {
-        let path = this.namespace ? this.namespace + '/updateContent' : 'updateContent'
+        let path = this.namespace ? this.namespace + '/setContent' : 'setContent'
         this.$store.dispatch(path, content)
       },
       getContent () {

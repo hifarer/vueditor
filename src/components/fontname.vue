@@ -41,18 +41,18 @@
     mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.mstates.toolbar.fontName.showPopup
+        return this.mstates.fontName.showPopup
       }
     },
     mounted () {
-      this.updateSelectValue({name: 'fontName', value: this.val})
+      this.setSelectValue({name: 'fontName', value: this.val})
     },
     methods: {
-      updateSelectValue (data) {
-        this.$store.dispatch(this.mpath + 'updateSelectValue', data)
+      setSelectValue (data) {
+        this.$store.dispatch(this.mpath + 'setSelectValue', data)
       },
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -60,8 +60,8 @@
       clickHandler (font) {
         this.val = font.abbr || font.val
         this.execCommand({name: 'fontName', value: font.val + ', sans-serif'})
-        this.updateSelectValue({name: 'fontName', value: this.val})
-        this.updatePopupDisplay()
+        this.setSelectValue({name: 'fontName', value: this.val})
+        this.setPopupDisplay()
       }
     }
   }

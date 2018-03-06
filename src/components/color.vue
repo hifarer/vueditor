@@ -66,12 +66,12 @@
     mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.mstates.toolbar[this.tagName].showPopup
+        return this.mstates[this.tagName].showPopup
       }
     },
     methods: {
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -90,7 +90,7 @@
       },
       clickHandler (color) {
         this.setColor(this.tagName, color)
-        this.updatePopupDisplay()
+        this.setPopupDisplay()
       },
       inputHandler () {
         let color = this.color
@@ -99,7 +99,7 @@
           window.alert(this.lang.invalidColorCodeMsg)
         } else {
           this.setColor(this.tagName, color)
-          this.updatePopupDisplay()
+          this.setPopupDisplay()
         }
         this.color = ''
       }

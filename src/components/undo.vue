@@ -51,21 +51,21 @@
       }
     },
     methods: {
-      updateButtonStates (data) {
-        this.$store.dispatch(this.mpath + 'updateButtonStates', data)
+      setButtonStates (data) {
+        this.$store.dispatch(this.mpath + 'setButtonStates', data)
       },
-      updateContent (data) {
-        this.$store.dispatch(this.mpath + 'updateContent', data)
+      setContent (data) {
+        this.$store.dispatch(this.mpath + 'setContent', data)
       },
       undo () {
         if (!this.canUndo) return
         this.index--
-        this.updateContent(this.stack[this.index])
+        this.setContent(this.stack[this.index])
       },
       redo () {
         if (!this.canRedo) return
         this.index++
-        this.updateContent(this.stack[this.index])
+        this.setContent(this.stack[this.index])
       },
       push (content) {
         if (content !== this.stack[this.index]) {
@@ -73,7 +73,7 @@
           this.stack.push(content)
           this.index++
         }
-        this.updateButtonStates({
+        this.setButtonStates({
           undo: this.canUndo ? 'default' : 'disabled',
           redo: this.canRedo ? 'default' : 'disabled'
         })

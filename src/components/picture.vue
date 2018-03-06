@@ -47,7 +47,7 @@
     mixins: [vuexMixin],
     computed: {
       showPopup: function () {
-        return this.mstates.toolbar.picture.showPopup
+        return this.mstates.picture.showPopup
       }
     },
     watch: {
@@ -60,14 +60,14 @@
       }
     },
     methods: {
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       hideDialog () {
-        this.updatePopupDisplay()
+        this.setPopupDisplay()
       },
       changeHandler () {
         let obj = this.$refs.file

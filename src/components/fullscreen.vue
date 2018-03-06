@@ -4,10 +4,10 @@
   import vuexMixin from '../mixins/vuex'
 
   export default {
-    mixins: [vuexMixin],
     render () {
       return ''
     },
+    mixins: [vuexMixin],
     computed: {
       fullscreen () {
         return this.mstates.fullscreen

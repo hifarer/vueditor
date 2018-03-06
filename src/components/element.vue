@@ -40,18 +40,18 @@
     mixins: [rectMixin, vuexMixin],
     computed: {
       showPopup () {
-        return this.mstates.toolbar.element.showPopup
+        return this.mstates.element.showPopup
       }
     },
     mounted () {
-      this.updateSelectValue({name: 'element', value: this.val})
+      this.setSelectValue({name: 'element', value: this.val})
     },
     methods: {
-      updateSelectValue (data) {
-        this.$store.dispatch(this.mpath + 'updateSelectValue', data)
+      setSelectValue (data) {
+        this.$store.dispatch(this.mpath + 'setSelectValue', data)
       },
-      updatePopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'updatePopupDisplay', data)
+      setPopupDisplay (data) {
+        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -60,8 +60,8 @@
         let tagName = event.target.innerHTML.trim()
         this.val = tagName
         this.execCommand({name: 'formatBlock', value: tagName})
-        this.updateSelectValue({name: 'element', value: tagName})
-        this.updatePopupDisplay()
+        this.setSelectValue({name: 'element', value: tagName})
+        this.setPopupDisplay()
       }
     }
   }

@@ -7,7 +7,7 @@ import { resetToolbar, modifyToolbar } from './config/toolbar.js'
 import { setConfig, getDefaultConf } from './config/index.js'
 
 import app from './components/app.vue'
-import createStore from './store/states.js'
+import createStore from './store/index.js'
 
 function isArray (obj) {
   return Object.prototype.toString.call(obj) === '[object Array]'
