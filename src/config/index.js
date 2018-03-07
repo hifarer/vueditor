@@ -2,11 +2,9 @@
 let defaultConf = {
   spellcheck: false,
   noFormatPaste: true,
-  pasteUpload: false,
+  uploadOnPaste: false,
   toolbar: [
-    'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
-    'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-    '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'code', 'fullscreen', 'sourceCode', 'markdown'
+    'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'code', 'fullscreen', 'sourceCode', 'markdown'
   ],
   fontName: [
     { val: 'arial black' },
@@ -14,11 +12,11 @@ let defaultConf = {
     { val: 'Courier New' }
   ],
   fontSize: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
-  code: {
-    type: ['bash', 'clike', 'css', 'html', 'java', 'javascript', 'php', 'python', 'sql'],
+  codeSnippet: {
+    lang: ['bash', 'clike', 'css', 'html', 'java', 'javascript', 'php', 'python', 'sql'],
     pattern: {
       attr: 'class',
-      value: 'language-#type#'
+      value: 'language-#lang#'
     }
   }
 }

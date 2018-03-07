@@ -18,9 +18,6 @@
       content () {
         return this.mstates.content
       },
-      callee () {
-        return this.mstates.callee
-      },
       view () {
         return this.mstates.view
       },
@@ -44,7 +41,7 @@
           this.push(this.content)
         }
       },
-      'callee': function ({ name, params }) {
+      'event': function ({ name, params }) {
         if (['undo', 'redo'].indexOf(name) !== -1) {
           this[name]()
         }

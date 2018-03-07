@@ -1,27 +1,21 @@
 
 export default {
 
-  SET_SELECT_VALUE (state, { name, value }) {
-    state[name].value = value
-  },
-
-  SET_BUTTON_STATES (state, data) {
+  SET_BUTTON_STATES ({ toolbar }, data) {
+    console.log(data)
     for (let name in data) {
-      if (state[name]) {
-        state[name].status = data[name]
+      if (typeof toolbar[name] !== 'undefined') {
+        toolbar[name] = data[name]
       }
     }
   },
 
-  SET_POPUP_DISPLAY (state, data) {
-    for (let name in state) {
-      if (state[name].showPopup === undefined) continue
-      if (data && data.name === name) {
-        state[name].showPopup = data.display
-      } else if (state[name].showPopup !== false) {
-        state[name].showPopup = false
-      }
-    }
+  SET_SELECT_VALUE ({ select }, { name, value }) {
+    select[name] = value
+  },
+
+  SET_ACTIVE_COMPONENT (state, data) {
+    state.activeComponent = data
   },
 
   SET_FULL_SCREEN (state, data) {
@@ -40,12 +34,12 @@ export default {
     state.view = data
   },
 
-  CALL_METHOD (state, data) {
-    state.callee = data
-  },
-
   EXEC_COMMAND (state, data) {
     state.command = data
+  },
+
+  TRIGGER_EVENT (state, data) {
+    state.event = data
   }
 
 }

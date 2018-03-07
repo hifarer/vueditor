@@ -28,19 +28,19 @@ let defaultToolbar = {
     link: {className: 'icon-link'},
     unLink: {className: 'icon-unlink', action: 'unLink'},
     markdown: {className: 'icon-markdown', action: 'markdown'},
-    picture: {className: 'icon-file-image-o'},
     sourceCode: {className: 'icon-code', action: 'sourceCode'},
-    table: {className: 'icon-table'},
     undo: {className: 'icon-undo', action: 'undo'},
     redo: {className: 'icon-repeat', action: 'redo'},
-    fullscreen: {className: 'icon-fullscreen', action: 'fullscreen'}
+    fullscreen: {className: 'icon-fullscreen', action: 'fullscreen'},
+    picture: {className: 'icon-file-image-o'},
+    table: {className: 'icon-table'}
   },
 
   selects: {
-    fontName: {className: 'font-select'},
-    fontSize: {className: ''},
     element: {className: ''},
-    code: {className: 'code-select'}
+    fontSize: {className: ''},
+    fontName: {className: 'font-select'},
+    codeSnippet: {className: 'lang-select'}
   }
 
 }

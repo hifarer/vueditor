@@ -60,18 +60,13 @@
           '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
         ],
         color: '',
-        lang: getLang(this.tagName)
+        lang: getLang(this.tag)
       }
     },
     mixins: [rectMixin, vuexMixin],
-    computed: {
-      showPopup () {
-        return this.mstates[this.tagName].showPopup
-      }
-    },
     methods: {
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -89,8 +84,8 @@
         this.execCommand({name: type, value: color})
       },
       clickHandler (color) {
-        this.setColor(this.tagName, color)
-        this.setPopupDisplay()
+        this.setColor(this.tag, color)
+        this.setActiveComponent()
       },
       inputHandler () {
         let color = this.color
@@ -98,8 +93,8 @@
         if (!valid) {
           window.alert(this.lang.invalidColorCodeMsg)
         } else {
-          this.setColor(this.tagName, color)
-          this.setPopupDisplay()
+          this.setColor(this.tag, color)
+          this.setActiveComponent()
         }
         this.color = ''
       }

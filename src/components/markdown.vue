@@ -54,8 +54,8 @@
       content () {
         return this.mstates.content
       },
-      callee () {
-        return this.mstates.callee
+      event () {
+        return this.mstates.event
       }
     },
     watch: {
@@ -68,16 +68,16 @@
         }
         this.currentView = val
       },
-      'callee': function (val) {
+      'event': function (val) {
         if (val.name === 'markdown') {
           this.setView(this.view === 'markdown' ? 'design' : 'markdown')
-          this.setPopupDisplay()
+          this.setActiveComponent()
         }
       }
     },
     methods: {
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       setContent (data) {
         this.$store.dispatch(this.mpath + 'setContent', data)

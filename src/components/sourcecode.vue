@@ -39,8 +39,8 @@
       content () {
         return this.mstates.content
       },
-      callee () {
-        return this.mstates.callee
+      event () {
+        return this.mstates.event
       }
     },
     watch: {
@@ -55,16 +55,16 @@
       'content': function (val) {
         this.setContent(val)
       },
-      'callee': function (val) {
+      'event': function (val) {
         if (val.name === 'sourceCode') {
           this.setView(this.view === 'sourceCode' ? 'design' : 'sourceCode')
-          this.setPopupDisplay()
+          this.setActiveComponent()
         }
       }
     },
     methods: {
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       setContent (data) {
         this.$store.dispatch(this.mpath + 'setContent', data)

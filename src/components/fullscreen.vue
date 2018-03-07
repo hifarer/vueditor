@@ -12,12 +12,12 @@
       fullscreen () {
         return this.mstates.fullscreen
       },
-      callee () {
-        return this.mstates.callee
+      event () {
+        return this.mstates.event
       }
     },
     watch: {
-      'callee': function (val) {
+      'event': function (val) {
         if (val.name === 'fullscreen') {
           this.setFullScreen(!this.fullscreen)
         }

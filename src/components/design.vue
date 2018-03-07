@@ -18,8 +18,6 @@
         iframeDoc: null,
         iframeBody: null,
         timer: null,
-        inited: false,
-        cache: '',
         lang: getLang('design'),
         config: getConfig()
       }
@@ -37,8 +35,8 @@
       command () {
         return this.mstates.command
       },
-      states () {
-        return this.mstates.states
+      toolbar () {
+        return this.mstates.toolbar
       }
     },
 
@@ -47,14 +45,6 @@
         if (val !== 'design') {
           clearTimeout(this.timer)
           this.setContent(this.iframeBody.innerHTML)
-        }
-      },
-      'content': function (val) {
-        if (this.inited) {
-          this.iframeBody.innerHTML !== val && (this.iframeBody.innerHTML = val)
-          this.view === 'design' && this.updateStates()
-        } else {
-          this.cache = val
         }
       },
       'command': function (data) {
@@ -72,11 +62,11 @@
       setButtonStates (data) {
         this.$store.dispatch(this.mpath + 'setButtonStates', data)
       },
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
-      callMethod (data) {
-        this.$store.dispatch(this.mpath + 'callMethod', data)
+      triggerEvent (data) {
+        this.$store.dispatch(this.mpath + 'triggerEvent', data)
       },
       setView (data) {
         this.$store.dispatch(this.mpath + 'setView', data)
@@ -85,10 +75,8 @@
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
         this.iframeBody = this.iframeWin.document.body
-        this.inited = true
-        if (this.cache) {
-          this.iframeBody.innerHTML !== this.cache && (this.iframeBody.innerHTML = this.cache)
-          this.cache = ''
+        if (this.content) {
+          this.iframeBody.innerHTML !== this.content && (this.iframeBody.innerHTML = this.content)
         }
         this.iframeDoc.designMode = 'on'
         this.iframeBody.spellcheck = this.config.spellcheck
@@ -100,7 +88,7 @@
       // init, selection change
       updateStates () {
         let json = {}
-        for (let name in this.states) {
+        for (let name in this.toolbar) {
           if (['redo', 'undo', 'fullscreen'].indexOf(name) === -1) {
             if (this.iframeDoc.queryCommandSupported(name)) {
               json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default'
@@ -116,7 +104,7 @@
           // throttle
           clearTimeout(timer)
           timer = setTimeout(() => {
-            this.view === 'design' && this.setPopupDisplay()
+            this.view === 'design' && this.setActiveComponent()
           }, 200)
           // dispatch selectionchange event for throttling
           this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
@@ -130,8 +118,8 @@
       keydownHandler (event) {
         if (event.ctrlKey && (event.keyCode === 89 || event.keyCode === 90)) {
           event.preventDefault()
-          event.keyCode === 89 && this.callMethod({name: 'redo'})
-          event.keyCode === 90 && this.callMethod({name: 'undo'})
+          event.keyCode === 89 && this.triggerEvent({name: 'redo'})
+          event.keyCode === 90 && this.triggerEvent({name: 'undo'})
         }
         if (event.keyCode === 13 && this.getRange()) {
           let container = this.getRange().commonAncestorContainer
@@ -284,7 +272,7 @@
         let tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table']
         let container = range.commonAncestorContainer
         container.nodeType === 3 && (container = container.parentNode)
-        let { pattern } = this.config.code
+        let { pattern } = this.config.codeSnippet
         if (container.tagName.toLowerCase() === 'code') {
           let value = pattern.value.replace(/#type#/, '')
           value = (container.getAttribute(pattern.attr) || '').replace(value, '')
@@ -451,7 +439,7 @@
       insertCodeBlock (name, value) {
         let range = this.getRange()
         if (!range) return
-        let { pattern } = this.config.code
+        let { pattern } = this.config.codeSnippet
         let tempDiv = document.createElement('div')
         tempDiv.innerHTML = value
         let attrValue = tempDiv.getElementsByTagName('code')[0].getAttribute(pattern.attr)

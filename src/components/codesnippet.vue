@@ -19,7 +19,7 @@
 <template>
   <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
     <ul>
-      <li v-for="(type, index) in code" :key="index" @click="clickHandler(type)">{{type}}</li>
+      <li v-for="(type, index) in lang" :key="index" @click="clickHandler(type)">{{type}}</li>
     </ul>
   </div>
 </template>
@@ -32,28 +32,21 @@
 
   export default {
     data () {
-      let { type, pattern } = getConfig('code')
+      let { lang, pattern } = getConfig('codeSnippet')
       return {
-        code: type,
-        val: type[0],
+        lang: lang,
         tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
       }
     },
     mixins: [rectMixin, vuexMixin],
-    computed: {
-      showPopup () {
-        return this.mstates.code.showPopup
-      }
-    },
     mounted () {
-      this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: this.val})
+      this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: this.lang[0]})
     },
     methods: {
-      clickHandler (type) {
-        this.val = type
-        this.$store.dispatch(this.mpath + 'execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#type#/igm, type)})
-        this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: type})
-        this.$store.dispatch(this.mpath + 'setPopupDisplay')
+      clickHandler (lang) {
+        this.$store.dispatch(this.mpath + 'execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang)})
+        this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: lang})
+        this.$store.dispatch(this.mpath + 'setActiveComponent')
       }
     }
   }

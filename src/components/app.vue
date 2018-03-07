@@ -4,7 +4,7 @@
     <ve-toolbar></ve-toolbar>
     <ve-design></ve-design>
     <template v-for="item in list">
-      <component v-if="config.toolbar.indexOf(item) !== -1" :tagName="item" :is="'ve-' + item.toLowerCase()"></component>
+      <component v-if="config.toolbar.indexOf(item) !== -1" :tag="item" :is="'ve-' + item.toLowerCase()"></component>
     </template>
   </div>
 </template>
@@ -18,7 +18,7 @@
   import fontName from './fontname.vue'
   import fontSize from './fontsize.vue'
   import sourceCode from './sourcecode.vue'
-  import code from './code.vue'
+  import codeSnippet from './codesnippet.vue'
   import element from './element.vue'
   import table from './table.vue'
   import undo from './undo.vue'
@@ -28,7 +28,7 @@
   import fullscreen from './fullscreen.vue'
 
   import createStore from '../store/index.js'
-  import { createNonceStr } from '../util'
+  import { createNonceStr } from '../util.js'
 
   import '../style/style.less'
 
@@ -37,7 +37,7 @@
       've-toolbar': toolbar,
       've-design': design,
       've-sourcecode': sourceCode,
-      've-code': code,
+      've-codesnippet': codeSnippet,
       've-forecolor': color,
       've-backcolor': color,
       've-fontname': fontName,

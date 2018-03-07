@@ -45,11 +45,6 @@
       }
     },
     mixins: [vuexMixin],
-    computed: {
-      showPopup: function () {
-        return this.mstates.picture.showPopup
-      }
-    },
     watch: {
       'showPopup': function (val) {
         if (val) {
@@ -60,14 +55,14 @@
       }
     },
     methods: {
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       hideDialog () {
-        this.setPopupDisplay()
+        this.setActiveComponent()
       },
       changeHandler () {
         let obj = this.$refs.file

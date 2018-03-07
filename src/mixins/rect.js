@@ -1,5 +1,4 @@
 export default {
-  props: ['tagName'],
   computed: {
     // rect belong to the clicked toolbar element
     rect () {

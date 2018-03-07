@@ -39,11 +39,6 @@
       }
     },
     mixins: [rectMixin, vuexMixin],
-    computed: {
-      showPopup () {
-        return this.mstates.fontSize.showPopup
-      }
-    },
     mounted () {
       this.setSelectValue({name: 'fontSize', value: this.val})
     },
@@ -51,8 +46,8 @@
       setSelectValue (data) {
         this.$store.dispatch(this.mpath + 'setSelectValue', data)
       },
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -61,7 +56,7 @@
         this.val = size
         this.execCommand({name: 'fontSize', value: size})
         this.setSelectValue({name: 'fontSize', value: size})
-        this.setPopupDisplay()
+        this.setActiveComponent()
       }
     }
   }

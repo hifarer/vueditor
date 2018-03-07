@@ -38,11 +38,6 @@
       }
     },
     mixins: [rectMixin, vuexMixin],
-    computed: {
-      showPopup () {
-        return this.mstates.element.showPopup
-      }
-    },
     mounted () {
       this.setSelectValue({name: 'element', value: this.val})
     },
@@ -50,8 +45,8 @@
       setSelectValue (data) {
         this.$store.dispatch(this.mpath + 'setSelectValue', data)
       },
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -61,7 +56,7 @@
         this.val = tagName
         this.execCommand({name: 'formatBlock', value: tagName})
         this.setSelectValue({name: 'element', value: tagName})
-        this.setPopupDisplay()
+        this.setActiveComponent()
       }
     }
   }

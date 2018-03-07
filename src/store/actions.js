@@ -1,14 +1,14 @@
 
-export const setSelectValue = (context, data) => {
-  context.commit('SET_SELECT_VALUE', data)
-}
-
 export const setButtonStates = ({ commit }, data) => {
   commit('SET_BUTTON_STATES', data)
 }
 
-export const setPopupDisplay = ({ commit }, data) => {
-  commit('SET_POPUP_DISPLAY', data)
+export const setSelectValue = ({ commit }, data) => {
+  commit('SET_SELECT_VALUE', data)
+}
+
+export const setActiveComponent = ({ commit }, data) => {
+  commit('SET_ACTIVE_COMPONENT', data)
 }
 
 export const setFullScreen = ({ commit }, data) => {
@@ -27,10 +27,10 @@ export const setView = ({commit}, data) => {
   commit('SET_VIEW', data)
 }
 
-export const callMethod = ({ commit }, data) => {
-  commit('CALL_METHOD', data)
-}
-
 export const execCommand = ({ commit }, data) => {
   commit('EXEC_COMMAND', data)
+}
+
+export const triggerEvent = ({ commit }, data) => {
+  commit('TRIGGER_EVENT', data)
 }

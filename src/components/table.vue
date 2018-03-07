@@ -46,14 +46,9 @@
       }
     },
     mixins: [rectMixin, vuexMixin],
-    computed: {
-      showPopup: function () {
-        return this.mstates.table.showPopup
-      }
-    },
     methods: {
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -65,7 +60,7 @@
       clickHandler () {
         let html = this.createTable(this.y + 1, this.x + 1)
         this.execCommand({ name: 'insertHTML', value: html })
-        this.setPopupDisplay()
+        this.setActiveComponent()
       },
       createTable (rows, cols) {
         let oTable = document.createElement('table')

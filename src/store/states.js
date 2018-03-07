@@ -1,32 +1,34 @@
 
-import { getToolbar } from '../config/toolbar.js'
 import { getConfig } from '../config/index.js'
 
+// 每一个按钮都有一个状态
+// 每一个对话框都有一个显示状态
+// 少部分模块有一个属性值
+
 export default function () {
-  let json = {}
-  let {btns, selects} = getToolbar()
+  let toolbar = {}
   let config = getConfig('toolbar')
 
   config.forEach(function (name) {
     if (name !== 'divider' && name !== '|') {
-      json[name] = {}
-      if (name in selects) {
-        json[name].value = ''
-        json[name].showPopup = false
-      } else {
-        if (btns[name] && btns[name].action === undefined) {
-          json[name].showPopup = false
-        }
-      }
-      json[name].status = '' // default disabled actived
+      toolbar[name] = '' // default disabled actived
     }
   })
 
   return {
-    ...json,
-    view: 'design',
-    content: '',
+    toolbar,
+    select: {
+      codeSnippt: '',
+      element: '',
+      fontName: '',
+      fontSize: ''
+    },
+
+    activeComponent: '',
     fullscreen: false,
+    content: '',
+    view: 'design',
+
     rect: {
       left: 0,
       top: 0,
@@ -37,7 +39,7 @@ export default function () {
       name: '',
       value: ''
     },
-    callee: {
+    event: {
       name: '',
       params: ''
     }

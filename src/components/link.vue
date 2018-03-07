@@ -37,21 +37,18 @@
       rect () {
         return this.mstates.rect
       },
-      callee () {
-        return this.mstates.callee
-      },
-      showPopup () {
-        return this.mstates.link.showPopup
+      event () {
+        return this.mstates.event
       }
     },
     watch: {
-      'callee': function (val) {
+      'event': function (val) {
         val.name === 'unLink' && this.unLinkHandler()
       }
     },
     methods: {
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -64,7 +61,7 @@
       linkHandler () {
         let href = this.checkValid()
         this.execCommand({ name: 'createlink', value: href })
-        this.setPopupDisplay()
+        this.setActiveComponent()
       },
       unLinkHandler () {
         this.execCommand({ name: 'unlink', value: null })

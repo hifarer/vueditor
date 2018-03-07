@@ -43,7 +43,7 @@
       text-overflow: ellipsis;
     }
   }
-  .code-select {
+  .lang-select {
     width: 80px;
   }
 </style>
@@ -54,15 +54,15 @@
       <div v-if="item in btns" 
         @click.stop.prevent="btnHandler($event, item)" 
         :title="lang[item].title"
-        :class="{'ve-active': mstates[item].status == 'actived', 've-disabled': mstates[item].status == 'disabled'}" 
+        :class="{'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}" 
         unselectable="on">
         <i :class="[btns[item].className]"></i>
       </div>
       <div v-if="item in selects" 
         @click.stop.prevent="selectHandler($event, item)" 
-        :class="[{'ve-disabled': mstates[item].status == 'disabled'}, selects[item].className, 've-select']" 
+        :class="[{'ve-disabled': toolbar[item] == 'disabled'}, selects[item].className, 've-select']" 
         unselectable="on">
-        <span>{{mstates[item].value}}</span><i :class="{'ve-triangle-down': !mstates[item].display, 've-triangle-up': mstates[item].display}"></i>
+        <span>{{select[item]}}</span><i :class="{'ve-triangle-down': item !== activeComponent, 've-triangle-up': item === activeComponent}"></i>
       </div>
       <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
     </template>
@@ -90,6 +90,15 @@
     computed: {
       view () {
         return this.mstates.view
+      },
+      toolbar () {
+        return this.mstates.toolbar
+      },
+      select () {
+        return this.mstates.select
+      },
+      activeComponent () {
+        return this.mstates.activeComponent
       }
     },
     watch: {
@@ -102,7 +111,7 @@
           }
         })
         if (val === 'codesnippet') {
-          states.code !== undefined && (states.code = 'default')
+          states.codeSnippet !== undefined && (states.codeSnippet = 'default')
         }
         this.setButtonStates(states)
       }
@@ -111,11 +120,11 @@
       setButtonStates (data) {
         this.$store.dispatch(this.mpath + 'setButtonStates', data)
       },
-      setPopupDisplay (data) {
-        this.$store.dispatch(this.mpath + 'setPopupDisplay', data)
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
-      callMethod (data) {
-        this.$store.dispatch(this.mpath + 'callMethod', data)
+      triggerEvent (data) {
+        this.$store.dispatch(this.mpath + 'triggerEvent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
@@ -124,27 +133,25 @@
         this.$store.dispatch(this.mpath + 'setRect', data)
       },
       btnHandler (event, name) {
-        if (this.mstates[name].status === 'disabled') return
+        if (this.toolbar[name].status === 'disabled') return
         let btn = this.btns[name]
         if (btn.action) {
           if (btn.native) {
             this.execCommand({ name: name, value: null })
           } else {
-            this.callMethod({ name: name, params: null })
+            this.triggerEvent({ name: name, params: null })
           }
         }
         this.updateStates(name)
-        this.showPopup(name, event.currentTarget)
+        this.updatePopup(name, event.currentTarget)
       },
       selectHandler (event, name) {
-        if (this.mstates[name].status === 'disabled') return
+        if (this.toolbar[name].status === 'disabled') return
         this.updateStates(name)
-        this.showPopup(name, event.currentTarget)
+        this.updatePopup(name, event.currentTarget)
       },
-      showPopup (name, obj) {
-        this.setPopupDisplay(this.mstates[name].showPopup !== undefined 
-        ? {name, display: !this.mstates[name].showPopup} 
-        : {})
+      updatePopup (name, obj) {
+        this.setActiveComponent(name)
         if ((this.btns[name] && !this.btns[name].action) || this.selects[name]) {
           this.setRect({
             left: obj.offsetLeft,
@@ -159,16 +166,16 @@
         // update no action btn status, no action means click on it will toggle a popover menu;
         if (this.view === 'design') {
           for (let item in this.btns) {
-            if (!this.btns[item].action && this.mstates[item] && this.mstates[item].status === 'actived') {
+            if (!this.btns[item].action && this.toolbar[item] === 'actived') {
               states[item] = 'default'
             }
           }
         }
         if (['sourceCode', 'markdown'].indexOf(name) !== -1) {
-          this.mstates['sourceCode'] && (states['sourceCode'] = 'default')
-          this.mstates['markdown'] && (states['markdown'] = 'default')
+          this.toolbar['sourceCode'] && (states['sourceCode'] = 'default')
+          this.toolbar['markdown'] && (states['markdown'] = 'default')
         }
-        this.mstates[name].status === 'actived' ? states[name] = 'default' : states[name] = 'actived'
+        this.toolbar[name] === 'actived' ? states[name] = 'default' : states[name] = 'actived'
         this.setButtonStates(states)
       }
     }
