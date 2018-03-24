@@ -1,61 +1,50 @@
 
-<style module lang="less" rel="stylesheet/less">
-  .ctn {
-    li {
-      display: block;
-      cursor: pointer;
-      padding: 6px;
-      border-bottom: 1px solid #ddd;
-      &:last-child {
-        border-bottom: none;
-      }
-      &:hover {
-        background: #d5e1f2;
-        border-color: #a3bde3;
-      }
-    }
-  }
-</style>
-
 <template>
-  <div class="ve-dropdown" :class="$style.ctn" @click="selectItem" v-show="showPopup" :style="style">
-    <ul>
-      <li v-for="(item, index) in arr" :key="index">{{item}}</li>
+  <div class="ve-selectbox">
+    <div :class="[{'ve-disabled': false}, 've-select']" @click="clickHandler">
+      <span>{{val}}</span><i :class="{'ve-triangle-down': activeComponent !== 'element', 've-triangle-up': activeComponent === 'element'}"></i>
+    </div>
+    <ul class="ve-dropdown" @click="selectHandler" v-show="activeComponent === 'element'" :style="style">
+      <li v-for="(item, index) in list" :key="index">{{item}}</li>
     </ul>
   </div>
 </template>
 
 <script>
   
-  import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
 
   export default {
     data () {
       return {
-        arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        list: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
         val: 'p'
       }
     },
-    mixins: [rectMixin, vuexMixin],
-    mounted () {
-      this.setSelectValue({name: 'element', value: this.val})
+    mixins: [vuexMixin],
+    computed: {
+      activeComponent () {
+        return this.mstates.activeComponent
+      }
     },
     methods: {
-      setSelectValue (data) {
-        this.$store.dispatch(this.mpath + 'setSelectValue', data)
-      },
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
-      selectItem (event) {
+      clickHandler () {
+        if (this.activeComponent === 'element') {
+          this.setActiveComponent()
+        } else {
+          this.setActiveComponent('element')
+        }
+      },
+      selectHandler (event) {
         let tagName = event.target.innerHTML.trim()
         this.val = tagName
         this.execCommand({name: 'formatBlock', value: tagName})
-        this.setSelectValue({name: 'element', value: tagName})
         this.setActiveComponent()
       }
     }

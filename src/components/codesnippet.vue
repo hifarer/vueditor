@@ -1,32 +1,17 @@
 
-<style module lang="less" rel="stylesheet/less">
-  .ctn {
-    li {
-      padding: 6px;
-      border-bottom: 1px solid #ddd;
-      cursor: pointer;
-      &:last-child {
-        border-bottom: none;
-      }
-      &:hover {
-        background: #d5e1f2;
-        border-color: #a3bde3;
-      }
-    }
-  }
-</style>
-
 <template>
-  <div class="ve-dropdown" :class="$style.ctn" v-show="showPopup" :style="style">
-    <ul>
-      <li v-for="(type, index) in lang" :key="index" @click="clickHandler(type)">{{type}}</li>
+  <div class="ve-selectbox">
+    <div :class="[{'ve-disabled': false}, 've-select']" @click="clickHandler">
+      <span>{{val}}</span><i :class="{'ve-triangle-down': activeComponent !== 'codeSnippet', 've-triangle-up': activeComponent === 'codeSnippet'}"></i>
+    </div>
+    <ul class="ve-dropdown" v-show="activeComponent === 'codeSnippet'" :style="style">
+      <li v-for="(type, index) in list" :key="index" @click="selectHandler(type)">{{type}}</li>
     </ul>
   </div>
 </template>
 
 <script>
   
-  import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
   import { getConfig } from '../config/'
 
@@ -34,19 +19,35 @@
     data () {
       let { lang, pattern } = getConfig('codeSnippet')
       return {
-        lang: lang,
+        list: lang,
+        val: lang[0],
         tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
       }
     },
-    mixins: [rectMixin, vuexMixin],
-    mounted () {
-      this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: this.lang[0]})
+    mixins: [vuexMixin],
+    computed: {
+      activeComponent () {
+        return this.mstates.activeComponent
+      }
     },
     methods: {
-      clickHandler (lang) {
-        this.$store.dispatch(this.mpath + 'execCommand', {name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang)})
-        this.$store.dispatch(this.mpath + 'setSelectValue', {name: 'code', value: lang})
-        this.$store.dispatch(this.mpath + 'setActiveComponent')
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.mpath + 'execCommand', data)
+      },
+      clickHandler () {
+        if (this.activeComponent === 'codeSnippet') {
+          this.setActiveComponent()
+        } else {
+          this.setActiveComponent('codeSnippet')
+        }
+      },
+      selectHandler (lang) {
+        this.val = lang
+        this.execCommand({name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang)})
+        this.setActiveComponent()
       }
     }
   }

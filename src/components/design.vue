@@ -215,7 +215,7 @@
           }
         })
 
-        if (this.config.pasteUpload && clipboardData.items) {
+        if (this.config.uploadOnPaste && clipboardData.items) {
           this.pasteUpload(clipboardData.items)
         }
       },

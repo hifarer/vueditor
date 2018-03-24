@@ -37,10 +37,10 @@ let defaultToolbar = {
   },
 
   selects: {
-    element: {className: ''},
-    fontSize: {className: ''},
-    fontName: {className: 'font-select'},
-    codeSnippet: {className: 'lang-select'}
+    // element: {className: ''},
+    // fontSize: {className: ''},
+    // fontName: {className: 'font-select'},
+    // codeSnippet: {className: 'lang-select'}
   }
 
 }

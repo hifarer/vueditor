@@ -7,7 +7,8 @@ export default {
     }
   },
   beforeCreate () {
-    let name = this.$parent.namespace
+    let name = this.$parent.namespace || this.$parent.$parent.namespace
+    console.log('namespace', name)
     this.mstates = name ? this.$store.state[name] : this.$store.state
     this.mpath = name ? name + '/' : ''
   }

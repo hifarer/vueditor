@@ -119,6 +119,12 @@
   box-sizing: border-box;
 }
 
+.ve-selectbox {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
 .ve-select {
   position: relative;
   min-width: 60px;
@@ -149,12 +155,29 @@
 
 .ve-dropdown {
   width: 176px;
-  padding: 5px 10px;
+  padding: 5px 10px!important;
   position: absolute;
   top: 36px;
   z-index: 1000;
   background: #fff;
   border: 1px solid #ccc;
+}
+
+.ve-dropdown li {
+  display: block;
+  cursor: pointer;
+  padding: 6px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  top: 26px;
+  letter-spacing: initial;
+  &:last-child {
+    border-bottom: none;
+  }
+  &:hover {
+    background: #d5e1f2;
+    border-color: #a3bde3;
+  }
 }
 
 .ve-disabled {

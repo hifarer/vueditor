@@ -18,7 +18,7 @@ export default function () {
   return {
     toolbar,
     select: {
-      codeSnippt: '',
+      codeSnippet: '',
       element: '',
       fontName: '',
       fontSize: ''

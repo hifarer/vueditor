@@ -15,11 +15,11 @@
   import design from './design.vue'
   
   import color from './color.vue'
-  import fontName from './fontname.vue'
-  import fontSize from './fontsize.vue'
+  // import fontName from './fontname.vue'
+  // import fontSize from './fontsize.vue'
   import sourceCode from './sourcecode.vue'
-  import codeSnippet from './codesnippet.vue'
-  import element from './element.vue'
+  // import codeSnippet from './codesnippet.vue'
+  // import element from './element.vue'
   import table from './table.vue'
   import undo from './undo.vue'
   import link from './link.vue'
@@ -29,6 +29,7 @@
 
   import createStore from '../store/index.js'
   import { createNonceStr } from '../util.js'
+  import { getLang } from '../config/lang.js'
 
   import '../style/style.less'
 
@@ -37,12 +38,12 @@
       've-toolbar': toolbar,
       've-design': design,
       've-sourcecode': sourceCode,
-      've-codesnippet': codeSnippet,
+      // 've-codesnippet': codeSnippet,
       've-forecolor': color,
       've-backcolor': color,
-      've-fontname': fontName,
-      've-fontsize': fontSize,
-      've-element': element,
+      // 've-fontname': fontName,
+      // 've-fontsize': fontSize,
+      // 've-element': element,
       've-table': table,
       've-link': link,
       've-undo': undo,
@@ -70,8 +71,13 @@
       }
     },
     created () {
-      this.namespace = createNonceStr()
-      this.$store.registerModule(this.namespace, createStore())
+      let lang = getLang('app')
+      if (!this.$store) {
+        throw new Error(lang.noStore)
+      } else {
+        this.namespace = createNonceStr()
+        this.$store.registerModule(this.namespace, createStore())
+      }
     }
   }
 </script>

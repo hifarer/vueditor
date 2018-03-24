@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Vueditor</title>
   <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+  <style>
+    .vueditor {
+      height: 250px!important;
+    }
+  </style>
 </head>
 <body>
 
@@ -11,6 +16,8 @@
     <Vueditor></Vueditor>
     <!-- <Vueditor></Vueditor> -->
   </div>
+
+  <!-- <div id="box"></div> -->
 
   <script src="https://cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
   <script src="https://cdn.bootcss.com/vuex/2.1.0/vuex.min.js"></script>
@@ -53,6 +60,13 @@
 
     // let editor1 = parent.$children[1]
     // editor1.setContent('content two')
+
+    // let inst = Vueditor.createEditor('#box', {
+    //   toolbar: [
+    //     'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
+    //   ]
+    // })
+    // inst.setContent('fill your content here')
 
   </script>
 </body>

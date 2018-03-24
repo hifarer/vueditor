@@ -1,46 +1,40 @@
 
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
-    display: table;
+    // display: table;
     width: 100%;
     font-size: 0;
     letter-spacing: -4px;
     background: #fff;
     border-bottom: 1px solid #ddd;
     user-select: none;
-    div {
+    div.ve-icon,
+    div.ve-select {
       cursor: pointer;
       position: relative;
       display: inline-block;
       padding: 10px 12px;
       color: rgba(0, 0, 0, 0.6);
     }
+    div.ve-icon:hover {
+      background: #eee;
+    }
+    div.ve-active {
+      background: #eee;
+      color: #000;
+    }
+    div.ve-disabled {
+      background: transparent;
+      color: rgba(0,0,0,.6);
+    }
     div.ve-divider {
+      display: inline-block;
       width: 0;
       height: 26px;
       margin: 5px;
       padding: 0;
       border-right: 1px solid #ddd;
       vertical-align: top;
-    }
-    div.ve-active {
-      background: #eee;
-      color: #000;
-    }
-    div:hover {
-      background: #eee;
-    }
-    div.ve-disabled {
-      background: transparent;
-      color: rgba(0,0,0,.6);
-    }
-  }
-  .font-select {
-    width: 100px;
-    span {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
   }
   .lang-select {
@@ -54,8 +48,8 @@
       <div v-if="item in btns" 
         @click.stop.prevent="btnHandler($event, item)" 
         :title="lang[item].title"
-        :class="{'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}" 
-        unselectable="on">
+        class="ve-icon"
+        :class="{'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}">
         <i :class="[btns[item].className]"></i>
       </div>
       <div v-if="item in selects" 
@@ -66,6 +60,12 @@
       </div>
       <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
     </template>
+
+    <ve-fontsize></ve-fontsize>
+    <ve-fontname></ve-fontname>
+    <ve-element></ve-element>
+    <ve-codesnippet></ve-codesnippet>
+
   </div>
 </template>
 
@@ -75,6 +75,11 @@
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/index.js'
   import { getToolbar } from '../config/toolbar.js'
+
+  import fontSize from './fontsize.vue'
+  import fontName from './fontname.vue'
+  import element from './element.vue'
+  import codeSnippet from './codesnippet.vue'
   
   export default {
     data () {
@@ -87,6 +92,12 @@
       }
     },
     mixins: [vuexMixin],
+    components: {
+      've-fontsize': fontSize,
+      've-fontname': fontName,
+      've-element': element,
+      've-codesnippet': codeSnippet,
+    },
     computed: {
       view () {
         return this.mstates.view

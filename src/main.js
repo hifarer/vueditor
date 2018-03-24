@@ -9,14 +9,6 @@ import { setConfig, getDefaultConf } from './config/index.js'
 import app from './components/app.vue'
 import createStore from './store/index.js'
 
-function isArray (obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]'
-}
-
-function isObject (obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]'
-}
-
 function checkConfig (config) {
   let proto = {
     toolbar: 'array.string',
@@ -31,10 +23,10 @@ function checkConfig (config) {
   let retData = {valid: true, info: ''}
   for (let name in config) {
     let types = ''
-    if (isArray(config[name])) {
+    if (Array.isArray(config[name])) {
       types += 'array'
-      isObject(config[name][0]) ? types += '.object' : types += '.string'
-    } else if (isObject(config[name])) {
+      typeof config[name][0] === 'object' ? types += '.object' : types += '.string'
+    } else if (typeof config[name] === 'object') {
       types = 'object'
     } else {
       types = 'string'

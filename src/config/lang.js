@@ -1,7 +1,9 @@
 
 let defaultLang = {
 
-  app: {},
+  app: {
+    noStore: 'Vueditor can not been initialized without Vuex store when using as component, Please check your Vue Instance!'
+  },
 
   removeFormat: {title: 'Remove format'},
 
@@ -37,8 +39,8 @@ let defaultLang = {
   },
   fontName: {},
   fontSize: {},
-  code: {},
   element: {},
+  codeSnippet: {},
   design: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },

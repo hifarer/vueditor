@@ -91,7 +91,8 @@ exports.default = {
     }
   },
   beforeCreate: function beforeCreate() {
-    var name = this.$parent.namespace;
+    var name = this.$parent.namespace || this.$parent.$parent.namespace;
+    console.log('namespace', name);
     this.mstates = name ? this.$store.state[name] : this.$store.state;
     this.mpath = name ? name + '/' : '';
   }
@@ -413,51 +414,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var defaultConf = {
-  spellcheck: false,
-  noFormatPaste: true,
-  uploadOnPaste: false,
-  toolbar: ['removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'code', 'fullscreen', 'sourceCode', 'markdown'],
-  fontName: [{ val: 'arial black' }, { val: 'times new roman' }, { val: 'Courier New' }],
-  fontSize: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
-  codeSnippet: {
-    lang: ['bash', 'clike', 'css', 'html', 'java', 'javascript', 'php', 'python', 'sql'],
-    pattern: {
-      attr: 'class',
-      value: 'language-#lang#'
-    }
-  }
-};
-
-var config = JSON.parse(JSON.stringify(defaultConf));
-
-exports.default = {
-  setConfig: function setConfig(data) {
-    config = data;
-  },
-  getConfig: function getConfig(name) {
-    return name ? config[name] : config;
-  },
-  getDefaultConf: function getDefaultConf() {
-    return defaultConf;
-  }
-};
-module.exports = exports['default'];
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var defaultLang = {
 
-  app: {},
+  app: {
+    noStore: 'Vueditor can not been initialized without Vuex store when using as component, Please check your Vue Instance!'
+  },
 
   removeFormat: { title: 'Remove format' },
 
@@ -493,8 +454,8 @@ var defaultLang = {
   },
   fontName: {},
   fontSize: {},
-  code: {},
   element: {},
+  codeSnippet: {},
   design: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
@@ -541,6 +502,48 @@ exports.default = {
 module.exports = exports['default'];
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var defaultConf = {
+  spellcheck: false,
+  noFormatPaste: true,
+  uploadOnPaste: false,
+  toolbar: ['removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'codeSnippet', 'fullscreen', 'sourceCode', 'markdown'],
+  fontName: [{ val: 'arial black' }, { val: 'times new roman' }, { val: 'Courier New' }],
+  fontSize: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
+  codeSnippet: {
+    lang: ['bash', 'clike', 'css', 'html', 'java', 'javascript', 'php', 'python', 'sql'],
+    pattern: {
+      attr: 'class',
+      value: 'language-#lang#'
+    }
+  }
+};
+
+var config = JSON.parse(JSON.stringify(defaultConf));
+
+exports.default = {
+  setConfig: function setConfig(data) {
+    config = data;
+  },
+  getConfig: function getConfig(name) {
+    return name ? config[name] : config;
+  },
+  getDefaultConf: function getDefaultConf() {
+    return defaultConf;
+  }
+};
+module.exports = exports['default'];
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -557,7 +560,7 @@ exports.default = {
       return this.mstates.rect;
     },
     style: function style() {
-      if (!this.showPopup) {
+      if (this.showPopup === false) {
         return { left: 0, top: 0 };
       }
       var _rect = this.rect,
@@ -636,10 +639,10 @@ var defaultToolbar = {
   },
 
   selects: {
-    element: { className: '' },
-    fontSize: { className: '' },
-    fontName: { className: 'font-select' },
-    codeSnippet: { className: 'lang-select' }
+    // element: {className: ''},
+    // fontSize: {className: ''},
+    // fontName: {className: 'font-select'},
+    // codeSnippet: {className: 'lang-select'}
   }
 
 };
@@ -717,6 +720,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _vue = __webpack_require__(9);
 
 var _vue2 = _interopRequireDefault(_vue);
@@ -725,11 +730,11 @@ var _vuex = __webpack_require__(10);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
 var _toolbar = __webpack_require__(6);
 
-var _index = __webpack_require__(3);
+var _index = __webpack_require__(4);
 
 var _app = __webpack_require__(11);
 
@@ -740,14 +745,6 @@ var _index2 = __webpack_require__(7);
 var _index3 = _interopRequireDefault(_index2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function isArray(obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
-}
-
-function isObject(obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]';
-}
 
 function checkConfig(config) {
   var proto = {
@@ -763,10 +760,10 @@ function checkConfig(config) {
   var retData = { valid: true, info: '' };
   for (var name in config) {
     var types = '';
-    if (isArray(config[name])) {
+    if (Array.isArray(config[name])) {
       types += 'array';
-      isObject(config[name][0]) ? types += '.object' : types += '.string';
-    } else if (isObject(config[name])) {
+      _typeof(config[name][0]) === 'object' ? types += '.object' : types += '.string';
+    } else if (_typeof(config[name]) === 'object') {
       types = 'object';
     } else {
       types = 'string';
@@ -926,25 +923,9 @@ var _color = __webpack_require__(21);
 
 var _color2 = _interopRequireDefault(_color);
 
-var _fontname = __webpack_require__(26);
-
-var _fontname2 = _interopRequireDefault(_fontname);
-
-var _fontsize = __webpack_require__(31);
-
-var _fontsize2 = _interopRequireDefault(_fontsize);
-
 var _sourcecode = __webpack_require__(36);
 
 var _sourcecode2 = _interopRequireDefault(_sourcecode);
-
-var _codesnippet = __webpack_require__(117);
-
-var _codesnippet2 = _interopRequireDefault(_codesnippet);
-
-var _element = __webpack_require__(46);
-
-var _element2 = _interopRequireDefault(_element);
 
 var _table = __webpack_require__(51);
 
@@ -976,21 +957,38 @@ var _index2 = _interopRequireDefault(_index);
 
 var _util = __webpack_require__(80);
 
+var _lang = __webpack_require__(3);
+
 __webpack_require__(81);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import codeSnippet from './codesnippet.vue'
+// import element from './element.vue'
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 exports.default = {
   components: {
     've-toolbar': _toolbar2.default,
     've-design': _design2.default,
     've-sourcecode': _sourcecode2.default,
-    've-codesnippet': _codesnippet2.default,
+    // 've-codesnippet': codeSnippet,
     've-forecolor': _color2.default,
     've-backcolor': _color2.default,
-    've-fontname': _fontname2.default,
-    've-fontsize': _fontsize2.default,
-    've-element': _element2.default,
+    // 've-fontname': fontName,
+    // 've-fontsize': fontSize,
+    // 've-element': element,
     've-table': _table2.default,
     've-link': _link2.default,
     've-undo': _undo2.default,
@@ -1018,21 +1016,17 @@ exports.default = {
     }
   },
   created: function created() {
-    this.namespace = (0, _util.createNonceStr)();
-    this.$store.registerModule(this.namespace, (0, _index2.default)());
+    var lang = (0, _lang.getLang)('app');
+    if (!this.$store) {
+      throw new Error(lang.noStore);
+    } else {
+      this.namespace = (0, _util.createNonceStr)();
+      this.$store.registerModule(this.namespace, (0, _index2.default)());
+    }
   }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
+};
+// import fontName from './fontname.vue'
+// import fontSize from './fontsize.vue'
 
 module.exports = exports['default'];
 
@@ -1118,7 +1112,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.ve-toolbar {\n  display: table;\n  width: 100%;\n  font-size: 0;\n  letter-spacing: -4px;\n  background: #fff;\n  border-bottom: 1px solid #ddd;\n  user-select: none;\n}\n.ve-toolbar div {\n  cursor: pointer;\n  position: relative;\n  display: inline-block;\n  padding: 10px 12px;\n  color: rgba(0, 0, 0, 0.6);\n}\n.ve-toolbar div.ve-divider {\n  width: 0;\n  height: 26px;\n  margin: 5px;\n  padding: 0;\n  border-right: 1px solid #ddd;\n  vertical-align: top;\n}\n.ve-toolbar div.ve-active {\n  background: #eee;\n  color: #000;\n}\n.ve-toolbar div:hover {\n  background: #eee;\n}\n.ve-toolbar div.ve-disabled {\n  background: transparent;\n  color: rgba(0, 0, 0, 0.6);\n}\n.font-select {\n  width: 100px;\n}\n.font-select span {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.lang-select {\n  width: 80px;\n}\n", ""]);
+exports.push([module.i, "\n.ve-toolbar {\n  width: 100%;\n  font-size: 0;\n  letter-spacing: -4px;\n  background: #fff;\n  border-bottom: 1px solid #ddd;\n  user-select: none;\n}\n.ve-toolbar div.ve-icon,\n.ve-toolbar div.ve-select {\n  cursor: pointer;\n  position: relative;\n  display: inline-block;\n  padding: 10px 12px;\n  color: rgba(0, 0, 0, 0.6);\n}\n.ve-toolbar div.ve-icon:hover {\n  background: #eee;\n}\n.ve-toolbar div.ve-active {\n  background: #eee;\n  color: #000;\n}\n.ve-toolbar div.ve-disabled {\n  background: transparent;\n  color: rgba(0, 0, 0, 0.6);\n}\n.ve-toolbar div.ve-divider {\n  display: inline-block;\n  width: 0;\n  height: 26px;\n  margin: 5px;\n  padding: 0;\n  border-right: 1px solid #ddd;\n  vertical-align: top;\n}\n.lang-select {\n  width: 80px;\n}\n", ""]);
 
 // exports
 
@@ -1138,11 +1132,27 @@ var _vuex = __webpack_require__(0);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
-var _index = __webpack_require__(3);
+var _index = __webpack_require__(4);
 
 var _toolbar = __webpack_require__(6);
+
+var _fontsize = __webpack_require__(31);
+
+var _fontsize2 = _interopRequireDefault(_fontsize);
+
+var _fontname = __webpack_require__(26);
+
+var _fontname2 = _interopRequireDefault(_fontname);
+
+var _element = __webpack_require__(46);
+
+var _element2 = _interopRequireDefault(_element);
+
+var _codesnippet = __webpack_require__(41);
+
+var _codesnippet2 = _interopRequireDefault(_codesnippet);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1234,6 +1244,12 @@ exports.default = {
   },
 
   mixins: [_vuex2.default],
+  components: {
+    've-fontsize': _fontsize2.default,
+    've-fontname': _fontname2.default,
+    've-element': _element2.default,
+    've-codesnippet': _codesnippet2.default
+  },
   computed: {
     view: function view() {
       return this.mstates.view;
@@ -1339,12 +1355,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ve-toolbar"
   }, [_vm._l((_vm.config), function(item) {
     return [(item in _vm.btns) ? _h('div', {
+      staticClass: "ve-icon",
       class: {
         've-active': _vm.toolbar[item] === 'actived', 've-disabled': _vm.toolbar[item] === 'disabled'
       },
       attrs: {
-        "title": _vm.lang[item].title,
-        "unselectable": "on"
+        "title": _vm.lang[item].title
       },
       on: {
         "click": function($event) {
@@ -1376,7 +1392,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })]) : _vm._e(), " ", (item == 'divider' || item == '|') ? _h('div', {
       staticClass: "ve-divider"
     }) : _vm._e()]
-  })])
+  }), " ", _h('ve-fontsize'), " ", _h('ve-fontname'), " ", _h('ve-element'), " ", _h('ve-codesnippet')])
 },staticRenderFns: []}
 if (false) {
   module.hot.accept()
@@ -1440,9 +1456,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(4);
 
 var _vuex = __webpack_require__(0);
 
@@ -1659,7 +1675,7 @@ exports.default = {
         }
       });
 
-      if (this.config.pasteUpload && clipboardData.items) {
+      if (this.config.uploadOnPaste && clipboardData.items) {
         this.pasteUpload(clipboardData.items);
       }
     },
@@ -2145,7 +2161,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
 var _rect = __webpack_require__(5);
 
@@ -2409,11 +2425,11 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n._3K88AeqPM5bvUs73oXJS4i_0 li {\n  cursor: pointer;\n  padding: 6px;\n  border-bottom: 1px solid #ddd;\n}\n._3K88AeqPM5bvUs73oXJS4i_0 li:last-child {\n  border-bottom: none;\n}\n._3K88AeqPM5bvUs73oXJS4i_0 li:hover {\n  background: #d5e1f2;\n  border-color: #a3bde3;\n}\n", ""]);
+exports.push([module.i, "\n._1YvgPeBxSyH4vrCUbOnfgb_0 {\n  width: 100px;\n}\n._1YvgPeBxSyH4vrCUbOnfgb_0 span {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n", ""]);
 
 // exports
 exports.locals = {
-	"ctn": "_3K88AeqPM5bvUs73oXJS4i_0"
+	"select": "_1YvgPeBxSyH4vrCUbOnfgb_0"
 };
 
 /***/ }),
@@ -2427,77 +2443,75 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _rect = __webpack_require__(5);
-
-var _rect2 = _interopRequireDefault(_rect);
-
 var _vuex = __webpack_require__(0);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 exports.default = {
   data: function data() {
     var arr = (0, _config.getConfig)('fontName');
     return {
-      fonts: arr,
+      list: arr,
       val: arr[0].abbr || arr[0].val
     };
   },
 
-  mixins: [_rect2.default, _vuex2.default],
-  mounted: function mounted() {
-    this.setSelectValue({ name: 'fontName', value: this.val });
+  mixins: [_vuex2.default],
+  computed: {
+    activeComponent: function activeComponent() {
+      return this.mstates.activeComponent;
+    }
   },
-
   methods: {
-    setSelectValue: function setSelectValue(data) {
-      this.$store.dispatch(this.mpath + 'setSelectValue', data);
-    },
     setActiveComponent: function setActiveComponent(data) {
       this.$store.dispatch(this.mpath + 'setActiveComponent', data);
     },
     execCommand: function execCommand(data) {
       this.$store.dispatch(this.mpath + 'execCommand', data);
     },
-    clickHandler: function clickHandler(font) {
+    clickHandler: function clickHandler() {
+      if (this.activeComponent === 'fontName') {
+        this.setActiveComponent();
+      } else {
+        this.setActiveComponent('fontName');
+      }
+    },
+    selectHandler: function selectHandler(font) {
       this.val = font.abbr || font.val;
       this.execCommand({ name: 'fontName', value: font.val + ', sans-serif' });
-      this.setSelectValue({ name: 'fontName', value: this.val });
       this.setActiveComponent();
     }
   }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
+};
 module.exports = exports['default'];
 
 /***/ }),
@@ -2506,27 +2520,39 @@ module.exports = exports['default'];
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _h('div', {
+    staticClass: "ve-selectbox"
+  }, [_h('div', {
+    class: [{
+      've-disabled': false
+    }, 've-select', _vm.$style.select],
+    on: {
+      "click": _vm.clickHandler
+    }
+  }, [_h('span', [_vm._s(_vm.val)]), _h('i', {
+    class: {
+      've-triangle-down': _vm.activeComponent !== 'fontName', 've-triangle-up': _vm.activeComponent === 'fontName'
+    }
+  })]), " ", _h('ul', {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.showPopup),
-      expression: "showPopup"
+      value: (_vm.activeComponent === 'fontName'),
+      expression: "activeComponent === 'fontName'"
     }],
     staticClass: "ve-dropdown",
-    class: _vm.$style.ctn,
     style: (_vm.style)
-  }, [_h('ul', [_vm._l((_vm.fonts), function(font, index) {
+  }, [_vm._l((_vm.list), function(item, index) {
     return _h('li', {
       key: index,
       style: ({
-        fontFamily: font.val + ', sans-serif'
+        fontFamily: item.val + ', sans-serif'
       }),
       on: {
         "click": function($event) {
-          _vm.clickHandler(font)
+          _vm.selectHandler(item)
         }
       }
-    }, [_vm._s(font.abbr || font.val)])
+    }, [_vm._s(item.abbr || item.val)])
   })])])
 },staticRenderFns: []}
 if (false) {
@@ -2542,10 +2568,6 @@ if (false) {
 
 var __vue_exports__, __vue_options__
 var __vue_styles__ = {}
-
-/* styles */
-__vue_styles__["$style"] = __webpack_require__(32)
-
 
 /* script */
 __vue_exports__ = __webpack_require__(34)
@@ -2566,11 +2588,6 @@ if (typeof __vue_options__ === "function") {
 __vue_options__.__file = "/Users/jiang/work/vueditor/src/components/fontsize.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-if (!__vue_options__.computed) __vue_options__.computed = {}
-Object.keys(__vue_styles__).forEach(function (key) {
-var module = __vue_styles__[key]
-__vue_options__.computed[key] = function () { return module }
-})
 
 /* hot reload */
 if (false) {(function () {
@@ -2590,48 +2607,8 @@ module.exports = __vue_exports__
 
 
 /***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(33);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js?{\"localIdentName\":\"[hash:base64]_0\",\"modules\":true,\"importLoaders\":true}!../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2cbe9846!../../node_modules/less-loader/dist/cjs.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./fontsize.vue", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js?{\"localIdentName\":\"[hash:base64]_0\",\"modules\":true,\"importLoaders\":true}!../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-2cbe9846!../../node_modules/less-loader/dist/cjs.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./fontsize.vue");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.LgCpYevw8jVsOH4KQwNEX_0 li {\n  cursor: pointer;\n  padding: 6px;\n  border-bottom: 1px solid #ddd;\n}\n.LgCpYevw8jVsOH4KQwNEX_0 li:last-child {\n  border-bottom: none;\n}\n.LgCpYevw8jVsOH4KQwNEX_0 li:hover {\n  background: #d5e1f2;\n  border-color: #a3bde3;\n}\n", ""]);
-
-// exports
-exports.locals = {
-	"ctn": "LgCpYevw8jVsOH4KQwNEX_0"
-};
-
-/***/ }),
+/* 32 */,
+/* 33 */,
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2642,77 +2619,65 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _rect = __webpack_require__(5);
-
-var _rect2 = _interopRequireDefault(_rect);
-
 var _vuex = __webpack_require__(0);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 exports.default = {
   data: function data() {
     var arr = (0, _config.getConfig)('fontSize');
     return {
-      fontSize: arr,
+      list: arr,
       val: arr[0]
     };
   },
 
-  mixins: [_rect2.default, _vuex2.default],
-  mounted: function mounted() {
-    this.setSelectValue({ name: 'fontSize', value: this.val });
+  mixins: [_vuex2.default],
+  computed: {
+    activeComponent: function activeComponent() {
+      return this.mstates.activeComponent;
+    }
   },
-
   methods: {
-    setSelectValue: function setSelectValue(data) {
-      this.$store.dispatch(this.mpath + 'setSelectValue', data);
-    },
     setActiveComponent: function setActiveComponent(data) {
       this.$store.dispatch(this.mpath + 'setActiveComponent', data);
     },
     execCommand: function execCommand(data) {
       this.$store.dispatch(this.mpath + 'execCommand', data);
     },
+    selectHandler: function selectHandler() {
+      if (this.activeComponent === 'fontSize') {
+        this.setActiveComponent();
+      } else {
+        this.setActiveComponent('fontSize');
+      }
+    },
     clickHandler: function clickHandler(size) {
       this.val = size;
       this.execCommand({ name: 'fontSize', value: size });
-      this.setSelectValue({ name: 'fontSize', value: size });
       this.setActiveComponent();
     }
   }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
+};
 module.exports = exports['default'];
 
 /***/ }),
@@ -2721,16 +2686,27 @@ module.exports = exports['default'];
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _h('div', {
+    staticClass: "ve-selectbox"
+  }, [_h('div', {
+    class: [{
+      've-disabled': false
+    }, 've-select'],
+    on: {
+      "click": _vm.selectHandler
+    }
+  }, [_h('span', [_vm._s(_vm.val)]), _h('i', {
+    class: {
+      've-triangle-down': _vm.activeComponent !== 'fontSize', 've-triangle-up': _vm.activeComponent === 'fontSize'
+    }
+  })]), " ", _h('ul', {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.showPopup),
-      expression: "showPopup"
+      value: (_vm.activeComponent === 'fontSize'),
+      expression: "activeComponent === 'fontSize'"
     }],
-    staticClass: "ve-dropdown",
-    class: _vm.$style.ctn,
-    style: (_vm.style)
-  }, [_h('ul', [_vm._l((_vm.fontSize), function(size, index) {
+    staticClass: "ve-dropdown"
+  }, [_vm._l((_vm.list), function(size, index) {
     return _h('li', {
       key: index,
       on: {
@@ -2976,20 +2952,177 @@ if (false) {
 }
 
 /***/ }),
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __vue_exports__, __vue_options__
 var __vue_styles__ = {}
 
-/* styles */
-__vue_styles__["$style"] = __webpack_require__(47)
+/* script */
+__vue_exports__ = __webpack_require__(44)
 
+/* template */
+var __vue_template__ = __webpack_require__(45)
+__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+if (
+  typeof __vue_exports__.default === "object" ||
+  typeof __vue_exports__.default === "function"
+) {
+if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+__vue_options__ = __vue_exports__ = __vue_exports__.default
+}
+if (typeof __vue_options__ === "function") {
+  __vue_options__ = __vue_options__.options
+}
+__vue_options__.__file = "/Users/jiang/work/vueditor/src/components/codesnippet.vue"
+__vue_options__.render = __vue_template__.render
+__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c863e6da", __vue_options__)
+  } else {
+    hotAPI.reload("data-v-c863e6da", __vue_options__)
+  }
+})()}
+if (__vue_options__.functional) {console.error("[vue-loader] codesnippet.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+module.exports = __vue_exports__
+
+
+/***/ }),
+/* 42 */,
+/* 43 */,
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _vuex = __webpack_require__(0);
+
+var _vuex2 = _interopRequireDefault(_vuex);
+
+var _config = __webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+exports.default = {
+  data: function data() {
+    var _getConfig = (0, _config.getConfig)('codeSnippet'),
+        lang = _getConfig.lang,
+        pattern = _getConfig.pattern;
+
+    return {
+      list: lang,
+      val: lang[0],
+      tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
+    };
+  },
+
+  mixins: [_vuex2.default],
+  computed: {
+    activeComponent: function activeComponent() {
+      return this.mstates.activeComponent;
+    }
+  },
+  methods: {
+    setActiveComponent: function setActiveComponent(data) {
+      this.$store.dispatch(this.mpath + 'setActiveComponent', data);
+    },
+    execCommand: function execCommand(data) {
+      this.$store.dispatch(this.mpath + 'execCommand', data);
+    },
+    clickHandler: function clickHandler() {
+      if (this.activeComponent === 'codeSnippet') {
+        this.setActiveComponent();
+      } else {
+        this.setActiveComponent('codeSnippet');
+      }
+    },
+    selectHandler: function selectHandler(lang) {
+      this.val = lang;
+      this.execCommand({ name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang) });
+      this.setActiveComponent();
+    }
+  }
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _h('div', {
+    staticClass: "ve-selectbox"
+  }, [_h('div', {
+    class: [{
+      've-disabled': false
+    }, 've-select'],
+    on: {
+      "click": _vm.clickHandler
+    }
+  }, [_h('span', [_vm._s(_vm.val)]), _h('i', {
+    class: {
+      've-triangle-down': _vm.activeComponent !== 'codeSnippet', 've-triangle-up': _vm.activeComponent === 'codeSnippet'
+    }
+  })]), " ", _h('ul', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.activeComponent === 'codeSnippet'),
+      expression: "activeComponent === 'codeSnippet'"
+    }],
+    staticClass: "ve-dropdown",
+    style: (_vm.style)
+  }, [_vm._l((_vm.list), function(type, index) {
+    return _h('li', {
+      key: index,
+      on: {
+        "click": function($event) {
+          _vm.selectHandler(type)
+        }
+      }
+    }, [_vm._s(type)])
+  })])])
+},staticRenderFns: []}
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-c863e6da", module.exports)
+  }
+}
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __vue_exports__, __vue_options__
+var __vue_styles__ = {}
 
 /* script */
 __vue_exports__ = __webpack_require__(49)
@@ -3010,11 +3143,6 @@ if (typeof __vue_options__ === "function") {
 __vue_options__.__file = "/Users/jiang/work/vueditor/src/components/element.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-if (!__vue_options__.computed) __vue_options__.computed = {}
-Object.keys(__vue_styles__).forEach(function (key) {
-var module = __vue_styles__[key]
-__vue_options__.computed[key] = function () { return module }
-})
 
 /* hot reload */
 if (false) {(function () {
@@ -3034,48 +3162,8 @@ module.exports = __vue_exports__
 
 
 /***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(48);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js?{\"localIdentName\":\"[hash:base64]_0\",\"modules\":true,\"importLoaders\":true}!../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-fb1b5702!../../node_modules/less-loader/dist/cjs.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./element.vue", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js?{\"localIdentName\":\"[hash:base64]_0\",\"modules\":true,\"importLoaders\":true}!../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-fb1b5702!../../node_modules/less-loader/dist/cjs.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./element.vue");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n._3vHBjPXBhHQPBNIroIW5cW_0 li {\n  display: block;\n  cursor: pointer;\n  padding: 6px;\n  border-bottom: 1px solid #ddd;\n}\n._3vHBjPXBhHQPBNIroIW5cW_0 li:last-child {\n  border-bottom: none;\n}\n._3vHBjPXBhHQPBNIroIW5cW_0 li:hover {\n  background: #d5e1f2;\n  border-color: #a3bde3;\n}\n", ""]);
-
-// exports
-exports.locals = {
-	"ctn": "_3vHBjPXBhHQPBNIroIW5cW_0"
-};
-
-/***/ }),
+/* 47 */,
+/* 48 */,
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3086,77 +3174,61 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _rect = __webpack_require__(5);
-
-var _rect2 = _interopRequireDefault(_rect);
-
 var _vuex = __webpack_require__(0);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 exports.default = {
   data: function data() {
     return {
-      arr: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      list: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
       val: 'p'
     };
   },
 
-  mixins: [_rect2.default, _vuex2.default],
-  mounted: function mounted() {
-    this.setSelectValue({ name: 'element', value: this.val });
+  mixins: [_vuex2.default],
+  computed: {
+    activeComponent: function activeComponent() {
+      return this.mstates.activeComponent;
+    }
   },
-
   methods: {
-    setSelectValue: function setSelectValue(data) {
-      this.$store.dispatch(this.mpath + 'setSelectValue', data);
-    },
     setActiveComponent: function setActiveComponent(data) {
       this.$store.dispatch(this.mpath + 'setActiveComponent', data);
     },
     execCommand: function execCommand(data) {
       this.$store.dispatch(this.mpath + 'execCommand', data);
     },
-    selectItem: function selectItem(event) {
+    clickHandler: function clickHandler() {
+      if (this.activeComponent === 'element') {
+        this.setActiveComponent();
+      } else {
+        this.setActiveComponent('element');
+      }
+    },
+    selectHandler: function selectHandler(event) {
       var tagName = event.target.innerHTML.trim();
       this.val = tagName;
       this.execCommand({ name: 'formatBlock', value: tagName });
-      this.setSelectValue({ name: 'element', value: tagName });
       this.setActiveComponent();
     }
   }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 module.exports = exports['default'];
 
 /***/ }),
@@ -3165,19 +3237,31 @@ module.exports = exports['default'];
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _h('div', {
+    staticClass: "ve-selectbox"
+  }, [_h('div', {
+    class: [{
+      've-disabled': false
+    }, 've-select'],
+    on: {
+      "click": _vm.clickHandler
+    }
+  }, [_h('span', [_vm._s(_vm.val)]), _h('i', {
+    class: {
+      've-triangle-down': _vm.activeComponent !== 'element', 've-triangle-up': _vm.activeComponent === 'element'
+    }
+  })]), " ", _h('ul', {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.showPopup),
-      expression: "showPopup"
+      value: (_vm.activeComponent === 'element'),
+      expression: "activeComponent === 'element'"
     }],
     staticClass: "ve-dropdown",
-    class: _vm.$style.ctn,
     style: (_vm.style),
     on: {
-      "click": _vm.selectItem
+      "click": _vm.selectHandler
     }
-  }, [_h('ul', [_vm._l((_vm.arr), function(item, index) {
+  }, [_vm._l((_vm.list), function(item, index) {
     return _h('li', {
       key: index
     }, [_vm._s(item)])
@@ -3288,7 +3372,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
 var _rect = __webpack_require__(5);
 
@@ -3666,7 +3750,7 @@ var _vuex = __webpack_require__(0);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3915,9 +3999,9 @@ var _vuex = __webpack_require__(0);
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _lang = __webpack_require__(4);
+var _lang = __webpack_require__(3);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5991,7 +6075,7 @@ exports.default = function () {
   return {
     toolbar: toolbar,
     select: {
-      codeSnippt: '',
+      codeSnippet: '',
       element: '',
       fontName: '',
       fontSize: ''
@@ -6019,7 +6103,7 @@ exports.default = function () {
   };
 };
 
-var _index = __webpack_require__(3);
+var _index = __webpack_require__(4);
 
 module.exports = exports['default'];
 
@@ -6087,7 +6171,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".vueditor html {\n  font-size: 16px;\n}\n.vueditor h1,\n.vueditor h2,\n.vueditor h3,\n.vueditor h4,\n.vueditor h5,\n.vueditor p {\n  margin: 0;\n  padding: 0;\n}\n.vueditor ul,\n.vueditor ol {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.vueditor a {\n  color: black;\n  text-decoration: none;\n}\n.vueditor hr {\n  margin: 10px 0;\n}\n.vueditor label {\n  font-weight: normal;\n}\n.vueditor img {\n  max-width: 100%;\n}\n.vueditor {\n  min-width: 300px;\n  min-height: 150px;\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #ddd;\n  background: #fff;\n  box-sizing: border-box;\n  position: relative;\n}\n.ve-fullscreen {\n  position: fixed;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  z-index: 10;\n  margin: 0!important;\n}\n.ve-design,\n.ve-code,\n.ve-md {\n  flex: 1;\n  overflow: hidden;\n}\n.ve-design {\n  position: relative;\n}\n.ve-design iframe {\n  width: 100%;\n  height: 100%;\n  display: block;\n  position: absolute;\n}\n.ve-code {\n  /*safari*/\n  position: relative;\n  overflow-y: auto;\n}\n[class^=ve-triangle] {\n  display: inline-block;\n  width: 0;\n  height: 0;\n  vertical-align: middle;\n  border-top: 4px solid;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n  transition: 200ms;\n}\n.ve-triangle-down {\n  transform: rotate(0deg);\n}\n.ve-triangle-up {\n  transform: rotate(-180deg);\n}\n.ve-btn-box {\n  float: right;\n  font-size: 0;\n}\n.ve-btn-box .ve-btn:not(:last-child) {\n  border-right: none;\n}\n.ve-input-box {\n  display: flex;\n  margin-bottom: 10px;\n}\n.ve-input-box .ve-input {\n  flex: 1;\n}\n.ve-input-box .ve-btn {\n  border-left: none;\n}\n.ve-btn {\n  display: inline-block;\n  margin: 0;\n  padding: 5px 15px;\n  text-align: center;\n  white-space: nowrap;\n  cursor: pointer;\n  border: 1px solid #ccc;\n  color: #333;\n  outline: none;\n  background-color: #fff;\n  user-select: none;\n  line-height: 20px;\n  transition: all 500ms;\n}\n.ve-btn:hover {\n  color: #fff;\n  background: #42b983;\n  border-color: #42b983;\n}\n.ve-btn:hover + .ve-btn {\n  border-left-color: #42b983;\n}\n.ve-input {\n  display: block;\n  width: 100%;\n  height: 32px;\n  padding: 5px 10px;\n  color: #555;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  outline: none;\n  box-sizing: border-box;\n}\n.ve-select {\n  position: relative;\n  min-width: 60px;\n  line-height: 26px;\n  margin: 5px 5px 5px 0;\n  padding: 0 20px 0 10px!important;\n  border-right: 1px solid #ddd;\n  vertical-align: top;\n}\n.ve-select span {\n  display: inline-block;\n  width: 100%;\n  vertical-align: middle;\n  font-size: 16px;\n  line-height: 26px;\n  letter-spacing: initial;\n}\n.ve-select i {\n  position: absolute;\n  right: 10px;\n  top: 50%;\n  margin-top: -2px;\n}\n.ve-select:hover {\n  background: transparent!important;\n  color: #000;\n}\n.ve-dropdown {\n  width: 176px;\n  padding: 5px 10px;\n  position: absolute;\n  top: 36px;\n  z-index: 1000;\n  background: #fff;\n  border: 1px solid #ccc;\n}\n.ve-disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.ve-popover {\n  font-size: 14px;\n  position: absolute;\n  z-index: 1000;\n  background-color: #fff;\n  padding: 1px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);\n  box-sizing: border-box;\n}\n.ve-pop-arrow {\n  position: absolute;\n  left: 50%;\n  top: -10px;\n  margin-left: -10px;\n  border-left: 10px solid transparent;\n  border-right: 10px solid transparent;\n  border-bottom: 10px solid rgba(0, 0, 0, 0.25);\n}\n.ve-pop-arrow:after {\n  position: absolute;\n  left: -10px;\n  top: 1px;\n  border-left: 10px solid transparent;\n  border-right: 10px solid transparent;\n  content: \"\";\n  border-bottom: 10px solid #fff;\n}\n.ve-pop-header {\n  background: #f7f7f7;\n  padding: 8px 14px;\n  border-bottom: 1px solid #ebebeb;\n}\n.ve-pop-body {\n  padding: 8px;\n}\n.ve-fixed {\n  overflow: hidden;\n}\n.ve-dialog {\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.6);\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n}\n.ve-dialog-header {\n  background: #f7f7f7;\n  padding: 10px;\n}\n.ve-close {\n  float: right;\n}\n.ve-dialog-body {\n  padding: 10px;\n}\n.ve-dialog-footer {\n  padding: 10px;\n  overflow: hidden;\n}\n.ve-preview {\n  margin-top: 10px;\n  text-align: center;\n  font-size: 0;\n}\n.ve-preview img {\n  max-height: 300px;\n}\n.vueditor .icon-align-center {\n  background: url(" + __webpack_require__(83) + ") no-repeat;\n}\n.vueditor .icon-align-justify {\n  background: url(" + __webpack_require__(84) + ") no-repeat;\n}\n.vueditor .icon-align-left {\n  background: url(" + __webpack_require__(85) + ") no-repeat;\n}\n.vueditor .icon-align-right {\n  background: url(" + __webpack_require__(86) + ") no-repeat;\n}\n.vueditor .icon-bold {\n  background: url(" + __webpack_require__(87) + ") no-repeat;\n}\n.vueditor .icon-code {\n  background: url(" + __webpack_require__(88) + ") no-repeat;\n}\n.vueditor .icon-eraser {\n  background: url(" + __webpack_require__(89) + ") no-repeat;\n}\n.vueditor .icon-file-image-o {\n  background: url(" + __webpack_require__(90) + ") no-repeat;\n}\n.vueditor .icon-file-text-o {\n  background: url(" + __webpack_require__(91) + ") no-repeat;\n}\n.vueditor .icon-file-text {\n  background: url(" + __webpack_require__(92) + ") no-repeat;\n}\n.vueditor .icon-indent {\n  background: url(" + __webpack_require__(93) + ") no-repeat;\n}\n.vueditor .icon-italic {\n  background: url(" + __webpack_require__(94) + ") no-repeat;\n}\n.vueditor .icon-link {\n  background: url(" + __webpack_require__(95) + ") no-repeat;\n}\n.vueditor .icon-list-ol {\n  background: url(" + __webpack_require__(96) + ") no-repeat;\n}\n.vueditor .icon-list-ul {\n  background: url(" + __webpack_require__(97) + ") no-repeat;\n}\n.vueditor .icon-outdent {\n  background: url(" + __webpack_require__(98) + ") no-repeat;\n}\n.vueditor .icon-repeat {\n  background: url(" + __webpack_require__(99) + ") no-repeat;\n}\n.vueditor .icon-strikethrough {\n  background: url(" + __webpack_require__(100) + ") no-repeat;\n}\n.vueditor .icon-subscript {\n  background: url(" + __webpack_require__(101) + ") no-repeat;\n}\n.vueditor .icon-superscript {\n  background: url(" + __webpack_require__(102) + ") no-repeat;\n}\n.vueditor .icon-table {\n  background: url(" + __webpack_require__(103) + ") no-repeat;\n}\n.vueditor .icon-underline {\n  background: url(" + __webpack_require__(104) + ") no-repeat;\n}\n.vueditor .icon-undo {\n  background: url(" + __webpack_require__(105) + ") no-repeat;\n}\n.vueditor .icon-unlink {\n  background: url(" + __webpack_require__(106) + ") no-repeat;\n}\n.vueditor .icon-markdown {\n  background: url(" + __webpack_require__(107) + ") no-repeat;\n}\n.vueditor .icon-fullscreen {\n  background: url(" + __webpack_require__(108) + ") no-repeat;\n}\n.vueditor [class^=icon] {\n  width: 16px;\n  height: 16px;\n  display: inline-block;\n  background-size: contain;\n  vertical-align: bottom;\n  opacity: 0.8;\n}\n", ""]);
+exports.push([module.i, ".vueditor html {\n  font-size: 16px;\n}\n.vueditor h1,\n.vueditor h2,\n.vueditor h3,\n.vueditor h4,\n.vueditor h5,\n.vueditor p {\n  margin: 0;\n  padding: 0;\n}\n.vueditor ul,\n.vueditor ol {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.vueditor a {\n  color: black;\n  text-decoration: none;\n}\n.vueditor hr {\n  margin: 10px 0;\n}\n.vueditor label {\n  font-weight: normal;\n}\n.vueditor img {\n  max-width: 100%;\n}\n.vueditor {\n  min-width: 300px;\n  min-height: 150px;\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  border: 1px solid #ddd;\n  background: #fff;\n  box-sizing: border-box;\n  position: relative;\n}\n.ve-fullscreen {\n  position: fixed;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  z-index: 10;\n  margin: 0!important;\n}\n.ve-design,\n.ve-code,\n.ve-md {\n  flex: 1;\n  overflow: hidden;\n}\n.ve-design {\n  position: relative;\n}\n.ve-design iframe {\n  width: 100%;\n  height: 100%;\n  display: block;\n  position: absolute;\n}\n.ve-code {\n  /*safari*/\n  position: relative;\n  overflow-y: auto;\n}\n[class^=ve-triangle] {\n  display: inline-block;\n  width: 0;\n  height: 0;\n  vertical-align: middle;\n  border-top: 4px solid;\n  border-right: 4px solid transparent;\n  border-left: 4px solid transparent;\n  transition: 200ms;\n}\n.ve-triangle-down {\n  transform: rotate(0deg);\n}\n.ve-triangle-up {\n  transform: rotate(-180deg);\n}\n.ve-btn-box {\n  float: right;\n  font-size: 0;\n}\n.ve-btn-box .ve-btn:not(:last-child) {\n  border-right: none;\n}\n.ve-input-box {\n  display: flex;\n  margin-bottom: 10px;\n}\n.ve-input-box .ve-input {\n  flex: 1;\n}\n.ve-input-box .ve-btn {\n  border-left: none;\n}\n.ve-btn {\n  display: inline-block;\n  margin: 0;\n  padding: 5px 15px;\n  text-align: center;\n  white-space: nowrap;\n  cursor: pointer;\n  border: 1px solid #ccc;\n  color: #333;\n  outline: none;\n  background-color: #fff;\n  user-select: none;\n  line-height: 20px;\n  transition: all 500ms;\n}\n.ve-btn:hover {\n  color: #fff;\n  background: #42b983;\n  border-color: #42b983;\n}\n.ve-btn:hover + .ve-btn {\n  border-left-color: #42b983;\n}\n.ve-input {\n  display: block;\n  width: 100%;\n  height: 32px;\n  padding: 5px 10px;\n  color: #555;\n  background-color: #fff;\n  border: 1px solid #ccc;\n  outline: none;\n  box-sizing: border-box;\n}\n.ve-selectbox {\n  position: relative;\n  display: inline-block;\n  vertical-align: top;\n}\n.ve-select {\n  position: relative;\n  min-width: 60px;\n  line-height: 26px;\n  margin: 5px 5px 5px 0;\n  padding: 0 20px 0 10px!important;\n  border-right: 1px solid #ddd;\n  vertical-align: top;\n}\n.ve-select span {\n  display: inline-block;\n  width: 100%;\n  vertical-align: middle;\n  font-size: 16px;\n  line-height: 26px;\n  letter-spacing: initial;\n}\n.ve-select i {\n  position: absolute;\n  right: 10px;\n  top: 50%;\n  margin-top: -2px;\n}\n.ve-select:hover {\n  background: transparent!important;\n  color: #000;\n}\n.ve-dropdown {\n  width: 176px;\n  padding: 5px 10px!important;\n  position: absolute;\n  top: 36px;\n  z-index: 1000;\n  background: #fff;\n  border: 1px solid #ccc;\n}\n.ve-dropdown li {\n  display: block;\n  cursor: pointer;\n  padding: 6px;\n  border-bottom: 1px solid #ddd;\n  font-size: 16px;\n  top: 26px;\n  letter-spacing: initial;\n}\n.ve-dropdown li:last-child {\n  border-bottom: none;\n}\n.ve-dropdown li:hover {\n  background: #d5e1f2;\n  border-color: #a3bde3;\n}\n.ve-disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.ve-popover {\n  font-size: 14px;\n  position: absolute;\n  z-index: 1000;\n  background-color: #fff;\n  padding: 1px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);\n  box-sizing: border-box;\n}\n.ve-pop-arrow {\n  position: absolute;\n  left: 50%;\n  top: -10px;\n  margin-left: -10px;\n  border-left: 10px solid transparent;\n  border-right: 10px solid transparent;\n  border-bottom: 10px solid rgba(0, 0, 0, 0.25);\n}\n.ve-pop-arrow:after {\n  position: absolute;\n  left: -10px;\n  top: 1px;\n  border-left: 10px solid transparent;\n  border-right: 10px solid transparent;\n  content: \"\";\n  border-bottom: 10px solid #fff;\n}\n.ve-pop-header {\n  background: #f7f7f7;\n  padding: 8px 14px;\n  border-bottom: 1px solid #ebebeb;\n}\n.ve-pop-body {\n  padding: 8px;\n}\n.ve-fixed {\n  overflow: hidden;\n}\n.ve-dialog {\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.6);\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 1000;\n}\n.ve-dialog-header {\n  background: #f7f7f7;\n  padding: 10px;\n}\n.ve-close {\n  float: right;\n}\n.ve-dialog-body {\n  padding: 10px;\n}\n.ve-dialog-footer {\n  padding: 10px;\n  overflow: hidden;\n}\n.ve-preview {\n  margin-top: 10px;\n  text-align: center;\n  font-size: 0;\n}\n.ve-preview img {\n  max-height: 300px;\n}\n.vueditor .icon-align-center {\n  background: url(" + __webpack_require__(83) + ") no-repeat;\n}\n.vueditor .icon-align-justify {\n  background: url(" + __webpack_require__(84) + ") no-repeat;\n}\n.vueditor .icon-align-left {\n  background: url(" + __webpack_require__(85) + ") no-repeat;\n}\n.vueditor .icon-align-right {\n  background: url(" + __webpack_require__(86) + ") no-repeat;\n}\n.vueditor .icon-bold {\n  background: url(" + __webpack_require__(87) + ") no-repeat;\n}\n.vueditor .icon-code {\n  background: url(" + __webpack_require__(88) + ") no-repeat;\n}\n.vueditor .icon-eraser {\n  background: url(" + __webpack_require__(89) + ") no-repeat;\n}\n.vueditor .icon-file-image-o {\n  background: url(" + __webpack_require__(90) + ") no-repeat;\n}\n.vueditor .icon-file-text-o {\n  background: url(" + __webpack_require__(91) + ") no-repeat;\n}\n.vueditor .icon-file-text {\n  background: url(" + __webpack_require__(92) + ") no-repeat;\n}\n.vueditor .icon-indent {\n  background: url(" + __webpack_require__(93) + ") no-repeat;\n}\n.vueditor .icon-italic {\n  background: url(" + __webpack_require__(94) + ") no-repeat;\n}\n.vueditor .icon-link {\n  background: url(" + __webpack_require__(95) + ") no-repeat;\n}\n.vueditor .icon-list-ol {\n  background: url(" + __webpack_require__(96) + ") no-repeat;\n}\n.vueditor .icon-list-ul {\n  background: url(" + __webpack_require__(97) + ") no-repeat;\n}\n.vueditor .icon-outdent {\n  background: url(" + __webpack_require__(98) + ") no-repeat;\n}\n.vueditor .icon-repeat {\n  background: url(" + __webpack_require__(99) + ") no-repeat;\n}\n.vueditor .icon-strikethrough {\n  background: url(" + __webpack_require__(100) + ") no-repeat;\n}\n.vueditor .icon-subscript {\n  background: url(" + __webpack_require__(101) + ") no-repeat;\n}\n.vueditor .icon-superscript {\n  background: url(" + __webpack_require__(102) + ") no-repeat;\n}\n.vueditor .icon-table {\n  background: url(" + __webpack_require__(103) + ") no-repeat;\n}\n.vueditor .icon-underline {\n  background: url(" + __webpack_require__(104) + ") no-repeat;\n}\n.vueditor .icon-undo {\n  background: url(" + __webpack_require__(105) + ") no-repeat;\n}\n.vueditor .icon-unlink {\n  background: url(" + __webpack_require__(106) + ") no-repeat;\n}\n.vueditor .icon-markdown {\n  background: url(" + __webpack_require__(107) + ") no-repeat;\n}\n.vueditor .icon-fullscreen {\n  background: url(" + __webpack_require__(108) + ") no-repeat;\n}\n.vueditor [class^=icon] {\n  width: 16px;\n  height: 16px;\n  display: inline-block;\n  background-size: contain;\n  vertical-align: bottom;\n  opacity: 0.8;\n}\n", ""]);
 
 // exports
 
@@ -6728,216 +6812,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-7cf07ab8", module.exports)
-  }
-}
-
-/***/ }),
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __vue_exports__, __vue_options__
-var __vue_styles__ = {}
-
-/* styles */
-__vue_styles__["$style"] = __webpack_require__(118)
-
-
-/* script */
-__vue_exports__ = __webpack_require__(120)
-
-/* template */
-var __vue_template__ = __webpack_require__(121)
-__vue_options__ = __vue_exports__ = __vue_exports__ || {}
-if (
-  typeof __vue_exports__.default === "object" ||
-  typeof __vue_exports__.default === "function"
-) {
-if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
-__vue_options__ = __vue_exports__ = __vue_exports__.default
-}
-if (typeof __vue_options__ === "function") {
-  __vue_options__ = __vue_options__.options
-}
-__vue_options__.__file = "/Users/jiang/work/vueditor/src/components/codesnippet.vue"
-__vue_options__.render = __vue_template__.render
-__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-if (!__vue_options__.computed) __vue_options__.computed = {}
-Object.keys(__vue_styles__).forEach(function (key) {
-var module = __vue_styles__[key]
-__vue_options__.computed[key] = function () { return module }
-})
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-c863e6da", __vue_options__)
-  } else {
-    hotAPI.reload("data-v-c863e6da", __vue_options__)
-  }
-})()}
-if (__vue_options__.functional) {console.error("[vue-loader] codesnippet.vue: functional components are not supported and should be defined in plain js files using render functions.")}
-
-module.exports = __vue_exports__
-
-
-/***/ }),
-/* 118 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(119);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(2)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js?{\"localIdentName\":\"[hash:base64]_0\",\"modules\":true,\"importLoaders\":true}!../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-c863e6da!../../node_modules/less-loader/dist/cjs.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./codesnippet.vue", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js?{\"localIdentName\":\"[hash:base64]_0\",\"modules\":true,\"importLoaders\":true}!../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-c863e6da!../../node_modules/less-loader/dist/cjs.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./codesnippet.vue");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n._1fDp9USp0QjlBq1uB5SuAZ_0 li {\n  padding: 6px;\n  border-bottom: 1px solid #ddd;\n  cursor: pointer;\n}\n._1fDp9USp0QjlBq1uB5SuAZ_0 li:last-child {\n  border-bottom: none;\n}\n._1fDp9USp0QjlBq1uB5SuAZ_0 li:hover {\n  background: #d5e1f2;\n  border-color: #a3bde3;\n}\n", ""]);
-
-// exports
-exports.locals = {
-	"ctn": "_1fDp9USp0QjlBq1uB5SuAZ_0"
-};
-
-/***/ }),
-/* 120 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _rect = __webpack_require__(5);
-
-var _rect2 = _interopRequireDefault(_rect);
-
-var _vuex = __webpack_require__(0);
-
-var _vuex2 = _interopRequireDefault(_vuex);
-
-var _config = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  data: function data() {
-    var _getConfig = (0, _config.getConfig)('codeSnippet'),
-        lang = _getConfig.lang,
-        pattern = _getConfig.pattern;
-
-    return {
-      lang: lang,
-      tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
-    };
-  },
-
-  mixins: [_rect2.default, _vuex2.default],
-  mounted: function mounted() {
-    this.$store.dispatch(this.mpath + 'setSelectValue', { name: 'code', value: this.lang[0] });
-  },
-
-  methods: {
-    clickHandler: function clickHandler(lang) {
-      this.$store.dispatch(this.mpath + 'execCommand', { name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang) });
-      this.$store.dispatch(this.mpath + 'setSelectValue', { name: 'code', value: lang });
-      this.$store.dispatch(this.mpath + 'setActiveComponent');
-    }
-  }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-module.exports = exports['default'];
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _h('div', {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: (_vm.showPopup),
-      expression: "showPopup"
-    }],
-    staticClass: "ve-dropdown",
-    class: _vm.$style.ctn,
-    style: (_vm.style)
-  }, [_h('ul', [_vm._l((_vm.lang), function(type, index) {
-    return _h('li', {
-      key: index,
-      on: {
-        "click": function($event) {
-          _vm.clickHandler(type)
-        }
-      }
-    }, [_vm._s(type)])
-  })])])
-},staticRenderFns: []}
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-c863e6da", module.exports)
   }
 }
 

@@ -5,7 +5,7 @@ export default {
       return this.mstates.rect
     },
     style () {
-      if (!this.showPopup) {
+      if (this.showPopup === false) {
         return {left: 0, top: 0}
       }
       let {left, top, width, height} = this.rect
