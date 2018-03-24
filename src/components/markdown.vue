@@ -1,6 +1,6 @@
 
 <style module>
-  :global(.ve-md) {
+  :global(.ve-markdown) {
     position: relative;
   }
   .editor {
@@ -25,7 +25,7 @@
 </style>
 
 <template>
-  <div class="ve-md" v-show="currentView == 'markdown'">
+  <div class="ve-markdown" v-show="currentView == 'markdown'">
     <textarea :class="$style.editor" @input="update" v-model="md" ref="editor"></textarea>
     <iframe src="about:blank" frameborder="0" :class="$style.iframe" @load="init"></iframe>
   </div>
@@ -37,6 +37,7 @@
   import vuexMixin from '../mixins/vuex'
 
   export default {
+    name: 'markdown',
     data () {
       return {
         md: '',

@@ -4,10 +4,15 @@
     // display: table;
     width: 100%;
     font-size: 0;
-    letter-spacing: -4px;
+    // letter-spacing: -4px;
     background: #fff;
     border-bottom: 1px solid #ddd;
     user-select: none;
+    & > div {
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
+    }
     div.ve-icon,
     div.ve-select {
       cursor: pointer;
@@ -45,18 +50,10 @@
 <template>
   <div class="ve-toolbar" ref="toolbar">
     <template v-for="item in config">
-      <div v-if="item in btns" 
-        @click.stop.prevent="btnHandler($event, item)" 
+      <div v-if="item in btns" @click.stop.prevent="btnHandler($event, item)" 
         :title="lang[item].title"
-        class="ve-icon"
-        :class="{'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}">
+        :class="['ve-icon', {'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}]">
         <i :class="[btns[item].className]"></i>
-      </div>
-      <div v-if="item in selects" 
-        @click.stop.prevent="selectHandler($event, item)" 
-        :class="[{'ve-disabled': toolbar[item] == 'disabled'}, selects[item].className, 've-select']" 
-        unselectable="on">
-        <span>{{select[item]}}</span><i :class="{'ve-triangle-down': item !== activeComponent, 've-triangle-up': item === activeComponent}"></i>
       </div>
       <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
     </template>
@@ -65,6 +62,10 @@
     <ve-fontname></ve-fontname>
     <ve-element></ve-element>
     <ve-codesnippet></ve-codesnippet>
+    <ve-color></ve-color>
+    <ve-link></ve-link>
+    <ve-table></ve-table>
+    <ve-undoredo></ve-undoredo>
 
   </div>
 </template>
@@ -79,9 +80,14 @@
   import fontSize from './fontsize.vue'
   import fontName from './fontname.vue'
   import element from './element.vue'
+  import color from './color.vue'
+  import link from './link.vue'
+  import table from './table.vue'
+  import undoredo from './undoredo.vue'
   import codeSnippet from './codesnippet.vue'
   
   export default {
+    name: 'toolbar',
     data () {
       let {btns, selects} = getToolbar()
       return {
@@ -96,6 +102,10 @@
       've-fontsize': fontSize,
       've-fontname': fontName,
       've-element': element,
+      've-color': color,
+      've-link': link,
+      've-table': table,
+      've-undoredo': undoredo,
       've-codesnippet': codeSnippet,
     },
     computed: {
@@ -107,6 +117,9 @@
       },
       select () {
         return this.mstates.select
+      },
+      fullscreen () {
+        return this.mstates.fullscreen
       },
       activeComponent () {
         return this.mstates.activeComponent
@@ -134,6 +147,9 @@
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
+      setFullScreen (bool) {
+        this.$store.dispatch(this.mpath + 'setFullScreen', bool)
+      },
       triggerEvent (data) {
         this.$store.dispatch(this.mpath + 'triggerEvent', data)
       },
@@ -143,21 +159,26 @@
       setRect (data) {
         this.$store.dispatch(this.mpath + 'setRect', data)
       },
+      action (name) {
+        switch (name) {
+          case 'picture':
+            this.setActiveComponent(name)
+            break
+          case 'fullscreen':
+            this.setFullScreen(!this.fullscreen)
+            break
+        }
+      },
       btnHandler (event, name) {
         if (this.toolbar[name].status === 'disabled') return
         let btn = this.btns[name]
-        if (btn.action) {
-          if (btn.native) {
-            this.execCommand({ name: name, value: null })
-          } else {
-            this.triggerEvent({ name: name, params: null })
-          }
+        if (btn.native) {
+          this.execCommand({ name: name, value: null })
+        } else {
+          this.action(name)
+          // this.setActiveComponent(name)
+          // this.triggerEvent({ name: name, params: null })
         }
-        this.updateStates(name)
-        this.updatePopup(name, event.currentTarget)
-      },
-      selectHandler (event, name) {
-        if (this.toolbar[name].status === 'disabled') return
         this.updateStates(name)
         this.updatePopup(name, event.currentTarget)
       },

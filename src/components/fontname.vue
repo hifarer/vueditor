@@ -11,11 +11,11 @@
 </style>
 
 <template>
-  <div class="ve-selectbox">
+  <div class="ve-select-box">
     <div :class="[{'ve-disabled': false}, 've-select', $style.select]" @click="clickHandler">
-      <span>{{val}}</span><i :class="{'ve-triangle-down': activeComponent !== 'fontName', 've-triangle-up': activeComponent === 'fontName'}"></i>
+      <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
-    <ul class="ve-dropdown" v-show="activeComponent === 'fontName'" :style="style">
+    <ul v-show="show" ref="popup" class="ve-dropdown" :style="style">
       <li v-for="(item, index) in list" :key="index" @click="selectHandler(item)" :style="{fontFamily: item.val + ', sans-serif'}">{{item.abbr || item.val}}</li>
     </ul>
   </div>
@@ -24,9 +24,11 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
+  import rectMixin from '../mixins/rect'
   import { getConfig } from '../config/'
 
   export default {
+    name: 'fontName',
     data () {
       let arr = getConfig('fontName')
       return {
@@ -34,12 +36,7 @@
         val: arr[0].abbr || arr[0].val
       }
     },
-    mixins: [vuexMixin],
-    computed: {
-      activeComponent () {
-        return this.mstates.activeComponent
-      }
-    },
+    mixins: [vuexMixin, rectMixin],
     methods: {
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
@@ -48,11 +45,7 @@
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       clickHandler () {
-        if (this.activeComponent === 'fontName') {
-          this.setActiveComponent()
-        } else {
-          this.setActiveComponent('fontName')
-        }
+        this.togglePopup(event)
       },
       selectHandler (font) {
         this.val = font.abbr || font.val

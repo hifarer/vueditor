@@ -11,7 +11,7 @@
 </style>
 
 <template>
-  <div class="ve-dialog" v-show="showPopup" @click.self="hideDialog">
+  <div class="ve-dialog" v-show="show" @click.self="hideDialog">
     <div :class="$style.wrap">
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">
@@ -37,6 +37,7 @@
   import { getConfig } from '../config/'
 
   export default {
+    name: 'picture',
     data () {
       return {
         url: '',
@@ -45,8 +46,21 @@
       }
     },
     mixins: [vuexMixin],
+    computed: {
+      event () {
+        return this.mstates.event
+      },
+      show () {
+        return this.mstates.activeComponent === this.$options.name
+      }
+    },
     watch: {
-      'showPopup': function (val) {
+      'event': function (val) {
+        if (val.name === 'picture') {
+          this.show = true
+        }
+      },
+      'show': function (val) {
         if (val) {
           document.body.classList.add('ve-fixed')
         } else {

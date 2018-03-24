@@ -17,24 +17,12 @@ export default function () {
 
   return {
     toolbar,
-    select: {
-      codeSnippet: '',
-      element: '',
-      fontName: '',
-      fontSize: ''
-    },
 
     activeComponent: '',
     fullscreen: false,
     content: '',
     view: 'design',
 
-    rect: {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0
-    },
     command: {
       name: '',
       value: ''

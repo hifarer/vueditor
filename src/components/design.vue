@@ -1,6 +1,6 @@
 
 <template>
-  <div class="ve-design" v-show="view === 'design' || view === 'codesnippet'">
+  <div class="ve-design" ref="design" v-show="view === 'design' || view === 'codesnippet'">
     <iframe src="about:blank" frameborder="0" @load="init"></iframe>
   </div>
 </template>
@@ -12,6 +12,7 @@
   import vuexMixin from '../mixins/vuex'
   
   export default {
+    name: 'design',
     data () {
       return {
         iframeWin: null,
@@ -47,6 +48,11 @@
           this.setContent(this.iframeBody.innerHTML)
         }
       },
+      'content': function (val) {
+        if (this.iframeBody && this.iframeBody.innerHTML !== val) {
+          this.iframeBody.innerHTML = val
+        }
+      },
       'command': function (data) {
         this.exec(data.name, data.value)
       }
@@ -57,7 +63,7 @@
         this.$store.dispatch(this.mpath + 'setContent', data)
       },
       setSelectValue (data) {
-        this.$store.dispatch(this.mpath + 'setSelectValue', data)
+        // this.$store.dispatch(this.mpath + 'setSelectValue', data)
       },
       setButtonStates (data) {
         this.$store.dispatch(this.mpath + 'setButtonStates', data)
@@ -373,68 +379,68 @@
         }
       },
 
-      fontSize (name, value) {
-        let selection = this.getSelection()
-        let range = this.getRange()
-        if (!selection || !range || range.collapsed) {
-          return
-        }
-        let childNodes = range.cloneContents().childNodes
-        if (childNodes.length === 1 && childNodes[0].nodeType === 1 && childNodes[0].tagName.toLowerCase() === 'span') {
-          let span = range.extractContents().childNodes[0]
-          span.style.fontSize = value
-          range.insertNode(span)
-          range.selectNode(span)
-          selection.removeAllRanges()
-          selection.addRange(range)
-        } else {
-          if (navigator.userAgent.indexOf('Chrome') !== -1 && navigator.userAgent.indexOf('Edge') === -1) {
-            if (document.queryCommandSupported('styleWithCss')) {
-              this.iframeDoc.execCommand('styleWithCss', false, true)
-            }
-            this.iframeDoc.execCommand('fontSize', false, 7)
-            let container = range.commonAncestorContainer
-            container.nodeType === 3 && (container = container.parentNode)
-            container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
-            Array.prototype.forEach.call(container.getElementsByTagName('span'), function (span) {
-              if (span.style.fontSize.trim() === '-webkit-xxx-large' || span.style.fontSize.trim() === 'xx-large') {
-                span.style.fontSize = value
-              }
-              span.normalize()
-            })
-          } else {
-            if (document.queryCommandSupported('styleWithCss')) {
-              this.iframeDoc.execCommand('styleWithCss', false, false)
-            }
-            this.iframeDoc.execCommand('fontSize', false, 7)
+      // fontSize (name, value) {
+      //   let selection = this.getSelection()
+      //   let range = this.getRange()
+      //   if (!selection || !range || range.collapsed) {
+      //     return
+      //   }
+      //   let childNodes = range.cloneContents().childNodes
+      //   if (childNodes.length === 1 && childNodes[0].nodeType === 1 && childNodes[0].tagName.toLowerCase() === 'span') {
+      //     let span = range.extractContents().childNodes[0]
+      //     span.style.fontSize = value
+      //     range.insertNode(span)
+      //     range.selectNode(span)
+      //     selection.removeAllRanges()
+      //     selection.addRange(range)
+      //   } else {
+      //     if (navigator.userAgent.indexOf('Chrome') !== -1 && navigator.userAgent.indexOf('Edge') === -1) {
+      //       if (document.queryCommandSupported('styleWithCss')) {
+      //         this.iframeDoc.execCommand('styleWithCss', false, true)
+      //       }
+      //       this.iframeDoc.execCommand('fontSize', false, 7)
+      //       let container = range.commonAncestorContainer
+      //       container.nodeType === 3 && (container = container.parentNode)
+      //       container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
+      //       Array.prototype.forEach.call(container.getElementsByTagName('span'), function (span) {
+      //         if (span.style.fontSize.trim() === '-webkit-xxx-large' || span.style.fontSize.trim() === 'xx-large') {
+      //           span.style.fontSize = value
+      //         }
+      //         span.normalize()
+      //       })
+      //     } else {
+      //       if (document.queryCommandSupported('styleWithCss')) {
+      //         this.iframeDoc.execCommand('styleWithCss', false, false)
+      //       }
+      //       this.iframeDoc.execCommand('fontSize', false, 7)
 
-            let fontList = []
-            let spanList = []
-            let container = range.commonAncestorContainer
-            container.nodeType === 3 && (container = container.parentNode)
-            container.tagName.toLowerCase() === 'font' && (container = container.parentNode)
-            fontList = container.getElementsByTagName('font')
-            for (let i = 0; i < fontList.length; i++) {
-              let font = fontList[i]
-              let span = document.createElement('span')
-              Array.prototype.forEach.call(font.attributes, function (attr) {
-                attr.nodeName === 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue)
-              })
-              span.innerHTML = font.innerHTML
-              span.querySelectorAll('span').length !== 0 && this.formatContent(span, 'span', 'fontSize')
-              span.normalize()
-              font.parentNode.replaceChild(span, font)
-              spanList.push(span)
-              i--
-            }
-            range.setStartBefore(spanList[0])
-            range.setEndAfter(spanList[spanList.length - 1])
-            selection.removeAllRanges()
-            selection.addRange(range)
-          }
-        }
-        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
-      },
+      //       let fontList = []
+      //       let spanList = []
+      //       let container = range.commonAncestorContainer
+      //       container.nodeType === 3 && (container = container.parentNode)
+      //       container.tagName.toLowerCase() === 'font' && (container = container.parentNode)
+      //       fontList = container.getElementsByTagName('font')
+      //       for (let i = 0; i < fontList.length; i++) {
+      //         let font = fontList[i]
+      //         let span = document.createElement('span')
+      //         Array.prototype.forEach.call(font.attributes, function (attr) {
+      //           attr.nodeName === 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue)
+      //         })
+      //         span.innerHTML = font.innerHTML
+      //         span.querySelectorAll('span').length !== 0 && this.formatContent(span, 'span', 'fontSize')
+      //         span.normalize()
+      //         font.parentNode.replaceChild(span, font)
+      //         spanList.push(span)
+      //         i--
+      //       }
+      //       range.setStartBefore(spanList[0])
+      //       range.setEndAfter(spanList[spanList.length - 1])
+      //       selection.removeAllRanges()
+      //       selection.addRange(range)
+      //     }
+      //   }
+      //   this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      // },
 
       insertCodeBlock (name, value) {
         let range = this.getRange()
@@ -520,12 +526,30 @@
         return range
       },
 
-      setRange (range) {
-        let sel = this.getSelection()
-        if (sel) {
-          sel.removeAllRanges()
-          sel.addRange(range)
+      getRangeContainer () {
+        let range = this.getRange()
+        if (!range) return
+        let container = range.commonAncestorContainer
+        if (container.nodeType === 3) {
+          container = container.parentNode
         }
+        return container
+      },
+
+      setRange (startContainer, startOffset, endContainer, endOffset) {
+        let range = this.getRange()
+        range.setStart(startContainer, startOffset)
+        range.setEnd(endContainer, endOffset)
+      },
+
+      setRangeAtNode (node) {
+        let range = this.getRange()
+        range.selectNode(node)
+      },
+
+      setRangeAtNodeContent (node) {
+        let range = this.getRange()
+        range.selectNodeContents(node)
       },
 
       removeRange () {
@@ -538,22 +562,22 @@
         return (range && !range.collapsed)
       },
 
-      unlink () {
-        let range = this.getRange()
-        let container = range.commonAncestorContainer
-        if (container.nodeType === 3) {
-          container = container.parentNode
-        }
-        if (container.tagName === 'A') {
-          let newRange = document.createRange()
-          newRange.selectNode(container)
-          this.setRange(newRange)
-          this.exec('Unlink', null)
-          this.removeRange(newRange)
-        } else {
-          this.exec('Unlink', null)
-        }
-      }
+      // unlink () {
+      //   let range = this.getRange()
+      //   let container = range.commonAncestorContainer
+      //   if (container.nodeType === 3) {
+      //     container = container.parentNode
+      //   }
+      //   if (container.tagName === 'A') {
+      //     let newRange = document.createRange()
+      //     newRange.selectNode(container)
+      //     this.setRange(newRange)
+      //     this.exec('Unlink', null)
+      //     this.removeRange(newRange)
+      //   } else {
+      //     this.exec('Unlink', null)
+      //   }
+      // }
 
     }
   }

@@ -23,25 +23,13 @@ let defaultToolbar = {
     insertOrderedList: {className: 'icon-list-ol', action: 'insertOrderedList', native: true},
     insertUnorderedList: {className: 'icon-list-ul', action: 'insertUnorderedList', native: true},
 
-    foreColor: {className: 'icon-file-text-o'},
-    backColor: {className: 'icon-file-text'},
-    link: {className: 'icon-link'},
-    unLink: {className: 'icon-unlink', action: 'unLink'},
-    markdown: {className: 'icon-markdown', action: 'markdown'},
     sourceCode: {className: 'icon-code', action: 'sourceCode'},
-    undo: {className: 'icon-undo', action: 'undo'},
-    redo: {className: 'icon-repeat', action: 'redo'},
+    markdown: {className: 'icon-markdown', action: 'markdown'},
     fullscreen: {className: 'icon-fullscreen', action: 'fullscreen'},
-    picture: {className: 'icon-file-image-o'},
-    table: {className: 'icon-table'}
+    picture: {className: 'icon-file-image-o', action: 'picture'}
   },
 
-  selects: {
-    // element: {className: ''},
-    // fontSize: {className: ''},
-    // fontName: {className: 'font-select'},
-    // codeSnippet: {className: 'lang-select'}
-  }
+  selects: {}
 
 }
 

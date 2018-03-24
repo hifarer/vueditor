@@ -10,10 +10,6 @@ export default {
     }
   },
 
-  SET_SELECT_VALUE ({ select }, { name, value }) {
-    select[name] = value
-  },
-
   SET_ACTIVE_COMPONENT (state, data) {
     state.activeComponent = data
   },
@@ -24,10 +20,6 @@ export default {
 
   SET_CONTENT (state, data) {
     state.content = data
-  },
-
-  SET_RECT (state, data) {
-    state.rect = data
   },
 
   SET_VIEW (state, data) {

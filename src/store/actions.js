@@ -3,10 +3,6 @@ export const setButtonStates = ({ commit }, data) => {
   commit('SET_BUTTON_STATES', data)
 }
 
-export const setSelectValue = ({ commit }, data) => {
-  commit('SET_SELECT_VALUE', data)
-}
-
 export const setActiveComponent = ({ commit }, data) => {
   commit('SET_ACTIVE_COMPONENT', data)
 }
@@ -17,10 +13,6 @@ export const setFullScreen = ({ commit }, data) => {
 
 export const setContent = ({ commit }, data) => {
   commit('SET_CONTENT', data)
-}
-
-export const setRect = ({ commit }, data) => {
-  commit('SET_RECT', data)
 }
 
 export const setView = ({commit}, data) => {

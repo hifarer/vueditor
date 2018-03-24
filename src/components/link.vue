@@ -7,14 +7,17 @@
 </style>
 
 <template>
-  <div class="ve-popover" :class="$style.ctn" 
-  :style="{left: rect.left + 'px', top: (rect.top + rect.height) + 'px'}" v-show="showPopup">
-    <div class="ve-pop-arrow"></div>
-    <div class="ve-pop-header">{{lang.title}}</div>
-    <div class="ve-pop-body">
-      <div class="ve-input-box">
-        <input type="text" class="ve-input" v-model="val">
-        <button type="button" class="ve-btn" @click="linkHandler">{{lang.ok}}</button>
+  <div class="ve-link">
+    <div :title="lang.addLink" :class="['ve-icon', {'ve-active': show}]" @click="clickHandler"><i class="icon-link"></i></div>
+    <div :title="lang.clearLink" class="ve-icon" @click="clearLink"><i class="icon-unlink"></i></div>
+    <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="position">
+      <div class="ve-pop-arrow"></div>
+      <div class="ve-pop-header">{{lang.addLink}}</div>
+      <div class="ve-pop-body">
+        <div class="ve-input-box">
+          <input type="text" class="ve-input" v-model="val">
+          <button type="button" class="ve-btn" @click="addLink">{{lang.ok}}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -23,29 +26,19 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
+  import rectMixin from '../mixins/rect'
   import { getLang } from '../config/lang.js'
 
   export default {
+    name: 'link',
     data () {
       return {
         val: '',
+        rect: {},
         lang: getLang('link')
       }
     },
-    mixins: [vuexMixin],
-    computed: {
-      rect () {
-        return this.mstates.rect
-      },
-      event () {
-        return this.mstates.event
-      }
-    },
-    watch: {
-      'event': function (val) {
-        val.name === 'unLink' && this.unLinkHandler()
-      }
-    },
+    mixins: [vuexMixin, rectMixin],
     methods: {
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
@@ -58,13 +51,25 @@
         href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
         return href
       },
-      linkHandler () {
+      clickHandler () {
+        this.togglePopup(event)
+      },
+      addLink () {
         let href = this.checkValid()
         this.execCommand({ name: 'createlink', value: href })
         this.setActiveComponent()
       },
-      unLinkHandler () {
-        this.execCommand({ name: 'unlink', value: null })
+      clearLink () {
+        let comp = this.$parent.$parent.$refs.design
+        let container = comp.getRangeContainer()
+        if (!container) return
+        while (container.tagName && container.tagName.toLowerCase() !== 'a') {
+          container = container.parentNode
+        }
+        if (container.tagName === 'A') {
+          comp.setRangeAtNode(container)
+          comp.exec({ name: 'unlink', value: null })
+        }
       }
     }
   }

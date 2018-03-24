@@ -16,7 +16,7 @@
 </style>
 
 <template>
-  <div class="ve-code" v-show="view === 'sourceCode'">
+  <div class="ve-sourcecode" v-show="view === 'sourceCode'">
     <textarea :class="$style.editor" v-model="code"></textarea>
   </div>
 </template>
@@ -26,6 +26,7 @@
   import vuexMixin from '../mixins/vuex'
 
   export default {
+    name: 'sourceCode',
     data () {
       return {
         code: ''

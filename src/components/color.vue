@@ -7,16 +7,16 @@
     z-index: 1000;
     background: #fff;
     border: 1px solid #ccc;
-    li {
-      margin: 1px;
-      float: left;
-      span {
-        display: block;
-        cursor: pointer;
-        width: 20px;
-        height: 20px;
-      }
-    }
+  }
+  .list {
+    overflow: hidden;
+  }
+  .list span {
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+    float: left;
+    cursor: pointer;
   }
   .input {
     max-width: ~"calc(100% - 35px)";
@@ -27,16 +27,18 @@
 </style>
 
 <template>
-  <div class="ve-color-picker" :class="$style.ctn" v-show="showPopup" :style="style">
-    <div class="ve-input-box">
-      <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="color">
-      <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
+  <div class="ve-color-picker">
+    <div :title="lang.foreColor" :class="['ve-icon', {'ve-active': show && key ==='fore'}]" @click="clickHandler('fore', $event)"><i class="icon-file-text-o"></i></div>
+    <div :title="lang.backColor" :class="['ve-icon', {'ve-active': show && key ==='back'}]" @click="clickHandler('back', $event)"><i class="icon-file-text"></i></div>
+    <div ref="menu" :class="$style.ctn" :style="position" v-show="show">
+      <div class="ve-input-box">
+        <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="val">
+        <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
+      </div>
+      <div :class="$style.list">
+        <span v-for="(item, index) in colors" :key="index" :title="item" :style="{background: item}" @click="setColor(item)"></span>
+      </div>
     </div>
-    <ul>
-      <li v-for="(color, index) in colors" :key="index" @click="clickHandler(color)">
-        <span :title="color" :style="{background: color}"></span>
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -47,6 +49,7 @@
   import vuexMixin from '../mixins/vuex'
   
   export default {
+    name: 'color',
     data () {
       return {
         colors: [
@@ -59,8 +62,10 @@
           '#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842',
           '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
         ],
-        color: '',
-        lang: getLang(this.tag)
+        key: '',
+        val: '',
+        rect: {},
+        lang: getLang('color')
       }
     },
     mixins: [rectMixin, vuexMixin],
@@ -70,33 +75,43 @@
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
+      },  
+      clickHandler (type, event) {
+        let obj = event.currentTarget
+        this.rect = {
+          left: obj.offsetLeft,
+          top: obj.offsetTop,
+          width: obj.offsetWidth,
+          height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
+        }
+        if (this.key === type && this.mstates.activeComponent === 'color') {
+          this.setActiveComponent()
+        } else {
+          this.setActiveComponent('color')
+        }
+        this.key = type
       },
-      checkValid (color) {
-        let sColor = color.replace(/\s+/g, '')
+      setColor (val) {
+        this.execCommand({name: this.key, value: val})
+        this.setActiveComponent()
+      },
+      inputHandler () {
+        let color = this.val
+        let valid = this.checkValid(color)
+        if (!valid) {
+          window.alert(this.lang.invalidColorCodeMsg)
+        } else {
+          this.setColor(color)
+        }
+      },
+      checkValid (val) {
+        let sColor = val.replace(/\s+/g, '')
         let hsl3 = /^#[0-9a-f]{3}$/i
         let hsl6 = /^#[0-9a-f]{6}$/i
         let rgb = /^rgb\(((\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5]),){2}(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\)$/
         if (hsl3.test(sColor) || hsl6.test(sColor) || rgb.test(sColor)) {
           return true
         }
-      },
-      setColor (type, color) {
-        this.execCommand({name: type, value: color})
-      },
-      clickHandler (color) {
-        this.setColor(this.tag, color)
-        this.setActiveComponent()
-      },
-      inputHandler () {
-        let color = this.color
-        let valid = this.checkValid(color)
-        if (!valid) {
-          window.alert(this.lang.invalidColorCodeMsg)
-        } else {
-          this.setColor(this.tag, color)
-          this.setActiveComponent()
-        }
-        this.color = ''
       }
     }
   }

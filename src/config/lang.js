@@ -2,7 +2,7 @@
 let defaultLang = {
 
   app: {
-    noStore: 'Vueditor can not been initialized without Vuex store when using as component, Please check your Vue Instance!'
+    noStore: 'Vueditor can not been initialized without Vuex store when using as a component, Please check your Vue Instance!'
   },
 
   removeFormat: {title: 'Remove format'},
@@ -25,14 +25,9 @@ let defaultLang = {
   insertOrderedList: {title: 'Insert ordered list'},
   insertUnorderedList: {title: 'Insert unordered list'},
 
-  foreColor: {
-    title: 'Text color',
-    ok: 'ok',
-    colorCode: 'Color code',
-    invalidColorCodeMsg: 'Please enter the correct color code'
-  },
-  backColor: {
-    title: 'Background color',
+  color: {
+    foreColor: 'Text color',
+    backColor: 'Background color',
     ok: 'ok',
     colorCode: 'Color code',
     invalidColorCodeMsg: 'Please enter the correct color code'
@@ -45,11 +40,9 @@ let defaultLang = {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
   link: {
-    title: 'Add link',
+    addLink: 'Add link',
+    clearLink: 'Clear link',
     ok: 'OK'
-  },
-  unLink: {
-    title: 'unlink'
   },
   markdown: {
     title: 'markdown'
@@ -67,8 +60,10 @@ let defaultLang = {
     title: 'Fullscreen'
   },
   table: {title: 'Table'},
-  undo: {title: 'Undo'},
-  redo: {title: 'Redo'}
+  undoRedo: {
+    undo: 'Undo',
+    redo: 'Redo'
+  }
 }
 
 let lang = JSON.parse(JSON.stringify(defaultLang))

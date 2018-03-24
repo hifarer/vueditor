@@ -1,10 +1,10 @@
 
 <template>
-  <div class="ve-selectbox">
+  <div class="ve-select-box">
     <div :class="[{'ve-disabled': false}, 've-select']" @click="clickHandler">
-      <span>{{val}}</span><i :class="{'ve-triangle-down': activeComponent !== 'codeSnippet', 've-triangle-up': activeComponent === 'codeSnippet'}"></i>
+      <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
-    <ul class="ve-dropdown" v-show="activeComponent === 'codeSnippet'" :style="style">
+    <ul v-show="show" ref="popup" class="ve-dropdown" :style="position">
       <li v-for="(type, index) in list" :key="index" @click="selectHandler(type)">{{type}}</li>
     </ul>
   </div>
@@ -13,23 +13,21 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
+  import rectMixin from '../mixins/rect'
   import { getConfig } from '../config/'
 
   export default {
+    name: 'codeSnippet',
     data () {
       let { lang, pattern } = getConfig('codeSnippet')
       return {
         list: lang,
         val: lang[0],
-        tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>'
+        tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>',
+        rect: {}
       }
     },
-    mixins: [vuexMixin],
-    computed: {
-      activeComponent () {
-        return this.mstates.activeComponent
-      }
-    },
+    mixins: [vuexMixin, rectMixin],
     methods: {
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
@@ -38,11 +36,7 @@
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       clickHandler () {
-        if (this.activeComponent === 'codeSnippet') {
-          this.setActiveComponent()
-        } else {
-          this.setActiveComponent('codeSnippet')
-        }
+        this.togglePopup(event)
       },
       selectHandler (lang) {
         this.val = lang

@@ -1,16 +1,23 @@
 
+<template>
+  <div class="ve-undo-redo">
+    <div :title="lang.undo" :class="['ve-icon', {'ve-disabled': !canUndo}]" @click="undo"><i class="icon-undo"></i></div>
+    <div :title="lang.redo" :class="['ve-icon', {'ve-disabled': !canRedo}]" @click="redo"><i class="icon-repeat"></i></div>
+  </div>
+</template>
+
 <script>
   
   import vuexMixin from '../mixins/vuex'
+  import { getLang } from '../config/lang.js'
 
   export default {
-    render () {
-      return ''
-    },
+    name: 'undoRedo',
     data () {
       return {
         stack: [],
-        index: -1
+        index: -1,
+        lang: getLang('undoRedo')
       }
     },
     mixins: [vuexMixin],
@@ -48,9 +55,6 @@
       }
     },
     methods: {
-      setButtonStates (data) {
-        this.$store.dispatch(this.mpath + 'setButtonStates', data)
-      },
       setContent (data) {
         this.$store.dispatch(this.mpath + 'setContent', data)
       },
@@ -70,10 +74,6 @@
           this.stack.push(content)
           this.index++
         }
-        this.setButtonStates({
-          undo: this.canUndo ? 'default' : 'disabled',
-          redo: this.canRedo ? 'default' : 'disabled'
-        })
       }
     }
   }
