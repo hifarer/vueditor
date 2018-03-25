@@ -1,8 +1,16 @@
 
+<style>
+  .ve-design {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+  }
+</style>
+
 <template>
-  <div class="ve-design" ref="design" v-show="view === 'design' || view === 'codesnippet'">
-    <iframe src="about:blank" frameborder="0" @load="init"></iframe>
-  </div>
+  <iframe class="ve-design" src="about:blank" frameborder="0" v-show="view !== 'sourceCode'" @load="init"></iframe>
 </template>
 
 <script>
@@ -86,8 +94,8 @@
         }
         this.iframeDoc.designMode = 'on'
         this.iframeBody.spellcheck = this.config.spellcheck
-        this.iframeBody.style.cssText = 'overflow-x: hidden;'
-        this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0;}</style>')
+        this.iframeBody.style.cssText = 'overflow-x: hidden; margin: 0; padding: 8px;'
+        this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style>')
         this.addEvent()
       },
 
@@ -325,7 +333,7 @@
               this.config.fontSize.indexOf(remFontSize) !== -1 && this.setSelectValue({name: 'fontSize', value: remFontSize})
             }
           }
-          this.view !== 'design' && this.setView('design')
+          // this.view !== 'design' && this.setView('design')
         }
       },
 

@@ -1,8 +1,8 @@
 
 
 <template>
-  <div class="ve-select-box">
-    <div :class="[{'ve-disabled': false}, 've-select']" @click="clickHandler">
+  <div class="ve-fontsize">
+    <div :class="['ve-select', {'ve-disabled': mstates.view !== 'design'}]" @click="clickHandler">
       <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
     <ul v-show="show" ref="popup" class="ve-dropdown" :style="position">

@@ -2,10 +2,11 @@
 <template>
   <div class="vueditor" :id="config.id" :class="[{'ve-fullscreen': fullscreen}].concat(config.classList)">
     <ve-toolbar></ve-toolbar>
-    <ve-design ref="design"></ve-design>
-    <template v-for="item in list">
-      <component v-if="config.toolbar.indexOf(item) !== -1" :is="'ve-' + item.toLowerCase()"></component>
-    </template>
+    <div class="ve-container">
+      <ve-sourcecode></ve-sourcecode>
+      <ve-design ref="design"></ve-design>
+    </div>
+    <ve-picture></ve-picture>
   </div>
 </template>
 
@@ -13,12 +14,8 @@
 
   import toolbar from './toolbar.vue'
   import design from './design.vue'
-  
   import sourceCode from './sourcecode.vue'
-  import table from './table.vue'
-  import link from './link.vue'
   import picture from './picture.vue'
-  import markdown from './markdown.vue'
 
   import createStore from '../store/index.js'
   import { createNonceStr } from '../util.js'
@@ -31,7 +28,6 @@
       've-toolbar': toolbar,
       've-design': design,
       've-sourcecode': sourceCode,
-      've-markdown': markdown,
       've-picture': picture
     },
     computed: {

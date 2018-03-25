@@ -27,6 +27,9 @@ export default {
   },
   methods: {
     togglePopup (event) {
+      if (this.mstates.view !== 'design') {
+        return
+      }
       let obj = event.currentTarget
       this.rect = {
         left: obj.offsetLeft,

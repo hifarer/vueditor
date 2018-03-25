@@ -11,7 +11,7 @@
 </style>
 
 <template>
-  <div class="ve-dialog" v-show="show" @click.self="hideDialog">
+  <div class="ve-picture ve-dialog" v-show="show" @click.self="hideDialog">
     <div :class="$style.wrap">
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">

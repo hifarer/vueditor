@@ -1,12 +1,14 @@
 
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
+    display: table-caption;
     // display: table;
     width: 100%;
     font-size: 0;
     // letter-spacing: -4px;
     background: #fff;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #ddd;
+    border-bottom: none;
     user-select: none;
     & > div {
       position: relative;
@@ -21,7 +23,7 @@
       padding: 10px 12px;
       color: rgba(0, 0, 0, 0.6);
     }
-    div.ve-icon:hover {
+    div.ve-icon:not(.ve-disabled):hover {
       background: #eee;
     }
     div.ve-active {
@@ -50,22 +52,27 @@
 <template>
   <div class="ve-toolbar" ref="toolbar">
     <template v-for="item in config">
+
       <div v-if="item in btns" @click.stop.prevent="btnHandler($event, item)" 
         :title="lang[item].title"
         :class="['ve-icon', {'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}]">
         <i :class="[btns[item].className]"></i>
       </div>
+
       <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
+
+      <component v-if="componentList.indexOf(item) !== -1" :is="getComponentName(item)"></component>
+
     </template>
 
-    <ve-fontsize></ve-fontsize>
+    <!-- <ve-fontsize></ve-fontsize>
     <ve-fontname></ve-fontname>
     <ve-element></ve-element>
     <ve-codesnippet></ve-codesnippet>
     <ve-color></ve-color>
     <ve-link></ve-link>
     <ve-table></ve-table>
-    <ve-undoredo></ve-undoredo>
+    <ve-undoredo></ve-undoredo> -->
 
   </div>
 </template>
@@ -123,6 +130,30 @@
       },
       activeComponent () {
         return this.mstates.activeComponent
+      },
+      componentList () {
+        // 'undo', 'redo'
+        // 'foreColor', 'backColor'
+        // 'link', 'unLink'
+        // 'table'
+        // 'fontSize'
+        // 'fontName'
+        // 'element'
+        // 'codeSnippet'
+        let arr = []
+        for (let i = 0, item = ''; i < this.config.length; i++) {
+          item = this.config[i]
+          if (item in this.btns || item == 'divider' || item == '|') {
+            continue
+          }
+          if (arr.indexOf(item) === -1) {
+            arr.push(item)
+          }
+        }
+        (arr.indexOf('undo') !== -1 && arr.indexOf('redo') !== -1) && arr.splice(arr.indexOf('redo'), 1);
+        (arr.indexOf('foreColor') !== -1 && arr.indexOf('backColor') !== -1) && arr.splice(arr.indexOf('backColor'), 1);
+        (arr.indexOf('link') !== -1 && arr.indexOf('unLink') !== -1) && arr.splice(arr.indexOf('unLink'), 1);
+        return arr
       }
     },
     watch: {
@@ -150,6 +181,9 @@
       setFullScreen (bool) {
         this.$store.dispatch(this.mpath + 'setFullScreen', bool)
       },
+      setView (data) {
+        this.$store.dispatch(this.mpath + 'setView', data)
+      },
       triggerEvent (data) {
         this.$store.dispatch(this.mpath + 'triggerEvent', data)
       },
@@ -167,17 +201,33 @@
           case 'fullscreen':
             this.setFullScreen(!this.fullscreen)
             break
+          case 'sourceCode':
+          case 'markdown':
+            this.setView(this.view === name ? 'design' : name)
+        }
+      },
+      getComponentName (name) {
+        switch (name) {
+          case 'undo':
+          case 'redo':
+            return 've-undoredo'
+          case 'foreColor':
+          case 'backColor':
+            return 've-color'
+          case 'link':
+          case 'unLink':
+            return 've-link'
+          default:
+            return 've-' + name.toLowerCase()
         }
       },
       btnHandler (event, name) {
-        if (this.toolbar[name].status === 'disabled') return
+        if (this.toolbar[name] === 'disabled') return
         let btn = this.btns[name]
         if (btn.native) {
           this.execCommand({ name: name, value: null })
         } else {
           this.action(name)
-          // this.setActiveComponent(name)
-          // this.triggerEvent({ name: name, params: null })
         }
         this.updateStates(name)
         this.updatePopup(name, event.currentTarget)

@@ -47,13 +47,14 @@ function mixinConfig (opts) {
   let config = opts ? Object.assign({}, defaultConf, opts) : defaultConf
   let lang = config.lang || getDefaultLang()
   let list = [
-    'sourceCode', 'markdown', 'picture'
+    'sourceCode', 'picture'
   ]
   // type check for config
   let typeInfo = checkConfig(config)
   if (!typeInfo.valid) {
     throw new Error(typeInfo.info)
   }
+  // todo toolbar 去重
 
   resetToolbar()
 

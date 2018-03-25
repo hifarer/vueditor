@@ -5,8 +5,8 @@
   <title>Vueditor</title>
   <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
   <style>
-    .vueditor {
-      height: 250px!important;
+    #editor .vueditor {
+      height: 250px;
     }
   </style>
 </head>
@@ -37,9 +37,7 @@
 
     const opts = {
       toolbar: [
-        'removeFormat', /* 'undo', 'redo', */ '|', 'code', 'element', 'fontName', 'fontSize'/* , 'foreColor', 'backColor', 'divider' */, 'bold', 'italic', 'underline', 'strikeThrough',
-        /* 'link', 'unLink',  */'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-        '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', /* 'emoji',  */'picture'/* , 'table', '|' */, 'sourceCode', 'markdown', 'fullscreen'
+        'removeFormat', 'undo', 'redo', '|', 'codeSnippet', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'sourceCode', 'markdown'
       ],
       fontName: [
         { val: 'arial black' },

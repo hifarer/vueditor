@@ -1,24 +1,28 @@
 
-<style module>
-  .editor {
-    /*safari*/
-    position: absolute;
-    box-sizing: border-box;
+<style>
+  .ve-sourcecode {
     display: block;
     width: 100%;
     height: 100%;
     padding: 8px;
+    box-sizing: border-box;
     outline: none;
     border: none;
     resize: none;
     font-size: 14px;
   }
+  /* .border {
+    width: 50%;
+    border-right: 1px solid #ddd;
+  } */
 </style>
 
 <template>
-  <div class="ve-sourcecode" v-show="view === 'sourceCode'">
-    <textarea :class="$style.editor" v-model="code"></textarea>
-  </div>
+  <textarea 
+    :class="['ve-sourcecode', view === 'markdown' ? '' : '']" 
+    v-show="view === 'sourceCode' || view === 'markdown'"
+    v-model="code"
+  ></textarea>
 </template>
 
 <script>

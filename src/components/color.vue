@@ -27,9 +27,9 @@
 </style>
 
 <template>
-  <div class="ve-color-picker">
-    <div :title="lang.foreColor" :class="['ve-icon', {'ve-active': show && key ==='fore'}]" @click="clickHandler('fore', $event)"><i class="icon-file-text-o"></i></div>
-    <div :title="lang.backColor" :class="['ve-icon', {'ve-active': show && key ==='back'}]" @click="clickHandler('back', $event)"><i class="icon-file-text"></i></div>
+  <div class="ve-color">
+    <div :title="lang.foreColor" :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disabled': mstates.view !== 'design'}]" @click="clickHandler('foreColor', $event)"><i class="icon-file-text-o"></i></div>
+    <div :title="lang.backColor" :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disabled': mstates.view !== 'design'}]" @click="clickHandler('backColor', $event)"><i class="icon-file-text"></i></div>
     <div ref="menu" :class="$style.ctn" :style="position" v-show="show">
       <div class="ve-input-box">
         <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="val">
@@ -77,6 +77,9 @@
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },  
       clickHandler (type, event) {
+        if (this.mstates.view !== 'design') {
+          return
+        }
         let obj = event.currentTarget
         this.rect = {
           left: obj.offsetLeft,

@@ -8,8 +8,8 @@
 
 <template>
   <div class="ve-link">
-    <div :title="lang.addLink" :class="['ve-icon', {'ve-active': show}]" @click="clickHandler"><i class="icon-link"></i></div>
-    <div :title="lang.clearLink" class="ve-icon" @click="clearLink"><i class="icon-unlink"></i></div>
+    <div :title="lang.addLink" :class="['ve-icon', {'ve-active': show, 've-disabled': mstates.view !== 'design'}]" @click="clickHandler"><i class="icon-link"></i></div>
+    <div :title="lang.clearLink" :class="['ve-icon', {'ve-disabled': mstates.view !== 'design'}]" @click="clearLink"><i class="icon-unlink"></i></div>
     <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="position">
       <div class="ve-pop-arrow"></div>
       <div class="ve-pop-header">{{lang.addLink}}</div>
@@ -70,6 +70,7 @@
           comp.setRangeAtNode(container)
           comp.exec({ name: 'unlink', value: null })
         }
+        this.setActiveComponent()
       }
     }
   }

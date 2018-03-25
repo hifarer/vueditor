@@ -4,9 +4,9 @@
 .vueditor {
   min-width: 300px;
   min-height: 150px;
+  width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: table;
   border: 1px solid #ddd;
   background: #fff;
   box-sizing: border-box;
@@ -14,35 +14,19 @@
 }
 
 .ve-fullscreen {
+  width: 100%!important;
+  height: 100%!important;
+  margin: 0!important;
   position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
   z-index: 10;
-  margin: 0!important;
 }
 
-.ve-design,
-.ve-markdown
-.ve-sourcecode {
-  flex: 1;
-  overflow: hidden;
-}
-.ve-design {
-  position: relative;
-}
-.ve-design iframe {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: absolute;
-}
-
-.ve-sourcecode {
-  /*safari*/
-  position: relative;
-  overflow-y: auto;
+.ve-container {
+  display: table-row;
 }
 
 [class^=ve-triangle] {
@@ -254,6 +238,12 @@
 }
 .ve-preview img {
   max-height: 300px;
+}
+
+.ve-grid {
+  width: 50%;
+  height: 100%;
+  float: left;
 }
 
 .vueditor {

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="ve-undo-redo">
+  <div class="ve-undoredo">
     <div :title="lang.undo" :class="['ve-icon', {'ve-disabled': !canUndo}]" @click="undo"><i class="icon-undo"></i></div>
     <div :title="lang.redo" :class="['ve-icon', {'ve-disabled': !canRedo}]" @click="redo"><i class="icon-repeat"></i></div>
   </div>
@@ -29,10 +29,10 @@
         return this.mstates.view
       },
       canUndo: function () {
-        return this.index > 0
+        return this.view === 'design' && this.index > 0
       },
       canRedo: function () {
-        return this.index < this.stack.length - 1
+        return this.view === 'design' && this.index < this.stack.length - 1
       }
     },
     watch: {
