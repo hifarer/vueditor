@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import { setLang, getDefaultLang } from './config/lang.js'
-import { resetToolbar, modifyToolbar } from './config/toolbar.js'
 import { setConfig, getDefaultConf } from './config/index.js'
 
 import app from './components/app.vue'
@@ -56,14 +55,11 @@ function mixinConfig (opts) {
   }
   // todo toolbar 去重
 
-  resetToolbar()
-
   config.plugins && config.plugins.forEach(({ name, element, component }) => {
     list.push(name)
     app.components['ve-' + name] = component
     config.toolbar.indexOf(name) === -1 && config.toolbar.push(name)
     lang[name] = element.lang
-    modifyToolbar(name, element)
   })
 
   setConfig(config)

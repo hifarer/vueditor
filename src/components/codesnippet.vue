@@ -42,6 +42,23 @@
         this.val = lang
         this.execCommand({name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang)})
         this.setActiveComponent()
+      },
+      insertCodeBlock (name, value) {
+        let range = this.getRange()
+        if (!range) return
+        let { pattern } = this.config.codeSnippet
+        let tempDiv = document.createElement('div')
+        tempDiv.innerHTML = value
+        let attrValue = tempDiv.getElementsByTagName('code')[0].getAttribute(pattern.attr)
+        let container = range.commonAncestorContainer
+        container.nodeType === 3 && (container = container.parentNode)
+        if (container.tagName.toLowerCase() === 'code') {
+          container.setAttribute(pattern.attr, attrValue)
+        } else if (container.tagName.toLowerCase() === 'pre') {
+          this.insertHTML(name, tempDiv.getElementsByTagName('code')[0].outerHTML)
+        } else {
+          this.insertHTML(name, value)
+        }
       }
     }
   }

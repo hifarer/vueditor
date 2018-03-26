@@ -82,7 +82,6 @@
   import vuexMixin from '../mixins/vuex'
   import { getLang } from '../config/lang.js'
   import { getConfig } from '../config/index.js'
-  import { getToolbar } from '../config/toolbar.js'
 
   import fontSize from './fontsize.vue'
   import fontName from './fontname.vue'
@@ -96,10 +95,7 @@
   export default {
     name: 'toolbar',
     data () {
-      let {btns, selects} = getToolbar()
       return {
-        btns,
-        selects,
         lang: getLang(),
         config: getConfig('toolbar')
       }
@@ -122,14 +118,8 @@
       toolbar () {
         return this.mstates.toolbar
       },
-      select () {
-        return this.mstates.select
-      },
       fullscreen () {
         return this.mstates.fullscreen
-      },
-      activeComponent () {
-        return this.mstates.activeComponent
       },
       componentList () {
         // 'undo', 'redo'
@@ -171,6 +161,35 @@
         this.setButtonStates(states)
       }
     },
+    beforeCreate () {
+      this.btns = {
+
+        removeFormat: {className: 'icon-eraser', action: 'removeFormat', native: true},
+
+        bold: {className: 'icon-bold', action: 'bold', native: true},
+        italic: {className: 'icon-italic', action: 'italic', native: true},
+        underline: {className: 'icon-underline', action: 'underline', native: true},
+        strikeThrough: {className: 'icon-strikethrough', action: 'strikeThrough', native: true},
+
+        superscript: {className: 'icon-superscript', action: 'superscript', native: true},
+        subscript: {className: 'icon-subscript', action: 'subscript', native: true},
+        indent: {className: 'icon-indent', action: 'indent', native: true},
+        outdent: {className: 'icon-outdent', action: 'outdent', native: true},
+
+        justifyLeft: {className: 'icon-align-left', action: 'justifyLeft', native: true},
+        justifyCenter: {className: 'icon-align-center', action: 'justifyCenter', native: true},
+        justifyRight: {className: 'icon-align-right', action: 'justifyRight', native: true},
+        justifyFull: {className: 'icon-align-justify', action: 'justifyFull', native: true},
+
+        insertOrderedList: {className: 'icon-list-ol', action: 'insertOrderedList', native: true},
+        insertUnorderedList: {className: 'icon-list-ul', action: 'insertUnorderedList', native: true},
+
+        sourceCode: {className: 'icon-code', action: 'sourceCode'},
+        markdown: {className: 'icon-markdown', action: 'markdown'},
+        fullscreen: {className: 'icon-fullscreen', action: 'fullscreen'},
+        picture: {className: 'icon-file-image-o', action: 'picture'}
+      }
+    },
     methods: {
       setButtonStates (data) {
         this.$store.dispatch(this.mpath + 'setButtonStates', data)
@@ -184,14 +203,8 @@
       setView (data) {
         this.$store.dispatch(this.mpath + 'setView', data)
       },
-      triggerEvent (data) {
-        this.$store.dispatch(this.mpath + 'triggerEvent', data)
-      },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
-      setRect (data) {
-        this.$store.dispatch(this.mpath + 'setRect', data)
       },
       action (name) {
         switch (name) {
@@ -223,40 +236,13 @@
       },
       btnHandler (event, name) {
         if (this.toolbar[name] === 'disabled') return
-        let btn = this.btns[name]
-        if (btn.native) {
+        if (this.btns[name].native) {
           this.execCommand({ name: name, value: null })
+          this.setActiveComponent()
         } else {
           this.action(name)
         }
-        this.updateStates(name)
-        this.updatePopup(name, event.currentTarget)
-      },
-      updatePopup (name, obj) {
-        this.setActiveComponent(name)
-        if ((this.btns[name] && !this.btns[name].action) || this.selects[name]) {
-          this.setRect({
-            left: obj.offsetLeft,
-            top: obj.offsetTop,
-            width: obj.offsetWidth,
-            height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
-          })
-        }
-      },
-      updateStates (name) {
         let states = {}
-        // update no action btn status, no action means click on it will toggle a popover menu;
-        if (this.view === 'design') {
-          for (let item in this.btns) {
-            if (!this.btns[item].action && this.toolbar[item] === 'actived') {
-              states[item] = 'default'
-            }
-          }
-        }
-        if (['sourceCode', 'markdown'].indexOf(name) !== -1) {
-          this.toolbar['sourceCode'] && (states['sourceCode'] = 'default')
-          this.toolbar['markdown'] && (states['markdown'] = 'default')
-        }
         this.toolbar[name] === 'actived' ? states[name] = 'default' : states[name] = 'actived'
         this.setButtonStates(states)
       }

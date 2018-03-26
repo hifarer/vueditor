@@ -72,10 +72,14 @@
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
+      setButtonStates (data) {
+        this.$store.dispatch(this.mpath + 'setButtonStates', data)
+      },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
       hideDialog () {
+        this.setButtonStates({picture: 'default'})
         this.setActiveComponent()
       },
       changeHandler () {
@@ -87,6 +91,24 @@
             this.url = window.URL.createObjectURL(obj.files.item(0))
           }
         }
+      },
+      pasteUpload (arr) {
+        let _this = this
+        Array.prototype.forEach.call(arr, item => {
+          if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
+            let reader = new window.FileReader()
+            reader.readAsDataURL(item.getAsFile())
+            reader.onload = function (e) {
+              let base64Str = e.target.result.replace('+', '%2B')
+              let xhr = new window.XMLHttpRequest()
+              xhr.open('POST', _this.config.uploadUrl)
+              xhr.send({ imageData: base64Str })
+              xhr.onload = function () {
+                _this.insertHTML('', `<img src="${xhr.responseText}">`)
+              }
+            }
+          }
+        })
       },
       certainHandler (event) {
         let obj = this.$refs.file

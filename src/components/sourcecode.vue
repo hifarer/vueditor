@@ -1,6 +1,6 @@
 
-<style>
-  .ve-sourcecode {
+<style module>
+  :global(.ve-sourcecode) {
     display: block;
     width: 100%;
     height: 100%;
@@ -11,18 +11,15 @@
     resize: none;
     font-size: 14px;
   }
-  /* .border {
+  .half {
     width: 50%;
+    float: left;
     border-right: 1px solid #ddd;
-  } */
+  }
 </style>
 
 <template>
-  <textarea 
-    :class="['ve-sourcecode', view === 'markdown' ? '' : '']" 
-    v-show="view === 'sourceCode' || view === 'markdown'"
-    v-model="code"
-  ></textarea>
+  <textarea :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']" v-show="view === 'sourceCode' || view === 'markdown'" v-model="code"></textarea>
 </template>
 
 <script>
@@ -43,39 +40,19 @@
       },
       content () {
         return this.mstates.content
-      },
-      event () {
-        return this.mstates.event
       }
     },
     watch: {
-      'view': function (val) {
-        if (val === 'sourceCode') {
-          this.code = this.content
-        }
+      'content': function (val) {
+        this.code = val
       },
       'code': function (val) {
         this.setContent(val)
-      },
-      'content': function (val) {
-        this.setContent(val)
-      },
-      'event': function (val) {
-        if (val.name === 'sourceCode') {
-          this.setView(this.view === 'sourceCode' ? 'design' : 'sourceCode')
-          this.setActiveComponent()
-        }
       }
     },
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
       setContent (data) {
         this.$store.dispatch(this.mpath + 'setContent', data)
-      },
-      setView (data) {
-        this.$store.dispatch(this.mpath + 'setView', data)
       }
     }
   }

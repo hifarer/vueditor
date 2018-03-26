@@ -1,9 +1,7 @@
 {
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "extends": "standard",
-    "plugins": [
-        "html"
-    ]
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": "standard",
+  "plugins": ["html"]
 }
