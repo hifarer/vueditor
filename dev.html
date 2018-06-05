@@ -37,15 +37,12 @@
     })
 
     const opts = {
-      toolbar: [
-        'removeFormat', 'undo', 'redo', '|', 'codeSnippet', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'sourceCode', 'markdown'
-      ],
       fontName: [
         { val: 'arial black' },
         { val: 'times new roman' },
         { val: 'Courier New' }
       ],
-      fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem']
+      fontSize: ['0.8rem', '1.0rem', '1.5rem', '2.0rem', '3.0rem', '5rem']
     }
 
     Vue.use(Vueditor, opts)

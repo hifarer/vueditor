@@ -21,8 +21,9 @@
 </style>
 
 <template>
-  <div class="ve-popover emoji" v-show="showPopup" 
-  :style="{left: rect.left + 'px', top: (rect.top + rect.height) + 'px'}">
+<div class="ve-emoji">
+  <div :class="['ve-icon', {'ve-active': show, 've-disabled': mstates.view !== 'design'}]" :title="lang.title" @click="clickHandler"><i class="icon-smile-o"></i></div>
+  <div class="ve-popover emoji" v-show="show" :style="position">
     <div class="ve-pop-arrow"></div>
     <div class="ve-pop-header">Insert Emoji</div>
     <div class="ve-pop-body">
@@ -33,6 +34,8 @@
       </div>
     </div>
   </div>
+</div>
+  
 </template>
 
 <script>
@@ -45,8 +48,12 @@
   // console.log(arr);
 
   import twemoji from 'twemoji'
+  import { getLang } from '../config/lang.js'
+  import rectMixin from '../mixins/rect'
+  import vuexMixin from '../mixins/vuex'
 
   export default {
+    name: 'emoji',
     data () {
       return {
         arr: [
@@ -56,18 +63,18 @@
           '1f614', '1f615', '1f643', '1f911', '1f632', '2639', '1f641', '1f616', '1f61e', '1f61f', '1f624', '1f622', '1f62d', '1f626',
           '1f627', '1f628', '1f629', '1f62c', '1f630', '1f631', '1f633', '1f635', '1f621', '1f620', '1f607', '1f920', '1f921', '1f925',
           '1f637', '1f912', '1f915', '1f922', '1f927'
-        ]
+        ],
+        lang: getLang('emoji')
       }
     },
-    computed: {
-      rect: function () {
-        return this.$store.state.rect
-      },
-      showPopup: function () {
-        return this.$store.state.toolbar.emoji.showPopup
-      }
-    },
+    mixins: [vuexMixin, rectMixin],
     methods: {
+      setActiveComponent (data) {
+        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
+      },
+      execCommand (data) {
+        this.$store.dispatch(this.mpath + 'execCommand', data)
+      },
       convert (code) {
         return twemoji.convert.fromCodePoint(code)
       },
@@ -76,12 +83,15 @@
         div.innerHTML = twemoji.parse(twemoji.convert.fromCodePoint(str))
         return div.children[0].src
       },
+      clickHandler () {
+        this.togglePopup(event)
+      },
       insertItem (event) {
         let obj = event.target
         if (obj.tagName.toLowerCase() === 'a') {
           obj = obj.children[0]
         }
-        this.$store.dispatch('execCommand', {name: 'insertHTML', value: obj.outerHTML})
+        this.execCommand({name: 'insertHTML', value: obj.outerHTML})
       }
     }
   }

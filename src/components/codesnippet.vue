@@ -1,7 +1,7 @@
 
 <template>
   <div class="ve-codesnippet">
-    <div :class="['ve-select', {'ve-disabled': mstates.view !== 'design'}]" @click="clickHandler">
+    <div :class="['ve-select', {'ve-disabled': mstates.view !== 'design' && mstates.view !== 'codesnippet'}]" @click="clickHandler">
       <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
     <ul v-show="show" ref="popup" class="ve-dropdown" :style="position">
@@ -23,7 +23,7 @@
       return {
         list: lang,
         val: lang[0],
-        tpl: '<pre><code ' + pattern.attr + '="' + pattern.value + '"><br></code></pre>',
+        pattern: pattern,
         rect: {}
       }
     },
@@ -40,24 +40,24 @@
       },
       selectHandler (lang) {
         this.val = lang
-        this.execCommand({name: 'insertCodeBlock', value: this.tpl.replace(/#lang#/igm, lang)})
+        this.insertCodeBlock(lang)
         this.setActiveComponent()
       },
-      insertCodeBlock (name, value) {
-        let range = this.getRange()
-        if (!range) return
-        let { pattern } = this.config.codeSnippet
+      insertCodeBlock (lang) {
+        let comp = this.$parent.$parent.$refs.design
+        let container = comp.getRangeContainerElement()
+        if (!container) return
+        let { attr, value } = this.pattern
         let tempDiv = document.createElement('div')
-        tempDiv.innerHTML = value
-        let attrValue = tempDiv.getElementsByTagName('code')[0].getAttribute(pattern.attr)
-        let container = range.commonAncestorContainer
-        container.nodeType === 3 && (container = container.parentNode)
+        let html = ('<pre><code ' + attr + '="' + value + '"><br></code></pre>').replace(/#lang#/igm, lang)
+        tempDiv.innerHTML = html
+        // if the range inside code element
         if (container.tagName.toLowerCase() === 'code') {
-          container.setAttribute(pattern.attr, attrValue)
+          container.setAttribute(attr, lang)
         } else if (container.tagName.toLowerCase() === 'pre') {
-          this.insertHTML(name, tempDiv.getElementsByTagName('code')[0].outerHTML)
+          comp.insertHTML(name, tempDiv.getElementsByTagName('code')[0].outerHTML)
         } else {
-          this.insertHTML(name, value)
+          comp.insertHTML(name, html)
         }
       }
     }

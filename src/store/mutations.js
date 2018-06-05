@@ -2,7 +2,7 @@
 export default {
 
   SET_BUTTON_STATES ({ toolbar }, data) {
-    console.log(data)
+    // console.log(data)
     for (let name in data) {
       if (typeof toolbar[name] !== 'undefined') {
         toolbar[name] = data[name]

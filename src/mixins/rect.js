@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     togglePopup (event) {
-      if (this.mstates.view !== 'design') {
+      if (this.mstates.view !== 'design' && this.$options.name !== 'codeSnippet') {
         return
       }
       let obj = event.currentTarget

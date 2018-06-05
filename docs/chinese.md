@@ -21,7 +21,6 @@ Vueditor
 
 - 可自定义
 - 轻量级, 依赖少
-- 插件支持
 
 ## 安装
 ```javascript
@@ -164,7 +163,6 @@ Vue.use(Vueditor, {
 | uploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
 | id                    | `String`   | 容器id |
 | classList             | `Array`    | 容器className |
-| plugins             | `Array`    | 插件 |
 
 
 以上可配置项的默认值
@@ -204,7 +202,6 @@ Vue.use(Vueditor, {
 - [x] 弹出菜单位置自适应
 - [ ] 表格高级设置
 - [ ] 代码高亮
-- [ ] 插件支持
 - [ ] XSS 预防
 - [ ] 测试
 

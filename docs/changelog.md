@@ -10,19 +10,19 @@
 
 0.2.9
 
-1. fix editor's configuration could affect each other bug.
+1. fix bug for editor's configuration.
 2. add preview to picture upload
 3. add type check for initialize config
-4. fix content sync bug when switch to source code view
-5. fix wrong html table bug.
+4. fix bug for content sync when switch to source code view
+5. fix bug for table html.
 
 0.2.8
 
-1. fix fullscreen bug
+1. fix bug for fullscreen
 
 0.2.7
 
-1. Support using custom define file upload function
+1. Support custom file upload function
 
 0.2.6
 

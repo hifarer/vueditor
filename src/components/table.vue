@@ -56,7 +56,7 @@
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
-      clickHandler () {
+      clickHandler (event) {
         this.togglePopup(event)
       },
       overHandler (index) {
@@ -71,14 +71,14 @@
       createTable (rows, cols) {
         let oTable = document.createElement('table')
         let oTbody = document.createElement('tbody')
-        oTable.style.cssText = 'border-collapse: collapse;'
+        oTable.style.cssText = 'border-collapse: collapse; width: ' + cols * 50 + 'px'
+        oTable.setAttribute('border', '1')
         oTable.appendChild(oTbody)
         for (let i = 0; i < rows; i++) {
           let tr = document.createElement('tr')
           for (let j = 0; j < cols; j++) {
             let td = document.createElement('td')
             td.innerHTML = '<br>'
-            td.style.cssText = 'width: 50px; border: 1px #ddd solid;'
             tr.appendChild(td)
           }
           oTbody.appendChild(tr)

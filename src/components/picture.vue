@@ -15,7 +15,7 @@
     <div :class="$style.wrap">
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">
-        <form ref="form">
+        <form>
           <input type="file" name="image" @change="changeHandler" ref="file">
         </form>
         <div class="ve-preview" v-if="url"><img :src="url"></div>
@@ -83,7 +83,40 @@
         this.setActiveComponent()
       },
       changeHandler () {
+        this.preview(this.$refs.file)
+      },
+      pasteHandler (arr) {
+        Array.prototype.forEach.call(arr, item => {
+          if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
+            if (this.uploadUrl) {
+              this.upload(item.file[0])
+            } else {
+              this.preview(item)
+              this.execCommand({name: 'insertHTML', value: `<img src="${this.url}">`})
+              this.hideDialog()
+            }
+          }
+        })
+      },
+      certainHandler (event) {
         let obj = this.$refs.file
+        if (this.url) {
+          if (this.$parent.upload) {
+            this.$parent.upload(obj, href => {
+              this.execCommand({name: 'insertHTML', value: `<img src="${href}">`})
+              this.hideDialog()
+            })
+          } else if (this.uploadUrl) {
+            this.upload(obj.file[0])
+          } else {
+            this.execCommand({name: 'insertHTML', value: `<img src="${this.url}">`})
+            this.hideDialog()
+          }
+        } else {
+          window.alert(this.lang.invalidFile)
+        }
+      },
+      preview (obj) {
         if (navigator.userAgent.indexOf('MSIE') >= 1) { // IE
           this.url = obj.value
         } else {
@@ -92,52 +125,18 @@
           }
         }
       },
-      pasteUpload (arr) {
-        let _this = this
-        Array.prototype.forEach.call(arr, item => {
-          if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
-            let reader = new window.FileReader()
-            reader.readAsDataURL(item.getAsFile())
-            reader.onload = function (e) {
-              let base64Str = e.target.result.replace('+', '%2B')
-              let xhr = new window.XMLHttpRequest()
-              xhr.open('POST', _this.config.uploadUrl)
-              xhr.send({ imageData: base64Str })
-              xhr.onload = function () {
-                _this.insertHTML('', `<img src="${xhr.responseText}">`)
-              }
-            }
-          }
-        })
-      },
-      certainHandler (event) {
-        let obj = this.$refs.file
-        let form = this.$refs.form
-        let uploadUrl = this.uploadUrl
-        if (this.url) {
-          if (this.$parent.upload) {
-            this.$parent.upload(obj, href => {
-              this.execCommand({name: 'insertHTML', value: `<img src="${href}">`})
-              this.hideDialog()
-            })
-          } else if (uploadUrl) {
-            let formData = new window.FormData(form)
-            let xhr = new window.XMLHttpRequest()
-            xhr.open('POST', uploadUrl)
-            xhr.send(formData)
-            xhr.onload = function () {
-              this.execCommand({name: 'insertHTML', value: `<img src="${xhr.responseText}">`})
-              this.hideDialog()
-            }.bind(this)
-            xhr.onerror = function (err) {
-              window.alert(err)
-            }
-          } else {
-            this.execCommand({name: 'insertHTML', value: `<img src="${this.url}">`})
-            this.hideDialog()
-          }
-        } else {
-          window.alert(this.lang.invalidFile)
+      upload (file) {
+        let formData = new window.FormData()
+        let xhr = new window.XMLHttpRequest()
+        formData.append('test', file)
+        xhr.open('POST', this.uploadUrl)
+        xhr.send(formData)
+        xhr.onload = () => {
+          this.execCommand({name: 'insertHTML', value: `<img src="${xhr.responseText}">`})
+          this.hideDialog()
+        }
+        xhr.onerror = err => {
+          window.alert(err)
         }
       }
     }

@@ -21,7 +21,6 @@ Online [DEMO](http://hifarer.github.io/vueditor/)
 
 - Customizable
 - Light weighted, very few dependencies
-- Plugin support
 
 ## Installation
 ```javascript
@@ -167,7 +166,6 @@ Vue.use(Vueditor, {
 | uploadUrl         | `String`   | File upload url, the return result of this must be a string refer to the uploaded file url, leave it empty will end up with local preview |
 | id                    | `String`   | id for the rendered editor element |
 | classList             | `Array`    | className for the rendered editor element |
-| plugins             | `Array`    | plugins for editor |
 
 
 Default value of the above fields:
@@ -207,7 +205,6 @@ See [change log](./docs/changelog.md)
 - [x] Popup menu position auto adjust
 - [ ] Advanced table options
 - [ ] Code highlight
-- [ ] Plugin support
 - [ ] XSS prevention
 - [ ] Test
 

@@ -63,6 +63,9 @@ let defaultLang = {
   undoRedo: {
     undo: 'Undo',
     redo: 'Redo'
+  },
+  emoji: {
+    title: 'emoji'
   }
 }
 

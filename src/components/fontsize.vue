@@ -1,5 +1,4 @@
 
-
 <template>
   <div class="ve-fontsize">
     <div :class="['ve-select', {'ve-disabled': mstates.view !== 'design'}]" @click="clickHandler">
@@ -34,76 +33,67 @@
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
       },
-      clickHandler () {
+      clickHandler (event) {
         this.togglePopup(event)
       },
       selectHandler (size) {
         this.val = size
-        this.execCommand({name: 'fontSize', value: size})
+        this.setFontSize(size)
         this.setActiveComponent()
       },
-      fontSize (name, value) {
-        let selection = this.getSelection()
-        let range = this.getRange()
-        if (!selection || !range || range.collapsed) {
+      replaceFontWithSpan (element) {
+        if (element.nodeType !== 1) return
+        let span = document.createElement('span')
+        Array.prototype.forEach.call(element.attributes, attr => {
+          attr.nodeName !== 'size' && span.setAttribute(attr.nodeName, attr.nodeValue)
+        })
+        span.innerHTML = element.innerHTML
+        element.parentNode.replaceChild(span, element)
+        return span
+      },
+      setFontSize (size) {
+        let comp = this.$parent.$parent.$refs.design
+        let range = comp.getRange()
+        if (!range || range.collapsed) {
           return
         }
-        let childNodes = range.cloneContents().childNodes
-        if (childNodes.length === 1 && childNodes[0].nodeType === 1 && childNodes[0].tagName.toLowerCase() === 'span') {
-          let span = range.extractContents().childNodes[0]
-          span.style.fontSize = value
-          range.insertNode(span)
-          range.selectNode(span)
-          selection.removeAllRanges()
-          selection.addRange(range)
+        let container = range.commonAncestorContainer
+        if (container.childNodes.length === 1) {
+          container.childNodes[0].nodeType === 1 ? container.childNodes[0].style.fontSize = size : container.style.fontSize = size
         } else {
-          if (navigator.userAgent.indexOf('Chrome') !== -1 && navigator.userAgent.indexOf('Edge') === -1) {
-            if (document.queryCommandSupported('styleWithCss')) {
-              this.iframeDoc.execCommand('styleWithCss', false, true)
-            }
-            this.iframeDoc.execCommand('fontSize', false, 7)
-            let container = range.commonAncestorContainer
-            container.nodeType === 3 && (container = container.parentNode)
-            container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
-            Array.prototype.forEach.call(container.getElementsByTagName('span'), function (span) {
-              if (span.style.fontSize.trim() === '-webkit-xxx-large' || span.style.fontSize.trim() === 'xx-large') {
-                span.style.fontSize = value
-              }
+          comp.exec('fontSize', 7)
+          container = range.commonAncestorContainer
+          container.nodeType === 3 && (container = container.parentNode)
+          container = container.parentNode
+          let fontList = Array.from(container.getElementsByTagName('font'))
+          let spanList = Array.from(container.getElementsByTagName('span'))
+          let startNode, endNode
+          if (fontList.length !== 0) {
+            fontList.forEach((font, index) => {
+              let span = this.replaceFontWithSpan(font)
+              span.style.fontSize = size
               span.normalize()
+              index === 0 && (startNode = span)
+              index === fontList.length - 1 && (endNode = span)
             })
-          } else {
-            if (document.queryCommandSupported('styleWithCss')) {
-              this.iframeDoc.execCommand('styleWithCss', false, false)
-            }
-            this.iframeDoc.execCommand('fontSize', false, 7)
-
-            let fontList = []
-            let spanList = []
-            let container = range.commonAncestorContainer
-            container.nodeType === 3 && (container = container.parentNode)
-            container.tagName.toLowerCase() === 'font' && (container = container.parentNode)
-            fontList = container.getElementsByTagName('font')
-            for (let i = 0; i < fontList.length; i++) {
-              let font = fontList[i]
-              let span = document.createElement('span')
-              Array.prototype.forEach.call(font.attributes, function (attr) {
-                attr.nodeName === 'size' ? span.style.fontSize = value : span.setAttribute(attr.nodeName, attr.nodeValue)
-              })
-              span.innerHTML = font.innerHTML
-              span.querySelectorAll('span').length !== 0 && this.formatContent(span, 'span', 'fontSize')
-              span.normalize()
-              font.parentNode.replaceChild(span, font)
-              spanList.push(span)
-              i--
-            }
-            range.setStartBefore(spanList[0])
-            range.setEndAfter(spanList[spanList.length - 1])
-            selection.removeAllRanges()
-            selection.addRange(range)
+          }
+          if (spanList.length !== 0) {
+            spanList.forEach((span, index) => {
+              if (span.style.fontSize.indexOf('xx-large') !== -1) {
+                span.style.fontSize = size
+                span.normalize()
+                !startNode && (startNode = span)
+                endNode = span
+              }
+            })
+          }
+          if (startNode && endNode) {
+            range.setStartBefore(startNode)
+            range.setEndAfter(endNode)
           }
         }
-        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
-      },
+        comp.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      }
     }
   }
 </script>

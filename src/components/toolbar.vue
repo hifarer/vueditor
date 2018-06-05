@@ -91,6 +91,7 @@
   import table from './table.vue'
   import undoredo from './undoredo.vue'
   import codeSnippet from './codesnippet.vue'
+  import emoji from './emoji.vue'
   
   export default {
     name: 'toolbar',
@@ -110,6 +111,7 @@
       've-table': table,
       've-undoredo': undoredo,
       've-codesnippet': codeSnippet,
+      've-emoji': emoji
     },
     computed: {
       view () {
@@ -217,7 +219,20 @@
           case 'sourceCode':
           case 'markdown':
             this.setView(this.view === name ? 'design' : name)
+            this.setActiveComponent()
         }
+      },
+      btnHandler (event, name) {
+        if (this.toolbar[name] === 'disabled') return
+        if (this.btns[name].native) {
+          this.execCommand({ name: name, value: null })
+          this.setActiveComponent()
+        } else {
+          this.action(name)
+        }
+        let states = {}
+        this.toolbar[name] === 'actived' ? states[name] = 'default' : states[name] = 'actived'
+        this.setButtonStates(states)
       },
       getComponentName (name) {
         switch (name) {
@@ -233,18 +248,6 @@
           default:
             return 've-' + name.toLowerCase()
         }
-      },
-      btnHandler (event, name) {
-        if (this.toolbar[name] === 'disabled') return
-        if (this.btns[name].native) {
-          this.execCommand({ name: name, value: null })
-          this.setActiveComponent()
-        } else {
-          this.action(name)
-        }
-        let states = {}
-        this.toolbar[name] === 'actived' ? states[name] = 'default' : states[name] = 'actived'
-        this.setButtonStates(states)
       }
     }
   }

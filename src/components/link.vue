@@ -61,14 +61,14 @@
       },
       clearLink () {
         let comp = this.$parent.$parent.$refs.design
-        let container = comp.getRangeContainer()
+        let container = comp.getRangeContainerElement()
         if (!container) return
         while (container.tagName && container.tagName.toLowerCase() !== 'a') {
           container = container.parentNode
         }
-        if (container.tagName === 'A') {
+        if (container.tagName && container.tagName.toLowerCase() === 'a') {
           comp.setRangeAtNode(container)
-          comp.exec({ name: 'unlink', value: null })
+          comp.exec('unlink', null)
         }
         this.setActiveComponent()
       }

@@ -316,7 +316,7 @@
               this.config.fontSize.indexOf(remFontSize) !== -1 && this.setSelectValue({name: 'fontSize', value: remFontSize})
             }
           }
-          // this.view !== 'design' && this.setView('design')
+          this.view !== 'design' && this.setView('design')
         }
       },
 
@@ -333,9 +333,8 @@
         if (this[name]) {
           this[name](name, value)
         } else {
-          let sel = this.getSelection()
           let range = this.getRange()
-          if (!sel || !range) return
+          if (!range) return
           if (document.queryCommandSupported('styleWithCss')) {
             this.iframeDoc.execCommand('styleWithCss', false, true)
           }
@@ -343,7 +342,7 @@
           this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
         }
         this.iframeBody.focus()
-        this.setContent(this.iframeBody.innerHTML)
+        // this.setContent(this.iframeBody.innerHTML)
       },
 
       insertHTML (name, value) {
@@ -436,7 +435,7 @@
         return range
       },
 
-      getRangeContainer () {
+      getRangeContainerElement () {
         let range = this.getRange()
         if (!range) return
         let container = range.commonAncestorContainer

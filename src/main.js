@@ -1,4 +1,6 @@
 
+// config 重购， vuex依赖移除， markdown 功能
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -16,8 +18,7 @@ function checkConfig (config) {
     uploadUrl: 'string',
     lang: 'object',
     id: 'string',
-    classList: 'array.string',
-    plugins: 'array.object'
+    classList: 'array.string'
   }
   let retData = {valid: true, info: ''}
   for (let name in config) {
@@ -54,13 +55,6 @@ function mixinConfig (opts) {
     throw new Error(typeInfo.info)
   }
   // todo toolbar 去重
-
-  config.plugins && config.plugins.forEach(({ name, element, component }) => {
-    list.push(name)
-    app.components['ve-' + name] = component
-    config.toolbar.indexOf(name) === -1 && config.toolbar.push(name)
-    lang[name] = element.lang
-  })
 
   setConfig(config)
   setLang(lang)

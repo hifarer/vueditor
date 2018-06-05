@@ -32,24 +32,9 @@
   <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
   <script src="//cdn.bootcss.com/vuex/2.0.0/vuex.min.js"></script>
   <script src="./dist/language/lang.cn.js"></script>
-  <script src="./dist/plugins/emoji.min.js"></script>
   <script src="./dist/script/vueditor.min.js"></script>
   <script>
     let uploadUrl = ''
-    let plugins = [
-      {
-        name: 'emoji',
-        element: {
-          type: 'button',
-          lang: {
-            title: 'Emoji'
-          },
-          className: 'icon-smile-o'
-        },
-        // emoji loaded from script tag, line 35
-        component: emoji
-      }
-    ]
 
     Vue.use(Vueditor, {
       toolbar: [
@@ -64,7 +49,6 @@
       ],
       fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
       uploadUrl: uploadUrl,
-      plugins: plugins
     })
 
     let parent = new Vue({
