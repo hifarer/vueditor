@@ -14,6 +14,7 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
+  import eventHub from './eventhub.vue'
 
   export default {
     name: 'codeSnippet',
@@ -28,11 +29,15 @@
         rect: {}
       }
     },
+    inject: ['range'],
     mixins: [vuexMixin, rectMixin],
     computed: {
       view () {
         return this.mstates.view
       }
+    },
+    created () {
+      this.eventHub = eventHub
     },
     methods: {
       setActiveComponent (data) {
@@ -53,8 +58,7 @@
         this.setActiveComponent()
       },
       insertCodeBlock (lang) {
-        let comp = this.$parent.$parent.$refs.design
-        let container = comp.getRangeContainerElement()
+        let container = this.range.getContainer()
         if (!container) return
         let { attr, value } = this.pattern
         let tempDiv = document.createElement('div')
@@ -64,9 +68,9 @@
         if (container.tagName.toLowerCase() === 'code') {
           container.setAttribute(attr, lang)
         } else if (container.tagName.toLowerCase() === 'pre') {
-          comp.insertHTML(name, tempDiv.getElementsByTagName('code')[0].outerHTML)
+          this.eventHub.$emit('insert-html', tempDiv.getElementsByTagName('code')[0].outerHTML)
         } else {
-          comp.insertHTML(name, html)
+          this.eventHub.$emit('insert-html', html)
         }
       },
       // tagName pre or code
@@ -77,11 +81,10 @@
           attrValue = (container.getAttribute(attrName) || '').replace(attrValue, '')
           this.val = value || '--'
         } else {
-          let comp = this.$parent.$parent.$refs.design
-          let range = comp.getRange()
+          let range = this.range.getRange()
           // 解决文字直接写到pre里
           if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
-            comp.wrapTextNode(range, 'code')
+            this.eventHub.$emit('wrap-text-node', range, 'code')
           }
         }
         this.view === 'design' && this.setView('codesnippet')

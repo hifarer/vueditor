@@ -14,6 +14,7 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
+  import eventHub from './eventhub.vue'
 
   export default {
     name: 'fontSize',
@@ -23,7 +24,11 @@
         val: '12px'
       }
     },
+    inject: ['range'],
     mixins: [vuexMixin, rectMixin],
+    created () {
+      this.eventHub = eventHub
+    },
     methods: {
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
@@ -50,8 +55,7 @@
         return span
       },
       setFontSize (size) {
-        let comp = this.$parent.$parent.$refs.design
-        let range = comp.getRange()
+        let range = this.range.getRange()
         if (!range || range.collapsed) {
           return
         }
@@ -59,7 +63,7 @@
         if (container.childNodes.length === 1) {
           container.childNodes[0].nodeType === 1 ? container.childNodes[0].style.fontSize = size : container.style.fontSize = size
         } else {
-          comp.exec('fontSize', 7)
+          this.eventHub.$emit('exec', 'fontSize', 7)
           container = range.commonAncestorContainer
           container.nodeType === 3 && (container = container.parentNode)
           container = container.parentNode
@@ -90,7 +94,7 @@
             range.setEndAfter(endNode)
           }
         }
-        comp.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+        this.eventHub.$emit('selectionchange')
       },
       syncValue (size) {
         let unit = size.match(/[a-z]+/ig)[0]

@@ -46,6 +46,7 @@
   
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
+  import eventHub from './eventhub.vue'
   
   export default {
     name: 'color',

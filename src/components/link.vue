@@ -27,6 +27,7 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
+  import eventHub from './eventhub.vue'
 
   export default {
     name: 'link',
@@ -37,7 +38,11 @@
         lang: window.__VUEDITOR_LANGUAGE__.link
       }
     },
+    inject: ['range'],
     mixins: [vuexMixin, rectMixin],
+    created () {
+      this.eventHub = eventHub
+    },
     methods: {
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
@@ -59,15 +64,14 @@
         this.setActiveComponent()
       },
       clearLink () {
-        let comp = this.$parent.$parent.$refs.design
-        let container = comp.getRangeContainerElement()
+        let container = this.range.getContainer()
         if (!container) return
         while (container.tagName && container.tagName.toLowerCase() !== 'a') {
           container = container.parentNode
         }
         if (container.tagName && container.tagName.toLowerCase() === 'a') {
-          comp.setRangeAtNode(container)
-          comp.exec('unlink', null)
+          this.range.setRangeAtNode(container)
+          this.eventHub.$emit('exec', 'unlink', null)
         }
         this.setActiveComponent()
       }

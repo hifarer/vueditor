@@ -16,13 +16,20 @@
   import design from './design.vue'
   import sourceCode from './sourcecode.vue'
   import picture from './picture.vue'
+  import eventHub from './eventhub.vue'
 
   import store from '../store/index.js'
+  import Range from '../range.js'
   import { createNonceStr } from '../util.js'
 
   import '../style/style.less'
 
   export default {
+    provide () {
+      return {
+        range: this.range
+      }
+    },
     components: {
       've-toolbar': toolbar,
       've-design': design,
@@ -48,6 +55,10 @@
         return this.content
       }
     },
+    beforeCreate () {
+      this.range = new Range()
+      this.eventHub = eventHub
+    },
     created () {
       let lang = window.__VUEDITOR_LANGUAGE__.app
       if (!this.$store) {
@@ -56,6 +67,9 @@
         this.namespace = createNonceStr()
         this.$store.registerModule(this.namespace, store)
       }
+      this.eventHub.$on('set-iframe-win', (obj) => {
+        this.range.setIframeWin(obj)
+      })
     }
   }
 </script>

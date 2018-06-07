@@ -20,6 +20,7 @@
 <script>
 
   import vuexMixin from '../mixins/vuex'
+  import eventHub from './eventhub.vue'
   
   export default {
     name: 'design',
@@ -37,6 +38,7 @@
       noFormatPaste: Boolean,
       uploadOnPaste: Boolean,
     },
+    inject: ['range'],
     
     mixins: [vuexMixin],
 
@@ -53,6 +55,16 @@
       toolbar () {
         return this.mstates.toolbar
       }
+    },
+
+    created: function () {
+      this.eventHub = eventHub
+      this.eventHub.$on('selectionchange', () => {
+        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      })
+      this.eventHub.$on('wrap-text-node', this.wrapTextNode)
+      this.eventHub.$on('insert-html', this.insertHTML)
+      this.eventHub.$on('exec', this.exec)
     },
 
     watch: {
@@ -103,6 +115,7 @@
         this.iframeBody.style.cssText = 'overflow-x: hidden; margin: 0; padding: 8px;'
         this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style>')
         this.addEvent()
+        this.eventHub.$emit('set-iframe-win', this.iframeWin)
       },
 
       // init, selection change
@@ -139,9 +152,8 @@
           event.keyCode === 89 && this.triggerEvent({name: 'redo'})
           event.keyCode === 90 && this.triggerEvent({name: 'undo'})
         }
-        if (event.keyCode === 13 && this.getRange()) {
-          let container = this.getRange().commonAncestorContainer
-          container.nodeType === 3 && (container = container.parentNode)
+        let container = this.range.getContainer()
+        if (event.keyCode === 13 && container) {
           if (['code', 'td', 'div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].indexOf( container.tagName.toLowerCase() ) !== -1 ) {
             event.preventDefault()
             this.enterHandler()
@@ -150,10 +162,9 @@
       },
 
       enterHandler () {
-        let range = this.getRange()
+        let range = this.range.getRange()
         if (!range) return
-        let container = range.commonAncestorContainer
-        container.nodeType === 3 && (container = container.parentNode)
+        let container = this.range.getContainer()
         let excludeTags = ['code', 'td']
         let includeTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         let bool = false
@@ -215,11 +226,8 @@
       // 无格式粘贴
       pasteHandler (event) {
         event.preventDefault()
-        let range = this.getRange()
-        if (!range) return
-        let container = range.commonAncestorContainer
-        container.nodeType === 3 && (container = container.parentNode)
-  
+        let container = this.range.getContainer()
+        if (!container) return
         let clipboardData = event.clipboardData || window.clipboardData
         let text = clipboardData.getData('text/plain') || clipboardData.getData('Text')
         let arr = text.replace(/(<|>)/igm, function (data) {
@@ -266,10 +274,9 @@
       },
 
       checkElement () {
-        let range = this.getRange()
+        let range = this.range.getRange()
         if (!range) return
-        let container = range.commonAncestorContainer
-        container.nodeType === 3 && (container = container.parentNode)
+        let container = this.range.getContainer()
         let tagName = container.tagName.toLowerCase()
         
         if (['code', 'pre'].indexOf(tagName) !== -1) {
@@ -305,7 +312,7 @@
         if (this[name]) {
           this[name](name, value)
         } else {
-          let range = this.getRange()
+          let range = this.range.getRange()
           if (!range) return
           if (document.queryCommandSupported('styleWithCss')) {
             this.iframeDoc.execCommand('styleWithCss', false, true)
@@ -317,14 +324,14 @@
         // this.setContent(this.iframeBody.innerHTML)
       },
 
-      insertHTML (name, value) {
-        let range = this.getRange()
-        if (!range || !value) return
+      insertHTML (html) {
+        let range = this.range.getRange()
+        if (!range || !html) return
         range.deleteContents()
         let node = null
         let frag = this.iframeDoc.createDocumentFragment()
         let obj = this.iframeDoc.createElement('div')
-        obj.innerHTML = value
+        obj.innerHTML = html
         while (obj.firstChild) {
           node = obj.firstChild
           frag.appendChild(node)
@@ -344,7 +351,7 @@
       formatBlock (name, value) {
         let ua = navigator.userAgent.toLowerCase()
         if (ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)) {
-          let range = this.getRange()
+          let range = this.range.getRange()
           if (!range || range.collapsed) {
             window.alert(this.lang.ieMsg)
           } else {
@@ -383,56 +390,12 @@
 
       removeFormat (name, value) {
         this.iframeDoc.execCommand(name, false, value)
-        let range = this.getRange()
-        if (!range) return
-        let container = range.commonAncestorContainer
-        container.nodeType === 3 && (container = container.parentNode)
+        let container = this.range.getContainer()
+        if (!container) return
         container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
         this.formatContent(container, 'span', 'verticalAlign')
         container.normalize()
-      },
-
-      getSelection () {
-        if (this.iframeWin && this.iframeWin.getSelection) {
-          return this.iframeWin.getSelection()
-        }
-      },
-
-      getRange () {
-        let sel = this.getSelection()
-        let range
-        if (sel && sel.rangeCount !== 0) {
-          range = sel.getRangeAt(0)
-        }
-        return range
-      },
-
-      getRangeContainerElement () {
-        let range = this.getRange()
-        if (!range) return
-        let container = range.commonAncestorContainer
-        if (container.nodeType === 3) {
-          container = container.parentNode
-        }
-        return container
-      },
-
-      setRange (startContainer, startOffset, endContainer, endOffset) {
-        let range = this.getRange()
-        range.setStart(startContainer, startOffset)
-        range.setEnd(endContainer, endOffset)
-      },
-
-      setRangeAtNode (node) {
-        let range = this.getRange()
-        range.selectNode(node)
-      },
-
-      setRangeAtNodeContent (node) {
-        let range = this.getRange()
-        range.selectNodeContents(node)
       }
-
     }
   }
 </script>
