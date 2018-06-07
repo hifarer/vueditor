@@ -48,7 +48,6 @@
   // console.log(arr);
 
   import twemoji from 'twemoji'
-  import { getLang } from '../config/lang.js'
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
 
@@ -64,7 +63,7 @@
           '1f627', '1f628', '1f629', '1f62c', '1f630', '1f631', '1f633', '1f635', '1f621', '1f620', '1f607', '1f920', '1f921', '1f925',
           '1f637', '1f912', '1f915', '1f922', '1f927'
         ],
-        lang: getLang('emoji')
+        lang: window.__VUEDITOR_LANGUAGE__.emoji
       }
     },
     mixins: [vuexMixin, rectMixin],

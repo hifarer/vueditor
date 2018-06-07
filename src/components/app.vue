@@ -1,12 +1,12 @@
 
 <template>
-  <div class="vueditor" :id="config.id" :class="[{'ve-fullscreen': fullscreen}].concat(config.classList)">
-    <ve-toolbar></ve-toolbar>
+  <div class="vueditor" :class="{'ve-fullscreen': fullscreen}">
+    <ve-toolbar :icons="toolbar"></ve-toolbar>
     <div class="ve-container">
       <ve-sourcecode></ve-sourcecode>
-      <ve-design ref="design"></ve-design>
+      <ve-design :spellcheck="spellcheck" :noFormatPaste="noFormatPaste" :uploadOnPaste="uploadOnPaste" ref="design"></ve-design>
     </div>
-    <ve-picture></ve-picture>
+    <ve-picture :uploadUrl="uploadUrl"></ve-picture>
   </div>
 </template>
 
@@ -17,9 +17,8 @@
   import sourceCode from './sourcecode.vue'
   import picture from './picture.vue'
 
-  import createStore from '../store/index.js'
+  import store from '../store/index.js'
   import { createNonceStr } from '../util.js'
-  import { getLang } from '../config/lang.js'
 
   import '../style/style.less'
 
@@ -50,12 +49,12 @@
       }
     },
     created () {
-      let lang = getLang('app')
+      let lang = window.__VUEDITOR_LANGUAGE__.app
       if (!this.$store) {
         throw new Error(lang.noStore)
       } else {
         this.namespace = createNonceStr()
-        this.$store.registerModule(this.namespace, createStore())
+        this.$store.registerModule(this.namespace, store)
       }
     }
   }

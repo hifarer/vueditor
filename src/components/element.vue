@@ -40,6 +40,14 @@
         this.val = tagName
         this.execCommand({name: 'formatBlock', value: tagName})
         this.setActiveComponent()
+      },
+      syncValue (parent, child) {
+        let tagName = child.tagName.toLowerCase()
+        while (parent.contains(child) && tagName !== 'body' && this.list.indexOf(tagName) === -1) {
+          child = child.parentNode
+          tagName = child.tagName.toLowerCase()
+        }
+        this.list.indexOf(tagName) !== -1 && (this.val = tagName)
       }
     }
   }

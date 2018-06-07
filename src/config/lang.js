@@ -1,5 +1,5 @@
 
-let defaultLang = {
+export default {
 
   app: {
     noStore: 'Vueditor can not been initialized without Vuex store when using as a component, Please check your Vue Instance!'
@@ -66,19 +66,5 @@ let defaultLang = {
   },
   emoji: {
     title: 'emoji'
-  }
-}
-
-let lang = JSON.parse(JSON.stringify(defaultLang))
-
-export default {
-  setLang (data) {
-    data && (lang = data)
-  },
-  getLang (name) {
-    return name ? lang[name] : lang
-  },
-  getDefaultLang () {
-    return defaultLang
   }
 }

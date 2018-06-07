@@ -51,7 +51,7 @@
 
 <template>
   <div class="ve-toolbar" ref="toolbar">
-    <template v-for="item in config">
+    <template v-for="item in icons">
 
       <div v-if="item in btns" @click.stop.prevent="btnHandler($event, item)" 
         :title="lang[item].title"
@@ -80,8 +80,6 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
-  import { getLang } from '../config/lang.js'
-  import { getConfig } from '../config/index.js'
 
   import fontSize from './fontsize.vue'
   import fontName from './fontname.vue'
@@ -97,9 +95,11 @@
     name: 'toolbar',
     data () {
       return {
-        lang: getLang(),
-        config: getConfig('toolbar')
+        lang: window.__VUEDITOR_LANGUAGE__
       }
+    },
+    props: {
+      icons: [String]
     },
     mixins: [vuexMixin],
     components: {
@@ -133,8 +133,8 @@
         // 'element'
         // 'codeSnippet'
         let arr = []
-        for (let i = 0, item = ''; i < this.config.length; i++) {
-          item = this.config[i]
+        for (let i = 0, item = ''; i < this.icons.length; i++) {
+          item = this.icons[i]
           if (item in this.btns || item == 'divider' || item == '|') {
             continue
           }
@@ -152,7 +152,7 @@
       'view': function (val) {
         let states = {}
         let exArr = ['sourceCode', 'markdown', 'fullscreen', 'divider', '|']
-        this.config.forEach(item => {
+        this.icons.forEach(item => {
           if (exArr.indexOf(item) === -1) {
             states[item] = val === 'design' ? 'default' : 'disabled'
           }

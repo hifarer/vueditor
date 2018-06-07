@@ -25,15 +25,17 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
-  import { getConfig } from '../config/'
 
   export default {
     name: 'fontName',
     data () {
-      let arr = getConfig('fontName')
       return {
-        list: arr,
-        val: arr[0].abbr || arr[0].val
+        list: [
+          { val: 'arial black' },
+          { val: 'times new roman' },
+          { val: 'Courier New' }
+        ],
+        val: 'arial black'
       }
     },
     mixins: [vuexMixin, rectMixin],
@@ -51,6 +53,9 @@
         this.val = font.abbr || font.val
         this.execCommand({name: 'fontName', value: font.val + ', sans-serif'})
         this.setActiveComponent()
+      },
+      syncValue (fontName) {
+        this.list.filter(item => item.val === fontName).length !== 0 && (this.val = fontName)
       }
     }
   }

@@ -27,7 +27,6 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
-  import { getLang } from '../config/lang.js'
 
   export default {
     name: 'link',
@@ -35,7 +34,7 @@
       return {
         val: '',
         rect: {},
-        lang: getLang('link')
+        lang: window.__VUEDITOR_LANGUAGE__.link
       }
     },
     mixins: [vuexMixin, rectMixin],

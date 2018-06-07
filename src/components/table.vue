@@ -33,7 +33,6 @@
 
 <script>
 
-  import { getLang } from '../config/lang.js'
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
 
@@ -45,7 +44,7 @@
         x: -1,
         y: -1,
         rect: {},
-        lang: getLang('table')
+        lang: window.__VUEDITOR_LANGUAGE__.table
       }
     },
     mixins: [vuexMixin, rectMixin],

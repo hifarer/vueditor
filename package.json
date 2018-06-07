@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "webpack --config ./build/webpack.dev.config.js  --progress --hide-modules",
     "build": "webpack --config ./build/webpack.prod.config.js --progress --hide-modules",
-    "plugin": "webpack --config ./build/webpack.plug.config.js --progress --hide-modules",
     "eslint": "eslint --fix --ext .vue,.js ./src/"
   },
   "dependencies": {

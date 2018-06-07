@@ -14,15 +14,13 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
-  import { getConfig } from '../config/'
 
   export default {
     name: 'fontSize',
     data () {
-      let arr = getConfig('fontSize')
       return {
-        list: arr,
-        val: arr[0]
+        list: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
+        val: '12px'
       }
     },
     mixins: [vuexMixin, rectMixin],
@@ -93,6 +91,18 @@
           }
         }
         comp.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      },
+      syncValue (size) {
+        let unit = size.match(/[a-z]+/ig)[0]
+        if (unit === 'px') {
+          this.list.indexOf(size) !== -1 && (this.val = size)
+        } else if (unit === 'rem') {
+          let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
+          let remFontSize = (parseInt(size) / rootFontSize).toFixed(1) + 'rem'
+          this.list.indexOf(remFontSize) !== -1 && (this.val = remFontSize)
+        } else {
+          this.val = '--'
+        }
       }
     }
   }

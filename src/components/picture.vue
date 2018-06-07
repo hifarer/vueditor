@@ -33,17 +33,17 @@
 <script>
 
   import vuexMixin from '../mixins/vuex'
-  import { getLang } from '../config/lang.js'
-  import { getConfig } from '../config/'
 
   export default {
     name: 'picture',
     data () {
       return {
         url: '',
-        lang: getLang('picture'),
-        uploadUrl: getConfig('uploadUrl')
+        lang: window.__VUEDITOR_LANGUAGE__.picture
       }
+    },
+    props: {
+      uploadUrl: String
     },
     mixins: [vuexMixin],
     computed: {

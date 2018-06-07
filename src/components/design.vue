@@ -19,8 +19,6 @@
 
 <script>
 
-  import { getLang } from '../config/lang.js'
-  import { getConfig } from '../config/'
   import vuexMixin from '../mixins/vuex'
   
   export default {
@@ -31,9 +29,13 @@
         iframeDoc: null,
         iframeBody: null,
         timer: null,
-        lang: getLang('design'),
-        config: getConfig()
+        lang: window.__VUEDITOR_LANGUAGE__.design
       }
+    },
+    props: {
+      spellcheck: Boolean,
+      noFormatPaste: Boolean,
+      uploadOnPaste: Boolean,
     },
     
     mixins: [vuexMixin],
@@ -97,7 +99,7 @@
           this.iframeBody.innerHTML !== this.content && (this.iframeBody.innerHTML = this.content)
         }
         this.iframeDoc.designMode = 'on'
-        this.iframeBody.spellcheck = this.config.spellcheck
+        this.iframeBody.spellcheck = this.spellcheck
         this.iframeBody.style.cssText = 'overflow-x: hidden; margin: 0; padding: 8px;'
         this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style>')
         this.addEvent()
@@ -127,7 +129,7 @@
         }, false)
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false)
-        this.config.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
+        this.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
         this.selectionChange()
       },
 
@@ -231,7 +233,7 @@
           }
         })
 
-        if (this.config.uploadOnPaste && clipboardData.items) {
+        if (this.uploadOnPaste && clipboardData.items) {
           // this.pasteUpload(clipboardData.items)
         }
       },
@@ -266,28 +268,16 @@
       checkElement () {
         let range = this.getRange()
         if (!range) return
-        let tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table']
         let container = range.commonAncestorContainer
         container.nodeType === 3 && (container = container.parentNode)
-        let { pattern } = this.config.codeSnippet
-        if (container.tagName.toLowerCase() === 'code') {
-          let value = pattern.value.replace(/#type#/, '')
-          value = (container.getAttribute(pattern.attr) || '').replace(value, '')
-          this.setSelectValue({name: 'code', value: value || '--'})
-          this.view === 'design' && this.setView('codesnippet')
-        } else if (container.tagName.toLowerCase() === 'pre') {
-          // 解决文字直接写到pre里
-          if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
-            this.wrapTextNode(range, 'code')
-          }
-          this.view === 'design' && this.setView('codesnippet')
+        let tagName = container.tagName.toLowerCase()
+        
+        if (['code', 'pre'].indexOf(tagName) !== -1) {
+          // parseCodeBlock(tagName)
         } else {
-          // tagname fontsize fontfamily
           let style = window.getComputedStyle(container)
-          let unit = this.config.fontSize[0].match(/[a-z]+/ig)[0]
           let fontName = style['fontFamily'].replace(', sans-serif', '').replace(/"/g, '')
-          let tagName = container.tagName.toLowerCase()
-
+          let fontSize = style['fontSize']
           if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
             // 解决文字直接写到body里
             if(tagName === 'body'){
@@ -295,27 +285,9 @@
               tagName = 'p'
             }
           }
-
-          if (this.config.toolbar.indexOf('element') !== -1) {
-            while (this.iframeBody.contains(container) && tagName !== 'body' && tags.indexOf(tagName) === -1) {
-              container = container.parentNode
-              tagName = container.tagName.toLowerCase()
-            }
-            tags.indexOf(tagName) !== -1 && this.setSelectValue({name: 'element', value: tagName})
-          }
-          if (this.config.toolbar.indexOf('fontName') !== -1) {
-            this.config.fontName.filter(item => item.val === fontName).length !== 0 && this.setSelectValue({name: 'fontName', value: fontName})
-          }
-          if (this.config.toolbar.indexOf('fontSize') !== -1) {
-            if (unit === 'px') {
-              this.config.fontSize.indexOf(style['fontSize']) !== -1 && this.setSelectValue({name: 'fontSize', value: style['fontSize']})
-            }
-            if (unit === 'rem') {
-              let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
-              let remFontSize = (parseInt(style['fontSize']) / rootFontSize).toFixed(1) + 'rem'
-              this.config.fontSize.indexOf(remFontSize) !== -1 && this.setSelectValue({name: 'fontSize', value: remFontSize})
-            }
-          }
+          // element syncValue(this.iframeBody, container)
+          // fontName syncValue(fontName)
+          // fontSize syncValue(fontSize)
           this.view !== 'design' && this.setView('design')
         }
       },
@@ -459,16 +431,6 @@
       setRangeAtNodeContent (node) {
         let range = this.getRange()
         range.selectNodeContents(node)
-      },
-
-      removeRange () {
-        let sel = this.getSelection()
-        sel && sel.removeAllRanges()
-      },
-
-      rangeValid () {
-        let range = this.getRange()
-        return (range && !range.collapsed)
       }
 
     }

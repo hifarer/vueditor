@@ -14,26 +14,35 @@
   
   import vuexMixin from '../mixins/vuex'
   import rectMixin from '../mixins/rect'
-  import { getConfig } from '../config/'
 
   export default {
     name: 'codeSnippet',
     data () {
-      let { lang, pattern } = getConfig('codeSnippet')
       return {
-        list: lang,
-        val: lang[0],
-        pattern: pattern,
+        list: ['bash', 'clike', 'css', 'html', 'java', 'javascript', 'php', 'python', 'sql'],
+        val: 'bash',
+        pattern: {
+          attrName: 'class',
+          attrValue: 'language-#lang#'
+        },
         rect: {}
       }
     },
     mixins: [vuexMixin, rectMixin],
+    computed: {
+      view () {
+        return this.mstates.view
+      }
+    },
     methods: {
       setActiveComponent (data) {
         this.$store.dispatch(this.mpath + 'setActiveComponent', data)
       },
       execCommand (data) {
         this.$store.dispatch(this.mpath + 'execCommand', data)
+      },
+      setView (data) {
+        this.$store.dispatch(this.mpath + 'setView', data)
       },
       clickHandler () {
         this.togglePopup(event)
@@ -59,6 +68,23 @@
         } else {
           comp.insertHTML(name, html)
         }
+      },
+      // tagName pre or code
+      parseCodeBlock (tagName) {
+        if (tagName === 'code') {
+          let { attrName, attrValue } = this.pattern
+          attrValue = attrValue.replace(/#type#/, '')
+          attrValue = (container.getAttribute(attrName) || '').replace(attrValue, '')
+          this.val = value || '--'
+        } else {
+          let comp = this.$parent.$parent.$refs.design
+          let range = comp.getRange()
+          // 解决文字直接写到pre里
+          if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
+            comp.wrapTextNode(range, 'code')
+          }
+        }
+        this.view === 'design' && this.setView('codesnippet')
       }
     }
   }

@@ -44,7 +44,6 @@
 
 <script>
   
-  import { getLang } from '../config/lang.js'
   import rectMixin from '../mixins/rect'
   import vuexMixin from '../mixins/vuex'
   
@@ -65,7 +64,7 @@
         key: '',
         val: '',
         rect: {},
-        lang: getLang('color')
+        lang: window.__VUEDITOR_LANGUAGE__.color
       }
     },
     mixins: [rectMixin, vuexMixin],

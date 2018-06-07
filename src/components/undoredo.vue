@@ -9,7 +9,6 @@
 <script>
   
   import vuexMixin from '../mixins/vuex'
-  import { getLang } from '../config/lang.js'
 
   export default {
     name: 'undoRedo',
@@ -17,7 +16,7 @@
       return {
         stack: [],
         index: -1,
-        lang: getLang('undoRedo')
+        lang: window.__VUEDITOR_LANGUAGE__.undoRedo
       }
     },
     mixins: [vuexMixin],
