@@ -15,8 +15,7 @@
   "dependencies": {
     "marked": "^0.3.9",
     "twemoji": "^2.4.1",
-    "vue": ">=2.0.5",
-    "vuex": ">=2.0.0"
+    "vue": ">=2.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

@@ -1,7 +1,7 @@
 
 <template>
   <div class="ve-fontsize">
-    <div :class="['ve-select', {'ve-disabled': mstates.view !== 'design'}]" @click="clickHandler">
+    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" @click="clickHandler">
       <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
     <ul v-show="show" ref="popup" class="ve-dropdown" :style="position">
@@ -12,9 +12,8 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
   import rectMixin from '../mixins/rect'
-  import eventHub from './eventhub.vue'
 
   export default {
     name: 'fontSize',
@@ -24,25 +23,23 @@
         val: '12px'
       }
     },
+    props: {
+      view: String,
+      activeComponent: String
+    },
     inject: ['range'],
-    mixins: [vuexMixin, rectMixin],
+    mixins: [hubMixin, rectMixin],
     created () {
-      this.eventHub = eventHub
+      this.eventHub.$on('sync-font-size', this.syncValue)
     },
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
       clickHandler (event) {
         this.togglePopup(event)
       },
       selectHandler (size) {
         this.val = size
         this.setFontSize(size)
-        this.setActiveComponent()
+        this.eventHub.$emit('set-active-component')
       },
       replaceFontWithSpan (element) {
         if (element.nodeType !== 1) return
@@ -63,7 +60,7 @@
         if (container.childNodes.length === 1) {
           container.childNodes[0].nodeType === 1 ? container.childNodes[0].style.fontSize = size : container.style.fontSize = size
         } else {
-          this.eventHub.$emit('exec', 'fontSize', 7)
+          this.eventHub.$emit('exec-command', {name: 'fontSize', value: 7})
           container = range.commonAncestorContainer
           container.nodeType === 3 && (container = container.parentNode)
           container = container.parentNode
@@ -94,7 +91,7 @@
             range.setEndAfter(endNode)
           }
         }
-        this.eventHub.$emit('selectionchange')
+        this.eventHub.$emit('selection-change')
       },
       syncValue (size) {
         let unit = size.match(/[a-z]+/ig)[0]

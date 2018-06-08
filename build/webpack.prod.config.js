@@ -85,12 +85,6 @@ module.exports = {
       commonjs2: 'vue',
       amd: 'vue',
       root: 'Vue'
-    },
-    vuex: {
-      commonjs: 'vuex',
-      commonjs2: 'vuex',
-      amd: 'vuex',
-      root: 'Vuex'
     }
   }
 

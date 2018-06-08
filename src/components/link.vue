@@ -8,10 +8,10 @@
 
 <template>
   <div class="ve-link">
-    <div :title="lang.addLink" :class="['ve-icon', {'ve-active': show, 've-disabled': mstates.view !== 'design'}]" @click="clickHandler"><i class="icon-link"></i></div>
-    <div :title="lang.clearLink" :class="['ve-icon', {'ve-disabled': mstates.view !== 'design'}]" @click="clearLink"><i class="icon-unlink"></i></div>
-    <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="position">
-      <div class="ve-pop-arrow"></div>
+    <div :title="lang.addLink" :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" @click="clickHandler"><i class="icon-link"></i></div>
+    <div :title="lang.clearLink" :class="['ve-icon', {'ve-disabled': view !== 'design'}]" @click="clearLink"><i class="icon-unlink"></i></div>
+    <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="{left: position.left, top: position.top, marginLeft: position.popLeft}">
+      <div class="ve-pop-arrow" :style="{left: position.arrowLeft}"></div>
       <div class="ve-pop-header">{{lang.addLink}}</div>
       <div class="ve-pop-body">
         <div class="ve-input-box">
@@ -25,9 +25,8 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
   import rectMixin from '../mixins/rect'
-  import eventHub from './eventhub.vue'
 
   export default {
     name: 'link',
@@ -38,30 +37,25 @@
         lang: window.__VUEDITOR_LANGUAGE__.link
       }
     },
-    inject: ['range'],
-    mixins: [vuexMixin, rectMixin],
-    created () {
-      this.eventHub = eventHub
+    props: {
+      view: String,
+      activeComponent: String
     },
+    inject: ['range'],
+    mixins: [hubMixin, rectMixin],
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
       checkValid () {
         let href = this.val
         href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
         return href
       },
-      clickHandler () {
+      clickHandler (event) {
         this.togglePopup(event)
       },
       addLink () {
         let href = this.checkValid()
-        this.execCommand({ name: 'createlink', value: href })
-        this.setActiveComponent()
+        this.eventHub.$emit('exec-command', { name: 'createlink', value: href })
+        this.eventHub.$emit('set-active-component')
       },
       clearLink () {
         let container = this.range.getContainer()
@@ -71,9 +65,9 @@
         }
         if (container.tagName && container.tagName.toLowerCase() === 'a') {
           this.range.setRangeAtNode(container)
-          this.eventHub.$emit('exec', 'unlink', null)
+          this.eventHub.$emit('exec-command', { name: 'unlink', value: null })
         }
-        this.setActiveComponent()
+        this.eventHub.$emit('set-active-component')
       }
     }
   }

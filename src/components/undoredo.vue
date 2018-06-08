@@ -8,7 +8,7 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   export default {
     name: 'undoRedo',
@@ -19,14 +19,12 @@
         lang: window.__VUEDITOR_LANGUAGE__.undoRedo
       }
     },
-    mixins: [vuexMixin],
+    props: {
+      view: String,
+      content: String
+    },
+    mixins: [hubMixin],
     computed: {
-      content () {
-        return this.mstates.content
-      },
-      view () {
-        return this.mstates.view
-      },
       canUndo: function () {
         return this.view === 'design' && this.index > 0
       },
@@ -46,16 +44,15 @@
           this.index = -1
           this.push(this.content)
         }
-      },
-      'event': function ({ name, params }) {
-        if (['undo', 'redo'].indexOf(name) !== -1) {
-          this[name]()
-        }
       }
+    },
+    created () {
+      this.eventHub.$on('undo', this.undo)
+      this.eventHub.$on('redo', this.redo)
     },
     methods: {
       setContent (data) {
-        this.$store.dispatch(this.mpath + 'setContent', data)
+        this.eventHub.$emit('set-content', data)
       },
       undo () {
         if (!this.canUndo) return

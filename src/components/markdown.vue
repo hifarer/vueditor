@@ -34,7 +34,7 @@
 <script>
 
   import marked from 'marked'
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   export default {
     name: 'markdown',
@@ -47,45 +47,29 @@
         currentView: 'design'
       }
     },
-    mixins: [vuexMixin],
-    computed: {
-      view () {
-        return this.mstates.view
-      },
-      content () {
-        return this.mstates.content
-      },
-      event () {
-        return this.mstates.event
-      }
+    props: {
+      view: String,
+      content: String
     },
+    mixins: [hubMixin],
     watch: {
       'view': function (val) {
         if (val !== 'markdown' && this.currentView === 'markdown') {
-          this.setContent(this.doc.body.innerHTML)
+          this.eventHub.$emit('set-content', this.doc.body.innerHTML)
         } else {
           this.md = this.content
           this.update()
         }
         this.currentView = val
-      },
-      'event': function (val) {
-        if (val.name === 'markdown') {
-          this.setView(this.view === 'markdown' ? 'design' : 'markdown')
-          this.setActiveComponent()
-        }
       }
     },
+    created () {
+      this.eventHub.$on('markdown', () => {
+        this.eventHub.$emit('set-view', this.view === 'markdown' ? 'design' : 'markdown')
+        this.eventHub.$emit('set-active-component')
+      })
+    },
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      setContent (data) {
-        this.$store.dispatch(this.mpath + 'setContent', data)
-      },
-      setView (data) {
-        this.$store.dispatch(this.mpath + 'setView', data)
-      },
       init (event) {
         this.el = event.target
         this.doc = event.target.contentDocument

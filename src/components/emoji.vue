@@ -2,7 +2,6 @@
 <style>
   .emoji {
     width: 276px;
-    margin-left: -120px;
   }
   .emoji .ve-pop-body {
     max-height: 350px;
@@ -22,10 +21,10 @@
 
 <template>
 <div class="ve-emoji">
-  <div :class="['ve-icon', {'ve-active': show, 've-disabled': mstates.view !== 'design'}]" :title="lang.title" @click="clickHandler"><i class="icon-smile-o"></i></div>
-  <div class="ve-popover emoji" v-show="show" :style="position">
-    <div class="ve-pop-arrow"></div>
-    <div class="ve-pop-header">Insert Emoji</div>
+  <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" :title="lang.title" @click="clickHandler"><i class="icon-smile-o"></i></div>
+  <div class="ve-popover emoji" ref="popup" v-show="show" :style="{left: position.left, top: position.top, marginLeft: position.popLeft}">
+    <div class="ve-pop-arrow" :style="{left: position.arrowLeft}"></div>
+    <div class="ve-pop-header">{{lang.title}}</div>
     <div class="ve-pop-body">
       <div class="wrap" @click="insertItem">
         <a href="javascript:;" draggable="false" v-for="item in arr">
@@ -49,7 +48,7 @@
 
   import twemoji from 'twemoji'
   import rectMixin from '../mixins/rect'
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   export default {
     name: 'emoji',
@@ -66,14 +65,12 @@
         lang: window.__VUEDITOR_LANGUAGE__.emoji
       }
     },
-    mixins: [vuexMixin, rectMixin],
+    props: {
+      view: String,
+      activeComponent: String
+    },
+    mixins: [hubMixin, rectMixin],
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
       convert (code) {
         return twemoji.convert.fromCodePoint(code)
       },
@@ -82,7 +79,7 @@
         div.innerHTML = twemoji.parse(twemoji.convert.fromCodePoint(str))
         return div.children[0].src
       },
-      clickHandler () {
+      clickHandler (event) {
         this.togglePopup(event)
       },
       insertItem (event) {
@@ -90,7 +87,7 @@
         if (obj.tagName.toLowerCase() === 'a') {
           obj = obj.children[0]
         }
-        this.execCommand({name: 'insertHTML', value: obj.outerHTML})
+        this.eventHub.$emit('insert-html', obj.outerHTML)
       }
     }
   }

@@ -22,7 +22,7 @@
 
 <template>
   <div class="ve-table">
-    <div :class="['ve-icon', {'ve-active': show, 've-disabled': mstates.view !== 'design'}]" :title="lang.title" @click="clickHandler"><i class="icon-table"></i></div>
+    <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" :title="lang.title" @click="clickHandler"><i class="icon-table"></i></div>
     <div v-show="show" ref="popup" class="ve-wrap" :style="position">
       <!--Vue.js 2.0 v-for i starts with 1-->
       <span v-for="i in num" :key="i" @mouseover="overHandler(i - 1)" @click="insertTable" :class="{'active': ((i - 1) % 8 <= x && parseInt((i - 1) / 8) <= y)}">
@@ -34,7 +34,7 @@
 <script>
 
   import rectMixin from '../mixins/rect'
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   export default {
     name: 'table',
@@ -47,14 +47,12 @@
         lang: window.__VUEDITOR_LANGUAGE__.table
       }
     },
-    mixins: [vuexMixin, rectMixin],
+    props: {
+      view: String,
+      activeComponent: String
+    },
+    mixins: [hubMixin, rectMixin],
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
       clickHandler (event) {
         this.togglePopup(event)
       },
@@ -64,8 +62,8 @@
       },
       insertTable () {
         let html = this.createTable(this.y + 1, this.x + 1)
-        this.execCommand({ name: 'insertHTML', value: html })
-        this.setActiveComponent()
+        this.eventHub.$emit('insert-html', html)
+        this.eventHub.$emit('set-active-component')
       },
       createTable (rows, cols) {
         let oTable = document.createElement('table')

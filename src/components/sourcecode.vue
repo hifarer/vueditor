@@ -24,7 +24,7 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   export default {
     name: 'sourceCode',
@@ -33,26 +33,17 @@
         code: ''
       }
     },
-    mixins: [vuexMixin],
-    computed: {
-      view () {
-        return this.mstates.view
-      },
-      content () {
-        return this.mstates.content
-      }
+    props: {
+      view: String,
+      content: String
     },
+    mixins: [hubMixin],
     watch: {
       'content': function (val) {
         this.code = val
       },
       'code': function (val) {
-        this.setContent(val)
-      }
-    },
-    methods: {
-      setContent (data) {
-        this.$store.dispatch(this.mpath + 'setContent', data)
+        this.eventHub.$emit('set-content', val)
       }
     }
   }

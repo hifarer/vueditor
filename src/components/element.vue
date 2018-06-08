@@ -1,7 +1,7 @@
 
 <template>
   <div class="ve-element">
-    <div :class="['ve-select', {'ve-disabled': mstates.view !== 'design'}]" @click="clickHandler">
+    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" @click="clickHandler">
       <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
     <ul v-show="show" ref="popup" class="ve-dropdown" :style="position" @click="selectHandler">
@@ -12,8 +12,9 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
   import rectMixin from '../mixins/rect'
+  import { getBrowser } from '../util.js'
 
   export default {
     name: 'element',
@@ -24,22 +25,24 @@
         rect: {}
       }
     },
-    mixins: [vuexMixin, rectMixin],
+    props: {
+      view: String,
+      activeComponent: String
+    },
+    inject: ['range'],
+    mixins: [hubMixin, rectMixin],
+    created () {
+      this.eventHub.$on('sync-element-tag', this.syncValue)
+    },
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
-      clickHandler () {
+      clickHandler (event) {
         this.togglePopup(event)
       },
       selectHandler (event) {
         let tagName = event.target.innerHTML.trim()
         this.val = tagName
-        this.execCommand({name: 'formatBlock', value: tagName})
-        this.setActiveComponent()
+        this.formatBlock(tagName)
+        this.eventHub.$emit('set-active-component')
       },
       syncValue (parent, child) {
         let tagName = child.tagName.toLowerCase()
@@ -48,6 +51,20 @@
           tagName = child.tagName.toLowerCase()
         }
         this.list.indexOf(tagName) !== -1 && (this.val = tagName)
+      },
+      formatBlock (value) {
+        let browser = getBrowser()
+        let lang = window.__VUEDITOR_LANGUAGE__.element
+        if (browser === 'IE') {
+          let range = this.range.getRange()
+          if (!range || range.collapsed) {
+            window.alert(lang.ieMsg)
+          } else {
+            this.eventHub.$emit('exec-command', {name: 'formatblock', value:'<' + value.toUpperCase() + '>'})
+          }
+        } else {
+          this.eventHub.$emit('exec-command', {name: 'formatblock', value})
+        }
       }
     }
   }

@@ -32,7 +32,7 @@
 
 <script>
 
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   export default {
     name: 'picture',
@@ -43,23 +43,16 @@
       }
     },
     props: {
-      uploadUrl: String
+      uploadUrl: String,
+      activeComponent: String
     },
-    mixins: [vuexMixin],
+    mixins: [hubMixin],
     computed: {
-      event () {
-        return this.mstates.event
-      },
       show () {
-        return this.mstates.activeComponent === this.$options.name
+        return this.activeComponent === this.$options.name
       }
     },
     watch: {
-      'event': function (val) {
-        if (val.name === 'picture') {
-          this.show = true
-        }
-      },
       'show': function (val) {
         if (val) {
           document.body.classList.add('ve-fixed')
@@ -68,19 +61,16 @@
         }
       }
     },
+    created () {
+      this.eventHub.$on('paste-upload', this.pasteHandler)
+    },
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      setButtonStates (data) {
-        this.$store.dispatch(this.mpath + 'setButtonStates', data)
-      },
       execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
+        this.eventHub.$emit('exec-command', data)
       },
       hideDialog () {
-        this.setButtonStates({picture: 'default'})
-        this.setActiveComponent()
+        this.eventHub.$emit('set-button-status', {picture: 'default'})
+        this.eventHub.$emit('set-active-component')
       },
       changeHandler () {
         this.preview(this.$refs.file)

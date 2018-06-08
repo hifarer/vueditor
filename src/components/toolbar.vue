@@ -1,14 +1,11 @@
 
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
-    display: table-caption;
-    // display: table;
     width: 100%;
     font-size: 0;
     // letter-spacing: -4px;
     background: #fff;
-    border: 1px solid #ddd;
-    border-bottom: none;
+    border-bottom: 1px solid #ddd;
     user-select: none;
     & > div {
       position: relative;
@@ -51,17 +48,23 @@
 
 <template>
   <div class="ve-toolbar" ref="toolbar">
-    <template v-for="item in icons">
+    <template v-for="item in toolbarIcons">
 
-      <div v-if="item in btns" @click.stop.prevent="btnHandler($event, item)" 
+      <div v-if="item in btns" @click.stop.prevent="clickHandler($event, item)" 
         :title="lang[item].title"
-        :class="['ve-icon', {'ve-active': toolbar[item] === 'actived', 've-disabled': toolbar[item] === 'disabled'}]">
+        :class="['ve-icon', {'ve-active': status[item] === 'actived', 've-disabled': status[item] === 'disabled'}]">
         <i :class="[btns[item].className]"></i>
       </div>
 
       <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
 
-      <component v-if="componentList.indexOf(item) !== -1" :is="getComponentName(item)"></component>
+      <component 
+        :view="view" 
+        :content="content" 
+        :fullscreen="fullscreen" 
+        :activeComponent="activeComponent"
+        v-if="componentList.indexOf(item) !== -1" :is="getComponentName(item)">
+      </component>
 
     </template>
 
@@ -79,7 +82,7 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
 
   import fontSize from './fontsize.vue'
   import fontName from './fontname.vue'
@@ -94,14 +97,27 @@
   export default {
     name: 'toolbar',
     data () {
+      let status = {}
+      // 每一个按钮都有一个状态
+      // 每一个下拉菜单、对话框都有一个显示状态
+      this.toolbarIcons.forEach( name => {
+        if (name !== 'divider' && name !== '|') {
+          status[name] = 'default' // default disabled actived
+        }
+      })
       return {
+        status,
         lang: window.__VUEDITOR_LANGUAGE__
       }
     },
     props: {
-      icons: [String]
+      toolbarIcons: [String],
+      view: String,
+      content: String,
+      fullscreen: Boolean,
+      activeComponent: String
     },
-    mixins: [vuexMixin],
+    mixins: [hubMixin],
     components: {
       've-fontsize': fontSize,
       've-fontname': fontName,
@@ -114,15 +130,6 @@
       've-emoji': emoji
     },
     computed: {
-      view () {
-        return this.mstates.view
-      },
-      toolbar () {
-        return this.mstates.toolbar
-      },
-      fullscreen () {
-        return this.mstates.fullscreen
-      },
       componentList () {
         // 'undo', 'redo'
         // 'foreColor', 'backColor'
@@ -133,8 +140,8 @@
         // 'element'
         // 'codeSnippet'
         let arr = []
-        for (let i = 0, item = ''; i < this.icons.length; i++) {
-          item = this.icons[i]
+        for (let i = 0, item = ''; i < this.toolbarIcons.length; i++) {
+          item = this.toolbarIcons[i]
           if (item in this.btns || item == 'divider' || item == '|') {
             continue
           }
@@ -150,17 +157,17 @@
     },
     watch: {
       'view': function (val) {
-        let states = {}
+        let status = {}
         let exArr = ['sourceCode', 'markdown', 'fullscreen', 'divider', '|']
-        this.icons.forEach(item => {
+        this.toolbarIcons.forEach(item => {
           if (exArr.indexOf(item) === -1) {
-            states[item] = val === 'design' ? 'default' : 'disabled'
+            status[item] = val === 'design' ? 'default' : 'disabled'
           }
         })
         if (val === 'codesnippet') {
-          states.codeSnippet !== undefined && (states.codeSnippet = 'default')
+          status.codeSnippet !== undefined && (status.codeSnippet = 'default')
         }
-        this.setButtonStates(states)
+        this.setButtonStatus(status)
       }
     },
     beforeCreate () {
@@ -192,21 +199,19 @@
         picture: {className: 'icon-file-image-o', action: 'picture'}
       }
     },
+    created () {
+      this.eventHub.$on('set-button-status', this.setButtonStatus)
+    },
     methods: {
-      setButtonStates (data) {
-        this.$store.dispatch(this.mpath + 'setButtonStates', data)
+      setButtonStatus (data) {
+        for (let name in data) {
+          if (typeof this.status[name] !== 'undefined') {
+            this.status[name] = data[name]
+          }
+        }
       },
       setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      setFullScreen (bool) {
-        this.$store.dispatch(this.mpath + 'setFullScreen', bool)
-      },
-      setView (data) {
-        this.$store.dispatch(this.mpath + 'setView', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
+        this.eventHub.$emit('set-active-component', data)
       },
       action (name) {
         switch (name) {
@@ -214,25 +219,25 @@
             this.setActiveComponent(name)
             break
           case 'fullscreen':
-            this.setFullScreen(!this.fullscreen)
+            this.eventHub.$emit('set-fullscreen', !this.fullscreen)
             break
           case 'sourceCode':
           case 'markdown':
-            this.setView(this.view === name ? 'design' : name)
+            this.eventHub.$emit('set-view', this.view === name ? 'design' : name)
             this.setActiveComponent()
         }
       },
-      btnHandler (event, name) {
-        if (this.toolbar[name] === 'disabled') return
+      clickHandler (event, name) {
+        if (this.status[name] === 'disabled') return
         if (this.btns[name].native) {
-          this.execCommand({ name: name, value: null })
+          this.eventHub.$emit('exec-command', { name: name, value: null })
           this.setActiveComponent()
         } else {
           this.action(name)
         }
-        let states = {}
-        this.toolbar[name] === 'actived' ? states[name] = 'default' : states[name] = 'actived'
-        this.setButtonStates(states)
+        let status = {}
+        this.status[name] === 'actived' ? status[name] = 'default' : status[name] = 'actived'
+        this.setButtonStatus(status)
       },
       getComponentName (name) {
         switch (name) {

@@ -19,8 +19,7 @@
 
 <script>
 
-  import vuexMixin from '../mixins/vuex'
-  import eventHub from './eventhub.vue'
+  import hubMixin from '../mixins/hub'
   
   export default {
     name: 'design',
@@ -34,37 +33,27 @@
       }
     },
     props: {
-      spellcheck: Boolean,
-      noFormatPaste: Boolean,
-      uploadOnPaste: Boolean,
+      config: {
+        validator (value) {
+          return Array.isArray(value.toolbar)
+        }
+      },
+      view: String,
+      content: String
     },
     inject: ['range'],
     
-    mixins: [vuexMixin],
-
-    computed: {
-      view () {
-        return this.mstates.view
-      },
-      content () {
-        return this.mstates.content
-      },
-      command () {
-        return this.mstates.command
-      },
-      toolbar () {
-        return this.mstates.toolbar
-      }
-    },
+    mixins: [hubMixin],
 
     created: function () {
-      this.eventHub = eventHub
-      this.eventHub.$on('selectionchange', () => {
-        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      this.eventHub.$on('selection-change', () => {
+        let Event = this.iframeWin.Event
+        this.setContent(this.iframeBody.innerHTML)
+        this.iframeDoc.dispatchEvent(new Event('selectionchange'))
       })
       this.eventHub.$on('wrap-text-node', this.wrapTextNode)
       this.eventHub.$on('insert-html', this.insertHTML)
-      this.eventHub.$on('exec', this.exec)
+      this.eventHub.$on('exec-command', this.exec)
     },
 
     watch: {
@@ -78,30 +67,12 @@
         if (this.iframeBody && this.iframeBody.innerHTML !== val) {
           this.iframeBody.innerHTML = val
         }
-      },
-      'command': function (data) {
-        this.exec(data.name, data.value)
       }
     },
 
     methods: {
-      setContent (data) {
-        this.$store.dispatch(this.mpath + 'setContent', data)
-      },
-      setSelectValue (data) {
-        // this.$store.dispatch(this.mpath + 'setSelectValue', data)
-      },
-      setButtonStates (data) {
-        this.$store.dispatch(this.mpath + 'setButtonStates', data)
-      },
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      triggerEvent (data) {
-        this.$store.dispatch(this.mpath + 'triggerEvent', data)
-      },
-      setView (data) {
-        this.$store.dispatch(this.mpath + 'setView', data)
+      setContent (content) {
+        this.eventHub.$emit('set-content', content)
       },
       init (event) {
         this.iframeWin = event.target.contentWindow
@@ -111,7 +82,7 @@
           this.iframeBody.innerHTML !== this.content && (this.iframeBody.innerHTML = this.content)
         }
         this.iframeDoc.designMode = 'on'
-        this.iframeBody.spellcheck = this.spellcheck
+        this.iframeBody.spellcheck = this.config.spellcheck
         this.iframeBody.style.cssText = 'overflow-x: hidden; margin: 0; padding: 8px;'
         this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style>')
         this.addEvent()
@@ -119,38 +90,41 @@
       },
 
       // init, selection change
-      updateStates () {
-        let json = {}
-        for (let name in this.toolbar) {
+      setButtonStatus () {
+        let status = {}
+        let arr = this.config.toolbar
+        for (let i = 0, name; i < arr.length; i++ ) {
+          name = arr[i]
           if (this.iframeDoc.queryCommandSupported(name) && ['redo', 'undo'].indexOf(name) === -1) {
-            json[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default'
+            status[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default'
           }
         }
-        this.setButtonStates(json)
+        this.eventHub.$emit('set-button-status', status)
       },
 
       addEvent () {
         let timer = null
+        let Event = this.iframeWin.Event
         this.iframeDoc.addEventListener('click', () => {
           // throttle
           clearTimeout(timer)
           timer = setTimeout(() => {
-            this.view === 'design' && this.setActiveComponent()
+            this.view === 'design' && this.eventHub.$emit('set-active-component')
           }, 200)
           // dispatch selectionchange event for throttling
-          this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+          this.iframeDoc.dispatchEvent(new Event('selectionchange'))
         }, false)
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false)
-        this.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
+        this.config.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
         this.selectionChange()
       },
 
       keydownHandler (event) {
         if (event.ctrlKey && (event.keyCode === 89 || event.keyCode === 90)) {
           event.preventDefault()
-          event.keyCode === 89 && this.triggerEvent({name: 'redo'})
-          event.keyCode === 90 && this.triggerEvent({name: 'undo'})
+          event.keyCode === 89 && this.eventHub.$emit('redo')
+          event.keyCode === 90 && this.eventHub.$emit('undo')
         }
         let container = this.range.getContainer()
         if (event.keyCode === 13 && container) {
@@ -241,8 +215,8 @@
           }
         })
 
-        if (this.uploadOnPaste && clipboardData.items) {
-          // this.pasteUpload(clipboardData.items)
+        if (this.config.uploadOnPaste && clipboardData.items) {
+          this.eventHub.$emit('paste-upload', clipboardData.items)
         }
       },
 
@@ -253,7 +227,7 @@
           clearTimeout(timer)
           timer = setTimeout(() => {
             this.checkElement()
-            this.view === 'design' && this.updateStates()
+            this.view === 'design' && this.setButtonStatus()
           }, 200)
         }, false)
         if (!('onselectionchange' in document)) {
@@ -263,7 +237,7 @@
             if (sel && sel.rangeCount) {
               if (focusOffset !== sel.focusOffset) {
                 focusOffset = sel.focusOffset
-                this.view === 'design' && this.updateStates()
+                this.view === 'design' && this.setButtonStatus()
                 this.checkElement()
               }
             } else {
@@ -280,7 +254,7 @@
         let tagName = container.tagName.toLowerCase()
         
         if (['code', 'pre'].indexOf(tagName) !== -1) {
-          // parseCodeBlock(tagName)
+          this.eventHub.$emit('parse-code-block', tagName)
         } else {
           let style = window.getComputedStyle(container)
           let fontName = style['fontFamily'].replace(', sans-serif', '').replace(/"/g, '')
@@ -292,10 +266,10 @@
               tagName = 'p'
             }
           }
-          // element syncValue(this.iframeBody, container)
-          // fontName syncValue(fontName)
-          // fontSize syncValue(fontSize)
-          this.view !== 'design' && this.setView('design')
+          this.eventHub.$emit('sync-element-tag', this.iframeBody, container)
+          this.eventHub.$emit('sync-font-name', fontName)
+          this.eventHub.$emit('sync-font-size', fontSize)
+          this.view !== 'design' && this.eventHub.$emit('set-view', 'design')
         }
       },
 
@@ -308,20 +282,17 @@
         range.collapse(true)
       },
 
-      exec (name, value) {
-        if (this[name]) {
-          this[name](name, value)
-        } else {
-          let range = this.range.getRange()
-          if (!range) return
-          if (document.queryCommandSupported('styleWithCss')) {
-            this.iframeDoc.execCommand('styleWithCss', false, true)
-          }
-          this.iframeDoc.execCommand(name, false, value)
-          this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+      exec ({name, value}) {
+        let Event = this.iframeWin.Event
+        let range = this.range.getRange()
+        if (!range) return
+        if (document.queryCommandSupported('styleWithCss')) {
+          this.iframeDoc.execCommand('styleWithCss', false, true)
         }
+        this.iframeDoc.execCommand(name, false, value)
+        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
         this.iframeBody.focus()
-        // this.setContent(this.iframeBody.innerHTML)
+        name !== 'fontSize' && this.setContent(this.iframeBody.innerHTML)
       },
 
       insertHTML (html) {
@@ -346,20 +317,7 @@
           range.setStartAfter(node)
           range.collapse(true)
         }
-      },
-
-      formatBlock (name, value) {
-        let ua = navigator.userAgent.toLowerCase()
-        if (ua.match(/rv:([\d.]+)\) like gecko/) || ua.match(/msie ([\d.]+)/)) {
-          let range = this.range.getRange()
-          if (!range || range.collapsed) {
-            window.alert(this.lang.ieMsg)
-          } else {
-            this.iframeDoc.execCommand('formatblock', false, '<' + value.toUpperCase() + '>')
-          }
-        } else {
-          this.iframeDoc.execCommand('formatblock', false, value)
-        }
+        this.iframeBody.focus()
       },
 
       formatContent (obj, tagName, cssName) {

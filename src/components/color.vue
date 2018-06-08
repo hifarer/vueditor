@@ -28,9 +28,9 @@
 
 <template>
   <div class="ve-color">
-    <div :title="lang.foreColor" :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disabled': mstates.view !== 'design'}]" @click="clickHandler('foreColor', $event)"><i class="icon-file-text-o"></i></div>
-    <div :title="lang.backColor" :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disabled': mstates.view !== 'design'}]" @click="clickHandler('backColor', $event)"><i class="icon-file-text"></i></div>
-    <div ref="menu" :class="$style.ctn" :style="position" v-show="show">
+    <div :title="lang.foreColor" :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disabled': view !== 'design'}]" @click="clickHandler('foreColor', $event)"><i class="icon-file-text-o"></i></div>
+    <div :title="lang.backColor" :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disabled': view !== 'design'}]" @click="clickHandler('backColor', $event)"><i class="icon-file-text"></i></div>
+    <div ref="popup" :class="$style.ctn" :style="position" v-show="show">
       <div class="ve-input-box">
         <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="val">
         <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
@@ -45,8 +45,7 @@
 <script>
   
   import rectMixin from '../mixins/rect'
-  import vuexMixin from '../mixins/vuex'
-  import eventHub from './eventhub.vue'
+  import hubMixin from '../mixins/hub'
   
   export default {
     name: 'color',
@@ -68,16 +67,17 @@
         lang: window.__VUEDITOR_LANGUAGE__.color
       }
     },
-    mixins: [rectMixin, vuexMixin],
+    props: {
+      view: String,
+      activeComponent: String
+    },
+    mixins: [rectMixin, hubMixin],
     methods: {
       setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
+        this.eventHub.$emit('set-active-component', data)
       },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },  
       clickHandler (type, event) {
-        if (this.mstates.view !== 'design') {
+        if (this.view !== 'design') {
           return
         }
         let obj = event.currentTarget
@@ -87,7 +87,7 @@
           width: obj.offsetWidth,
           height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
         }
-        if (this.key === type && this.mstates.activeComponent === 'color') {
+        if (this.key === type && this.activeComponent === 'color') {
           this.setActiveComponent()
         } else {
           this.setActiveComponent('color')
@@ -95,7 +95,7 @@
         this.key = type
       },
       setColor (val) {
-        this.execCommand({name: this.key, value: val})
+        this.eventHub.$emit('exec-command', {name: this.key, value: val})
         this.setActiveComponent()
       },
       inputHandler () {

@@ -1,9 +1,7 @@
 
 export default {
 
-  app: {
-    noStore: 'Vueditor can not been initialized without Vuex store when using as a component, Please check your Vue Instance!'
-  },
+  app: {},
 
   removeFormat: {title: 'Remove format'},
 
@@ -34,11 +32,11 @@ export default {
   },
   fontName: {},
   fontSize: {},
-  element: {},
-  codeSnippet: {},
-  design: {
+  element: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
+  codeSnippet: {},
+  design: {},
   link: {
     addLink: 'Add link',
     clearLink: 'Clear link',

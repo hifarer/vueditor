@@ -40,7 +40,6 @@ Use it in the following cases:
 
 ```javascript
 import Vue from 'vue'
-import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
 import 'vueditor/dist/style/vueditor.min.css'
@@ -95,7 +94,6 @@ Call `createEditor` and pass specific config as parameter respectively for multi
 ```javascript
 
   import Vue from 'vue'
-  import Vuex from 'vuex'
   import { createEditor } from 'vueditor'
 
   import 'vueditor/dist/style/vueditor.min.css'

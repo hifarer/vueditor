@@ -40,7 +40,6 @@ npm install vueditor
 
 ```javascript
 import Vue from 'vue'
-import Vuex from 'vuex'
 import Vueditor from 'vueditor'
 
 import 'vueditor/dist/style/vueditor.min.css'
@@ -95,7 +94,6 @@ inst.getContent();
 ```javascript
 
   import Vue from 'vue'
-  import Vuex from 'vuex'
   import {createEditor} from 'vueditor'
 
   import 'vueditor/dist/style/vueditor.min.css'

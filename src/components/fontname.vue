@@ -12,7 +12,7 @@
 
 <template>
   <div class="ve-fontname">
-    <div :class="['ve-select', $style.select, {'ve-disabled': mstates.view !== 'design'}]" @click="clickHandler">
+    <div :class="['ve-select', $style.select, {'ve-disabled': view !== 'design'}]" @click="clickHandler">
       <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
     </div>
     <ul v-show="show" ref="popup" class="ve-dropdown" :style="style">
@@ -23,7 +23,7 @@
 
 <script>
   
-  import vuexMixin from '../mixins/vuex'
+  import hubMixin from '../mixins/hub'
   import rectMixin from '../mixins/rect'
 
   export default {
@@ -38,24 +38,25 @@
         val: 'arial black'
       }
     },
-    mixins: [vuexMixin, rectMixin],
+    props: {
+      view: String,
+      activeComponent: String
+    },
+    mixins: [hubMixin, rectMixin],
+    created () {
+      this.eventHub.$on('sync-font-name', this.syncValue)
+    },
     methods: {
-      setActiveComponent (data) {
-        this.$store.dispatch(this.mpath + 'setActiveComponent', data)
-      },
-      execCommand (data) {
-        this.$store.dispatch(this.mpath + 'execCommand', data)
-      },
-      clickHandler () {
+      clickHandler (event) {
         this.togglePopup(event)
       },
       selectHandler (font) {
         this.val = font.abbr || font.val
-        this.execCommand({name: 'fontName', value: font.val + ', sans-serif'})
-        this.setActiveComponent()
+        this.eventHub.$emit('exec-command', {name: 'fontName', value: font.val + ', sans-serif'})
+        this.eventHub.$emit('set-active-component')
       },
       syncValue (fontName) {
-        this.list.filter(item => item.val === fontName).length !== 0 && (this.val = fontName)
+        this.val = this.list.filter(item => item.val === fontName).length !== 0 ? fontName : '--'
       }
     }
   }
