@@ -8,14 +8,15 @@
   <style>
     body {
       margin: 0;
-      height: 2000px;
     }
     #github {
       text-align: right;
     }
-    #editor1 {
+    #editor1,
+    #editor2 {
       width: 500px;
-      height: 500px;
+      height: 300px;
+      margin: 50px auto;
     }
   </style>
 </head>
@@ -29,11 +30,9 @@
   </div>
   <div id="editor2"></div>
 
-  <script src="//cdn.bootcss.com/vue/2.0.5/vue.min.js"></script>
-  <script src="./dist/language/lang.cn.js"></script>
+  <script src="//cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
   <script src="./dist/script/vueditor.min.js"></script>
   <script>
-    let uploadUrl = ''
 
     Vue.use(Vueditor, {
       toolbar: [
@@ -41,13 +40,7 @@
         'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
         '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'fullscreen', 'sourceCode', 'markdown'
       ],
-      fontName: [
-        {val: 'arial black'},
-        {val: 'times new roman'},
-        {val: 'Courier New'}
-      ],
-      fontSize: ['0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-      uploadUrl: uploadUrl,
+      uploadUrl: '',
     })
 
     let parent = new Vue({
@@ -58,13 +51,10 @@
   </script>
   <script>
     let inst = Vueditor.createEditor('#editor2', {
-      lang: lang,
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
       ],
-      uploadUrl: '',
-      id: 'someid',
-      classList: ['someclass']
+      uploadUrl: ''
     })
     inst.setContent('fill your content here')
   </script>

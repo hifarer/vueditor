@@ -41,7 +41,6 @@
       view: String,
       content: String
     },
-    inject: ['range'],
     
     mixins: [hubMixin],
 

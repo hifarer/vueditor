@@ -1,13 +1,14 @@
 
-// toolbar优化 多个实例问题 切换其他程序后history问题 markdown功能 文档
+// toolbar优化 源码高度问题 切换其他程序后history问题 markdown功能 文档
 
 import Vue from 'vue'
 
 import defaultConf from './config/index.js'
 import defaultLang from './config/lang.js'
 import Range from './range.js'
+import { createNonceStr } from './util.js'
 
-import eventHub from './components/eventhub.vue'
+import getEventHub from './eventhub.js'
 import app from './components/app.vue'
 
 function distinctArray (arr) {
@@ -28,7 +29,8 @@ function mixinConfig (opts) {
   return Object.assign({}, app, {
     beforeCreate () {
       this.range = new Range()
-      this.eventHub = eventHub
+      this.nonceStr = createNonceStr()
+      this.eventHub = getEventHub(this.nonceStr)
       this.config = config
     }
   })

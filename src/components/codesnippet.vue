@@ -32,7 +32,6 @@
       view: String,
       activeComponent: String
     },
-    inject: ['range'],
     mixins: [hubMixin, rectMixin],
     created () {
       this.eventHub.$on('parse-code-block', this.parseCodeBlock)

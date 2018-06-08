@@ -1,4 +1,6 @@
-const lang = {
+
+export default {
+  
   app: {},
 
   removeFormat: {title: '清除格式'},
@@ -33,19 +35,26 @@ const lang = {
     colorCode: '颜色代码',
     invalidColorCodeMsg: '请输入正确的颜色代码。',
   },
+  color: {
+    foreColor: '文字颜色',
+    backColor: '背景颜色',
+    ok: '确定',
+    colorCode: '颜色代码',
+    invalidColorCodeMsg: '请输入正确的颜色代码。',
+  },
   fontName: {},
   fontSize: {},
-  code: {},
-  element: {},
+  element: {
+    ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
+  },
+  codeSnippet: {},
   design: {
     ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
   },
   link: {
-    title: '添加超链接',
+    addLink: '添加超链接',
+    clearLink: '取消超链接',
     ok: '确定'
-  },
-  unLink: {
-    title: '取消超链接'
   },
   markdown: {
     title: 'markdown'
@@ -62,7 +71,14 @@ const lang = {
   fullscreen: {
     title: '全屏'
   },
-  table: {title: '表格'},
-  undo: {title: '撤销'},
-  redo: {title: '恢复'}
+  table: {
+    title: '表格'
+  },
+  undoRedo: {
+    undo: 'Undo',
+    redo: 'Redo'
+  },
+  emoji: {
+    title: 'emoji'
+  }
 }

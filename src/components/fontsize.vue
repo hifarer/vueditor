@@ -27,7 +27,6 @@
       view: String,
       activeComponent: String
     },
-    inject: ['range'],
     mixins: [hubMixin, rectMixin],
     created () {
       this.eventHub.$on('sync-font-size', this.syncValue)

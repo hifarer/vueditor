@@ -36,7 +36,8 @@
     },
     provide () {
       return {
-        range: this.range
+        range: this.range,
+        nonceStr: this.nonceStr
       }
     },
     components: {

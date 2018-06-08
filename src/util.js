@@ -12,3 +12,12 @@ export function getBrowser () {
   }
   return browser
 }
+
+export function createNonceStr () {
+  let str = '1234567890ABCDEFGHIJKLOMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+  let nonceStr = ''
+  for (let i = 0; i < 10; i++) {
+    nonceStr += str.charAt(Math.round(Math.random() * (str.length - 1)))
+  }
+  return nonceStr
+}

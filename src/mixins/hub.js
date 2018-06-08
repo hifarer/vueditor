@@ -1,8 +1,9 @@
 
-import eventHub from '../components/eventhub.vue'
+import getEventHub from '../eventhub.js'
 
 export default {
+  inject: ['range', 'nonceStr'],
   created () {
-    this.eventHub = eventHub
+    this.eventHub = getEventHub(this.nonceStr)
   }
 }

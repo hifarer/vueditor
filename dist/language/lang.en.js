@@ -1,4 +1,6 @@
-const lang = {
+
+export default {
+
   app: {},
 
   removeFormat: {title: 'Remove format'},
@@ -21,31 +23,24 @@ const lang = {
   insertOrderedList: {title: 'Insert ordered list'},
   insertUnorderedList: {title: 'Insert unordered list'},
 
-  foreColor: {
-    title: 'Text color',
+  color: {
+    foreColor: 'Text color',
+    backColor: 'Background color',
     ok: 'ok',
     colorCode: 'Color code',
-    invalidColorCodeMsg: 'Please enter the correct color code',
-  },
-  backColor: {
-    title: 'Background color',
-    ok: 'ok',
-    colorCode: 'Color code',
-    invalidColorCodeMsg: 'Please enter the correct color code',
+    invalidColorCodeMsg: 'Please enter the correct color code'
   },
   fontName: {},
   fontSize: {},
-  code: {},
-  element: {},
-  design: {
+  element: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
+  codeSnippet: {},
+  design: {},
   link: {
-    title: 'Add link',
+    addLink: 'Add link',
+    clearLink: 'Clear link',
     ok: 'OK'
-  },
-  unLink: {
-    title: 'unlink'
   },
   markdown: {
     title: 'markdown'
@@ -62,7 +57,14 @@ const lang = {
   fullscreen: {
     title: 'Fullscreen'
   },
-  table: {title: 'Table'},
-  undo: {title: 'Undo'},
-  redo: {title: 'Redo'}
+  table: {
+    title: 'Table'
+  },
+  undoRedo: {
+    undo: 'Undo',
+    redo: 'Redo'
+  },
+  emoji: {
+    title: 'emoji'
+  }
 }

@@ -29,7 +29,6 @@
       view: String,
       activeComponent: String
     },
-    inject: ['range'],
     mixins: [hubMixin, rectMixin],
     created () {
       this.eventHub.$on('sync-element-tag', this.syncValue)
