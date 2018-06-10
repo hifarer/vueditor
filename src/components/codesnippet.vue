@@ -1,12 +1,12 @@
 
 <template>
   <div class="ve-codesnippet">
-    <div :class="['ve-select', {'ve-disabled': view !== 'design' && view !== 'codesnippet'}]" @click="clickHandler">
-      <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
+    <div :class="['ve-select', {'ve-disabled': view !== 'design' && view !== 'codeSnippet'}]" onselectable="on">
+      <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
-    <ul v-show="show" ref="popup" class="ve-dropdown" :style="position">
-      <li v-for="(type, index) in list" :key="index" @click="selectHandler(type)">{{type}}</li>
-    </ul>
+    <div v-show="show" ref="popup" class="ve-dropdown" :style="position">
+      <a href="javascript:;" v-for="(type, index) in list" :key="index" @click="selectHandler(type)">{{type}}</a>
+    </div>
   </div>
 </template>
 
@@ -77,7 +77,7 @@
             this.eventHub.$emit('wrap-text-node', range, 'code')
           }
         }
-        this.view === 'design' && this.eventHub.$emit('set-view', 'codesnippet')
+        this.view === 'design' && this.eventHub.$emit('set-view', 'codeSnippet')
       }
     }
   }

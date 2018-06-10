@@ -1,8 +1,12 @@
 
 <template>
   <div class="ve-undoredo">
-    <div :title="lang.undo" :class="['ve-icon', {'ve-disabled': !canUndo}]" @click="undo"><i class="icon-undo"></i></div>
-    <div :title="lang.redo" :class="['ve-icon', {'ve-disabled': !canRedo}]" @click="redo"><i class="icon-repeat"></i></div>
+    <div :class="['ve-icon', {'ve-disabled': !canUndo}]">
+      <a href="javascript:;" :title="lang.undo" @click="undo"><i class="icon-undo"></i></a>
+    </div>
+    <div :class="['ve-icon', {'ve-disabled': !canRedo}]" onselectable="on">
+      <a href="javascript:;" :title="lang.redo" @click="redo"><i class="icon-repeat"></i></a>
+    </div>
   </div>
 </template>
 

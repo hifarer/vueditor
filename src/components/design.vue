@@ -14,7 +14,7 @@
 </style>
 
 <template>
-  <iframe :class="['ve-design', view === 'markdown' ? $style.half: '' ]" src="about:blank" frameborder="0" v-show="view !== 'sourceCode'" @load="init"></iframe>
+  <iframe :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; margin: 0; word-break: break-word; overflow: hidden;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style><script>document.designMode = \'on\'</script></head><body class=\'page\' spellcheck=\'false\'></body></html>');document.close();}())" v-show="view !== 'sourceCode'" @load="init"></iframe>
 </template>
 
 <script>
@@ -46,9 +46,8 @@
 
     created: function () {
       this.eventHub.$on('selection-change', () => {
-        let Event = this.iframeWin.Event
         this.setContent(this.iframeBody.innerHTML)
-        this.iframeDoc.dispatchEvent(new Event('selectionchange'))
+        this.triggerEvent('selectionchange')
       })
       this.eventHub.$on('wrap-text-node', this.wrapTextNode)
       this.eventHub.$on('insert-html', this.insertHTML)
@@ -73,6 +72,12 @@
       setContent (content) {
         this.eventHub.$emit('set-content', content)
       },
+      triggerEvent (eventName) {
+        let event = document.createEvent('Event')
+        // args: string type, boolean bubbles, boolean cancelable
+        event.initEvent(eventName, false, true)
+        this.iframeDoc.dispatchEvent(event);
+      },
       init (event) {
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
@@ -80,10 +85,6 @@
         if (this.content) {
           this.iframeBody.innerHTML !== this.content && (this.iframeBody.innerHTML = this.content)
         }
-        this.iframeDoc.designMode = 'on'
-        this.iframeBody.spellcheck = this.config.spellcheck
-        this.iframeBody.style.cssText = 'overflow-x: hidden; margin: 0; padding: 8px;'
-        this.iframeDoc.head.insertAdjacentHTML('beforeEnd', '<style>pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style>')
         this.addEvent()
         this.eventHub.$emit('set-iframe-win', this.iframeWin)
       },
@@ -103,7 +104,6 @@
 
       addEvent () {
         let timer = null
-        let Event = this.iframeWin.Event
         this.iframeDoc.addEventListener('click', () => {
           // throttle
           clearTimeout(timer)
@@ -111,11 +111,11 @@
             this.view === 'design' && this.eventHub.$emit('set-active-component')
           }, 200)
           // dispatch selectionchange event for throttling
-          this.iframeDoc.dispatchEvent(new Event('selectionchange'))
+          this.triggerEvent('selectionchange')
         }, false)
         this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
         this.iframeBody.addEventListener('keyup', this.keyupHandler, false)
-        this.config.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
+        // this.config.noFormatPaste && this.iframeBody.addEventListener('paste', this.pasteHandler, false)
         this.selectionChange()
       },
 
@@ -282,14 +282,13 @@
       },
 
       exec ({name, value}) {
-        let Event = this.iframeWin.Event
         let range = this.range.getRange()
         if (!range) return
         if (document.queryCommandSupported('styleWithCss')) {
           this.iframeDoc.execCommand('styleWithCss', false, true)
         }
         this.iframeDoc.execCommand(name, false, value)
-        this.iframeDoc.dispatchEvent(new window.Event('selectionchange'))
+        this.triggerEvent('selectionchange')
         this.iframeBody.focus()
         name !== 'fontSize' && this.setContent(this.iframeBody.innerHTML)
       },

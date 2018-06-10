@@ -11,7 +11,7 @@
   .list {
     overflow: hidden;
   }
-  .list span {
+  .list a {
     width: 20px;
     height: 20px;
     margin: 1px;
@@ -19,7 +19,7 @@
     cursor: pointer;
   }
   .input {
-    max-width: ~"calc(100% - 35px)";
+    max-width: ~"calc(100% - 46px)";
   }
   .btn {
     line-height: 16px;
@@ -28,15 +28,19 @@
 
 <template>
   <div class="ve-color">
-    <div :title="lang.foreColor" :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disabled': view !== 'design'}]" @click="clickHandler('foreColor', $event)"><i class="icon-file-text-o"></i></div>
-    <div :title="lang.backColor" :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disabled': view !== 'design'}]" @click="clickHandler('backColor', $event)"><i class="icon-file-text"></i></div>
+    <div :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disabled': view !== 'design'}]" onselectable="on">
+      <a href="javascript:;" :title="lang.foreColor" @click="clickHandler('foreColor', $event)"><i class="icon-file-text-o"></i></a>
+    </div>
+    <div :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disabled': view !== 'design'}]" onselectable="on">
+      <a href="javascript:;" :title="lang.backColor" @click="clickHandler('backColor', $event)"><i class="icon-file-text"></i></a>
+    </div>
     <div ref="popup" :class="$style.ctn" :style="position" v-show="show">
       <div class="ve-input-box">
         <input type="text" class="ve-input" :class="$style.input" :placeholder="lang.colorCode" v-model="val">
         <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
       </div>
       <div :class="$style.list">
-        <span v-for="(item, index) in colors" :key="index" :title="item" :style="{background: item}" @click="setColor(item)"></span>
+        <a href="javascript:;" v-for="(item, index) in colors" :key="index" :title="item" :style="{background: item}" @click="setColor(item)"></span>
       </div>
     </div>
   </div>
@@ -80,7 +84,7 @@
         if (this.view !== 'design') {
           return
         }
-        let obj = event.currentTarget
+        let obj = event.currentTarget.parentNode
         this.rect = {
           left: obj.offsetLeft,
           top: obj.offsetTop,

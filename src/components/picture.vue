@@ -54,10 +54,11 @@
     },
     watch: {
       'show': function (val) {
+        let body = document.body
         if (val) {
-          document.body.classList.add('ve-fixed')
+          body.classList ? body.classList.add('ve-fixed') : body.className += 've-fixed' 
         } else {
-          document.body.classList.remove('ve-fixed')
+          body.classList ? body.classList.remove('ve-fixed') : body.className = body.className.replace('ve-fixed', '')
         }
       }
     },

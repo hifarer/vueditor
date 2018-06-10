@@ -21,7 +21,9 @@
 
 <template>
 <div class="ve-emoji">
-  <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" :title="lang.title" @click="clickHandler"><i class="icon-smile-o"></i></div>
+  <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" onselectable="on">
+    <a href="javascript:;" :title="lang.title" @click="clickHandler"><i class="icon-smile-o"></i></a>
+  </div>
   <div class="ve-popover emoji" ref="popup" v-show="show" :style="{left: position.left, top: position.top, marginLeft: position.popLeft}">
     <div class="ve-pop-arrow" :style="{left: position.arrowLeft}"></div>
     <div class="ve-pop-header">{{lang.title}}</div>

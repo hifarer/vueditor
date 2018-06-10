@@ -1,7 +1,6 @@
 
 const webpack = require('webpack')
 const path = require('path')
-const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const pkg = require('../package.json')
@@ -32,12 +31,7 @@ module.exports = {
           loader: 'vue-loader',
           options: {
             extractCSS: true,
-            preserveWhitespace: false,
-            postcss: [
-              autoprefixer({
-                browsers: ['last 3 versions']
-              })
-            ]
+            preserveWhitespace: false
           }
         }],
         exclude: /node_modules/

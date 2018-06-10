@@ -42,10 +42,10 @@ export default {
   },
   methods: {
     togglePopup (event) {
-      if (this.view !== 'design' && this.$options.name !== 'codeSnippet') {
+      if (this.view !== 'design' && !(this.view === 'codeSnippet' && this.$options.name === 'codeSnippet')) {
         return
       }
-      let obj = event.currentTarget
+      let obj = event.currentTarget.parentNode
       this.rect = {
         parentLeft: obj.parentNode.offsetLeft,
         left: obj.offsetLeft,

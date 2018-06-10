@@ -1,12 +1,12 @@
 
 <template>
   <div class="ve-fontsize">
-    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" @click="clickHandler">
-      <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
+    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" onselectable="on">
+      <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
-    <ul v-show="show" ref="popup" class="ve-dropdown" :style="position">
-      <li v-for="(size, index) in list" :key="index" @click="selectHandler(size)">{{size}}</li>
-    </ul>
+    <div v-show="show" ref="popup" class="ve-dropdown" :style="position">
+      <a href="javascript:;" v-for="(size, index) in list" :key="index" @click="selectHandler(size)">{{size}}</a>
+    </div>
   </div>
 </template>
 

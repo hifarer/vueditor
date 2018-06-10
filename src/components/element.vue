@@ -1,11 +1,11 @@
 
 <template>
   <div class="ve-element">
-    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" @click="clickHandler">
-      <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
+    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" onselectable="on">
+      <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
-    <ul v-show="show" ref="popup" class="ve-dropdown" :style="position" @click="selectHandler">
-      <li v-for="(item, index) in list" :key="index">{{item}}</li>
+    <div v-show="show" ref="popup" class="ve-dropdown" :style="position" @click="selectHandler">
+      <a href="javascript:;" v-for="(item, index) in list" :key="index">{{item}}</a>
     </ul>
   </div>
 </template>

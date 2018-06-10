@@ -1,5 +1,5 @@
 
-// toolbar优化 源码高度问题 切换其他程序后history问题 markdown功能 文档
+// toolbar优化 源码高度问题 ie输入颜色代码range丢失问题 unlink问题 切换其他程序后history问题 markdown功能 文档
 
 import Vue from 'vue'
 
@@ -26,14 +26,13 @@ function mixinConfig (opts) {
   config.toolbar = distinctArray(config.toolbar)
   window.__VUEDITOR_LANGUAGE__ = config.lang || defaultLang
 
-  return Object.assign({}, app, {
-    beforeCreate () {
-      this.range = new Range()
-      this.nonceStr = createNonceStr()
-      this.eventHub = getEventHub(this.nonceStr)
-      this.config = config
-    }
-  })
+  app.beforeCreate = function () {
+    this.range = new Range()
+    this.nonceStr = createNonceStr()
+    this.eventHub = getEventHub(this.nonceStr)
+    this.config = config
+  }
+  return app
 }
 
 const install = function (Vue, opts) {

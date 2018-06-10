@@ -25,22 +25,22 @@
   <script>
 
     Vue.use(Vueditor)
-    let parent = new Vue({
+    var parent = new Vue({
       el: '#editor'
     })
-    let editor = parent.$children[0]
-    let editor2 = parent.$children[1]
+    var editor = parent.$children[0]
+    var editor2 = parent.$children[1]
     editor.setContent('content one')
     editor2.setContent('content two')
 
-    // let inst = Vueditor.createEditor('#box', {
+    // var inst = Vueditor.createEditor('#box', {
     //   toolbar: [
     //     'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
     //   ]
     // })
     // inst.setContent('fill your content here')
 
-    // let inst2 = Vueditor.createEditor('#box2')
+    // var inst2 = Vueditor.createEditor('#box2')
     // inst2.setContent('fill your content here2')
 
   </script>

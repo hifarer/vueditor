@@ -12,12 +12,12 @@
 
 <template>
   <div class="ve-fontname">
-    <div :class="['ve-select', $style.select, {'ve-disabled': view !== 'design'}]" @click="clickHandler">
-      <span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i>
+    <div :class="['ve-select', $style.select, {'ve-disabled': view !== 'design'}]" onselectable="on">
+      <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
-    <ul v-show="show" ref="popup" class="ve-dropdown" :style="style">
-      <li v-for="(item, index) in list" :key="index" @click="selectHandler(item)" :style="{fontFamily: item.val + ', sans-serif'}">{{item.abbr || item.val}}</li>
-    </ul>
+    <div v-show="show" ref="popup" class="ve-dropdown" :style="style">
+      <a href="javascript:;" v-for="(item, index) in list" :key="index" @click="selectHandler(item)" :style="{fontFamily: item.val + ', sans-serif'}">{{item.abbr || item.val}}</a>
+    </div>
   </div>
 </template>
 

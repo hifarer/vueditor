@@ -17,11 +17,15 @@
       cursor: pointer;
       position: relative;
       display: inline-block;
-      padding: 10px 12px;
+      // padding: 10px 12px;
       color: rgba(0, 0, 0, 0.6);
     }
     div.ve-icon:not(.ve-disabled):hover {
       background: #eee;
+    }
+    div.ve-icon a {
+      display: inline-block;
+      padding: 10px 12px;
     }
     div.ve-active {
       background: #eee;
@@ -50,12 +54,15 @@
   <div class="ve-toolbar" ref="toolbar">
     <template v-for="item in toolbarIcons">
 
-      <div v-if="item in btns" @click.stop.prevent="clickHandler($event, item)" 
-        :title="lang[item].title"
+      <div 
+        unselectable="on"
+        v-if="item in btns"
         :class="['ve-icon', {'ve-active': status[item] === 'actived', 've-disabled': status[item] === 'disabled'}]">
-        <i :class="[btns[item].className]"></i>
+        <a href="javascript:;" :title="lang[item].title" @click.stop.prevent="clickHandler($event, item)">
+          <i :class="[btns[item].className]"></i>
+        </a>
       </div>
-
+      
       <div class="ve-divider" v-if="item == 'divider' || item == '|'"></div>
 
       <component 
@@ -111,7 +118,7 @@
       }
     },
     props: {
-      toolbarIcons: [String],
+      toolbarIcons: Array,
       view: String,
       content: String,
       fullscreen: Boolean,
@@ -164,7 +171,7 @@
             status[item] = val === 'design' ? 'default' : 'disabled'
           }
         })
-        if (val === 'codesnippet') {
+        if (val === 'codeSnippet') {
           status.codeSnippet !== undefined && (status.codeSnippet = 'default')
         }
         this.setButtonStatus(status)
