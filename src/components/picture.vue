@@ -1,5 +1,5 @@
 
-<style module>
+<style module lang="less" rel="stylesheet/less">
   .wrap {
     width: 500px;
     position: relative;
@@ -32,7 +32,7 @@
 
 <script>
 
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'picture',
@@ -46,7 +46,7 @@
       uploadUrl: String,
       activeComponent: String
     },
-    mixins: [hubMixin],
+    mixins: [injectMixin],
     computed: {
       show () {
         return this.activeComponent === this.$options.name

@@ -1,5 +1,5 @@
 
-<style module>
+<style module lang="less" rel="stylesheet/less">
   :global(.ve-markdown) {
     position: relative;
   }
@@ -34,7 +34,7 @@
 <script>
 
   import marked from 'marked'
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'markdown',
@@ -51,7 +51,7 @@
       view: String,
       content: String
     },
-    mixins: [hubMixin],
+    mixins: [injectMixin],
     watch: {
       'view': function (val) {
         if (val !== 'markdown' && this.currentView === 'markdown') {

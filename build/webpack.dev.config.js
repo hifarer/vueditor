@@ -1,16 +1,14 @@
 
-const webpack = require('webpack')
 const path = require('path')
+const webpack = require('webpack')
+const VueLoader = require('vue-loader')
+const HtmlwebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
 
-  context: __dirname,
-
-  watch: true,
-
-  entry: {
-    vueditor: '../src/main.js'
-  },
+  mode: 'development',
+  devtool: 'eval-source-map',
+  entry: './src/main.js',
 
   output: {
     path: path.join(__dirname, '../dist'),
@@ -33,7 +31,15 @@ module.exports = {
       },
       {
         test: /\.(css|less)$/,
-        use: ['style-loader', 'css-loader', 'less-loader', 'postcss-loader']
+        oneOf: [
+          {
+            resourceQuery: /module/,
+            use: ['vue-style-loader', 'css-loader?modules=true', 'less-loader']
+          },
+          {
+            use: ['vue-style-loader', 'css-loader', 'less-loader']
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -43,12 +49,22 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': '"development"'
-      }
+    new VueLoader.VueLoaderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlwebpackPlugin({
+      inject: 'head',
+      title: 'Vueditor',
+      template: './index.tpl.html'
     })
   ],
+
+  devServer: {
+    contentBase: path.join(__dirname, '..'),
+    compress: true,
+    noInfo: true,
+    hot: true,
+    port: 9999
+  },
 
   externals: {
     vue: {

@@ -23,7 +23,7 @@
 
 <script>
   
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
   import rectMixin from '../mixins/rect'
 
   export default {
@@ -42,7 +42,7 @@
       view: String,
       activeComponent: String
     },
-    mixins: [hubMixin, rectMixin],
+    mixins: [injectMixin, rectMixin],
     created () {
       this.eventHub.$on('sync-font-name', this.syncValue)
     },

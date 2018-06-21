@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <script src="//cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <Vueditor></Vueditor>
+</div>
+<script>
+  Vue.use(Vueditor)
+  let parent = new Vue({
+    el: '#app'
+  })
+  let editor = parent.$children[0]
+  editor.setContent(`fill your content here`)
+</script>
+</body>
+</html>

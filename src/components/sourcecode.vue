@@ -1,5 +1,5 @@
 
-<style module>
+<style module lang="less" rel="stylesheet/less">
   :global(.ve-sourcecode) {
     display: block;
     width: 100%;
@@ -24,7 +24,7 @@
 
 <script>
   
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'sourceCode',
@@ -37,7 +37,7 @@
       view: String,
       content: String
     },
-    mixins: [hubMixin],
+    mixins: [injectMixin],
     watch: {
       'content': function (val) {
         this.code = val

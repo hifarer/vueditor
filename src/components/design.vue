@@ -1,5 +1,5 @@
 
-<style module>
+<style module lang="less" rel="stylesheet/less">
   :global(.ve-design) {
     display: block;
     width: 100%;
@@ -19,7 +19,7 @@
 
 <script>
 
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
   
   export default {
     name: 'design',
@@ -42,7 +42,7 @@
       content: String
     },
     
-    mixins: [hubMixin],
+    mixins: [injectMixin],
 
     created: function () {
       this.eventHub.$on('selection-change', () => {

@@ -6,13 +6,13 @@
     </div>
     <div v-show="show" ref="popup" class="ve-dropdown" :style="position" @click="selectHandler">
       <a href="javascript:;" v-for="(item, index) in list" :key="index">{{item}}</a>
-    </ul>
+    </div>
   </div>
 </template>
 
 <script>
   
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
   import rectMixin from '../mixins/rect'
   import { getBrowser } from '../util.js'
 
@@ -29,7 +29,7 @@
       view: String,
       activeComponent: String
     },
-    mixins: [hubMixin, rectMixin],
+    mixins: [injectMixin, rectMixin],
     created () {
       this.eventHub.$on('sync-element-tag', this.syncValue)
     },

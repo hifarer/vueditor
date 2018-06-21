@@ -36,7 +36,7 @@
 <script>
 
   import rectMixin from '../mixins/rect'
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'table',
@@ -53,7 +53,7 @@
       view: String,
       activeComponent: String
     },
-    mixins: [hubMixin, rectMixin],
+    mixins: [injectMixin, rectMixin],
     methods: {
       clickHandler (event) {
         this.togglePopup(event)

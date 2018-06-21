@@ -1,5 +1,5 @@
 
-<style>
+<style lang="less" rel="stylesheet/less">
   .emoji {
     width: 276px;
   }
@@ -50,7 +50,7 @@
 
   import twemoji from 'twemoji'
   import rectMixin from '../mixins/rect'
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'emoji',
@@ -71,7 +71,7 @@
       view: String,
       activeComponent: String
     },
-    mixins: [hubMixin, rectMixin],
+    mixins: [injectMixin, rectMixin],
     methods: {
       convert (code) {
         return twemoji.convert.fromCodePoint(code)

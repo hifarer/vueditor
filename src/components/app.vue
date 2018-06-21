@@ -2,7 +2,7 @@
 <template>
   <div class="vueditor" :class="{'ve-fullscreen': fullscreen}">
     <ve-toolbar 
-      :toolbarIcons="config.toolbar" 
+      :icons="config.toolbar" 
       :view="view" 
       :content="content" 
       :fullscreen="fullscreen"
@@ -10,7 +10,7 @@
     </ve-toolbar>
     <div class="ve-container">
       <ve-sourcecode :view="view" :content="content"></ve-sourcecode>
-      <ve-design :config="config" :view="view" :content="content" ref="design"></ve-design>
+      <ve-design :config="config" :view="view" :content="content"></ve-design>
     </div>
     <ve-picture :uploadUrl="config.uploadUrl" :activeComponent="activeComponent"></ve-picture>
   </div>
@@ -37,7 +37,7 @@
     provide () {
       return {
         range: this.range,
-        nonceStr: this.nonceStr
+        eventHub: this.eventHub
       }
     },
     components: {

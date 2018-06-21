@@ -40,7 +40,7 @@
         <button type="button" class="ve-btn" :class="$style.input" @click="inputHandler">{{lang.ok}}</button>
       </div>
       <div :class="$style.list">
-        <a href="javascript:;" v-for="(item, index) in colors" :key="index" :title="item" :style="{background: item}" @click="setColor(item)"></span>
+        <a href="javascript:;" v-for="(item, index) in colors" :key="index" :title="item" :style="{background: item}" @click="setColor(item)"></a>
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@
 <script>
   
   import rectMixin from '../mixins/rect'
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
   
   export default {
     name: 'color',
@@ -75,7 +75,7 @@
       view: String,
       activeComponent: String
     },
-    mixins: [rectMixin, hubMixin],
+    mixins: [rectMixin, injectMixin],
     methods: {
       setActiveComponent (data) {
         this.eventHub.$emit('set-active-component', data)

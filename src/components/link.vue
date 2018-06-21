@@ -1,11 +1,11 @@
-<style module>
+<style module lang="less" rel="stylesheet/less">
   .ctn {
     width: 240px;
     height: 90px;
     margin-left: -102px;
   }
   .input {
-    max-width: calc(100% - 55px);
+    max-width: ~"calc(100% - 55px)";
   }
 </style>
 
@@ -32,7 +32,7 @@
 
 <script>
   
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
   import rectMixin from '../mixins/rect'
 
   export default {
@@ -48,7 +48,7 @@
       view: String,
       activeComponent: String
     },
-    mixins: [hubMixin, rectMixin],
+    mixins: [injectMixin, rectMixin],
     methods: {
       checkValid () {
         let href = this.val

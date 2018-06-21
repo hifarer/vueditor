@@ -1,14 +1,12 @@
 
-// toolbar优化 源码高度问题 ie输入颜色代码range丢失问题 unlink问题 切换其他程序后history问题 markdown功能 文档
+// 源码高度问题 ie输入颜色代码range丢失问题 unlink问题 切换其他程序后history问题 markdown功能 文档
 
 import Vue from 'vue'
 
 import defaultConf from './config/index.js'
 import defaultLang from './config/lang.js'
 import Range from './range.js'
-import { createNonceStr } from './util.js'
 
-import getEventHub from './eventhub.js'
 import app from './components/app.vue'
 
 function distinctArray (arr) {
@@ -28,8 +26,7 @@ function mixinConfig (opts) {
 
   app.beforeCreate = function () {
     this.range = new Range()
-    this.nonceStr = createNonceStr()
-    this.eventHub = getEventHub(this.nonceStr)
+    this.eventHub = new Vue()
     this.config = config
   }
   return app

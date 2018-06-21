@@ -12,7 +12,7 @@
 
 <script>
   
-  import hubMixin from '../mixins/hub'
+  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'undoRedo',
@@ -27,7 +27,7 @@
       view: String,
       content: String
     },
-    mixins: [hubMixin],
+    mixins: [injectMixin],
     computed: {
       canUndo: function () {
         return this.view === 'design' && this.index > 0
