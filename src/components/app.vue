@@ -2,7 +2,7 @@
 <template>
   <div class="vueditor" :class="{'ve-fullscreen': fullscreen}">
     <ve-toolbar 
-      :icons="config.toolbar" 
+      :btns="config.toolbar" 
       :view="view" 
       :content="content" 
       :fullscreen="fullscreen"
@@ -10,18 +10,21 @@
     </ve-toolbar>
     <div class="ve-container">
       <ve-sourcecode :view="view" :content="content"></ve-sourcecode>
-      <ve-design :config="config" :view="view" :content="content"></ve-design>
+      <ve-design :view="view" :content="content" :config="config"></ve-design>
     </div>
-    <ve-picture :uploadUrl="config.uploadUrl" :activeComponent="activeComponent"></ve-picture>
+    <ve-picture :config="config.upload" :activeComponent="activeComponent"></ve-picture>
   </div>
 </template>
 
 <script>
 
-  import toolbar from './toolbar.vue'
-  import design from './design.vue'
-  import sourceCode from './sourcecode.vue'
-  import picture from './picture.vue'
+  import Vue from 'vue'
+  import Toolbar from './toolbar.vue'
+  import Design from './design.vue'
+  import SourceCode from './sourcecode.vue'
+  import Picture from './picture.vue'
+
+  import Range from '../range.js'
 
   import '../style/main.less'
 
@@ -34,17 +37,11 @@
         fullscreen: false
       }
     },
-    provide () {
-      return {
-        range: this.range,
-        eventHub: this.eventHub
-      }
-    },
     components: {
-      've-toolbar': toolbar,
-      've-design': design,
-      've-sourcecode': sourceCode,
-      've-picture': picture
+      've-toolbar': Toolbar,
+      've-design': Design,
+      've-sourcecode': SourceCode,
+      've-picture': Picture
     },
     methods: {
       setContent (content) {
@@ -54,20 +51,19 @@
         return this.content
       }
     },
+    provide () {
+      this.range = new Range()
+      this.eventHub = new Vue()
+      return {
+        range: this.range,
+        eventHub: this.eventHub
+      }
+    },
     created () {
-      this.eventHub.$on('set-iframe-win', obj => {
-        this.range.setIframeWin(obj)
-      })
-      this.eventHub.$on('set-active-component', component => {
-        this.activeComponent = component
-      })
-      this.eventHub.$on('set-view', view => {
-        this.view = view
-      })
-      this.eventHub.$on('set-fullscreen', bool => {
-        this.fullscreen = bool
-      })
+      this.eventHub.$on('set-view', view => this.view = view)
       this.eventHub.$on('set-content', this.setContent)
+      this.eventHub.$on('set-fullscreen', fullscreen => this.fullscreen = fullscreen)
+      this.eventHub.$on('set-active-component', component => this.activeComponent = component)
     }
   }
 </script>

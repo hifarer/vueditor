@@ -29,7 +29,7 @@
     },
     mixins: [injectMixin, rectMixin],
     created () {
-      this.eventHub.$on('sync-font-size', this.syncValue)
+      this.eventHub.$on('sync-select-value', this.syncValue)
     },
     methods: {
       clickHandler (event) {
@@ -46,7 +46,10 @@
         Array.prototype.forEach.call(element.attributes, attr => {
           attr.nodeName !== 'size' && span.setAttribute(attr.nodeName, attr.nodeValue)
         })
-        span.innerHTML = element.innerHTML
+        while (element.firstChild) {
+          span.appendChild(element.firstChild)
+        }
+        span.normalize()
         element.parentNode.replaceChild(span, element)
         return span
       },
@@ -56,13 +59,16 @@
           return
         }
         let container = range.commonAncestorContainer
+        // if range container has only one child
         if (container.childNodes.length === 1) {
           container.childNodes[0].nodeType === 1 ? container.childNodes[0].style.fontSize = size : container.style.fontSize = size
         } else {
+          // use native api to create new dom tree for range
           this.eventHub.$emit('exec-command', {name: 'fontSize', value: 7})
           container = range.commonAncestorContainer
           container.nodeType === 3 && (container = container.parentNode)
           container = container.parentNode
+          // some browser does not support styleWithCss
           let fontList = Array.from(container.getElementsByTagName('font'))
           let spanList = Array.from(container.getElementsByTagName('span'))
           let startNode, endNode
@@ -70,18 +76,17 @@
             fontList.forEach((font, index) => {
               let span = this.replaceFontWithSpan(font)
               span.style.fontSize = size
-              span.normalize()
+              // for new range
               index === 0 && (startNode = span)
               index === fontList.length - 1 && (endNode = span)
             })
           }
           if (spanList.length !== 0) {
-            spanList.forEach((span, index) => {
+            spanList.forEach(span => {
               if (span.style.fontSize.indexOf('xx-large') !== -1) {
                 span.style.fontSize = size
-                span.normalize()
                 !startNode && (startNode = span)
-                endNode = span
+                endNode = span  // endNode will be the last one of the loop
               }
             })
           }
@@ -90,15 +95,15 @@
             range.setEndAfter(endNode)
           }
         }
-        this.eventHub.$emit('selection-change')
       },
-      syncValue (size) {
-        let unit = size.match(/[a-z]+/ig)[0]
+      syncValue ({ name, value }) {
+        if (name !== 'fontName') return
+        let unit = value.match(/[a-z]+/ig)[0]
         if (unit === 'px') {
-          this.list.indexOf(size) !== -1 && (this.val = size)
+          this.list.indexOf(value) !== -1 && (this.val = value)
         } else if (unit === 'rem') {
           let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
-          let remFontSize = (parseInt(size) / rootFontSize).toFixed(1) + 'rem'
+          let remFontSize = (parseInt(value) / rootFontSize).toFixed(1) + 'rem'
           this.list.indexOf(remFontSize) !== -1 && (this.val = remFontSize)
         } else {
           this.val = '--'

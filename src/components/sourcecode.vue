@@ -28,23 +28,33 @@
 
   export default {
     name: 'sourceCode',
+    props: {
+      view: String,
+      content: String
+    },
     data () {
       return {
         code: ''
       }
     },
-    props: {
-      view: String,
-      content: String
-    },
     mixins: [injectMixin],
     watch: {
       'content': function (val) {
-        this.code = val
+        // only update when visible
+        if (this.view === 'sourceCode' || this.view === 'markdown') {
+          this.code = val
+        }
       },
       'code': function (val) {
-        this.eventHub.$emit('set-content', val)
+        clearTimeout(this.timer)
+        // throttle
+        this.timer = setTimeout(() => {
+          this.eventHub.$emit('set-content', val)
+        }, 200);
       }
+    },
+    created () {
+      this.timer = null
     }
   }
 </script>

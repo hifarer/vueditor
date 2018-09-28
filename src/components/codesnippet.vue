@@ -34,7 +34,7 @@
     },
     mixins: [injectMixin, rectMixin],
     created () {
-      this.eventHub.$on('parse-code-block', this.parseCodeBlock)
+      this.eventHub.$on('parse-code-snippet', this.parseCodeSnippet)
     },
     methods: {
       clickHandler (event) {
@@ -62,7 +62,7 @@
         }
       },
       // tagName pre or code
-      parseCodeBlock (tagName) {
+      parseCodeSnippet (tagName) {
         let range = this.range.getRange()
         if (!range) return
         let container = this.range.getContainer()

@@ -31,7 +31,7 @@
     },
     mixins: [injectMixin, rectMixin],
     created () {
-      this.eventHub.$on('sync-element-tag', this.syncValue)
+      this.eventHub.$on('sync-select-value', this.syncValue)
     },
     methods: {
       clickHandler (event) {
@@ -43,13 +43,16 @@
         this.formatBlock(tagName)
         this.eventHub.$emit('set-active-component')
       },
-      syncValue (parent, child) {
-        let tagName = child.tagName.toLowerCase()
-        while (parent.contains(child) && tagName !== 'body' && this.list.indexOf(tagName) === -1) {
-          child = child.parentNode
-          tagName = child.tagName.toLowerCase()
-        }
-        this.list.indexOf(tagName) !== -1 && (this.val = tagName)
+      syncValue ({ name, value }) {
+        if (name !== 'element') return
+        let tagName = '--'
+        Array.isArray(value) && value.forEach(item => {
+          // the first tagName in list
+          if (this.list.indexOf(item) !== -1 && tagName === '--') {
+            tagName = item
+          }
+        })
+        this.val = tagName
       },
       formatBlock (value) {
         let browser = getBrowser()

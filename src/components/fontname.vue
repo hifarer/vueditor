@@ -44,7 +44,7 @@
     },
     mixins: [injectMixin, rectMixin],
     created () {
-      this.eventHub.$on('sync-font-name', this.syncValue)
+      this.eventHub.$on('sync-select-value', this.syncValue)
     },
     methods: {
       clickHandler (event) {
@@ -55,8 +55,9 @@
         this.eventHub.$emit('exec-command', {name: 'fontName', value: font.val + ', sans-serif'})
         this.eventHub.$emit('set-active-component')
       },
-      syncValue (fontName) {
-        this.val = this.list.filter(item => item.val === fontName).length !== 0 ? fontName : '--'
+      syncValue ({ name, value }) {
+        if (name !== 'fontName') return
+        this.val = this.list.filter(item => item.val === value).length !== 0 ? value : '--'
       }
     }
   }

@@ -15,9 +15,7 @@
     <div :class="$style.wrap">
       <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
       <div class="ve-dialog-body">
-        <form>
-          <input type="file" name="image" @change="changeHandler" ref="file">
-        </form>
+        <input type="file" ref="file" @change="changeHandler">
         <div class="ve-preview" v-if="url"><img :src="url"></div>
       </div>
       <div class="ve-dialog-footer">
@@ -33,23 +31,24 @@
 <script>
 
   import injectMixin from '../mixins/inject'
+  import { getBrowser } from '../util'
 
   export default {
     name: 'picture',
+    props: {
+      config: Object,
+      activeComponent: String
+    },
     data () {
       return {
         url: '',
         lang: window.__VUEDITOR_LANGUAGE__.picture
       }
     },
-    props: {
-      uploadUrl: String,
-      activeComponent: String
-    },
     mixins: [injectMixin],
     computed: {
       show () {
-        return this.activeComponent === this.$options.name
+        return this.activeComponent === 'picture'
       }
     },
     watch: {
@@ -66,64 +65,69 @@
       this.eventHub.$on('paste-upload', this.pasteHandler)
     },
     methods: {
-      execCommand (data) {
-        this.eventHub.$emit('exec-command', data)
-      },
       hideDialog () {
-        this.eventHub.$emit('set-button-status', {picture: 'default'})
+        this.eventHub.$emit('set-button-status', { picture: 'default' })
         this.eventHub.$emit('set-active-component')
       },
       changeHandler () {
-        this.preview(this.$refs.file)
+        let obj = this.$refs.file
+        if (obj.files.length !== 0 && obj.files[0].type.match(/^image\//i)) {
+          if (getBrowser() === 'IE') {
+            this.url = obj.value
+          } else {
+            this.url = window.URL.createObjectURL(obj.files[0])
+          }
+        }
       },
       pasteHandler (arr) {
         Array.prototype.forEach.call(arr, item => {
           if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
-            if (this.uploadUrl) {
-              this.upload(item.file[0])
-            } else {
-              this.preview(item)
-              this.execCommand({name: 'insertHTML', value: `<img src="${this.url}">`})
-              this.hideDialog()
+            let reader = new FileReader()
+            reader.onload = event => {
+              if (this.config.url) {
+                this.upload(event.target.result)
+              } else {
+                this.url = event.target.result
+                this.eventHub.$emit('insert-html', `<img src="${this.url}">`)
+              }
             }
+            reader.readAsDataURL(item.getAsFile())
           }
         })
       },
-      certainHandler (event) {
+      certainHandler () {
         let obj = this.$refs.file
         if (this.url) {
-          if (this.$parent.upload) {
+          // if upload function provided
+          if (typeof this.$parent.upload === 'function') {
             this.$parent.upload(obj, href => {
-              this.execCommand({name: 'insertHTML', value: `<img src="${href}">`})
+              this.eventHub.$emit('insert-html', `<img src="${href}">`)
               this.hideDialog()
             })
-          } else if (this.uploadUrl) {
+          } else if (this.config.url) {
+            // if upload url provided
             this.upload(obj.file[0])
           } else {
-            this.execCommand({name: 'insertHTML', value: `<img src="${this.url}">`})
+            this.eventHub.$emit('insert-html', `<img src="${this.url}">`)
             this.hideDialog()
           }
         } else {
           window.alert(this.lang.invalidFile)
         }
       },
-      preview (obj) {
-        if (navigator.userAgent.indexOf('MSIE') >= 1) { // IE
-          this.url = obj.value
-        } else {
-          if (obj.files.length !== 0 && obj.files.item(0).type.indexOf('image') !== -1) {
-            this.url = window.URL.createObjectURL(obj.files.item(0))
-          }
-        }
-      },
-      upload (file) {
+      upload (fileData) {
+        let { url, fieldName } = this.config
         let formData = new window.FormData()
         let xhr = new window.XMLHttpRequest()
-        formData.append('test', file)
-        xhr.open('POST', this.uploadUrl)
+        formData.append(fieldName, fileData)
+        xhr.open('POST', url)
         xhr.send(formData)
         xhr.onload = () => {
-          this.execCommand({name: 'insertHTML', value: `<img src="${xhr.responseText}">`})
+          if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+            this.eventHub.$emit('insert-html', `<img src="${xhr.responseText}">`)
+          } else {
+            window.alert(xhr.responseText)
+          }
           this.hideDialog()
         }
         xhr.onerror = err => {
