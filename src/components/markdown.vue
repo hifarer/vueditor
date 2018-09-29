@@ -34,10 +34,13 @@
 <script>
 
   import marked from 'marked'
-  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'markdown',
+    props: {
+      view: String,
+      content: String
+    },
     data () {
       return {
         md: '',
@@ -47,11 +50,7 @@
         currentView: 'design'
       }
     },
-    props: {
-      view: String,
-      content: String
-    },
-    mixins: [injectMixin],
+    inject: ['eventHub'],
     watch: {
       'view': function (val) {
         if (val !== 'markdown' && this.currentView === 'markdown') {

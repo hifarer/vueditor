@@ -48,8 +48,7 @@
 
 <script>
   
-  import rectMixin from '../mixins/rect'
-  import injectMixin from '../mixins/inject'
+  import mixins from '../mixins'
   
   export default {
     name: 'color',
@@ -75,7 +74,8 @@
         lang: window.__VUEDITOR_LANGUAGE__.color
       }
     },
-    mixins: [rectMixin, injectMixin],
+    inject: ['eventHub'],
+    mixins: [mixins],
     methods: {
       clickHandler (type, event) {
         if (this.view !== 'design') return

@@ -71,7 +71,6 @@
 
 <script>
   
-  import injectMixin from '../mixins/inject'
   import toolbarConf from '../config/toolbar'
 
   import FontSize from './fontsize.vue'
@@ -130,7 +129,7 @@
         componentList
       }
     },
-    mixins: [injectMixin],
+    inject: ['eventHub'],
     components: {
       've-fontsize': FontSize,
       've-fontname': FontName,

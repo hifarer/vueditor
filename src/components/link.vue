@@ -31,8 +31,7 @@
 
 <script>
   
-  import injectMixin from '../mixins/inject'
-  import rectMixin from '../mixins/rect'
+  import mixins from '../mixins'
 
   export default {
     name: 'link',
@@ -47,7 +46,8 @@
         position: { left: 0, top: 0, arrowLeft: 0 }
       }
     },
-    mixins: [injectMixin, rectMixin],
+    inject: ['range', 'eventHub'],
+    mixins: [mixins],
     methods: {
       clickHandler (event) {
         this.toggleMenu(event)

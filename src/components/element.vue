@@ -12,8 +12,7 @@
 
 <script>
   
-  import injectMixin from '../mixins/inject'
-  import rectMixin from '../mixins/rect'
+  import mixins from '../mixins'
   import { getBrowser } from '../util.js'
 
   export default {
@@ -29,7 +28,8 @@
         position: { left: 0, top: 0 }
       }
     },
-    mixins: [injectMixin, rectMixin],
+    inject: ['range', 'eventHub'],
+    mixins: [mixins],
     methods: {
       clickHandler (event) {
         this.toggleMenu(event)

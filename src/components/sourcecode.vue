@@ -23,8 +23,6 @@
 </template>
 
 <script>
-  
-  import injectMixin from '../mixins/inject'
 
   export default {
     name: 'sourceCode',
@@ -37,7 +35,7 @@
         code: ''
       }
     },
-    mixins: [injectMixin],
+    inject: ['eventHub'],
     watch: {
       'content': function (val) {
         // only update when visible

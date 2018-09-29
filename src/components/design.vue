@@ -18,8 +18,6 @@
 </template>
 
 <script>
-
-  import injectMixin from '../mixins/inject'
   
   export default {
     name: 'design',
@@ -37,7 +35,7 @@
         lang: window.__VUEDITOR_LANGUAGE__.design
       }
     },
-    mixins: [injectMixin],
+    inject: ['range', 'eventHub'],
 
     created: function () {
       this.timer = null

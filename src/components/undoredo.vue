@@ -12,8 +12,6 @@
 
 <script>
   
-  import injectMixin from '../mixins/inject'
-
   export default {
     name: 'undoRedo',
     props: {
@@ -27,7 +25,7 @@
         lang: window.__VUEDITOR_LANGUAGE__.undoRedo
       }
     },
-    mixins: [injectMixin],
+    inject: ['eventHub'],
     computed: {
       canUndo: function () {
         return this.view === 'design' && this.index > 0

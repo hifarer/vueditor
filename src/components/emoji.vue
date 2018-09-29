@@ -45,8 +45,7 @@
 // console.log(arr);
 
 import twemoji from 'twemoji'
-import rectMixin from '../mixins/rect'
-import injectMixin from '../mixins/inject'
+import mixins from '../mixins'
 
 export default {
   name: 'emoji',
@@ -61,7 +60,8 @@ export default {
       position: { left: 0, top: 0, arrowLeft: 0 }
     }
   },
-  mixins: [injectMixin, rectMixin],
+  inject: ['eventHub'],
+  mixins: [mixins],
   methods: {
     convert (code) {
       return twemoji.convert.fromCodePoint(code)

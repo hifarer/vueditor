@@ -35,8 +35,7 @@
 
 <script>
 
-  import rectMixin from '../mixins/rect'
-  import injectMixin from '../mixins/inject'
+  import mixins from '../mixins'
 
   export default {
     name: 'table',
@@ -53,7 +52,8 @@
         lang: window.__VUEDITOR_LANGUAGE__.table
       }
     },
-    mixins: [injectMixin, rectMixin],
+    inject: ['eventHub'],
+    mixins: [mixins],
     methods: {
       clickHandler (event) {
         this.toggleMenu(event)

@@ -30,7 +30,6 @@
 
 <script>
 
-  import injectMixin from '../mixins/inject'
   import { getBrowser } from '../util'
 
   export default {
@@ -45,7 +44,7 @@
         lang: window.__VUEDITOR_LANGUAGE__.picture
       }
     },
-    mixins: [injectMixin],
+    inject: ['eventHub'],
     computed: {
       show () {
         return this.activeComponent === 'picture'
