@@ -15,7 +15,7 @@
     <div :class="['ve-select', $style.select, {'ve-disabled': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
-    <div v-show="show" ref="popup" class="ve-dropdown" :style="style">
+    <div v-show="show" ref="popup" class="ve-dropdown" :style="position">
       <a href="javascript:;" v-for="(item, index) in list" :key="index" @click="selectHandler(item)" :style="{fontFamily: item.val + ', sans-serif'}">{{item.abbr || item.val}}</a>
     </div>
   </div>
@@ -28,6 +28,10 @@
 
   export default {
     name: 'fontName',
+    props: {
+      view: String,
+      activeComponent: String
+    },
     data () {
       return {
         list: [
@@ -35,20 +39,14 @@
           { val: 'times new roman' },
           { val: 'Courier New' }
         ],
-        val: 'arial black'
+        val: 'arial black',
+        position: { left: 0, top: 0 }
       }
     },
-    props: {
-      view: String,
-      activeComponent: String
-    },
     mixins: [injectMixin, rectMixin],
-    created () {
-      this.eventHub.$on('sync-select-value', this.syncValue)
-    },
     methods: {
       clickHandler (event) {
-        this.togglePopup(event)
+        this.toggleMenu(event)
       },
       selectHandler (font) {
         this.val = font.abbr || font.val
@@ -59,6 +57,9 @@
         if (name !== 'fontName') return
         this.val = this.list.filter(item => item.val === value).length !== 0 ? value : '--'
       }
+    },
+    created () {
+      this.eventHub.$on('sync-select-value', this.syncValue)
     }
   }
 </script>

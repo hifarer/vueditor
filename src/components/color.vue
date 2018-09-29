@@ -10,13 +10,13 @@
   }
   .list {
     overflow: hidden;
-  }
-  .list a {
-    width: 20px;
-    height: 20px;
-    margin: 1px;
-    float: left;
-    cursor: pointer;
+    a {
+      width: 20px;
+      height: 20px;
+      margin: 1px;
+      float: left;
+      cursor: pointer;
+    }
   }
   .input {
     max-width: ~"calc(100% - 46px)";
@@ -53,6 +53,10 @@
   
   export default {
     name: 'color',
+    props: {
+      view: String,
+      activeComponent: String
+    },
     data () {
       return {
         colors: [
@@ -65,43 +69,33 @@
           '#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842',
           '#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031'
         ],
+        position: { left: 0, top: 0 },
         key: '',
         val: '',
-        rect: {},
         lang: window.__VUEDITOR_LANGUAGE__.color
       }
     },
-    props: {
-      view: String,
-      activeComponent: String
-    },
     mixins: [rectMixin, injectMixin],
     methods: {
-      setActiveComponent (data) {
-        this.eventHub.$emit('set-active-component', data)
-      },
       clickHandler (type, event) {
-        if (this.view !== 'design') {
-          return
-        }
+        if (this.view !== 'design') return
+        this.$refs.popup.style.display = 'block' // show the popup menu so that we can get it's offsetWidth
         let obj = event.currentTarget.parentNode
-        this.rect = {
-          left: obj.offsetLeft,
-          top: obj.offsetTop,
-          width: obj.offsetWidth,
-          height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
-        }
-        if (this.key === type && this.activeComponent === 'color') {
-          this.setActiveComponent()
-        } else {
-          this.setActiveComponent('color')
-        }
+        let rect = obj.getBoundingClientRect()
+        let popWidth = this.$refs.popup.offsetWidth
+        let showMenu = this.key !== type || this.activeComponent !== 'color'
         this.key = type
+        // getPositionForDropdown comes from mixin
+        this.position = this.getPositionForDropdown({
+          popWidth,
+          btnWidth: rect.width,
+          btnHeight: rect.height,
+          rectLeft: rect.left,
+          offsetLeft: obj.offsetLeft
+        })
+        this.eventHub.$emit('set-active-component', showMenu ? 'color' : '')
       },
-      setColor (val) {
-        this.eventHub.$emit('exec-command', {name: this.key, value: val})
-        this.setActiveComponent()
-      },
+      // todo ie输入颜色代码range丢失问题
       inputHandler () {
         let color = this.val
         let valid = this.checkValid(color)
@@ -119,6 +113,10 @@
         if (hsl3.test(sColor) || hsl6.test(sColor) || rgb.test(sColor)) {
           return true
         }
+      },
+      setColor (val) {
+        this.eventHub.$emit('exec-command', {name: this.key, value: val})
+        this.eventHub.$emit('set-active-component')
       }
     }
   }

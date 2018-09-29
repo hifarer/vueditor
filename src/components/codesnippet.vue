@@ -17,28 +17,25 @@
 
   export default {
     name: 'codeSnippet',
+    props: {
+      view: String,
+      activeComponent: String
+    },
     data () {
       return {
-        list: ['bash', 'clike', 'css', 'html', 'java', 'javascript', 'php', 'python', 'sql'],
+        list: ['bash', 'sql', 'clike', 'php', 'python', 'java', 'javascript', 'css', 'html'],
         val: 'bash',
         pattern: {
           attrName: 'class',
           attrValue: 'language-#lang#'
         },
-        rect: {}
+        position: { left: 0, top: 0 }
       }
     },
-    props: {
-      view: String,
-      activeComponent: String
-    },
     mixins: [injectMixin, rectMixin],
-    created () {
-      this.eventHub.$on('parse-code-snippet', this.parseCodeSnippet)
-    },
     methods: {
       clickHandler (event) {
-        this.togglePopup(event)
+        this.toggleMenu(event)
       },
       selectHandler (lang) {
         this.val = lang
@@ -48,37 +45,33 @@
       insertCodeBlock (lang) {
         let container = this.range.getContainer()
         if (!container) return
-        let { attrName, attrValue } = this.pattern
-        let tempDiv = document.createElement('div')
-        let html = ('<pre><code ' + attrName + '="' + attrValue + '"><br></code></pre>').replace(/#lang#/igm, lang)
-        tempDiv.innerHTML = html
-        // if the range inside code element
+        // if the range is inside code element
         if (container.tagName.toLowerCase() === 'code') {
           container.setAttribute(attrName, lang)
-        } else if (container.tagName.toLowerCase() === 'pre') {
-          this.eventHub.$emit('insert-html', tempDiv.getElementsByTagName('code')[0].outerHTML)
         } else {
-          this.eventHub.$emit('insert-html', html)
-        }
-      },
-      // tagName pre or code
-      parseCodeSnippet (tagName) {
-        let range = this.range.getRange()
-        if (!range) return
-        let container = this.range.getContainer()
-        if (tagName === 'code') {
           let { attrName, attrValue } = this.pattern
-          attrValue = attrValue.replace(/#lang#/, '')
-          attrValue = (container.getAttribute(attrName) || '').replace(attrValue, '')
-          this.val = attrValue || '--'
-        } else {
-          // 解决文字直接写到pre里
-          if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
-            this.eventHub.$emit('wrap-text-node', range, 'code')
+          let tempDiv = document.createElement('div')
+          let html = ('<pre><code ' + attrName + '="' + attrValue + '"><br></code></pre>').replace(/#lang#/igm, lang)
+          tempDiv.innerHTML = html
+          // if the range is inside pre element
+          if (container.tagName.toLowerCase() === 'pre') {
+            this.eventHub.$emit('insert-html', tempDiv.children[0].outerHTML)
+          } else {
+            this.eventHub.$emit('insert-html', html)
           }
         }
-        this.view === 'design' && this.eventHub.$emit('set-view', 'codeSnippet')
+      },
+      syncValue ({ name, value }) {
+        if (name !== 'codeSnippet') return
+        // todo: has mutiple className
+        let { attrName, attrValue } = this.pattern
+        attrValue = attrValue.replace(/#lang#/, '')     // language-#lang# -> language-
+        let val = (value[attrName] || '').replace(attrValue, '')    // value is a attributes object
+        this.val = val || '--'
       }
+    },
+    created () {
+      this.eventHub.$on('sync-select-value', this.syncValue)
     }
   }
 </script>

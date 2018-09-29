@@ -40,23 +40,23 @@
 
   export default {
     name: 'table',
+    props: {
+      view: String,
+      activeComponent: String
+    },
     data () {
       return {
         num: 64,
         x: -1,
         y: -1,
-        rect: {},
+        position: { left: 0, top: 0 },
         lang: window.__VUEDITOR_LANGUAGE__.table
       }
-    },
-    props: {
-      view: String,
-      activeComponent: String
     },
     mixins: [injectMixin, rectMixin],
     methods: {
       clickHandler (event) {
-        this.togglePopup(event)
+        this.toggleMenu(event)
       },
       overHandler (index) {
         this.x = index % 8

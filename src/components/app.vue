@@ -45,7 +45,9 @@
     },
     methods: {
       setContent (content) {
-        this.content = content
+        if (this.content !== content) {
+          this.content = content
+        }
       },
       getContent () {
         return this.content

@@ -3,61 +3,56 @@ export default {
   computed: {
     show () {
       return this.activeComponent === this.$options.name
-    },
-    position () {
-      if (!this.activeComponent || this.activeComponent !== this.$options.name || !this.$refs.popup) {
-        return {left: 0, top: 0}
-      }
-      this.$refs.popup.style.display = 'block'
-      let {parentLeft, left, top, width, height} = this.rect
-      let offsetWidth = this.$refs.popup.offsetWidth
-      let offsetLeft = left
-      // by default, the popup menu's left edge is intend to align with the the clicked toolbar element's left edge
-      // > 0 means the popup menu's right edge is not totally visible, so we try to align the popup menu's right edge with the clicked toolbar element's right edge
-      if (parentLeft + offsetWidth - document.documentElement.clientWidth > 0) {
-        offsetLeft = width - offsetWidth
-        // check if the popup menu's left edge is totally visible or not
-        if (parentLeft + offsetLeft < 0) {
-          // align center
-          offsetLeft = (width - offsetWidth) / 2
-        }
-      }
-      let position = {left: offsetLeft + 'px', top: (top + height) + 'px'}
-      if (this.$options.name === 'emoji' || this.$options.name === 'link') {
-        let marginLeft = 0
-        let arrowLeft = offsetWidth / 2
-        if (parentLeft + offsetLeft - (offsetWidth - width) / 2 < 0) {
-          marginLeft = -(parentLeft + offsetLeft)
-          arrowLeft = Math.abs(marginLeft) + width / 2
-        } else if (offsetLeft === width - offsetWidth) {
-          arrowLeft = Math.abs(offsetLeft) + width / 2
-        } else {
-          marginLeft = -(offsetWidth - width) / 2
-        }
-        position.popLeft = marginLeft + 'px'
-        position.arrowLeft = arrowLeft + 'px'
-      }
-      return position
     }
   },
   methods: {
-    togglePopup (event) {
-      if (this.view !== 'design' && !(this.view === 'codeSnippet' && this.$options.name === 'codeSnippet')) {
+    toggleMenu (event) {
+      let name = this.$options.name
+      if (this.view !== 'design' && !(this.view === 'codeSnippet' && name === 'codeSnippet')) return
+      if (this.activeComponent === name) {
+        this.eventHub.$emit('set-active-component') // just hide the popup menu
         return
       }
+      this.$refs.popup.style.display = 'block' // show the popup menu so that we can get it's offsetWidth
       let obj = event.currentTarget.parentNode
-      this.rect = {
-        parentLeft: obj.parentNode.offsetLeft,
-        left: obj.offsetLeft,
-        top: obj.offsetTop,
-        width: obj.offsetWidth,
-        height: obj.offsetHeight + parseInt(window.getComputedStyle(obj).marginBottom)
+      let rect = obj.getBoundingClientRect()
+      let popWidth = this.$refs.popup.offsetWidth
+      let fnName = ['emoji', 'link'].indexOf(name) !== -1 ? 'getPositionForPopup' : 'getPositionForDropdown'
+      this.position = this[fnName]({
+        popWidth,
+        btnWidth: rect.width,
+        btnHeight: rect.height,
+        rectLeft: rect.left,
+        offsetLeft: obj.offsetLeft
+      })
+      this.eventHub.$emit('set-active-component', name)
+    },
+    getPositionForDropdown (data) {
+      let { popWidth, btnWidth, btnHeight, rectLeft, offsetLeft } = data
+      let posLeft = offsetLeft // by default, the popup menu is intend to align with the the clicked toolbar button's left edge
+      // true means the right part is not fully visible
+      if (rectLeft + offsetLeft + popWidth - document.documentElement.clientWidth > 0) {
+        // true means the left part is not fully visible
+        if (rectLeft + offsetLeft + btnWidth - popWidth < 0) {
+          posLeft = offsetLeft + (btnWidth - popWidth) / 2 // align center
+        } else {
+          posLeft = offsetLeft + btnWidth - popWidth // align with the right edge
+        }
       }
-      if (this.activeComponent !== this.$options.name) {
-        this.eventHub.$emit('set-active-component', this.$options.name)
-      } else {
-        this.eventHub.$emit('set-active-component')
+      return { left: posLeft + 'px', top: btnHeight + 'px' }
+    },
+    getPositionForPopup (data) {
+      let { popWidth, btnWidth, btnHeight, rectLeft, offsetLeft } = data
+      let posLeft = offsetLeft + btnWidth / 2 - popWidth / 2
+      // true means the left part is not fully visible
+      if (rectLeft + posLeft < 0) {
+        posLeft = -rectLeft
       }
+      // true means the right part is not fully visible
+      if (rectLeft + posLeft + popWidth > document.documentElement.clientWidth) {
+        posLeft = document.documentElement.clientWidth - (rectLeft + offsetLeft) - popWidth
+      }
+      return { left: posLeft + 'px', top: btnHeight + 'px', arrowLeft: Math.abs(posLeft) + btnWidth / 2 + 'px' }
     }
   }
 }

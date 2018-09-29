@@ -104,24 +104,25 @@
 }
 
 .ve-select {
-  position: relative;
-  min-width: 60px;
-  line-height: 26px;
-  margin: 5px 5px 5px 0;
-  padding: 0 20px 0 10px!important;
-  border-right: 1px solid #ddd;
   vertical-align: top;
+  a {
+    display: block;
+    position: relative;
+    min-width: 60px;
+    margin: 5px;
+    padding: 0 15px;
+    line-height: 26px;
+    border-right: 1px solid #ddd;
+  }
   span {
     display: inline-block;
     width: 100%;
     vertical-align: middle;
     font-size: 16px;
-    line-height: 26px;
-    letter-spacing: initial;
   }
   i {
     position: absolute;
-    right: 10px;
+    right: 7px;
     top: 50%;
     margin-top: -2px;
   }
@@ -148,7 +149,6 @@
   border-bottom: 1px solid #ddd;
   font-size: 16px;
   top: 26px;
-  letter-spacing: initial;
   &:last-child {
     border-bottom: none;
   }
@@ -324,6 +324,9 @@
   }
   .icon-fullscreen {
     background: url("../images/icon-fullscreen.png") no-repeat;
+  }
+  .icon-smile-o {
+    background: url("../images/icon-smile-o.png") no-repeat;
   }
   [class^=icon] {
     width: 16px;

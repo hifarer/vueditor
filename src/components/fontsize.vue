@@ -17,23 +17,21 @@
 
   export default {
     name: 'fontSize',
-    data () {
-      return {
-        list: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
-        val: '12px'
-      }
-    },
     props: {
       view: String,
       activeComponent: String
     },
-    mixins: [injectMixin, rectMixin],
-    created () {
-      this.eventHub.$on('sync-select-value', this.syncValue)
+    data () {
+      return {
+        list: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
+        val: '12px',
+        position: { left: 0, top: 0 }
+      }
     },
+    mixins: [injectMixin, rectMixin],
     methods: {
       clickHandler (event) {
-        this.togglePopup(event)
+        this.toggleMenu(event)
       },
       selectHandler (size) {
         this.val = size
@@ -63,7 +61,7 @@
         if (container.childNodes.length === 1) {
           container.childNodes[0].nodeType === 1 ? container.childNodes[0].style.fontSize = size : container.style.fontSize = size
         } else {
-          // use native api to create new dom tree for range
+          // use native api to create new dom tree for the range
           this.eventHub.$emit('exec-command', {name: 'fontSize', value: 7})
           container = range.commonAncestorContainer
           container.nodeType === 3 && (container = container.parentNode)
@@ -97,7 +95,7 @@
         }
       },
       syncValue ({ name, value }) {
-        if (name !== 'fontName') return
+        if (name !== 'fontSize') return
         let unit = value.match(/[a-z]+/ig)[0]
         if (unit === 'px') {
           this.list.indexOf(value) !== -1 && (this.val = value)
@@ -109,6 +107,9 @@
           this.val = '--'
         }
       }
+    },
+    created () {
+      this.eventHub.$on('sync-select-value', this.syncValue)
     }
   }
 </script>

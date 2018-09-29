@@ -2,7 +2,6 @@
   .ctn {
     width: 240px;
     height: 90px;
-    margin-left: -102px;
   }
   .input {
     max-width: ~"calc(100% - 55px)";
@@ -17,7 +16,7 @@
     <div :class="['ve-icon', {'ve-disabled': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.clearLink" @click="clearLink"><i class="icon-unlink"></i></a>
     </div>
-    <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="{left: position.left, top: position.top, marginLeft: position.popLeft}">
+    <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="position">
       <div class="ve-pop-arrow" :style="{left: position.arrowLeft}"></div>
       <div class="ve-pop-header">{{lang.addLink}}</div>
       <div class="ve-pop-body">
@@ -37,32 +36,29 @@
 
   export default {
     name: 'link',
-    data () {
-      return {
-        val: '',
-        rect: {},
-        lang: window.__VUEDITOR_LANGUAGE__.link
-      }
-    },
     props: {
       view: String,
       activeComponent: String
     },
+    data () {
+      return {
+        val: '',
+        lang: window.__VUEDITOR_LANGUAGE__.link,
+        position: { left: 0, top: 0, arrowLeft: 0 }
+      }
+    },
     mixins: [injectMixin, rectMixin],
     methods: {
-      checkValid () {
-        let href = this.val
-        href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
-        return href
-      },
       clickHandler (event) {
-        this.togglePopup(event)
+        this.toggleMenu(event)
       },
       addLink () {
-        let href = this.checkValid()
+        let href = this.val
+        href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
         this.eventHub.$emit('exec-command', { name: 'createlink', value: href })
         this.eventHub.$emit('set-active-component')
       },
+      // todo unlink IE问题
       clearLink () {
         let container = this.range.getContainer()
         if (!container) return

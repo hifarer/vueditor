@@ -16,16 +16,16 @@
 
   export default {
     name: 'undoRedo',
+    props: {
+      view: String,
+      content: String
+    },
     data () {
       return {
         stack: [],
         index: -1,
         lang: window.__VUEDITOR_LANGUAGE__.undoRedo
       }
-    },
-    props: {
-      view: String,
-      content: String
     },
     mixins: [injectMixin],
     computed: {
@@ -43,6 +43,7 @@
         }
       },
       'view': function (val) {
+        // re initial stack
         if (val === 'design') {
           this.stack = []
           this.index = -1

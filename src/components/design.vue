@@ -43,14 +43,15 @@
       this.timer = null
       this.eventHub.$on('insert-html', this.insertHTML)
       this.eventHub.$on('exec-command', this.execCommand)
-      this.eventHub.$on('wrap-text-node', this.wrapTextNode)
     },
 
     watch: {
       'content': function (val) {
         // only update when visible
-        if (this.view !== 'sourceCode' && this.iframeBody) {
-          this.iframeBody.innerHTML = val
+        if (this.view !== 'sourceCode') {
+          if (this.iframeBody && this.iframeBody.innerHTML !== val) {
+            this.iframeBody.innerHTML = val
+          }
         }
       }
     },
@@ -66,13 +67,6 @@
         }
         this.addEvent()
         this.range.setIframeWin(this.iframeWin)
-      },
-
-      setContent (content) {
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          this.eventHub.$emit('set-content', content)
-        }, 200)
       },
       
       // init, selection change
@@ -194,7 +188,10 @@
       },
 
       keyupHandler (event) {
-        this.setContent(this.iframeBody.innerHTML)
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          this.eventHub.$emit('set-content', this.iframeBody.innerHTML)
+        }, 200)
       },
   
       pasteHandler (event) {
@@ -228,6 +225,7 @@
           // throttle
           clearTimeout(timer)
           timer = setTimeout(() => {
+            // update select value and button status
             this.checkElement()
             this.view === 'design' && this.setButtonStatus()
           }, 200)
@@ -257,8 +255,16 @@
         let tagName = container.tagName.toLowerCase()
         let domNodePath = this.getDOMNodePath(this.iframeBody, container)
         
-        if (['code', 'pre'].indexOf(tagName) !== -1) {
-          this.eventHub.$emit('parse-code-snippet', tagName)
+        if (['pre', 'code'].indexOf(tagName) !== -1) {
+          if (tagName === 'pre') {
+            // 解决文字直接写到pre里
+            if (range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
+              this.wrapTextNode(range, 'code')
+            }
+          } else {
+            this.eventHub.$emit('sync-select-value', { name: 'codeSnippet', value: container.attributes })
+          }
+          this.view === 'design' && this.eventHub.$emit('set-view', 'codeSnippet')
         } else {
           let style = window.getComputedStyle(container)
           let fontName = style['fontFamily'].replace(', sans-serif', '').replace(/"/g, '')
@@ -290,7 +296,7 @@
         this.iframeBody.focus()
         // 设置一个延迟以便像设置字号等功能在调用这个方法后再次改变innerHTML
         setTimeout(() => {
-          this.setContent(this.iframeBody.innerHTML)
+          this.eventHub.$emit('set-content', this.iframeBody.innerHTML)
         }, 200)
       },
 
@@ -326,6 +332,7 @@
         if (!container) return
         container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
         this.formatContent(container)
+        container.normalize()
       },
 
       formatContent (obj) {
@@ -366,6 +373,6 @@
         range.collapse(true)
       }
 
-    } // end of method
+    }
   }
 </script>

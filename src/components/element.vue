@@ -4,8 +4,8 @@
     <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
-    <div v-show="show" ref="popup" class="ve-dropdown" :style="position" @click="selectHandler">
-      <a href="javascript:;" v-for="(item, index) in list" :key="index">{{item}}</a>
+    <div v-show="show" ref="popup" class="ve-dropdown" :style="position">
+      <a href="javascript:;" v-for="(item, index) in list" :key="index" @click="selectHandler(item)">{{item}}</a>
     </div>
   </div>
 </template>
@@ -18,30 +18,39 @@
 
   export default {
     name: 'element',
-    data () {
-      return {
-        list: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-        val: 'p',
-        rect: {}
-      }
-    },
     props: {
       view: String,
       activeComponent: String
     },
-    mixins: [injectMixin, rectMixin],
-    created () {
-      this.eventHub.$on('sync-select-value', this.syncValue)
+    data () {
+      return {
+        list: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        val: 'p',
+        position: { left: 0, top: 0 }
+      }
     },
+    mixins: [injectMixin, rectMixin],
     methods: {
       clickHandler (event) {
-        this.togglePopup(event)
+        this.toggleMenu(event)
       },
-      selectHandler (event) {
-        let tagName = event.target.innerHTML.trim()
+      selectHandler (tagName) {
         this.val = tagName
         this.formatBlock(tagName)
         this.eventHub.$emit('set-active-component')
+      },
+      formatBlock (value) {
+        let lang = window.__VUEDITOR_LANGUAGE__.element
+        if (getBrowser() === 'IE') {
+          let range = this.range.getRange()
+          if (!range || range.collapsed) {
+            window.alert(lang.ieMsg)
+          } else {
+            this.eventHub.$emit('exec-command', {name: 'formatblock', value:'<' + value.toUpperCase() + '>'})
+          }
+        } else {
+          this.eventHub.$emit('exec-command', {name: 'formatblock', value})
+        }
       },
       syncValue ({ name, value }) {
         if (name !== 'element') return
@@ -53,21 +62,10 @@
           }
         })
         this.val = tagName
-      },
-      formatBlock (value) {
-        let browser = getBrowser()
-        let lang = window.__VUEDITOR_LANGUAGE__.element
-        if (browser === 'IE') {
-          let range = this.range.getRange()
-          if (!range || range.collapsed) {
-            window.alert(lang.ieMsg)
-          } else {
-            this.eventHub.$emit('exec-command', {name: 'formatblock', value:'<' + value.toUpperCase() + '>'})
-          }
-        } else {
-          this.eventHub.$emit('exec-command', {name: 'formatblock', value})
-        }
       }
+    },
+    created () {
+      this.eventHub.$on('sync-select-value', this.syncValue)
     }
   }
 </script>

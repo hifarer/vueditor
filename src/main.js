@@ -1,5 +1,5 @@
 
-// 源码高度问题 ie输入颜色代码range丢失问题 unlink问题 切换其他程序后history问题 markdown功能 文档
+// 源码高度问题 切换其他程序后history问题 markdown功能 文档
 
 import defaultConf from './config/index.js'
 import defaultLang from './config/lang.js'
