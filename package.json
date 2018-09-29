@@ -24,6 +24,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.4",
     "eslint": "^4.11.0",
     "eslint-config-standard": "^10.2.1",

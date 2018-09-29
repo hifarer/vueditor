@@ -1,6 +1,6 @@
 
 export default {
-  
+
   app: {},
 
   removeFormat: {title: '清除格式'},
@@ -27,20 +27,20 @@ export default {
     title: '文字颜色',
     ok: '确定',
     colorCode: '颜色代码',
-    invalidColorCodeMsg: '请输入正确的颜色代码。',
+    invalidColorCodeMsg: '请输入正确的颜色代码。'
   },
   backColor: {
     title: '背景颜色',
     ok: '确定',
     colorCode: '颜色代码',
-    invalidColorCodeMsg: '请输入正确的颜色代码。',
+    invalidColorCodeMsg: '请输入正确的颜色代码。'
   },
   color: {
     foreColor: '文字颜色',
     backColor: '背景颜色',
     ok: '确定',
     colorCode: '颜色代码',
-    invalidColorCodeMsg: '请输入正确的颜色代码。',
+    invalidColorCodeMsg: '请输入正确的颜色代码。'
   },
   fontName: {},
   fontSize: {},

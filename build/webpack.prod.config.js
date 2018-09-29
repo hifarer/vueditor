@@ -3,6 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const VueLoader = require('vue-loader')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const pkg = require('../package.json')
 const banner = pkg.name + ' v' + pkg.version + '\n' + pkg.repository.url
@@ -14,7 +15,7 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, '../dist'),
-    filename: 'script/vueditor.min.js',
+    filename: 'vueditor.min.js',
     library: 'Vueditor',
     libraryTarget: 'umd'
   },
@@ -63,7 +64,10 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('style/vueditor.min.css'),
+    new CopyWebpackPlugin([
+      { from: './src/lang', to: './lang' }
+    ]),
+    new ExtractTextPlugin('vueditor.min.css'),
     new VueLoader.VueLoaderPlugin(),
     new webpack.BannerPlugin(banner)
   ],

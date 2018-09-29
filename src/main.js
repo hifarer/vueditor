@@ -2,7 +2,7 @@
 // 源码高度问题 切换其他程序后history问题 markdown功能 文档
 
 import defaultConf from './config/index.js'
-import defaultLang from './config/lang.js'
+import defaultLang from './lang/en.js'
 
 import Vue from 'vue'
 import App from './components/app.vue'

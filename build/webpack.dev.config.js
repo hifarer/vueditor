@@ -11,8 +11,6 @@ module.exports = {
   entry: './src/main.js',
 
   output: {
-    path: path.join(__dirname, '../dist'),
-    filename: 'script/[name].js',
     library: 'Vueditor',
     libraryTarget: 'umd'
   },
@@ -54,7 +52,7 @@ module.exports = {
     new HtmlwebpackPlugin({
       inject: 'head',
       title: 'Vueditor',
-      template: './index.tpl.html'
+      template: './src/template.html'
     })
   ],
 
