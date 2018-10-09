@@ -93,7 +93,7 @@
         status[item] = 'default' // default disabled actived
       }
       // get actual component list from button list
-      if (item in toolbarConf || item == 'divider' || item == '|') {
+      if (item in toolbarConf || item === 'divider' || item === '|') {
         componentList.push(item)
       } else if (['undo', 'redo'].indexOf(item) !== -1) {
         componentList.indexOf('ve-undoredo') === -1 && componentList.push('ve-undoredo')
@@ -146,8 +146,7 @@
         let status = {}
         let excludeArr = ['sourceCode', 'markdown', 'fullscreen', 'divider', '|']
         this.btns.forEach(item => {
-          if (excludeArr.indexOf(item) === -1) {
-            // status should be disabled when view is codeSnippet or sourceCode 
+          if (excludeArr.indexOf(item) === -1) { // status should be disabled when view is codeSnippet or sourceCode
             status[item] = val !== 'design' ? 'disabled' : 'default'
           }
         })

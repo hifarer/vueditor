@@ -32,7 +32,6 @@
 </template>
 
 <script>
-
   import marked from 'marked'
 
   export default {
@@ -67,6 +66,26 @@
         this.eventHub.$emit('set-view', this.view === 'markdown' ? 'design' : 'markdown')
         this.eventHub.$emit('set-active-component')
       })
+      //
+      let renderer = new marked.Renderer()
+      renderer.heading = function (text, level) {
+        return `<h${level}>${text}</h${level}>`
+      }
+      renderer.paragraph = function (text) {
+        let div = document.createElement('div')
+        div.innerHTML = text
+        if (div.children.length === 0) {
+          return '<p>' + text + '</p>\n'
+        }
+        return text + '\n'
+      }
+
+      marked.setOptions({
+        renderer: renderer,
+        gfm: false
+      })
+      this.isJsAction = false
+      this.timer = null
     },
     methods: {
       init (event) {
@@ -103,27 +122,6 @@
           this.isJsAction = true
         }, 100)
       }
-    },
-    created () {
-      let renderer = new marked.Renderer()
-      renderer.heading = function (text, level) {
-        return `<h${level}>${text}</h${level}>`
-      }
-      renderer.paragraph = function (text) {
-        let div = document.createElement('div')
-        div.innerHTML = text
-        if (div.children.length === 0) {
-          return '<p>' + text + '</p>\n'
-        }
-        return text + '\n'
-      }
-
-      marked.setOptions({
-        renderer: renderer,
-        gfm: false
-      })
-      this.isJsAction = false
-      this.timer = null
     }
   }
 </script>

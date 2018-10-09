@@ -46,7 +46,7 @@
           if (!range || range.collapsed) {
             window.alert(lang.ieMsg)
           } else {
-            this.eventHub.$emit('exec-command', {name: 'formatblock', value:'<' + value.toUpperCase() + '>'})
+            this.eventHub.$emit('exec-command', {name: 'formatblock', value: '<' + value.toUpperCase() + '>'})
           }
         } else {
           this.eventHub.$emit('exec-command', {name: 'formatblock', value})

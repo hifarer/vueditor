@@ -47,6 +47,7 @@
         if (!container) return
         // if the range is inside code element
         if (container.tagName.toLowerCase() === 'code') {
+          // TODO issue: attrName not defined
           container.setAttribute(attrName, lang)
         } else {
           let { attrName, attrValue } = this.pattern
@@ -65,8 +66,8 @@
         if (name !== 'codeSnippet') return
         // todo: has mutiple className
         let { attrName, attrValue } = this.pattern
-        attrValue = attrValue.replace(/#lang#/, '')     // language-#lang# -> language-
-        let val = (value[attrName] || '').replace(attrValue, '')    // value is a attributes object
+        attrValue = attrValue.replace(/#lang#/, '') // language-#lang# -> language-
+        let val = (value[attrName] || '').replace(attrValue, '') // value is a attributes object
         this.val = val || '--'
       }
     },

@@ -55,7 +55,7 @@
     },
 
     methods: {
-      
+
       init (event) {
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
@@ -66,12 +66,12 @@
         this.addEvent()
         this.range.setIframeWin(this.iframeWin)
       },
-      
+
       // init, selection change
       setButtonStatus () {
         let status = {}
         let arr = this.config.toolbar
-        for (let i = 0, name; i < arr.length; i++ ) {
+        for (let i = 0, name; i < arr.length; i++) {
           name = arr[i]
           if (this.iframeDoc.queryCommandSupported(name) && ['redo', 'undo'].indexOf(name) === -1) {
             status[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default'
@@ -84,7 +84,7 @@
         let event = document.createEvent('Event')
         // args: string type, boolean bubbles, boolean cancelable
         event.initEvent(eventName, false, true)
-        this.iframeDoc.dispatchEvent(event);
+        this.iframeDoc.dispatchEvent(event)
       },
 
       addEvent () {
@@ -197,13 +197,13 @@
         if (!container) return
         let clipboardData = event.clipboardData || window.clipboardData
         let text = clipboardData.getData('text/plain') || clipboardData.getData('Text')
-        
+
         if (this.config.paste.noFormat) {
           event.preventDefault()
           let arr = text.replace(/(<|>)/igm, data => {
             return data.replace('<', '&lt;').replace('>', '&gt;')
           }).split('\n')
-    
+
           this.insertHTML(arr.shift() || '')
           arr.forEach(item => {
             if (item.match(/\S/mg) !== null) {
@@ -232,8 +232,7 @@
           let sel = this.range.getSelection()
           let focusOffset = -1
           setInterval(() => {
-            if (sel && sel.rangeCount) {
-              // if previous focusOffset does not equal current focusOffset 
+            if (sel && sel.rangeCount) { // if previous focusOffset does not equal current focusOffset
               if (focusOffset !== sel.focusOffset) {
                 focusOffset = sel.focusOffset
                 this.checkElement()
@@ -252,7 +251,7 @@
         let container = this.range.getContainer()
         let tagName = container.tagName.toLowerCase()
         let domNodePath = this.getDOMNodePath(this.iframeBody, container)
-        
+
         if (['pre', 'code'].indexOf(tagName) !== -1) {
           if (tagName === 'pre') {
             // 解决文字直接写到pre里
@@ -313,7 +312,7 @@
         range.insertNode(frag)
         // set cursor
         if (node.hasChildNodes() && node.childNodes[0].nodeType === 1) {
-          while(node.hasChildNodes() && node.childNodes[0].nodeType === 1){
+          while (node.hasChildNodes() && node.childNodes[0].nodeType === 1) {
             node = node.childNodes[0]
           }
           node.tagName.toLowerCase() === 'br' ? range.selectNode(node) : range.setStart(node, 0)
@@ -359,7 +358,6 @@
             this.formatContent(node)
           }
         }
-
       },
 
       wrapTextNode (range, tagName) {

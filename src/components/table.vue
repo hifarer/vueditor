@@ -34,7 +34,6 @@
 </template>
 
 <script>
-
   import mixins from '../mixins'
 
   export default {

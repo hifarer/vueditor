@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
   import { getBrowser } from '../util'
 
   export default {
@@ -54,7 +53,7 @@
       'show': function (val) {
         let body = document.body
         if (val) {
-          body.classList ? body.classList.add('ve-fixed') : body.className += 've-fixed' 
+          body.classList ? body.classList.add('ve-fixed') : body.className += 've-fixed'
         } else {
           body.classList ? body.classList.remove('ve-fixed') : body.className = body.className.replace('ve-fixed', '')
         }
@@ -81,6 +80,7 @@
       pasteHandler (arr) {
         Array.prototype.forEach.call(arr, item => {
           if (item.getAsFile() && item.kind === 'file' && item.type.match(/^image\//i)) {
+            // eslint-disable-next-line
             let reader = new FileReader()
             reader.onload = event => {
               if (this.config.url) {
@@ -122,7 +122,7 @@
         xhr.open('POST', url)
         xhr.send(formData)
         xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+          if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
             this.eventHub.$emit('insert-html', `<img src="${xhr.responseText}">`)
           } else {
             window.alert(xhr.responseText)

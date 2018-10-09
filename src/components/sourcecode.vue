@@ -23,7 +23,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'sourceCode',
     props: {
@@ -48,7 +47,7 @@
         // throttle
         this.timer = setTimeout(() => {
           this.eventHub.$emit('set-content', val)
-        }, 200);
+        }, 200)
       }
     },
     created () {

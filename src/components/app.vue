@@ -17,7 +17,6 @@
 </template>
 
 <script>
-
   import Vue from 'vue'
   import Toolbar from './toolbar.vue'
   import Design from './design.vue'
@@ -62,10 +61,10 @@
       }
     },
     created () {
-      this.eventHub.$on('set-view', view => this.view = view)
+      this.eventHub.$on('set-view', view => { this.view = view })
       this.eventHub.$on('set-content', this.setContent)
-      this.eventHub.$on('set-fullscreen', fullscreen => this.fullscreen = fullscreen)
-      this.eventHub.$on('set-active-component', component => this.activeComponent = component)
+      this.eventHub.$on('set-fullscreen', fullscreen => { this.fullscreen = fullscreen })
+      this.eventHub.$on('set-active-component', component => { this.activeComponent = component })
     }
   }
 </script>
