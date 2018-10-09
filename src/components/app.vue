@@ -36,6 +36,19 @@
         fullscreen: false
       }
     },
+    props: {
+      // :default-content="''"
+      defaultContent: {
+        type: String,
+        default: null
+      }
+    },
+    watch: {
+      // :@change="getNewValue"
+      content (to) {
+        this.$emit('change', to)
+      }
+    },
     components: {
       've-toolbar': Toolbar,
       've-design': Design,
@@ -61,6 +74,7 @@
       }
     },
     created () {
+      if (this.defaultContent) { this.setContent(this.defaultContent) }
       this.eventHub.$on('set-view', view => { this.view = view })
       this.eventHub.$on('set-content', this.setContent)
       this.eventHub.$on('set-fullscreen', fullscreen => { this.fullscreen = fullscreen })
