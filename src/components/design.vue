@@ -4,8 +4,6 @@
     display: block;
     width: 100%;
     height: 100%;
-    position: relative;
-    overflow-y: auto;
   }
   .half {
     width: 50%;
@@ -14,7 +12,7 @@
 </style>
 
 <template>
-  <iframe v-show="view !== 'sourceCode'" @load="init" :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; margin: 0; word-break: break-word; overflow: hidden;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style><script>document.designMode = \'on\'</script></head><body class=\'page\' spellcheck=\'false\'></body></html>');document.close();}())"></iframe>
+  <iframe v-show="view !== 'sourceCode'" @load="init" :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; } body {margin: 0; padding: 8px; box-sizing: border-box; word-break: break-all;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style><script>document.designMode = \'on\'</script></head><body spellcheck=\'false\'></body></html>');document.close();}())"></iframe>
 </template>
 
 <script>
@@ -180,6 +178,7 @@
           // if container.nextElementSibling === null insertBefore equals appendChild
           container.parentNode.insertBefore(range.extractContents(), container.nextElementSibling)
           container.innerHTML.trim() === '' && (container.innerHTML = '<br>')
+          container.nextElementSibling.scrollIntoView()
           range.setStart(container.nextElementSibling, 0)
         }
         range.collapse(true)

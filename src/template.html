@@ -12,12 +12,13 @@
   <Vueditor></Vueditor>
 </div>
 <script>
+  // use var for ie9
   Vue.use(Vueditor)
-  let parent = new Vue({
+  var parent = new Vue({
     el: '#app'
   })
-  let editor = parent.$children[0]
-  editor.setContent(`fill your content here`)
+  var editor = parent.$children[0]
+  editor.setContent('fill your content here')
 </script>
 </body>
 </html>

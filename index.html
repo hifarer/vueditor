@@ -33,7 +33,7 @@
   <script src="//cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
   <script src="./dist/script/vueditor.min.js"></script>
   <script>
-
+    // use var for ie9
     Vue.use(Vueditor, {
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'code', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
@@ -43,14 +43,14 @@
       uploadUrl: '',
     })
 
-    let parent = new Vue({
+    var parent = new Vue({
       el: '#editor1'
     })
-    let editor = parent.$children[0]
+    var editor = parent.$children[0]
     editor.setContent(`fill your content here`)
   </script>
   <script>
-    let inst = Vueditor.createEditor('#editor2', {
+    var inst = Vueditor.createEditor('#editor2', {
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
       ],
