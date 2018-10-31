@@ -94,14 +94,14 @@
           }
         }
       },
-      syncValue ({ name, value }) {
-        if (name !== 'fontSize') return
-        let unit = value.match(/[a-z]+/ig)[0]
+      syncValue ({ type, data }) {
+        if (type !== 'fontSize') return
+        let unit = data.match(/[a-z]+/ig)[0]
         if (unit === 'px') {
-          this.list.indexOf(value) !== -1 && (this.val = value)
+          this.list.indexOf(data) !== -1 && (this.val = data)
         } else if (unit === 'rem') {
           let rootFontSize = parseInt(window.getComputedStyle(document.documentElement)['fontSize'])
-          let remFontSize = (parseInt(value) / rootFontSize).toFixed(1) + 'rem'
+          let remFontSize = (parseInt(data) / rootFontSize).toFixed(1) + 'rem'
           this.list.indexOf(remFontSize) !== -1 && (this.val = remFontSize)
         } else {
           this.val = '--'

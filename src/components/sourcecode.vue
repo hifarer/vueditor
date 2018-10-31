@@ -19,7 +19,7 @@
 </style>
 
 <template>
-  <textarea :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']" v-show="view === 'sourceCode' || view === 'markdown'" v-model="code"></textarea>
+  <textarea :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']" v-show="view === 'sourceCode' || view === 'markdown'" :value="code"></textarea>
 </template>
 
 <script>
@@ -38,21 +38,34 @@
     inject: ['eventHub'],
     watch: {
       'content': function (val) {
-        // only update when visible
-        if (this.view === 'sourceCode' || this.view === 'markdown') {
+        // only update when switch to markdown
+        if (this.view === 'markdown') {
           this.code = val
         }
       },
       'code': function (val) {
-        clearTimeout(this.timer)
-        // throttle
-        this.timer = setTimeout(() => {
-          this.eventHub.$emit('set-content', val)
-        }, 200);
+        // only update when switch to markdown
+        if (this.view === 'markdown') {
+          clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
+            this.eventHub.$emit('set-content', val)
+          }, 200)
+        }
+      },
+      'view': function (val) {
+        if (this.view === 'design') {
+          this.eventHub.$emit('set-content', this.code)
+        }
+        if (this.view === 'sourceCode') {
+          this.code = this.content
+        }
       }
     },
     created () {
       this.timer = null
+    },
+    beforeDestroy () {
+      clearTimeout(this.timer)
     }
   }
 </script>

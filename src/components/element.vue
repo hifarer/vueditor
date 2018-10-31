@@ -52,10 +52,10 @@
           this.eventHub.$emit('exec-command', {name: 'formatblock', value})
         }
       },
-      syncValue ({ name, value }) {
-        if (name !== 'element') return
+      syncValue ({ type, data }) {
+        if (type !== 'element') return
         let tagName = '--'
-        Array.isArray(value) && value.forEach(item => {
+        Array.isArray(data) && data.forEach(item => {
           // the first tagName in list
           if (this.list.indexOf(item) !== -1 && tagName === '--') {
             tagName = item

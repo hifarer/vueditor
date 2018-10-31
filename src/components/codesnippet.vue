@@ -61,13 +61,20 @@
           }
         }
       },
-      syncValue ({ name, value }) {
-        if (name !== 'codeSnippet') return
-        // todo: has mutiple className
+      /**
+       * @param type select name
+       * @param data attributes object
+       */
+      syncValue ({ type, data }) {
+        if (type !== 'codeSnippet') return
         let { attrName, attrValue } = this.pattern
         attrValue = attrValue.replace(/#lang#/, '')     // language-#lang# -> language-
-        let val = (value[attrName] || '').replace(attrValue, '')    // value is a attributes object
-        this.val = val || '--'
+        let val = data && data[attrName] ? data[attrName].value : ''
+        if (attrName === 'class') {
+          let temp = val.match(new RegExp(attrValue + '[^\\s]+', 'gim'))
+          val = temp ? temp[0] : ''
+        }
+        this.val = val.replace(attrValue, '') || '--'
       }
     },
     created () {

@@ -53,9 +53,9 @@
         this.eventHub.$emit('exec-command', {name: 'fontName', value: font.val + ', sans-serif'})
         this.eventHub.$emit('set-active-component')
       },
-      syncValue ({ name, value }) {
-        if (name !== 'fontName') return
-        this.val = this.list.filter(item => item.val === value).length !== 0 ? value : '--'
+      syncValue ({ type, data }) {
+        if (type !== 'fontName') return
+        this.val = this.list.filter(item => item.val === data).length !== 0 ? data : '--'
       }
     },
     created () {

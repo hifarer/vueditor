@@ -124,6 +124,9 @@
       })
       this.isJsAction = false
       this.timer = null
+    },
+    beforeDestroy () {
+      clearTimeout(this.timer)
     }
   }
 </script>

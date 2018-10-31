@@ -43,6 +43,10 @@
       this.eventHub.$on('exec-command', this.execCommand)
     },
 
+    beforeDestroy () {
+      clearTimeout(this.timer)
+    },
+
     watch: {
       'content': function (val) {
         // only update when visible
@@ -132,13 +136,14 @@
       },
 
       shouldAddNewLine (container) {
+        let bool = true
+        let arr = this.getDOMNodePath(this.iframeBody, container)
+        
         let excludeTags = ['code', 'td']
         let includeTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-        let bool = false
-        let arr = this.getDOMNodePath(this.iframeBody, container)
-
         let includeIndex = -1
         let excludeIndex = -1
+
         // find the first exclude and include tag index
         arr.forEach((tag, i) => {
           if (includeTags.indexOf(tag) !== -1 && includeIndex === -1) {
@@ -151,7 +156,7 @@
         // if exclude-tag-node does not contain include-tag-node or include-tag-node contains exclude-tag-node
         if (excludeIndex !== -1) {
           if (includeIndex === -1 || (includeIndex !== -1 && includeIndex > excludeIndex)) {
-            bool = true
+            bool = false
           }
         }
         return bool
@@ -161,7 +166,8 @@
         let range = this.range.getRange()
         if (!range) return
         let container = this.range.getContainer()
-        if (bool) {
+        // should not append new line
+        if (!bool) {
           let br = this.iframeDoc.createElement('br')
           range.insertNode(br)
           br.insertAdjacentHTML('afterend', '&#8203;')
@@ -170,16 +176,10 @@
           if (!range.collapsed) {
             range.deleteContents()
           }
-          // todo 后面是个图片
-          // 如果后面没有文本内容了，生成新的p，如果有截断当前的元素
           range.setEndAfter(container)
-          if (range.toString() === '') {
-            container.insertAdjacentHTML('afterend', '<p><br></p>')
-          } else {
-            // if container.nextElementSibling === null insertBefore equals appendChild
-            container.parentNode.insertBefore(range.extractContents(), container.nextElementSibling)
-            container.innerHTML.trim() === '' && (container.innerHTML = '<br>')
-          }
+          // if container.nextElementSibling === null insertBefore equals appendChild
+          container.parentNode.insertBefore(range.extractContents(), container.nextElementSibling)
+          container.innerHTML.trim() === '' && (container.innerHTML = '<br>')
           range.setStart(container.nextElementSibling, 0)
         }
         range.collapse(true)
@@ -260,7 +260,7 @@
               this.wrapTextNode(range, 'code')
             }
           } else {
-            this.eventHub.$emit('sync-select-value', { name: 'codeSnippet', value: container.attributes })
+            this.eventHub.$emit('sync-select-value', { type: 'codeSnippet', data: container.attributes })
           }
           this.view === 'design' && this.eventHub.$emit('set-view', 'codeSnippet')
         } else {
@@ -271,9 +271,9 @@
           if (tagName === 'body' && range.startContainer === range.endContainer && range.startContainer.nodeType === 3) {
             this.wrapTextNode(range, 'p')
           }
-          this.eventHub.$emit('sync-select-value', { name: 'element', value: domNodePath })
-          this.eventHub.$emit('sync-select-value', { name: 'fontName', value: fontName })
-          this.eventHub.$emit('sync-select-value', { name: 'fontSize', value: fontSize })
+          this.eventHub.$emit('sync-select-value', { type: 'element', data: domNodePath })
+          this.eventHub.$emit('sync-select-value', { type: 'fontName', data: fontName })
+          this.eventHub.$emit('sync-select-value', { type: 'fontSize', data: fontSize })
           // if not in code or pre element, set view to design
           this.view !== 'design' && this.eventHub.$emit('set-view', 'design')
         }
@@ -369,8 +369,8 @@
         range.startContainer.parentNode.replaceChild(obj, range.startContainer)
         range.setStart(obj.childNodes[0], offset)
         range.collapse(true)
+        this.eventHub.$emit('set-content', this.iframeBody.innerHTML)
       }
-
     }
   }
 </script>
