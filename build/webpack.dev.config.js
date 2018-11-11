@@ -32,10 +32,18 @@ module.exports = {
         oneOf: [
           {
             resourceQuery: /module/,
-            use: ['vue-style-loader', 'css-loader?modules=true', 'less-loader']
+            use: [
+              'vue-style-loader',
+              'css-loader?modules=true',
+              'less-loader'
+            ]
           },
           {
-            use: ['vue-style-loader', 'css-loader', 'less-loader']
+            use: [
+              'vue-style-loader',
+              'css-loader',
+              'less-loader'
+            ]
           }
         ]
       },

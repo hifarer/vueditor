@@ -7,7 +7,7 @@ Vueditor
 
 [English DOC](../README.md)
 
-基于 Vue.js 和 Vuex.js 实现的富文本编辑器, 只支持 Vue.js 2.x.x
+基于 Vue.js 实现的富文本编辑器, 需要 Vue.js 2.2.0+
 
 浏览器兼容性: Chrome, Firefox, Safari, IE 9+.
 
@@ -42,20 +42,22 @@ npm install vueditor
 import Vue from 'vue'
 import Vueditor from 'vueditor'
 
-import 'vueditor/dist/style/vueditor.min.css'
+import 'vueditor/dist/vueditor.min.css'
 
 // 编辑器配置
 let config = {
   toolbar: [
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
-  fontName: [
-    {val: 'arial black'}, 
-    {val: 'times new roman'}, 
-    {val: 'Courier New'}
-  ],
-  fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-  uploadUrl: ''
+  spellcheck: false,
+  paste: {
+    noFormat: true,
+    upload: true
+  },
+  upload: {
+    url: '',
+    fieldName: 'test'
+  }
 };
 
 Vue.use(Vuex);
@@ -94,22 +96,19 @@ inst.getContent();
 ```javascript
 
   import Vue from 'vue'
-  import {createEditor} from 'vueditor'
+  import { createEditor } from 'vueditor'
 
-  import 'vueditor/dist/style/vueditor.min.css'
+  import 'vueditor/dist/vueditor.min.css'
   
   Vue.use(Vuex);
 
   createEditor('#editorContainer', {
     toolbar: [
       'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
-    ],
-    uploadUrl: '',
-    id: '',
-    classList: []
+    ]
   });
 ```
-注意这种用法会替换掉被初始化的那个元素，如果要添加样式到该元素可以在config里面加上`classList` 或 `id`来实现；`createEditor`返回一个Vueditor实例，通过该实例可以获取和设置内容:
+注意这种用法会替换掉被初始化的那个元素，但是在该元素添加的属性会被完整移植；`createEditor`返回一个Vueditor实例，通过该实例可以获取和设置内容:
 
 ```javascript
 let inst = createEditor(...);
@@ -120,7 +119,7 @@ inst.getContent();
 #### 文件上传
 在初始化时可以指定一个地址用于上传文件，程序会自动处理上传过程。但是有时候需要在上传时进行一些如认证之类的操作，这时就需要自己来实现一个上传函数。给vueditor实例添加一个名叫`upload`的方法，当进行上传操作时将会调用该方法。该方法有两个参数，第一个是上传文件的input元素对象，第二个参数是一个回调函数，回调函数接受上传后的文件地址作为参数用以插入到编辑器，示例如下：
 ```javascript
-editor.upload = function (obj, callback) {
+editor.upload = (obj, callback) => {
   let formData = new FormData();
   let xhr = new XMLHttpRequest();
   formData.append('fieldName', obj.files[0]);
@@ -137,9 +136,9 @@ editor.upload = function (obj, callback) {
 
 ### 界面语言
 
-编辑器的默认语言为英语，如需设置成中文，需要引入`dist/language/lang.cn.js`, 使用script标签或者`import`, `require`都可以。引入以后在初始化编辑器作为配置的一部分传入，webpack import(需要安装exports-loader)示例：
+编辑器的默认语言为英语，如需设置成中文，需要引入`dist/lang/cn.js`, 使用script标签或者`import`, `require`都可以。引入以后在初始化编辑器作为配置的一部分传入，webpack import(需要安装exports-loader)示例：
 ```javascript
-import lang from 'exports-loader?lang!vueditor/dist/language/lang.cn.js'
+import lang from 'exports-loader?lang!vueditor/lang/cn.js'
 
 Vue.use(Vueditor, {
   ...
@@ -152,15 +151,14 @@ Vue.use(Vueditor, {
 |          名称         |    类型    |                                                         描述                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
 | spellcheck            | `Boolean` | 是否打开拼写检查, 默认关闭 |
-| noFormatPaste         | `Boolean` | 是否开启无格式粘贴模式, 默认打开 |
-| pasteUpload           | `Boolean` | 是否开启粘贴自动上传图片功能，默认关闭，将使用`uploadUrl`作为上传接口，服务端需要接受处理base64字符串，字段名`imageData` |
+| lang                  | `Object`  | 界面语言, 默认英文 |
 | toolbar               | `Array`   | 工具栏的按钮, 可用`|` or `divider` 做为分隔符 |
-| fontName              | `Array`   | font-family 选项, `val` 为实际css值, `abbr` 为select-option显示的内容, `abbr` 等于 `val` 时可省略 |
-| fontSize              | `Array`    | font-size 选项 |
-| lang                  | `Object`   | 界面语言, 默认英文 |
-| uploadUrl         | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
-| id                    | `String`   | 容器id |
-| classList             | `Array`    | 容器className |
+| paste                 | `Object`  | 粘贴设置 |
+| paste.noFormat        | `Boolean` | 是否开启无格式粘贴模式, 默认打开 |
+| paste.upload          | `Boolean` | 是否开启粘贴自动上传图片功能，默认关闭，将使用`upload`作为上传的配置，服务端需要接受处理base64字符 |
+| upload                | `Object`   | 上传设置 |
+| upload.url            | `String`   | 文件上传接口，返回值必须为字符串路径, 留空只进行本地预览 |
+| upload.fieldName      | `String`   | 文件上传的field name |
 
 
 以上可配置项的默认值
@@ -168,22 +166,17 @@ Vue.use(Vueditor, {
 ```javascript
 {
   toolbar: [
-    'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider',
-    'bold', 'italic', 'underline', 'strikeThrough', 'links', 'divider', 'subscript', 'superscript',
-    'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
-    'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'tables', '|', 'setView'
+    'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'codeSnippet', 'fullscreen', 'sourceCode', 'markdown'
   ],
-  fontName: [
-    {val: 'arial black'}, 
-    {val: 'times new roman'}, 
-    {val: 'Courier New'}
-  ],
-  fontSize: [
-    '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
-  ],
-  uploadUrl: ''
-  id: '',
-  classList: []
+  spellcheck: false,
+  paste: {
+    noFormat: true,
+    upload: true
+  },
+  upload: {
+    url: '',
+    fieldName: 'test'
+  }
 };
 ```
 

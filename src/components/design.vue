@@ -177,6 +177,7 @@
           range.setEndAfter(container)
           // if container.nextElementSibling === null insertBefore equals appendChild
           container.parentNode.insertBefore(range.extractContents(), container.nextElementSibling)
+          container.nextElementSibling.innerHTML.trim() === '' && (container.nextElementSibling.innerHTML = '<br>')
           container.innerHTML.trim() === '' && (container.innerHTML = '<br>')
           container.nextElementSibling.scrollIntoView()
           range.setStart(container.nextElementSibling, 0)

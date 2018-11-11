@@ -1,4 +1,8 @@
 
+0.4.0
+
+1. remove vuex dependency
+
 0.3.1
 
 1. fix error on switching to source code when disabled some buttons

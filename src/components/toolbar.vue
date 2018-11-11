@@ -47,22 +47,26 @@
 
 <template>
   <div class="ve-toolbar">
-    <template v-for="(item, index) in componentList">
+    <template v-for="(val, name) in componentData">
       <!-- divider -->
-      <div v-if="item == 'divider' || item == '|'" :key="index" class="ve-divider"></div>
+      <div v-if="name == 'divider' || name == '|'" :key="name" class="ve-divider"></div>
       <!-- button with extra html -->
-      <component v-else-if="item.indexOf('ve-') !== -1"
-        :key="index"
-        :view="view" 
-        :content="content" 
-        :fullscreen="fullscreen" 
-        :activeComponent="activeComponent"
-        :is="item">
+      <component v-else-if="name.indexOf('ve-') !== -1 && name === 've-undoredo'" 
+        :key="name" 
+        :is="name"
+        :view="view"
+        :content="content">
+      </component>
+      <component v-else-if="name.indexOf('ve-') !== -1 && name !== 've-undoredo'"
+        :key="name"
+        :is="name"
+        :view="view"
+        :activeComponent="activeComponent">
       </component>
       <!-- just button -->
-      <div v-else :key="index" :class="['ve-icon', {'ve-active': status[item] === 'actived', 've-disabled': status[item] === 'disabled'}]" unselectable="on">
-        <a href="javascript:;" :title="lang[item].title" @click.stop.prevent="clickHandler($event, item)">
-          <i :class="[toolbarConf[item].className]"></i>
+      <div v-else :key="name" :class="['ve-icon', {'ve-active': status[name] === 'actived', 've-disabled': status[name] === 'disabled'}]" unselectable="on">
+        <a href="javascript:;" :title="lang[name].title" @click.stop.prevent="clickHandler($event, name)">
+          <i :class="[toolbarConf[name].className]"></i>
         </a>
       </div>
     </template>
@@ -83,34 +87,6 @@
   import CodeSnippet from './codesnippet.vue'
   import Emoji from './emoji.vue'
 
-  const getIntialStatusAndComponentList = arr => {
-    let status = {}
-    let componentList = []
-    for (let i = 0, item = ''; i < arr.length; i++) {
-      item = arr[i]
-      // divider has not status
-      if (item !== 'divider' && item !== '|') {
-        status[item] = 'default' // default disabled actived
-      }
-      // get actual component list from button list
-      if (item in toolbarConf || item == 'divider' || item == '|') {
-        componentList.push(item)
-      } else if (['undo', 'redo'].indexOf(item) !== -1) {
-        componentList.indexOf('ve-undoredo') === -1 && componentList.push('ve-undoredo')
-      } else if (['foreColor', 'backColor'].indexOf(item) !== -1) {
-        componentList.indexOf('ve-color') === -1 && componentList.push('ve-color')
-      } else if (['link', 'unLink'].indexOf(item) !== -1) {
-        componentList.indexOf('ve-link') === -1 && componentList.push('ve-link')
-      } else {
-        componentList.push('ve-' + item.toLowerCase())
-      }
-    }
-    return {
-      status,
-      componentList
-    }
-  }
-  
   export default {
     name: 'toolbar',
     props: {
@@ -121,12 +97,11 @@
       activeComponent: String
     },
     data () {
-      let { status, componentList } = getIntialStatusAndComponentList(this.btns)
       this.toolbarConf = toolbarConf
       return {
         lang: window.__VUEDITOR_LANGUAGE__,
-        status,
-        componentList
+        status: this.getInitialStatus(),
+        componentData: this.getComponentData()
       }
     },
     inject: ['eventHub'],
@@ -158,6 +133,36 @@
       }
     },
     methods: {
+      getInitialStatus () {
+        let status = {}
+        for (let i = 0, item = ''; i < this.btns.length; i++) {
+          item = this.btns[i]
+          // divider has not status
+          if (item !== 'divider' && item !== '|') {
+            status[item] = 'default' // default disabled actived
+          }
+        }
+        return status
+      },
+      getComponentData () {
+        let componentData = {}
+        for (let i = 0, item = ''; i < this.btns.length; i++) {
+          item = this.btns[i]
+          // get actual component list from button list
+          if (item in toolbarConf || item == 'divider' || item == '|') {
+            componentData[item] = null
+          } else if (['undo', 'redo'].indexOf(item) !== -1) {
+            componentData['ve-undoredo'] = null
+          } else if (['foreColor', 'backColor'].indexOf(item) !== -1) {
+            componentData['ve-color'] = null
+          } else if (['link', 'unLink'].indexOf(item) !== -1) {
+            componentData['ve-link'] = null
+          } else {
+            componentData['ve-' + item.toLowerCase()] = null
+          }
+        }
+        return componentData
+      },
       setButtonStatus (data) {
         for (let name in data) {
           if (typeof this.status[name] !== 'undefined') {

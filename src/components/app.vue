@@ -2,9 +2,9 @@
 <template>
   <div class="vueditor" :class="{'ve-fullscreen': fullscreen}">
     <ve-toolbar 
-      :btns="config.toolbar" 
-      :view="view" 
-      :content="content" 
+      :btns="config.toolbar"
+      :view="view"
+      :content="content"
       :fullscreen="fullscreen"
       :activeComponent="activeComponent">
     </ve-toolbar>

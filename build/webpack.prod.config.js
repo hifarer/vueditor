@@ -2,7 +2,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const VueLoader = require('vue-loader')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const pkg = require('../package.json')
@@ -43,16 +43,20 @@ module.exports = {
         oneOf: [
           {
             resourceQuery: /module/,
-            use: ExtractTextPlugin.extract({
-              fallback: 'vue-style-loader',
-              use: ['css-loader?modules=true&minimize', 'less-loader']
-            })
+            use: [
+              MiniCssExtractPlugin.loader,
+              'css-loader?modules=true&minimize',
+              'less-loader',
+              'postcss-loader'
+            ]
           },
           {
-            use: ExtractTextPlugin.extract({
-              fallback: 'vue-style-loader',
-              use: ['css-loader?minimize', 'less-loader']
-            })
+            use: [
+              MiniCssExtractPlugin.loader,
+              'css-loader?minimize',
+              'less-loader',
+              'postcss-loader'
+            ]
           }
         ]
       },
@@ -67,7 +71,9 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src/lang', to: './lang' }
     ]),
-    new ExtractTextPlugin('vueditor.min.css'),
+    new MiniCssExtractPlugin({
+      filename: 'vueditor.min.css'
+    }),
     new VueLoader.VueLoaderPlugin(),
     new webpack.BannerPlugin(banner)
   ],

@@ -7,7 +7,7 @@ Vueditor
 
 [中文文档](./docs/chinese.md)
 
-A wysiwyg editor written in Vue.js and Vuex.js, require Vue.js 2.0.0, Vuex.js 2.0.0 and above.
+A wysiwyg editor written in Vue.js, require Vue.js 2.2.0+.
 
 Browser compatibility: Chrome, Firefox, Safari, IE 9+.
 
@@ -42,20 +42,22 @@ Use it in the following cases:
 import Vue from 'vue'
 import Vueditor from 'vueditor'
 
-import 'vueditor/dist/style/vueditor.min.css'
+import 'vueditor/dist/vueditor.min.css'
 
 // your config here
 let config = {
   toolbar: [
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
   ],
-  fontName: [
-    {val: 'arial black'}, 
-    {val: 'times new roman'}, 
-    {val: 'Courier New'}
-  ],
-  fontSize: ['12px', '14px', '16px', '18px', '0.8rem', '1.0rem', '1.2rem', '1.5rem', '2.0rem'],
-  uploadUrl: ''
+  spellcheck: false,
+  paste: {
+    noFormat: true,
+    upload: true
+  },
+  upload: {
+    url: '',
+    fieldName: 'test'
+  }
 };
 
 Vue.use(Vuex);
@@ -96,21 +98,18 @@ Call `createEditor` and pass specific config as parameter respectively for multi
   import Vue from 'vue'
   import { createEditor } from 'vueditor'
 
-  import 'vueditor/dist/style/vueditor.min.css'
+  import 'vueditor/dist/vueditor.min.css'
   
   Vue.use(Vuex);
 
   createEditor('#editorContainer', {
     toolbar: [
       'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
-    ],
-    uploadUrl: '',
-    id: '',
-    classList: []
+    ]
   });
 ```
 
-The initialized element will be replaced in this case, you can add classList or id to the config for adding styles, the rendered element will have these attributes. `createEditor` returns a vueditor instance, you can set and get content with it:
+The initialized element will be replaced in this case, but you can still add className or id to it, the rendered element will have these attributes. `createEditor` returns a vueditor instance, you can set and get content with it:
 
 ```javascript
 let inst = createEditor(...);
@@ -120,9 +119,9 @@ inst.getContent();
 
 #### File upload
 
-You can set `uploadUrl` attribute in config when you initialize an editor, all the upload stuffs will be handled automatically. If you perfer do it yourself or has some authrization to do before uploading, just add a function `upload` to the instance returned by `createEditor`. When an upload action triggered, vueditor will call this function instead of the build-in function. The upload function has two arguments: `obj` refer to the file input element, `callback` requires the uploaded file url as argument for inserting content to the editor, See the example below: 
+You can set `upload` attribute in config when you initialize an editor, all the upload stuffs will be handled automatically. If you perfer do it yourself or has some authrization to do before uploading, just add a function `upload` to the instance returned by `createEditor`. When an upload action triggered, vueditor will call this function instead of the build-in function. The upload function has two arguments: `obj` refer to the file input element, `callback` requires the uploaded file url as argument for inserting content to the editor, See the example below: 
 ```javascript
-editor.upload = function (obj, callback) {
+editor.upload = (obj, callback) => {
   let formData = new FormData();
   let xhr = new XMLHttpRequest();
   formData.append('fieldName', obj.files[0]);
@@ -141,9 +140,9 @@ editor.upload = function (obj, callback) {
 
 The editor's default language is English, to set to other language, you will need to translate for your own.
 The `dist/language` folder has an full example inside. Adding a script tag or use `import`, `require` to    
-bring the language object in, then make it an attribute of the config for initialize. See the example for webpack import(with exports-loader installed) below:
+bring the language object in, then make it an attribute of the config for initializing. See the example for webpack import(with exports-loader installed) below:
 ```javascript
-import lang from 'exports-loader?lang!vueditor/dist/language/lang.cn.js'
+import lang from 'exports-loader?lang!vueditor/lang/cn.js'
 Vue.use(Vueditor, {
   ...
   lang: lang,
@@ -154,16 +153,15 @@ Vue.use(Vueditor, {
 
 |          Name         |    Type    |                                                         Description                                                         |
 | --------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| spellcheck            | `Boolean`  | Check spell or not, default is false |
-| noFormatPaste         | `Boolean`  | Determine paste format, default is true |
-| pasteUpload           | `Boolean`  | Whether to upload clipbord image or not, default is false, will use `uploadUrl` as upload url, the server side need to able to handle base 64 string, the field name is `imageData` |
-| lang                  | `Object`   | Interface language, default is English |
-| toolbar               | `Array`   | Buttons on the toolbar, use `|` or `divider` as separator for grouping |
-| fontName              | `Array`   | The font-family select's options, `val` refer to the actual css value, `abbr` refer to the option's text, `abbr` is optional when equals to `val` |
-| fontSize              | `Array`    | The font-size select's options |
-| uploadUrl         | `String`   | File upload url, the return result of this must be a string refer to the uploaded file url, leave it empty will end up with local preview |
-| id                    | `String`   | id for the rendered editor element |
-| classList             | `Array`    | className for the rendered editor element |
+| spellcheck            | `Boolean`  | check spell or not, default is false |
+| lang                  | `Object`   | interface language, default is English |
+| toolbar               | `Array`   | buttons on the toolbar, use `|` or `divider` as separator for grouping |
+| paste                 | `Object`  | paste config |
+| paste.noFormat        | `Boolean`  | no format paste, default is true |
+| paste.upload          | `Boolean`  | whether to upload clipbord image or not, default is false, will use `upload` as upload config, the server side need to able to handle base 64 string |
+| upload                | `Object`   | upload config |
+| upload.url            | `String`   | file upload url, the return result of this must be a string refer to the uploaded file url, leave it empty will end up with local preview |
+| upload.fieldName      | `String`   | field name for uploading file |
 
 
 Default value of the above fields:
@@ -171,22 +169,17 @@ Default value of the above fields:
 ```javascript
 {
   toolbar: [
-    'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider',
-    'bold', 'italic', 'underline', 'strikeThrough', 'links', 'divider', 'subscript', 'superscript',
-    'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
-    'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'tables', '|', 'setView'
+    'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'codeSnippet', 'fullscreen', 'sourceCode', 'markdown'
   ],
-  fontName: [
-    {val: 'arial black'}, 
-    {val: 'times new roman'}, 
-    {val: 'Courier New'}
-  ],
-  fontSize: [
-    '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'
-  ],
-  uploadUrl: ''
-  id: '',
-  classList: []
+  spellcheck: false,
+  paste: {
+    noFormat: true,
+    upload: true
+  },
+  upload: {
+    url: '',
+    fieldName: 'test'
+  }
 };
 ```
 

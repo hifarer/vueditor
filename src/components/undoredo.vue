@@ -36,7 +36,7 @@
     },
     watch: {
       'content': function (val) {
-        if (this.view === 'design') {
+        if (this.view !== 'sourceCode') {
           this.push(val)
         }
       },

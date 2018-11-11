@@ -1,5 +1,5 @@
 
-// 回车问题 markdown功能 文档
+// markdown功能
 
 import defaultConf from './config/index.js'
 import defaultLang from './lang/en.js'

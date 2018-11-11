@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Vueditor</title>
   <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
-  <link rel="stylesheet" type="text/css" href="./dist/style/vueditor.min.css">
+  <link rel="stylesheet" type="text/css" href="./dist/vueditor.min.css">
   <style>
     body {
       margin: 0;
@@ -31,10 +31,10 @@
   <div id="editor2"></div>
 
   <script src="//cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
-  <script src="./dist/script/vueditor.min.js"></script>
+  <script src="./dist/vueditor.min.js"></script>
   <script>
     // use var for ie9
-    Vue.use(Vueditor, {
+    Vue.use(Vueditor.default, {
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'code', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough',
         'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
@@ -50,7 +50,7 @@
     editor.setContent(`fill your content here`)
   </script>
   <script>
-    var inst = Vueditor.createEditor('#editor2', {
+    var inst = Vueditor.default.createEditor('#editor2', {
       toolbar: [
         'removeFormat', 'undo', 'redo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'sourceCode'
       ],
