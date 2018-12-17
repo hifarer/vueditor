@@ -1,6 +1,6 @@
 
-<style lang="less" rel="stylesheet/less">
-  .ve-table .ve-wrap {
+<style module lang="less" rel="stylesheet/less">
+  .container {
     width: 192px;
     padding: 10px;
     position: absolute;
@@ -25,7 +25,7 @@
     <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.title" @click="clickHandler"><i class="icon-table"></i></a>
     </div>
-    <div v-show="show" ref="popup" class="ve-wrap" :style="position">
+    <div v-show="show" ref="popup" :class="$style.container" :style="position">
       <!--Vue.js 2.0 v-for i starts with 1-->
       <span v-for="i in num" :key="i" @mouseover="overHandler(i - 1)" @click="insertTable" :class="{'active': ((i - 1) % 8 <= x && parseInt((i - 1) / 8) <= y)}">
       </span>

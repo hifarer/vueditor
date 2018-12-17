@@ -9,8 +9,10 @@
       :activeComponent="activeComponent">
     </ve-toolbar>
     <div class="ve-container">
-      <ve-sourcecode :view="view" :content="content"></ve-sourcecode>
-      <ve-design :view="view" :content="content" :config="config"></ve-design>
+      <div class="ve-wrapper">
+        <ve-sourcecode :view="view" :content="content"></ve-sourcecode>
+        <ve-design :view="view" :content="content" :config="config"></ve-design>
+      </div>
     </div>
     <ve-picture :config="config.upload" :activeComponent="activeComponent"></ve-picture>
   </div>

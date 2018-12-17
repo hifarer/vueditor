@@ -40,9 +40,9 @@
           this.push(val)
         }
       },
-      'view': function (val) {
+      'view': function (val, oldVal) {
         // re initial stack
-        if (val === 'design') {
+        if (val === 'design' && oldVal !== 'codeSnippet') {
           this.stack = []
           this.index = -1
           this.push(this.content)

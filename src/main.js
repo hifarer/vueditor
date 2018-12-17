@@ -1,6 +1,4 @@
 
-// markdown功能
-
 import defaultConf from './config/index.js'
 import defaultLang from './lang/en.js'
 

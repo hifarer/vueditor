@@ -13,13 +13,15 @@
   }
   .half {
     width: 50%;
-    float: left;
+    position: absolute;
+    left: 0;
+    top: 0;
     border-right: 1px solid #ddd;
   }
 </style>
 
 <template>
-  <textarea :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']" v-show="view === 'sourceCode' || view === 'markdown'" :value="code"></textarea>
+  <textarea :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']" v-show="view === 'sourceCode' || view === 'markdown'" v-model="code"></textarea>
 </template>
 
 <script>
@@ -37,12 +39,6 @@
     },
     inject: ['eventHub'],
     watch: {
-      'content': function (val) {
-        // only update when switch to markdown
-        if (this.view === 'markdown') {
-          this.code = val
-        }
-      },
       'code': function (val) {
         // only update when switch to markdown
         if (this.view === 'markdown') {
@@ -52,17 +48,19 @@
           }, 200)
         }
       },
-      'view': function (val) {
-        if (this.view === 'design') {
+      'view': function (val, oldVal) {
+        // markdown的时候会定时更新，sourceCode不会
+        if (val === 'design' && oldVal === 'sourceCode') {
           this.eventHub.$emit('set-content', this.code)
         }
-        if (this.view === 'sourceCode') {
+        if ((val === 'sourceCode' || val === 'markdown') && oldVal === 'design') {
           this.code = this.content
         }
       }
     },
     created () {
       this.timer = null
+      this.code = this.content
     },
     beforeDestroy () {
       clearTimeout(this.timer)

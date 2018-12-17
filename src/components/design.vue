@@ -7,15 +7,19 @@
   }
   .half {
     width: 50%;
-    float: left;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 </style>
 
 <template>
-  <iframe v-show="view !== 'sourceCode'" @load="init" :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; } body {margin: 0; padding: 8px; box-sizing: border-box; word-break: break-all;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style><script>document.designMode = \'on\'</script></head><body spellcheck=\'false\'></body></html>');document.close();}())"></iframe>
+  <iframe v-show="view !== 'sourceCode'" @load="init" :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; } body {margin: 0; padding: 8px; box-sizing: border-box; word-break: break-all;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style></head><body spellcheck=\'false\'></body></html>');document.close();}())"></iframe>
 </template>
 
 <script>
+
+  import marked from '../markdown.js'
   
   export default {
     name: 'design',
@@ -46,11 +50,14 @@
     },
 
     watch: {
+      'view': function (val) {
+        this.iframeDoc.designMode = val === 'markdown' ? 'off' : 'on'
+      },
       'content': function (val) {
         // only update when visible
         if (this.view !== 'sourceCode') {
           if (this.iframeBody && this.iframeBody.innerHTML !== val) {
-            this.iframeBody.innerHTML = val
+            this.iframeBody.innerHTML = marked ? marked(val) : val
           }
         }
       }
@@ -62,6 +69,7 @@
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
         this.iframeBody = this.iframeWin.document.body
+        this.iframeDoc.designMode = 'on'
         if (this.content) {
           this.iframeBody.innerHTML !== this.content && (this.iframeBody.innerHTML = this.content)
         }
@@ -275,7 +283,9 @@
           this.eventHub.$emit('sync-select-value', { type: 'fontName', data: fontName })
           this.eventHub.$emit('sync-select-value', { type: 'fontSize', data: fontSize })
           // if not in code or pre element, set view to design
-          this.view !== 'design' && this.eventHub.$emit('set-view', 'design')
+          if (this.view !== 'markdown' && this.view !== 'design') {
+            this.eventHub.$emit('set-view', 'design')
+          }
         }
       },
 

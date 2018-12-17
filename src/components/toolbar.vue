@@ -119,15 +119,22 @@
     watch: {
       'view': function (val) {
         let status = {}
-        let excludeArr = ['sourceCode', 'markdown', 'fullscreen', 'divider', '|']
+        // 这些无论view是什么都是显示默认状态
+        let excludeArr = ['fullscreen', 'divider', '|']
         this.btns.forEach(item => {
           if (excludeArr.indexOf(item) === -1) {
             // status should be disabled when view is codeSnippet or sourceCode 
             status[item] = val !== 'design' ? 'disabled' : 'default'
           }
         })
-        if (val === 'codeSnippet' && status.codeSnippet !== undefined) {
-          status.codeSnippet = 'default'
+        if (typeof status.markdown !== 'undefined') {
+          status.markdown = val === 'markdown' ? 'actived' : 'default'
+        }
+        if (typeof status.sourceCode !== 'undefined') {
+          status.sourceCode = val === 'sourceCode' ? 'actived' : 'default'
+        }
+        if (typeof status.codeSnippet !== 'undefined') {
+          status.codeSnippet = val !== 'sourceCode' && val !== 'markdown' ? 'default' : 'disabled'
         }
         this.setButtonStatus(status)
       }
