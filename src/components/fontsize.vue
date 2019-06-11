@@ -22,7 +22,7 @@
     },
     data () {
       return {
-        list: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px'],
+        list: ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px', '42px', '48px'],
         val: '12px',
         position: { left: 0, top: 0 }
       }
@@ -38,18 +38,46 @@
         this.setFontSize(size)
         this.eventHub.$emit('set-active-component')
       },
-      replaceFontWithSpan (element) {
-        if (element.nodeType !== 1) return
-        let span = document.createElement('span')
-        Array.prototype.forEach.call(element.attributes, attr => {
-          attr.nodeName !== 'size' && span.setAttribute(attr.nodeName, attr.nodeValue)
+      assignElement (source, target) {
+        let sibling = source.nextSibling
+        Array.prototype.forEach.call(source.attributes, attr => {
+          attr.nodeName !== 'size' && target.setAttribute(attr.nodeName, attr.nodeValue)
         })
-        while (element.firstChild) {
-          span.appendChild(element.firstChild)
+        while (source.firstChild) {
+          target.appendChild(source.firstChild)
         }
-        span.normalize()
-        element.parentNode.replaceChild(span, element)
-        return span
+        target.normalize()
+        return target
+      },
+      parseFontElement (element) {
+        if (element.nodeType !== 1) return
+        let temp = null
+        // <font></font>
+        if (element.innerHTML.trim() === '') {
+          temp = document.createTextNode(element.innerHTML)
+          element.parentNode.replaceChild(temp, element)
+          return temp
+        }
+        // <span><font>xxx</font></span>
+        else if (element.parentNode.children.length === 1 && element.parentNode.innerHTML.trim() === element.outerHTML.trim()) {
+          temp = element.parentNode
+          this.assignElement(element, temp)
+          temp.removeChild(element)
+          return temp
+        }
+        // <font><span>xxx</span></font>
+        else if (element.children.length === 1 && element.innerHTML.trim() === element.children[0].outerHTML.trim()) {
+          temp = element.children[0]
+          while (element.firstChild) {
+            element.parentNode.insertBefore(element.firstChild, element)
+          }
+          element.parentNode.removeChild(element)
+          return temp
+        } else {
+          temp = this.assignElement(element, document.createElement('span'))
+          element.parentNode.replaceChild(temp, element)
+          return temp
+        }
       },
       setFontSize (size) {
         let range = this.range.getRange()
@@ -63,35 +91,39 @@
         } else {
           // use native api to create new dom tree for the range
           this.eventHub.$emit('exec-command', {name: 'fontSize', value: 7})
+          range = this.range.getRange()
           container = range.commonAncestorContainer
           container.nodeType === 3 && (container = container.parentNode)
           container = container.parentNode
-          // some browser does not support styleWithCss
-          let fontList = Array.from(container.getElementsByTagName('font'))
-          let spanList = Array.from(container.getElementsByTagName('span'))
+
           let startNode, endNode
-          if (fontList.length !== 0) {
-            fontList.forEach((font, index) => {
-              let span = this.replaceFontWithSpan(font)
-              span.style.fontSize = size
-              // for new range
-              index === 0 && (startNode = span)
-              index === fontList.length - 1 && (endNode = span)
-            })
-          }
-          if (spanList.length !== 0) {
-            spanList.forEach(span => {
-              if (span.style.fontSize.indexOf('xx-large') !== -1) {
-                span.style.fontSize = size
-                !startNode && (startNode = span)
-                endNode = span  // endNode will be the last one of the loop
-              }
-            })
-          }
+          
+          Array.prototype.slice.call(container.getElementsByTagName('font')).forEach((ele, index) => {
+            ele = this.parseFontElement(ele)
+            ele.nodeType === 1 && (ele.style.fontSize = size)
+            !startNode && (startNode = ele)
+            endNode = ele
+          })
+          
           if (startNode && endNode) {
             range.setStartBefore(startNode)
             range.setEndAfter(endNode)
+            this.range.setRange(range)
           }
+
+          setTimeout(() => {
+            range = this.range.getRange()
+            console.log(range)
+            console.log(range.toString())
+            Array.prototype.slice.call(container.getElementsByTagName('span')).forEach((ele, index) => {
+              let bool = this.range.isNodeInRange(range, ele)
+              console.log(bool)
+              if (bool && ele.style.fontSize !== '' && ele.style.fontSize !== size) {
+                ele.style.fontSize = size
+              }
+            })
+          }, 1000)
+
         }
       },
       syncValue ({ type, data }) {

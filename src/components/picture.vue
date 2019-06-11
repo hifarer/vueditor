@@ -70,7 +70,7 @@
       },
       changeHandler () {
         let obj = this.$refs.file
-        if (obj.files.length !== 0 && obj.files[0].type.match(/^image\//i)) {
+        if (obj.files && obj.files.length !== 0 && obj.files[0].type.match(/^image\//i)) {
           if (getBrowser() === 'IE') {
             this.url = obj.value
           } else {

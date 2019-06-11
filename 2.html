@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=3, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h3>asdf</h3>
+        <p>asdfasdf</p>
+        <p>123213</p>
+    </div>
+    <script>
+        range = document.createRange();
+        // range.selectNode(document.getElementsByTagName("div").item(0));
+        range.selectNode(document.getElementsByTagName("p").item(0));
+        bool = range.isPointInRange(document.getElementsByTagName("p").item(0), 0);
+        console.log(bool)
+    </script>
+</body>
+</html>

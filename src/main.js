@@ -5,6 +5,8 @@ import defaultLang from './lang/en.js'
 import Vue from 'vue'
 import App from './components/app.vue'
 
+// todo IE设置字号BUG 清除格式问题　插入图片 表格问题
+
 /**
  * @param {Array} arr toolbar button list
  */

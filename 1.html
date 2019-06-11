@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p><span style="font-size: 12px;">my name <span style="font-size: 28px;">is hehe</span></span><span style="font-size: 24px;"><span style="font-size: 28px;">fill<span style="font-size: 12px;"> your </span></span><span id="span" style="font-size: 12px;"><span style="font-size: 28px;">content</span> here</span></span><span style="font-size: 24px;"><span style="font-size: 42px;"><span style="font-size: 12px;">she</span> like me</span> very much</span></p>
+  </div>
+  <button id="hehe">asdfasd</button>
+  <script>
+    document.getElementById('hehe').onclick = function () {
+      var sel = window.getSelection();
+      var range = sel.getRangeAt(0);
+      var node = document.querySelector('#span');
+      var result = rangeCompareNode(range, node);
+      console.log(result)
+    }
+    function rangeCompareNode(range, node) {
+      var nodeRange = node.ownerDocument.createRange()
+      var lastTextChild = null
+      while ((lastTextChild = node.lastChild) && lastTextChild.nodeType === 1) {
+        node = lastTextChild
+      }
+      if (node.firstChild && lastTextChild) {
+        nodeRange.setStart(node.firstChild, 0)
+        nodeRange.setEnd(lastTextChild, lastTextChild.nodeValue.length)
+      } else {
+        nodeRange.selectNodeContents(node)
+      }
+      console.log(range.toString())
+      console.log(nodeRange.toString())
+      var isBefore = range.compareBoundaryPoints(Range.START_TO_START, nodeRange)
+      var isAfter = range.compareBoundaryPoints(Range.END_TO_END, nodeRange)
+      return isBefore <= 0 && isAfter >= 0
+    }
+  </script>
+</body>
+
+</html>

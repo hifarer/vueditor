@@ -7,19 +7,19 @@
   }
   .half {
     width: 50%;
-    position: absolute;
-    right: 0;
-    top: 0;
   }
 </style>
 
 <template>
-  <iframe v-show="view !== 'sourceCode'" @load="init" :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; } body {margin: 0; padding: 8px; box-sizing: border-box; word-break: break-all;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style></head><body spellcheck=\'false\'></body></html>');document.close();}())"></iframe>
+  <iframe v-if="view !== 'sourceCode'" @load="init" :class="['ve-design', view === 'markdown' ? $style.half: '' ]" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="javascript:void(function () {document.open();document.write('<!DOCTYPE html><html lang=\'en\' class=\'page\'><head><meta charset=\'UTF-8\'><meta name=\'viewport\' content=\'width=device-width, initial-scale=1.0\'><meta http-equiv=\'X-UA-Compatible\' content=\'ie=edge\'><title>Document</title><style>.page {width: 100%; height: 100%; } body {margin: 0; padding: 8px; box-sizing: border-box; word-break: break-all;} pre {margin: 0; padding: 0.5rem; background: #f5f2f0; line-height: 1.6;}</style></head><body contenteditable=\'true\' spellcheck=\'false\'></body></html>');document.close();}())"></iframe>
 </template>
 
 <script>
 
   import marked from '../markdown.js'
+  import { getBrowser } from '../util.js'
+
+  const browser = getBrowser()
   
   export default {
     name: 'design',
@@ -51,7 +51,7 @@
 
     watch: {
       'view': function (val) {
-        this.iframeDoc.designMode = val === 'markdown' ? 'off' : 'on'
+        this.iframeBody.setAttribute('contenteditable', val === 'markdown' ? false : true)
       },
       'content': function (val) {
         // only update when visible
@@ -69,7 +69,6 @@
         this.iframeWin = event.target.contentWindow
         this.iframeDoc = this.iframeWin.document
         this.iframeBody = this.iframeWin.document.body
-        this.iframeDoc.designMode = 'on'
         if (this.content) {
           this.iframeBody.innerHTML !== this.content && (this.iframeBody.innerHTML = this.content)
         }
@@ -289,15 +288,24 @@
         }
       },
 
+      setStyleWithCss (bool) {
+        try {
+          this.iframeDoc.execCommand('styleWithCSS', false, bool)
+        } catch (e) {
+          try {
+            // use false to use CSS, true to use HTML
+            this.iframeDoc.execCommand('useCSS', false, !bool)
+          } catch (e) {}
+        }
+      },
+
       execCommand ({name, value}) {
         let range = this.range.getRange()
         if (!range) return
         if (this[name]) {
-          this[name](name, value)
+          this[name](value)
         } else {
-          if (document.queryCommandSupported('styleWithCss')) {
-            this.iframeDoc.execCommand('styleWithCss', false, true)
-          }
+          this.setStyleWithCss(false)
           this.iframeDoc.execCommand(name, false, value)
         }
         this.triggerEvent('selectionchange')
@@ -334,42 +342,42 @@
         this.iframeBody.focus()
       },
 
-      removeFormat (name, value) {
-        this.iframeDoc.execCommand(name, false, value)
-        let container = this.range.getContainer()
+      removeFormat (value) {
+        this.iframeDoc.execCommand('removeFormat', false, value)
+        let container = this.range.getContainer(true)
         if (!container) return
-        container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
+        // container.tagName.toLowerCase() === 'span' && (container = container.parentNode)
+        console.log(container.innerHTML || container.textContent)
         this.formatContent(container)
         container.normalize()
       },
 
       formatContent (obj) {
-        // let pattern = {fontSize: /font-size:\s?\d+px;/g, verticalAlign: /vertical-align:\s?(sub|super);/g}
-        let pattern = /vertical-align:\s?(sub|super);/g
+        
+        if (obj.nodeType === 3) return
+        // console.log(obj.innerHTML || container.textContent)
         let nodeList = Array.prototype.slice.call(obj.getElementsByTagName('span'))
         for (let i = 0; i < nodeList.length; i++) {
           let node = nodeList[i]
-          if (node.style.length === 0 || node.getAttribute('style').match(pattern) == null) continue
           // node has no element child
+          // console.log(node.outerHTML) 
           if (node.children.length === 0) {
-            // verticalAlign is the only style
-            if (node.style.length === 1) {
-              // style is the only attribute, replace the Node
-              if (node.attributes.length === 1) {
-                let parent = node.parentNode
-                parent.replaceChild(document.createTextNode(node.innerHTML), node)
-                parent.normalize()
-              } else {
-                node.removeAttributte('style')
-              }
+            // style is the only attribute, replace the Node
+            
+            if (node.attributes.length === 1 && node.attributes[0].nodeName === 'style' && node.parentNode) {
+              let parent = node.parentNode
+              // console.log(parent)
+              parent.replaceChild(document.createTextNode(node.innerText || node.textContent), node)
+              parent.normalize()
+              // console.log('fi')
             } else {
-              node.style.verticalAlign = ''
+              node.removeAttribute('style')
+              // console.log('2')
             }
           } else {
             this.formatContent(node)
           }
         }
-
       },
 
       wrapTextNode (range, tagName) {

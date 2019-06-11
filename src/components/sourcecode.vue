@@ -13,15 +13,14 @@
   }
   .half {
     width: 50%;
-    position: absolute;
-    left: 0;
-    top: 0;
+    height: 100%;
+    float: left;
     border-right: 1px solid #ddd;
   }
 </style>
 
 <template>
-  <textarea :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']" v-show="view === 'sourceCode' || view === 'markdown'" v-model="code"></textarea>
+  <textarea v-if="view === 'sourceCode' || view === 'markdown'" v-model="code" :class="['ve-sourcecode', view === 'markdown' ? $style.half : '']"></textarea>
 </template>
 
 <script>

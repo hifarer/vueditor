@@ -66,6 +66,7 @@ module.exports = {
 
   devServer: {
     contentBase: path.join(__dirname, '..'),
+    disableHostCheck: true,
     compress: true,
     noInfo: true,
     hot: true,
