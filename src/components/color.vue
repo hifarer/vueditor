@@ -28,10 +28,10 @@
 
 <template>
   <div class="ve-color">
-    <div :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-active': show && key ==='foreColor', 've-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.foreColor" @click="clickHandler('foreColor', $event)"><i class="icon-file-text-o"></i></a>
     </div>
-    <div :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-active': show && key ==='backColor', 've-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.backColor" @click="clickHandler('backColor', $event)"><i class="icon-file-text"></i></a>
     </div>
     <div ref="popup" :class="$style.ctn" :style="position" v-show="show">

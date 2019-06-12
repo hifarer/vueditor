@@ -10,10 +10,10 @@
 
 <template>
   <div class="ve-link">
-    <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-active': show, 've-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.addLink" @click="clickHandler"><i class="icon-link"></i></a>
     </div>
-    <div :class="['ve-icon', {'ve-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.clearLink" @click="clearLink"><i class="icon-unlink"></i></a>
     </div>
     <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="position">

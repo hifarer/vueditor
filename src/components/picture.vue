@@ -11,17 +11,22 @@
 </style>
 
 <template>
-  <div class="ve-picture ve-dialog" v-show="show" @click.self="hideDialog">
-    <div :class="$style.wrap">
-      <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
-      <div class="ve-dialog-body">
-        <input type="file" ref="file" @change="changeHandler">
-        <div class="ve-preview" v-if="url"><img :src="url"></div>
-      </div>
-      <div class="ve-dialog-footer">
-        <div class="ve-btn-box">
-          <button class="ve-btn" @click="hideDialog">{{lang.cancel}}</button>
-          <button class="ve-btn" @click="certainHandler">{{lang.ok}}</button>
+  <div class="ve-picture">
+    <div :class="['ve-icon', {'ve-active': show, 've-disable': view !== 'design'}]" unselectable="on">
+      <a href="javascript:;" :title="lang.addLink" @click="clickHandler"><i class="icon-file-image-o"></i></a>
+    </div>
+    <div class="ve-dialog" ref="dialog" v-show="show" @click.self="hideDialog">
+      <div :class="$style.wrap">
+        <div class="ve-dialog-header">{{lang.title}}<a href="javascript:;" class="ve-close" @click="hideDialog">&times;</a></div>
+        <div class="ve-dialog-body">
+          <input type="file" ref="file" @change="changeHandler">
+          <div class="ve-preview" v-if="url"><img :src="url"></div>
+        </div>
+        <div class="ve-dialog-footer">
+          <div class="ve-btn-box">
+            <button class="ve-btn" @click="hideDialog">{{lang.cancel}}</button>
+            <button class="ve-btn" @click="certainHandler">{{lang.ok}}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -36,6 +41,7 @@
     name: 'picture',
     props: {
       config: Object,
+      view: String,
       activeComponent: String
     },
     data () {
@@ -60,10 +66,10 @@
         }
       }
     },
-    created () {
-      this.eventHub.$on('paste-upload', this.pasteHandler)
-    },
     methods: {
+      clickHandler (event) {
+        this.eventHub.$emit('set-active-component', 'picture')
+      },
       hideDialog () {
         this.eventHub.$emit('set-button-status', { picture: 'default' })
         this.eventHub.$emit('set-active-component')
@@ -132,6 +138,17 @@
         xhr.onerror = err => {
           window.alert(err)
         }
+      }
+    },
+    mounted () {
+      this.$el.parentNode.parentNode.appendChild(this.$refs.dialog);
+    },
+    created () {
+      this.eventHub.$on('paste-upload', this.pasteHandler)
+    },
+    destroyed () {
+      if (this.$refs.dialog && this.$refs.dialog.parentNode) {
+        this.$refs.dialog.parentNode.removeChild(this.$refs.dialog);
       }
     }
   }

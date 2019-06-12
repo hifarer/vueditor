@@ -1,7 +1,7 @@
 
 <template>
   <div class="ve-element">
-    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-select', {'ve-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
     <div v-show="show" ref="popup" class="ve-dropdown" :style="position">

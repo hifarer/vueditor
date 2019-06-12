@@ -18,7 +18,7 @@
       display: inline-block;
       color: rgba(0, 0, 0, 0.6);
     }
-    div.ve-icon:not(.ve-disabled):hover {
+    div.ve-icon:not(.ve-disable):hover {
       background: #eee;
     }
     div.ve-icon a {
@@ -29,7 +29,7 @@
       background: #eee;
       color: #000;
     }
-    div.ve-disabled {
+    div.ve-disable {
       background: transparent;
       color: rgba(0,0,0,.6);
     }
@@ -47,26 +47,21 @@
 
 <template>
   <div class="ve-toolbar">
-    <template v-for="(val, name) in componentData">
+    <template v-for="name in finalBtns">
       <!-- divider -->
       <div v-if="name == 'divider' || name == '|'" :key="name" class="ve-divider"></div>
       <!-- button with extra html -->
-      <component v-else-if="name.indexOf('ve-') !== -1 && name === 've-undoredo'" 
-        :key="name" 
-        :is="name"
-        :view="view"
-        :content="content">
-      </component>
-      <component v-else-if="name.indexOf('ve-') !== -1 && name !== 've-undoredo'"
+      <component v-else-if="name.indexOf('ve-') !== -1" 
         :key="name"
         :is="name"
         :view="view"
+        :content="content"
         :activeComponent="activeComponent">
       </component>
       <!-- just button -->
-      <div v-else :key="name" :class="['ve-icon', {'ve-active': status[name] === 'actived', 've-disabled': status[name] === 'disabled'}]" unselectable="on">
+      <div v-else :key="name" :class="['ve-icon', {'ve-active': status[name] === 'active', 've-disable': status[name] === 'disable'}]" unselectable="on">
         <a href="javascript:;" :title="lang[name].title" @click.stop.prevent="clickHandler($event, name)">
-          <i :class="[toolbarConf[name].className]"></i>
+          <i :class="toolbarConf[name].className"></i>
         </a>
       </div>
     </template>
@@ -86,6 +81,7 @@
   import UndoRedo from './undoredo.vue'
   import CodeSnippet from './codesnippet.vue'
   import Emoji from './emoji.vue'
+  import Picture from './picture.vue'
 
   export default {
     name: 'toolbar',
@@ -99,9 +95,32 @@
     data () {
       this.toolbarConf = toolbarConf
       return {
-        lang: window.__VUEDITOR_LANGUAGE__,
-        status: this.getInitialStatus(),
-        componentData: this.getComponentData()
+        lang: window.__VUEDITOR_LANGUAGE__
+      }
+    },
+    computed: {
+      finalBtns () {
+        let list = []
+        for (let i = 0, item = ''; i < this.btns.length; i++) {
+          item = this.btns[i]
+          if (toolbarConf.hasOwnProperty(item) || item == 'divider' || item == '|') {
+            list.push(item)
+          } else {
+            list.push('ve-' + item.toLowerCase())
+          }
+        }
+        return list
+      },
+      status () {
+        let status = {}
+        for (let i = 0, item = ''; i < this.btns.length; i++) {
+          item = this.btns[i]
+          // divider has not status
+          if (toolbarConf.hasOwnProperty(item) && item !== 'divider' && item !== '|') {
+            status[item] = 'default' // default disable active
+          }
+        }
+        return status
       }
     },
     inject: ['eventHub'],
@@ -114,7 +133,8 @@
       've-table': Table,
       've-undoredo': UndoRedo,
       've-codesnippet': CodeSnippet,
-      've-emoji': Emoji
+      've-emoji': Emoji,
+      've-picture': Picture
     },
     watch: {
       'view': function (val) {
@@ -123,53 +143,20 @@
         let excludeArr = ['fullscreen', 'divider', '|']
         this.btns.forEach(item => {
           if (excludeArr.indexOf(item) === -1) {
-            // status should be disabled when view is codeSnippet or sourceCode 
-            status[item] = val !== 'design' ? 'disabled' : 'default'
+            // status should be disable when view is codeSnippet or sourceCode 
+            status[item] = val !== 'design' ? 'disable' : 'default'
           }
         })
         if (typeof status.markdown !== 'undefined') {
-          status.markdown = val === 'markdown' ? 'actived' : 'default'
+          status.markdown = val === 'markdown' ? 'active' : 'default'
         }
         if (typeof status.sourceCode !== 'undefined') {
-          status.sourceCode = val === 'sourceCode' ? 'actived' : 'default'
-        }
-        if (typeof status.codeSnippet !== 'undefined') {
-          status.codeSnippet = val !== 'sourceCode' && val !== 'markdown' ? 'default' : 'disabled'
+          status.sourceCode = val === 'sourceCode' ? 'active' : 'default'
         }
         this.setButtonStatus(status)
       }
     },
     methods: {
-      getInitialStatus () {
-        let status = {}
-        for (let i = 0, item = ''; i < this.btns.length; i++) {
-          item = this.btns[i]
-          // divider has not status
-          if (item !== 'divider' && item !== '|') {
-            status[item] = 'default' // default disabled actived
-          }
-        }
-        return status
-      },
-      getComponentData () {
-        let componentData = {}
-        for (let i = 0, item = ''; i < this.btns.length; i++) {
-          item = this.btns[i]
-          // get actual component list from button list
-          if (item in toolbarConf || item == 'divider' || item == '|') {
-            componentData[item] = null
-          } else if (['undo', 'redo'].indexOf(item) !== -1) {
-            componentData['ve-undoredo'] = null
-          } else if (['foreColor', 'backColor'].indexOf(item) !== -1) {
-            componentData['ve-color'] = null
-          } else if (['link', 'unLink'].indexOf(item) !== -1) {
-            componentData['ve-link'] = null
-          } else {
-            componentData['ve-' + item.toLowerCase()] = null
-          }
-        }
-        return componentData
-      },
       setButtonStatus (data) {
         for (let name in data) {
           if (typeof this.status[name] !== 'undefined') {
@@ -179,20 +166,17 @@
       },
       doAction (name) {
         switch (name) {
-          case 'picture':
-            this.eventHub.$emit('set-active-component', name)
-            break
           case 'fullscreen':
             this.eventHub.$emit('set-fullscreen', !this.fullscreen)
             break
-          case 'sourceCode':
           case 'markdown':
+          case 'sourceCode':
             this.eventHub.$emit('set-view', this.view === name ? 'design' : name)
             this.eventHub.$emit('set-active-component')
         }
       },
       clickHandler (event, name) {
-        if (this.status[name] === 'disabled') return
+        if (this.status[name] === 'disable') return
         if (this.toolbarConf[name].native) {
           this.eventHub.$emit('exec-command', { name: name, value: null })
           this.eventHub.$emit('set-active-component')
@@ -200,7 +184,7 @@
           this.doAction(name)
         }
         this.setButtonStatus({
-          [name]: this.status[name] === 'actived' ? 'default' : 'actived'
+          [name]: this.status[name] === 'active' ? 'default' : 'active'
         })
       }
     },

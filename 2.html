@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=3, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-    <div>
-        <h3>asdf</h3>
-        <p>asdfasdf</p>
-        <p>123213</p>
-    </div>
-    <script>
-        range = document.createRange();
-        // range.selectNode(document.getElementsByTagName("div").item(0));
-        range.selectNode(document.getElementsByTagName("p").item(0));
-        bool = range.isPointInRange(document.getElementsByTagName("p").item(0), 0);
-        console.log(bool)
-    </script>
+  <input type="button" onclick="alert(isSelected(document.getElementById('span')))" value="Is span selected?">
+  <div contenteditable="true">Here is a span: <span id="span" style="font-weight: bold">span</span>. Select some text
+    and press the button to see if the selection conatins the whole span</div>
+  <script>
+    function isSelected(el) {
+      if (window.getSelection) {
+        var sel = window.getSelection();
+        var elRange = document.createRange();
+        elRange.selectNodeContents(el);
+        for (var i = 0, range; i < sel.rangeCount; ++i) {
+          range = sel.getRangeAt(i);
+          if (range.compareBoundaryPoints(range.START_TO_START, elRange) <= 0
+            && range.compareBoundaryPoints(range.END_TO_END, elRange) >= 0) {
+            return true;
+          }
+        }
+      } else if (document.selection && document.selection.type == "Text") {
+        var textRange = document.selection.createRange();
+        var elTextRange = textRange.duplicate();
+        elTextRange.moveToElementText(el);
+        return textRange.inRange(elTextRange);
+      }
+      return false;
+    }
+  </script>
 </body>
+
 </html>

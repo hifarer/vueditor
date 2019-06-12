@@ -22,7 +22,7 @@
 
 <template>
   <div class="ve-table">
-    <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-active': show, 've-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" :title="lang.title" @click="clickHandler"><i class="icon-table"></i></a>
     </div>
     <div v-show="show" ref="popup" :class="$style.container" :style="position">

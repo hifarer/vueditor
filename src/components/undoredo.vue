@@ -1,10 +1,10 @@
 
 <template>
   <div class="ve-undoredo">
-    <div :class="['ve-icon', {'ve-disabled': !canUndo}]">
+    <div :class="['ve-icon', {'ve-disable': !canUndo}]">
       <a href="javascript:;" :title="lang.undo" @click="undo"><i class="icon-undo"></i></a>
     </div>
-    <div :class="['ve-icon', {'ve-disabled': !canRedo}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-disable': !canRedo}]" onselectable="on">
       <a href="javascript:;" :title="lang.redo" @click="redo"><i class="icon-repeat"></i></a>
     </div>
   </div>

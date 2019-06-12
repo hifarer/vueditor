@@ -1,12 +1,12 @@
 
 export default class Range {
   setIframeWin (obj) {
-    this.obj = obj
+    this.iframeWin = obj
   }
 
   getSelection () {
-    if (this.obj && this.obj.getSelection) {
-      return this.obj.getSelection()
+    if (this.iframeWin && this.iframeWin.getSelection) {
+      return this.iframeWin.getSelection()
     }
   }
 
@@ -74,11 +74,7 @@ export default class Range {
     } else {
       nodeRange.selectNodeContents(node)
     }
-    console.log(nodeRange.toString())
-    
-    let isBefore = range.compareBoundaryPoints(Range.START_TO_START, nodeRange)
-    let isAfter = range.compareBoundaryPoints(Range.END_TO_END, nodeRange)
-    console.log(isBefore, isAfter)
-    return isBefore <= 0 && isAfter >= 0
+    return range.compareBoundaryPoints(range.START_TO_START, nodeRange) <= 0 
+      && range.compareBoundaryPoints(range.END_TO_END, nodeRange) >= 0
   }
 }

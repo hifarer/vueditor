@@ -14,7 +14,6 @@
         <ve-design :view="view" :content="content" :config="config"></ve-design>
       </div>
     </div>
-    <ve-picture :config="config.upload" :activeComponent="activeComponent"></ve-picture>
   </div>
 </template>
 
@@ -24,7 +23,6 @@
   import Toolbar from './toolbar.vue'
   import Design from './design.vue'
   import SourceCode from './sourcecode.vue'
-  import Picture from './picture.vue'
 
   import Range from '../range.js'
 
@@ -42,8 +40,7 @@
     components: {
       've-toolbar': Toolbar,
       've-design': Design,
-      've-sourcecode': SourceCode,
-      've-picture': Picture
+      've-sourcecode': SourceCode
     },
     methods: {
       setContent (content) {

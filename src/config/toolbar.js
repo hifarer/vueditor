@@ -1,6 +1,6 @@
 export default {
 
-  // 非组件，系统命令按钮
+  // 系统命令按钮
   removeFormat: { className: 'icon-eraser', action: 'removeFormat', native: true },
 
   bold: { className: 'icon-bold', action: 'bold', native: true },
@@ -21,13 +21,9 @@ export default {
   insertOrderedList: { className: 'icon-list-ol', action: 'insertOrderedList', native: true },
   insertUnorderedList: { className: 'icon-list-ul', action: 'insertUnorderedList', native: true },
 
-  // 非组件，只有一个按钮点击后执行一个操作
+  // 自定义命令按钮
   markdown: { className: 'icon-markdown', action: 'markdown' },
-  fullscreen: { className: 'icon-fullscreen', action: 'fullscreen' },
-
-  // 组件的html按钮和其余部分分离的
   sourceCode: { className: 'icon-code', action: 'sourceCode' },
-  picture: { className: 'icon-file-image-o', action: 'picture' }
+  fullscreen: { className: 'icon-fullscreen', action: 'fullscreen' }
 
-  // 组件的html按钮和其余部分一体的，不在此列出
 }

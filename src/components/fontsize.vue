@@ -1,7 +1,7 @@
 
 <template>
   <div class="ve-fontsize">
-    <div :class="['ve-select', {'ve-disabled': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-select', {'ve-disable': view !== 'design'}]" onselectable="on">
       <a href="javascript:;" @click="clickHandler"><span>{{val}}</span><i :class="{'ve-triangle-down': !show, 've-triangle-up': show}"></i></a>
     </div>
     <div v-show="show" ref="popup" class="ve-dropdown" :style="position">
@@ -89,41 +89,33 @@
         if (container.childNodes.length === 1) {
           container.childNodes[0].nodeType === 1 ? container.childNodes[0].style.fontSize = size : container.style.fontSize = size
         } else {
-          // use native api to create new dom tree for the range
-          this.eventHub.$emit('exec-command', {name: 'fontSize', value: 7})
+          // use execCommand to create a new dom tree for the range
+          this.eventHub.$emit('exec-command', { name: 'fontSize', value: 7 })
           range = this.range.getRange()
           container = range.commonAncestorContainer
           container.nodeType === 3 && (container = container.parentNode)
           container = container.parentNode
 
           let startNode, endNode
-          
           Array.prototype.slice.call(container.getElementsByTagName('font')).forEach((ele, index) => {
             ele = this.parseFontElement(ele)
             ele.nodeType === 1 && (ele.style.fontSize = size)
             !startNode && (startNode = ele)
             endNode = ele
           })
-          
           if (startNode && endNode) {
             range.setStartBefore(startNode)
             range.setEndAfter(endNode)
-            this.range.setRange(range)
           }
 
-          setTimeout(() => {
-            range = this.range.getRange()
-            console.log(range)
-            console.log(range.toString())
-            Array.prototype.slice.call(container.getElementsByTagName('span')).forEach((ele, index) => {
-              let bool = this.range.isNodeInRange(range, ele)
-              console.log(bool)
-              if (bool && ele.style.fontSize !== '' && ele.style.fontSize !== size) {
-                ele.style.fontSize = size
-              }
-            })
-          }, 1000)
-
+          Array.prototype.slice.call(container.getElementsByTagName('span')).forEach((ele, index) => {
+            let bool = this.range.isNodeInRange(range, ele)
+            console.log(bool)
+            if (bool && ele.style.fontSize !== '' && ele.style.fontSize !== size) {
+              ele.style.fontSize = size
+            }
+          })
+          
         }
       },
       syncValue ({ type, data }) {

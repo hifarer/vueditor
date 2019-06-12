@@ -17,7 +17,7 @@
 
 <template>
 <div class="ve-emoji">
-  <div :class="['ve-icon', {'ve-active': show, 've-disabled': view !== 'design'}]" onselectable="on">
+  <div :class="['ve-icon', {'ve-active': show, 've-disable': view !== 'design'}]" onselectable="on">
     <a href="javascript:;" :title="lang.title" @click="clickHandler"><i class="icon-smile-o"></i></a>
   </div>
   <div class="ve-popover emoji" ref="popup" v-show="show" :style="position">

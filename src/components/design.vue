@@ -83,7 +83,7 @@
         for (let i = 0, name; i < arr.length; i++ ) {
           name = arr[i]
           if (this.iframeDoc.queryCommandSupported(name) && ['redo', 'undo'].indexOf(name) === -1) {
-            status[name] = this.iframeDoc.queryCommandState(name) ? 'actived' : 'default'
+            status[name] = this.iframeDoc.queryCommandState(name) ? 'active' : 'default'
           }
         }
         this.eventHub.$emit('set-button-status', status)
