@@ -10,7 +10,6 @@
     </ve-toolbar>
     <div class="ve-container">
       <div class="ve-wrapper">
-        <ve-sourcecode :view="view" :content="content"></ve-sourcecode>
         <ve-design :view="view" :content="content" :config="config"></ve-design>
       </div>
     </div>
@@ -22,7 +21,6 @@
   import Vue from 'vue'
   import Toolbar from './toolbar.vue'
   import Design from './design.vue'
-  import SourceCode from './sourcecode.vue'
 
   import Range from '../range.js'
 
@@ -39,8 +37,7 @@
     },
     components: {
       've-toolbar': Toolbar,
-      've-design': Design,
-      've-sourcecode': SourceCode
+      've-design': Design
     },
     methods: {
       setContent (content) {

@@ -36,9 +36,7 @@
     },
     watch: {
       'content': function (val) {
-        if (this.view !== 'sourceCode') {
-          this.push(val)
-        }
+        this.push(val)
       },
       'view': function (val, oldVal) {
         // re initial stack

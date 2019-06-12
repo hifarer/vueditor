@@ -2,6 +2,7 @@ build
 node_modules
 src
 index.html
+test.html
 .babelrc
 .editorconfig
 .gitignore

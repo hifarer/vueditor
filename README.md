@@ -20,7 +20,7 @@ Online [DEMO](http://hifarer.github.io/vueditor/)
 ## Features
 
 - Customizable
-- Light weighted, very few dependencies
+- Light weighted
 
 ## Installation
 ```javascript
@@ -47,7 +47,7 @@ import 'vueditor/dist/vueditor.min.css'
 // your config here
 let config = {
   toolbar: [
-    'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
+    'removeFormat', 'undoRedo', '|', 'element', 'fontName', 'fontSize', 'color'
   ],
   spellcheck: false,
   paste: {
@@ -104,7 +104,7 @@ Call `createEditor` and pass specific config as parameter respectively for multi
 
   createEditor('#editorContainer', {
     toolbar: [
-      'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+      'removeFormat', 'undoRedo', '|', 'elements', 'fontName', 'fontSize', 'color', 
     ]
   });
 ```
@@ -169,7 +169,7 @@ Default value of the above fields:
 ```javascript
 {
   toolbar: [
-    'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'codeSnippet', 'fullscreen', 'sourceCode', 'markdown'
+    'removeFormat', 'undoRedo', '|', 'element', 'fontName', 'fontSize', 'color', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'codeSnippet', 'fullscreen'
   ],
   spellcheck: false,
   paste: {
@@ -183,15 +183,8 @@ Default value of the above fields:
 };
 ```
 
-## Change log
-
-See [change log](./docs/changelog.md)
-
-## Bug confirmed
-
 ## TODO
 
-- [x] Markdown support
 - [x] Full screen and fixed toolbar features
 - [x] Popup menu position auto adjust
 - [ ] Advanced table options

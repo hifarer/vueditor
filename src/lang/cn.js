@@ -56,17 +56,11 @@ export default {
     clearLink: '取消超链接',
     ok: '确定'
   },
-  markdown: {
-    title: 'markdown'
-  },
   picture: {
     title: '插入图片',
     ok: '确定',
     cancel: '取消',
     invalidFile: '未选择图片或选择的文件并非图片!'
-  },
-  sourceCode: {
-    title: '源码'
   },
   fullscreen: {
     title: '全屏'
@@ -77,8 +71,5 @@ export default {
   undoRedo: {
     undo: 'Undo',
     redo: 'Redo'
-  },
-  emoji: {
-    title: 'emoji'
   }
 }

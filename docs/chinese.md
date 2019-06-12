@@ -20,7 +20,7 @@ Vueditor
 ## 特性
 
 - 可自定义
-- 轻量级, 依赖少
+- 轻量级
 
 ## 安装
 ```javascript
@@ -47,7 +47,7 @@ import 'vueditor/dist/vueditor.min.css'
 // 编辑器配置
 let config = {
   toolbar: [
-    'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor'
+    'removeFormat', 'undoRedo', '|', 'element', 'fontName', 'fontSize', 'color'
   ],
   spellcheck: false,
   paste: {
@@ -104,7 +104,7 @@ inst.getContent();
 
   createEditor('#editorContainer', {
     toolbar: [
-      'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 
+      'removeFormat', 'undoRedo', '|', 'elements', 'fontName', 'fontSize', 'color'
     ]
   });
 ```
@@ -166,7 +166,7 @@ Vue.use(Vueditor, {
 ```javascript
 {
   toolbar: [
-    'removeFormat', 'undo', 'redo', '|', 'element', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'codeSnippet', 'fullscreen', 'sourceCode', 'markdown'
+    'removeFormat', 'undoRedo', '|', 'element', 'fontName', 'fontSize', 'color', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'unLink', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'codeSnippet', 'fullscreen'
   ],
   spellcheck: false,
   paste: {
@@ -180,15 +180,8 @@ Vue.use(Vueditor, {
 };
 ```
 
-## 更新记录
-
-查看[这里](./docs/changelog.md)
-
-## Bug确认
-
 ## TODO
 
-- [x] Markdown 支持
 - [x] 全屏及工具栏固定选项
 - [x] 弹出菜单位置自适应
 - [ ] 表格高级设置

@@ -1,7 +1,7 @@
 
 export default {
   toolbar: [
-    'removeFormat', 'undoRedo', '|', 'element', 'fontName', 'fontSize', 'color', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'emoji', 'picture', 'table', '|', 'codeSnippet', 'fullscreen', 'sourceCode', 'markdown'
+    'removeFormat', 'undoRedo', '|', 'codeSnippet', 'element', 'fontName', 'fontSize', 'color', 'divider', 'bold', 'italic', 'underline', 'strikeThrough', 'link', 'divider', 'subscript', 'superscript', 'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent', 'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'fullscreen'
   ],
   spellcheck: false,
   paste: {

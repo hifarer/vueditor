@@ -22,8 +22,6 @@ export default {
   insertUnorderedList: { className: 'icon-list-ul', action: 'insertUnorderedList', native: true },
 
   // 自定义命令按钮
-  markdown: { className: 'icon-markdown', action: 'markdown' },
-  sourceCode: { className: 'icon-code', action: 'sourceCode' },
   fullscreen: { className: 'icon-fullscreen', action: 'fullscreen' }
 
 }

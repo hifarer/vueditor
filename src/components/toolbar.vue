@@ -80,7 +80,6 @@
   import Table from './table.vue'
   import UndoRedo from './undoredo.vue'
   import CodeSnippet from './codesnippet.vue'
-  import Emoji from './emoji.vue'
   import Picture from './picture.vue'
 
   export default {
@@ -133,7 +132,6 @@
       've-table': Table,
       've-undoredo': UndoRedo,
       've-codesnippet': CodeSnippet,
-      've-emoji': Emoji,
       've-picture': Picture
     },
     watch: {
@@ -143,16 +141,10 @@
         let excludeArr = ['fullscreen', 'divider', '|']
         this.btns.forEach(item => {
           if (excludeArr.indexOf(item) === -1) {
-            // status should be disable when view is codeSnippet or sourceCode 
+            // status should be disable when view is codeSnippet
             status[item] = val !== 'design' ? 'disable' : 'default'
           }
         })
-        if (typeof status.markdown !== 'undefined') {
-          status.markdown = val === 'markdown' ? 'active' : 'default'
-        }
-        if (typeof status.sourceCode !== 'undefined') {
-          status.sourceCode = val === 'sourceCode' ? 'active' : 'default'
-        }
         this.setButtonStatus(status)
       }
     },
@@ -169,10 +161,6 @@
           case 'fullscreen':
             this.eventHub.$emit('set-fullscreen', !this.fullscreen)
             break
-          case 'markdown':
-          case 'sourceCode':
-            this.eventHub.$emit('set-view', this.view === name ? 'design' : name)
-            this.eventHub.$emit('set-active-component')
         }
       },
       clickHandler (event, name) {
