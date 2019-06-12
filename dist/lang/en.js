@@ -72,17 +72,11 @@ export default {
     clearLink: 'Clear link',
     ok: 'OK'
   },
-  markdown: {
-    title: 'markdown'
-  },
   picture: {
     title: 'Insert Picture',
     ok: 'OK',
     cancel: 'Cancel',
     invalidFile: 'No file selected or selected file is not a picture'
-  },
-  sourceCode: {
-    title: 'Source Code'
   },
   fullscreen: {
     title: 'Fullscreen'
@@ -93,8 +87,5 @@ export default {
   undoRedo: {
     undo: 'Undo',
     redo: 'Redo'
-  },
-  emoji: {
-    title: 'emoji'
   }
 }

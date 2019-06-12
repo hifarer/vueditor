@@ -2,7 +2,9 @@
 const path = require('path')
 const webpack = require('webpack')
 const VueLoader = require('vue-loader')
+const TerserJSPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const pkg = require('../package.json')
@@ -45,7 +47,7 @@ module.exports = {
             resourceQuery: /module/,
             use: [
               MiniCssExtractPlugin.loader,
-              'css-loader?modules=true&minimize',
+              'css-loader',
               'less-loader',
               'postcss-loader'
             ]
@@ -53,7 +55,7 @@ module.exports = {
           {
             use: [
               MiniCssExtractPlugin.loader,
-              'css-loader?minimize',
+              'css-loader',
               'less-loader',
               'postcss-loader'
             ]
@@ -70,6 +72,10 @@ module.exports = {
         }
       }
     ]
+  },
+
+  optimization: {
+    minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()]
   },
 
   plugins: [
