@@ -9,7 +9,7 @@
   "main": "dist/vueditor.min.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack-dev-server --open --config ./build/webpack.dev.config.js --progress --hide-modules",
+    "dev": "webpack-dev-server --open --config ./build/webpack.dev.config.js --hide-modules",
     "build": "webpack --config ./build/webpack.prod.config.js --progress --hide-modules",
     "eslint": "eslint --fix --ext .vue,.js ./src/"
   },
