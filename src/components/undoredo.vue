@@ -1,77 +1,44 @@
 
 <template>
   <div class="ve-undoredo">
-    <div :class="['ve-icon', {'ve-disable': !canUndo}]">
+    <div :class="['ve-icon', { 've-disable': !canUndo }]" unselectable="on">
       <a href="javascript:;" :title="lang.undo" @click="undo"><i class="icon-undo"></i></a>
     </div>
-    <div :class="['ve-icon', {'ve-disable': !canRedo}]" onselectable="on">
+    <div :class="['ve-icon', { 've-disable': !canRedo }]" unselectable="on">
       <a href="javascript:;" :title="lang.redo" @click="redo"><i class="icon-repeat"></i></a>
     </div>
   </div>
 </template>
 
 <script>
-  
+  import UndoRedo from '../core/undoRedo'
+
   export default {
     name: 'undoRedo',
     props: {
-      view: String,
-      content: String
+      view: String
     },
-    data () {
+    data() {
       return {
-        stack: [],
-        index: -1,
-        lang: window.__VUEDITOR_LANGUAGE__.undoRedo
+        lang: window.__VUEDITOR_LANGUAGE__.undoRedo,
+        canUndo: false,
+        canRedo: false
       }
     },
-    inject: ['eventHub'],
-    computed: {
-      canUndo: function () {
-        return this.view === 'design' && this.index > 0
-      },
-      canRedo: function () {
-        return this.view === 'design' && this.index < this.stack.length - 1
-      }
-    },
-    watch: {
-      'content': function (val) {
-        this.push(val)
-      },
-      'view': function (val, oldVal) {
-        // re initial stack
-        if (val === 'design' && oldVal !== 'codeSnippet') {
-          this.stack = []
-          this.index = -1
-          this.push(this.content)
-        }
-      }
-    },
-    created () {
-      this.eventHub.$on('undo', this.undo)
-      this.eventHub.$on('redo', this.redo)
-    },
+    inject: ['editor', 'eventHub'],
     methods: {
-      setContent (data) {
-        this.eventHub.$emit('set-content', data)
+      undo() {
+        this.editor.undo()
       },
-      undo () {
-        if (!this.canUndo) return
-        this.index--
-        this.setContent(this.stack[this.index])
-      },
-      redo () {
-        if (!this.canRedo) return
-        this.index++
-        this.setContent(this.stack[this.index])
-      },
-      push (content) {
-        if (content !== this.stack[this.index]) {
-          this.stack = this.stack.slice(0, this.index + 1)
-          this.stack.push(content)
-          this.index++
-        }
+      redo() {
+        this.editor.redo()
       }
+    },
+    mounted() {
+      this.editor.subscrible('history', () => {
+        this.canUndo = this.view === 'design' && this.editor.canUndo()
+        this.canRedo = this.view === 'design' && this.editor.canRedo()
+      })
     }
   }
 </script>

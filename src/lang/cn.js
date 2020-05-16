@@ -47,7 +47,7 @@ export default {
   element: {
     ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
   },
-  codeSnippet: {},
+  code: {},
   design: {
     ieMsg: '在IE浏览器中必须选中一段文字才能使用此功能！'
   },
@@ -56,11 +56,12 @@ export default {
     clearLink: '取消超链接',
     ok: '确定'
   },
-  picture: {
+  image: {
     title: '插入图片',
     ok: '确定',
     cancel: '取消',
-    invalidFile: '未选择图片或选择的文件并非图片!'
+    noFile: '未选择图片!',
+    invalidFile: '选择的文件类型无效!'
   },
   fullscreen: {
     title: '全屏'

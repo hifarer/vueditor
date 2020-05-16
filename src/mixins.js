@@ -1,23 +1,23 @@
 
 export default {
   computed: {
-    show () {
+    show() {
       return this.activeComponent === this.$options.name
     }
   },
   methods: {
-    toggleMenu (event) {
+    toggleMenu(event) {
       let name = this.$options.name
-      if (this.view !== 'design' && !(this.view === 'codeSnippet' && name === 'codeSnippet')) return
+      if (this.view !== 'design' && !(this.view === 'code' && name === 'code')) return
       if (this.activeComponent === name) {
-        this.eventHub.$emit('set-active-component') // just hide the popup menu
+        this.eventHub.$emit('set-active-component') // hide the popup menu
         return
       }
-      this.$refs.popup.style.display = 'block' // show the popup menu so that we can get it's offsetWidth
+      this.$refs.popup.style.display = 'block' // show popup menu and get it's offsetWidth
       let obj = event.currentTarget.parentNode
       let rect = obj.getBoundingClientRect()
       let popWidth = this.$refs.popup.offsetWidth
-      let fnName = ['emoji', 'link'].indexOf(name) !== -1 ? 'getPositionForPopup' : 'getPositionForDropdown'
+      let fnName = ['link'].indexOf(name) !== -1 ? 'getPositionForPopup' : 'getPositionForDropdown'
       this.position = this[fnName]({
         popWidth,
         btnWidth: rect.width,
@@ -27,7 +27,7 @@ export default {
       })
       this.eventHub.$emit('set-active-component', name)
     },
-    getPositionForDropdown (data) {
+    getPositionForDropdown(data) {
       let { popWidth, btnWidth, btnHeight, rectLeft, offsetLeft } = data
       let posLeft = offsetLeft // by default, the popup menu is intend to align with the the clicked toolbar button's left edge
       // true means the right part is not fully visible
@@ -41,7 +41,7 @@ export default {
       }
       return { left: posLeft + 'px', top: btnHeight + 'px' }
     },
-    getPositionForPopup (data) {
+    getPositionForPopup(data) {
       let { popWidth, btnWidth, btnHeight, rectLeft, offsetLeft } = data
       let posLeft = offsetLeft + btnWidth / 2 - popWidth / 2
       // true means the left part is not fully visible

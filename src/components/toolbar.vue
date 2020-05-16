@@ -1,4 +1,115 @@
 
+<template>
+  <div class="ve-toolbar">
+    <template v-for="name in config.toolbar">
+      <div 
+        v-if="name == '|'" 
+        :key="name" 
+        class="ve-divider">
+      </div>
+      <component 
+        v-else-if="name.indexOf('ve-') !== -1"
+        :is="name"
+        :key="name"
+        :view="view"
+        :config="config"
+        :activeComponent="activeComponent"
+      />
+      <div 
+        v-else 
+        :key="name" 
+        :class="['ve-icon', { 've-active': status[name] === 'active', 've-disable': status[name] === 'disable' }]" 
+        unselectable="on">
+        <a href="javascript:;" :title="lang[name].title" @click.prevent="clickHandler(name)">
+          <i :class="toolbarConf[name]"></i>
+        </a>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script>
+  
+  import toolbarConf from '../config/toolbar'
+  import FontSize from './fontsize.vue'
+  import FontName from './fontname.vue'
+  import Element from './element.vue'
+  import Color from './color.vue'
+  import Link from './link.vue'
+  import Table from './table.vue'
+  import UndoRedo from './undoredo.vue'
+  import code from './code.vue'
+  import Image from './image.vue'
+  import Fullscreen from './fullscreen.vue'
+
+  export default {
+    name: 'toolbar',
+    props: {
+      config: Object,
+      view: String,
+      activeComponent: String
+    },
+    data() {
+      let status = {}
+      for (let i = 0, item = ''; i < this.config.toolbar.length; i++) {
+        item = this.config.toolbar[i]
+        if (toolbarConf.hasOwnProperty(item)) {
+          status[item] = 'default' // default disable active
+        }
+      }
+      return {
+        lang: window.__VUEDITOR_LANGUAGE__,
+        status: status
+      }
+    },
+    inject: ['editor', 'eventHub'],
+    components: {
+      've-fontsize': FontSize,
+      've-fontname': FontName,
+      've-element': Element,
+      've-color': Color,
+      've-link': Link,
+      've-table': Table,
+      've-undoredo': UndoRedo,
+      've-code': code,
+      've-image': Image,
+      've-fullscreen': Fullscreen
+    },
+    watch: {
+      'view': function (val) {
+        let status = {}
+        this.config.toolbar.forEach(item => {
+          if (item !== '|') {
+            status[item] = val !== 'design' ? 'disable' : 'default'
+          }
+        })
+        this.setButtonStatus(status)
+      }
+    },
+    methods: {
+      setButtonStatus(data) {
+        for (let name in data) {
+          if (typeof this.status[name] !== 'undefined') {
+            this.status[name] = data[name]
+          }
+        }
+      },
+      clickHandler(name) {
+        if (this.status[name] === 'disable') return
+        this.editor.execCommand(name, null)
+        this.eventHub.$emit('set-active-component')
+        this.setButtonStatus({
+          [name]: this.status[name] === 'active' ? 'default' : 'active'
+        })
+      }
+    },
+    created() {
+      this.toolbarConf = toolbarConf
+      this.eventHub.$on('set-button-status', this.setButtonStatus)
+    }
+  }
+</script>
+
 <style lang="less" rel="stylesheet/less">
   .ve-toolbar {
     width: 100%;
@@ -44,140 +155,3 @@
     }
   }
 </style>
-
-<template>
-  <div class="ve-toolbar">
-    <template v-for="name in finalBtns">
-      <!-- divider -->
-      <div v-if="name == 'divider' || name == '|'" :key="name" class="ve-divider"></div>
-      <!-- button with extra html -->
-      <component v-else-if="name.indexOf('ve-') !== -1" 
-        :key="name"
-        :is="name"
-        :view="view"
-        :content="content"
-        :activeComponent="activeComponent">
-      </component>
-      <!-- just button -->
-      <div v-else :key="name" :class="['ve-icon', {'ve-active': status[name] === 'active', 've-disable': status[name] === 'disable'}]" unselectable="on">
-        <a href="javascript:;" :title="lang[name].title" @click.stop.prevent="clickHandler($event, name)">
-          <i :class="toolbarConf[name].className"></i>
-        </a>
-      </div>
-    </template>
-  </div>
-</template>
-
-<script>
-  
-  import toolbarConf from '../config/toolbar'
-
-  import FontSize from './fontsize.vue'
-  import FontName from './fontname.vue'
-  import Element from './element.vue'
-  import Color from './color.vue'
-  import Link from './link.vue'
-  import Table from './table.vue'
-  import UndoRedo from './undoredo.vue'
-  import CodeSnippet from './codesnippet.vue'
-  import Picture from './picture.vue'
-
-  export default {
-    name: 'toolbar',
-    props: {
-      btns: Array,
-      view: String,
-      content: String,
-      fullscreen: Boolean,
-      activeComponent: String
-    },
-    data () {
-      this.toolbarConf = toolbarConf
-      return {
-        lang: window.__VUEDITOR_LANGUAGE__
-      }
-    },
-    computed: {
-      finalBtns () {
-        let list = []
-        for (let i = 0, item = ''; i < this.btns.length; i++) {
-          item = this.btns[i]
-          if (toolbarConf.hasOwnProperty(item) || item == 'divider' || item == '|') {
-            list.push(item)
-          } else {
-            list.push('ve-' + item.toLowerCase())
-          }
-        }
-        return list
-      },
-      status () {
-        let status = {}
-        for (let i = 0, item = ''; i < this.btns.length; i++) {
-          item = this.btns[i]
-          // divider has not status
-          if (toolbarConf.hasOwnProperty(item) && item !== 'divider' && item !== '|') {
-            status[item] = 'default' // default disable active
-          }
-        }
-        return status
-      }
-    },
-    inject: ['eventHub'],
-    components: {
-      've-fontsize': FontSize,
-      've-fontname': FontName,
-      've-element': Element,
-      've-color': Color,
-      've-link': Link,
-      've-table': Table,
-      've-undoredo': UndoRedo,
-      've-codesnippet': CodeSnippet,
-      've-picture': Picture
-    },
-    watch: {
-      'view': function (val) {
-        let status = {}
-        // 这些无论view是什么都是显示默认状态
-        let excludeArr = ['fullscreen', 'divider', '|']
-        this.btns.forEach(item => {
-          if (excludeArr.indexOf(item) === -1) {
-            // status should be disable when view is codeSnippet
-            status[item] = val !== 'design' ? 'disable' : 'default'
-          }
-        })
-        this.setButtonStatus(status)
-      }
-    },
-    methods: {
-      setButtonStatus (data) {
-        for (let name in data) {
-          if (typeof this.status[name] !== 'undefined') {
-            this.status[name] = data[name]
-          }
-        }
-      },
-      doAction (name) {
-        switch (name) {
-          case 'fullscreen':
-            this.eventHub.$emit('set-fullscreen', !this.fullscreen)
-            break
-        }
-      },
-      clickHandler (event, name) {
-        if (this.status[name] === 'disable') return
-        if (this.toolbarConf[name].native) {
-          this.eventHub.$emit('exec-command', { name: name, value: null })
-          this.eventHub.$emit('set-active-component')
-        } else {
-          this.doAction(name)
-        }
-        this.setButtonStatus({
-          [name]: this.status[name] === 'active' ? 'default' : 'active'
-        })
-      }
-    },
-    created () {
-      this.eventHub.$on('set-button-status', this.setButtonStatus)
-    }
-  }
-</script>

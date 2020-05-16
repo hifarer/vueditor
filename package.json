@@ -1,6 +1,6 @@
 {
   "name": "vueditor",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "a wysiwyg editor based on Vue.js",
   "repository": {
     "type": "git",

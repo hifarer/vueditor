@@ -9,7 +9,7 @@ Vueditor
 
 基于 Vue.js 实现的富文本编辑器, 需要 Vue.js 2.2.0+
 
-浏览器兼容性: Chrome, Firefox, Safari, IE 9+.
+浏览器兼容性: Chrome, Firefox, Safari, 不支持IE。
 
 在线 [DEMO](http://hifarer.github.io/vueditor/)
 

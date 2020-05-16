@@ -11,15 +11,16 @@
 <body>
 <div id="app">
   <Vueditor></Vueditor>
+  <div id="editor"></div>
 </div>
 <script>
-  // use var for ie9
-  Vue.use(Vueditor.default)
-  var parent = new Vue({
-    el: '#app'
-  })
-  var editor = parent.$children[0]
-  editor.setContent('<p><span style="font-size: 12px;">I am <span style="font-size: 28px;">nobody</span></span> <span style="font-size: 24px;"><span style="font-size: 28px;">this<span style="font-size: 12px;"> editor </span></span><span style="font-size: 12px;"><span style="font-size: 28px;">is under</span> develop</span></span> <span style="font-size: 24px;"><span style="font-size: 42px;"><span style="font-size: 12px;">hope</span> you will</span> enjoy it later</span></p>')
+
+  // Vue.use(Vueditor.default)
+  // let parent = new Vue({
+  //   el: '#app'
+  // })
+  // let editor = parent.$children[0]
+  // editor.setContent('<p><span style="font-size: 12px;">I am <span style="font-size: 28px;">nobody</span></span> <span style="font-size: 24px;"><span style="font-size: 28px;">this<span style="font-size: 12px;"> editor </span></span><span style="font-size: 12px;"><span style="font-size: 28px;">is under</span> develop</span></span> <span style="font-size: 24px;"><span style="font-size: 42px;"><span style="font-size: 12px;">hope</span> you will</span> enjoy it later</span></p>')
   // editor.setContent('<p>' + 
   //     '<span><span style="font-size: 12px;">oneoneone</span><span style="font-size: 12px;">twotwotwo</span></span>' + 
   //     '<span style="font-size: 12px;">threethreethree<span style="font-size: 12px;">fourfourfour</span></span>' + 
@@ -28,12 +29,17 @@
   // editor.setContent('<p>asdfasdf<span style="font-size: 12px;">oneoneone</span>asdfasdf</p>')
   // editor.setContent(`
   //   <p>
-  //     <span style="font-size: 12px;">oneoneonetwotwotwo</span>
+  //     \n<span style="font-size: 12px;">oneoneonetwotwotwo</span>
   //     <span style="font-size: 12px;">threethreethreefourfourfour</span>
-  //     <span style="font-size: 28px;"><span style="font-size: 12px;">fivefivefive</span>sixsixsix</span>
-      
+  //     <span style="font-size: 28px;"><span style="font-size: 12px;">fivefivefive</span>sixsixsix</span>\n
   //   </p>
   // `)
+  Vueditor.default.createEditor('#editor', {
+    // toolbar: [
+    //   'removeFormat', 'undoRedo', '|', 'elements', 'fontName', 'fontSize', 'color'
+    // ]
+  });
+  // editor.setContent('<p>hello<span>asdfasdf</span></p>')
 </script>
 </body>
 </html>

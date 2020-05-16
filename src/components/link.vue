@@ -1,19 +1,10 @@
-<style module lang="less" rel="stylesheet/less">
-  .ctn {
-    width: 240px;
-    height: 90px;
-  }
-  .input {
-    max-width: ~"calc(100% - 55px)";
-  }
-</style>
 
 <template>
   <div class="ve-link">
-    <div :class="['ve-icon', {'ve-active': show, 've-disable': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-active': show, 've-disable': view !== 'design'}]" unselectable="on">
       <a href="javascript:;" :title="lang.addLink" @click="clickHandler"><i class="icon-link"></i></a>
     </div>
-    <div :class="['ve-icon', {'ve-disable': view !== 'design'}]" onselectable="on">
+    <div :class="['ve-icon', {'ve-disable': view !== 'design'}]" unselectable="on">
       <a href="javascript:;" :title="lang.clearLink" @click="clearLink"><i class="icon-unlink"></i></a>
     </div>
     <div v-show="show" ref="popup" :class="['ve-popover', $style.ctn]" :style="position">
@@ -39,38 +30,38 @@
       view: String,
       activeComponent: String
     },
-    data () {
+    data() {
       return {
         val: '',
-        lang: window.__VUEDITOR_LANGUAGE__.link,
-        position: { left: 0, top: 0, arrowLeft: 0 }
+        position: { left: 0, top: 0, arrowLeft: 0 },
+        lang: window.__VUEDITOR_LANGUAGE__.link
       }
     },
-    inject: ['range', 'eventHub'],
+    inject: ['editor', 'eventHub'],
     mixins: [mixins],
     methods: {
-      clickHandler (event) {
+      clickHandler(event) {
         this.toggleMenu(event)
       },
-      addLink () {
-        let href = this.val
-        href.match(/^https?:\/\//igm) === null && (href = 'http://' + href)
-        this.eventHub.$emit('exec-command', { name: 'createlink', value: href })
+      addLink() {
+        this.editor.addLink(this.val)
         this.eventHub.$emit('set-active-component')
       },
       // todo unlink IE问题
-      clearLink () {
-        let container = this.range.getContainer()
-        if (!container) return
-        while (container.tagName && container.tagName.toLowerCase() !== 'a') {
-          container = container.parentNode
-        }
-        if (container.tagName && container.tagName.toLowerCase() === 'a') {
-          this.range.setRangeAtNode(container)
-          this.eventHub.$emit('exec-command', { name: 'unlink', value: null })
-        }
+      clearLink() {
+        this.editor.clearLink()
         this.eventHub.$emit('set-active-component')
       }
     }
   }
 </script>
+
+<style module lang="less" rel="stylesheet/less">
+  .ctn {
+    width: 240px;
+    height: 90px;
+  }
+  .input {
+    max-width: ~"calc(100% - 55px)";
+  }
+</style>

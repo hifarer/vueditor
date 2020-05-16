@@ -65,18 +65,19 @@ export default {
   element: {
     ieMsg: 'You must select a text to use this feature in IE browser'
   },
-  codeSnippet: {},
+  code: {},
   design: {},
   link: {
     addLink: 'Add link',
     clearLink: 'Clear link',
     ok: 'OK'
   },
-  picture: {
-    title: 'Insert Picture',
+  image: {
+    title: 'Insert image',
     ok: 'OK',
     cancel: 'Cancel',
-    invalidFile: 'No file selected or selected file is not a picture'
+    noFile: 'file not selected!',
+    invalidFile: 'invalid file type!'
   },
   fullscreen: {
     title: 'Fullscreen'

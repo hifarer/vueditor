@@ -1,16 +1,16 @@
 
 <template>
-  <div class="vueditor" :class="{'ve-fullscreen': fullscreen}">
+  <div class="vueditor" :class="{ 've-fullscreen': fullscreen }">
     <ve-toolbar 
-      :btns="config.toolbar"
+      :config="config"
       :view="view"
-      :content="content"
-      :fullscreen="fullscreen"
       :activeComponent="activeComponent">
     </ve-toolbar>
     <div class="ve-container">
       <div class="ve-wrapper">
-        <ve-design :view="view" :content="content" :config="config"></ve-design>
+        <ve-editor 
+          :config="config"
+          :view="view" />
       </div>
     </div>
   </div>
@@ -20,47 +20,50 @@
 
   import Vue from 'vue'
   import Toolbar from './toolbar.vue'
-  import Design from './design.vue'
+  import EditorComponent from './editor.vue'
 
-  import Range from '../range.js'
-
-  import '../style/main.less'
+  import Editor from '../core/editor'
 
   export default {
-    data () {
+    data() {
       return {
-        activeComponent: '',
         view: 'design',
-        content: '',
-        fullscreen: false
+        fullscreen: false,
+        activeComponent: ''
+      }
+    },
+    provide() {
+      let eventHub = new Vue()
+      this.editor = new Editor(eventHub)
+      this.eventHub = eventHub
+      return {
+        editor: this.editor,
+        eventHub: this.eventHub
+      }
+    },
+    watch: {
+      'view': function(val, oldVal) {
+        if (val === 'design' && oldVal !== 'code') {
+          // re-init stack
+          this.editor.resetUndoRedo()
+        }
       }
     },
     components: {
       've-toolbar': Toolbar,
-      've-design': Design
+      've-editor': EditorComponent
     },
     methods: {
-      setContent (content) {
-        if (this.content !== content) {
-          this.content = content
-        }
+      setContent(content) {
+        this.editor.setContent(content)
       },
-      getContent () {
-        return this.content
+      getContent() {
+        return this.editor.getContent()
       }
     },
-    provide () {
-      this.range = new Range()
-      this.eventHub = new Vue()
-      return {
-        range: this.range,
-        eventHub: this.eventHub
-      }
-    },
-    created () {
+    created() {
       this.eventHub.$on('set-view', view => this.view = view)
-      this.eventHub.$on('set-content', this.setContent)
-      this.eventHub.$on('set-fullscreen', fullscreen => this.fullscreen = fullscreen)
+      this.eventHub.$on('set-fullscreen', () => this.fullscreen = !this.fullscreen)
       this.eventHub.$on('set-active-component', component => this.activeComponent = component)
     }
   }
