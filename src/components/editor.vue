@@ -4,6 +4,8 @@
 </template>
 
 <script>
+
+  import { debounce } from '../core/util'
   
   export default {
     name: 'design',
@@ -42,26 +44,28 @@
       },
       
       addEvent() {
-        let timer = null
-        this.iframeDoc.addEventListener('click', () => {
-          clearTimeout(timer)
-          timer = setTimeout(() => {
-            this.editor.triggerEvent('selectionchange')
-            this.eventHub.$emit('set-active-component')
-          }, 200)
-        }, false)
-        this.iframeDoc.addEventListener('selectionchange', this.selectionchangeHandler, false)
-        this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
-        this.iframeBody.addEventListener('keyup', this.keyupHandler, false)
+        let keyupHandler = debounce(() => this.editor.setContent(), 200)
+        let clickHandler = debounce(() => {
+          this.editor.triggerEvent('selectionchange')
+          this.eventHub.$emit('set-active-component')
+        }, 200)
+        let selectionchangeHandler = debounce(() => {
+          this.checkElement()
+          this.setButtonStatus()
+        }, 200)
         this.iframeBody.addEventListener('paste', this.pasteHandler, false)
+        this.iframeBody.addEventListener('keydown', this.keydownHandler, false)
+        this.iframeBody.addEventListener('keyup', keyupHandler, false)
+        this.iframeDoc.addEventListener('click', clickHandler, false)
+        this.iframeDoc.addEventListener('selectionchange', selectionchangeHandler, false)
       },
 
       keydownHandler(event) {
         // undo redo
         if (event.ctrlKey && (event.keyCode === 89 || event.keyCode === 90)) {
           event.preventDefault()
-          event.keyCode === 89 && this.eventHub.$emit('redo')
-          event.keyCode === 90 && this.eventHub.$emit('undo')
+          event.keyCode === 89 && this.editor.redo()
+          event.keyCode === 90 && this.editor.undo()
         }
         if (event.keyCode === 13) {
           let range = this.editor.getRange()
@@ -72,13 +76,6 @@
             this.enterHandler(range, container)
           }
         }
-      },
-
-      keyupHandler(event) {
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          this.editor.setContent()
-        }, 200)
       },
 
       getDOMNodePath(parent, node) {
@@ -98,7 +95,6 @@
         let includeTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
         let domNodePath = this.getDOMNodePath(this.iframeBody, container)
-
         domNodePath.forEach((tag, i) => {
           if (includeTags.indexOf(tag) !== -1 && includeIndex === -1) {
             includeIndex = i
@@ -158,11 +154,6 @@
         }
       },
 
-      selectionchangeHandler() {
-        this.checkElement()
-        this.setButtonStatus()
-      },
-
       checkElement() {
         let range = this.editor.getRange()
         if (!range) return
@@ -210,12 +201,7 @@
     },
 
     mounted() {
-      this.timer = null
       this.init()
-    },
-
-    beforeDestroy() {
-      clearTimeout(this.timer)
     }
   }
 </script>

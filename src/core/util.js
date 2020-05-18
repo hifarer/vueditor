@@ -1,6 +1,8 @@
 
+let browser = ''
+
 export function getBrowser() {
-  let browser = ''
+  if (browser !== '') return browser
   let ua = window.navigator.userAgent.toLowerCase()
   if (ua.indexOf('chrome') !== -1) {
     // Edge/18.18362
@@ -35,4 +37,35 @@ export function checkColor(val) {
     return true
   }
   return false
+}
+
+/**
+ * @param {function} fn
+ * @param {number} delay
+ */
+export function debounce(fn, delay) {
+  let timer = null
+  return () => {
+    if (timer !== null) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      fn()
+    }, delay)
+  }
+}
+
+/**
+ * @param {function} fn
+ * @param {number} delay
+ */
+export function throttle(fn, delay) {
+  let flag = false
+  return () => {
+    if (flag) return
+    setTimeout(() => {
+      fn()
+      flag = false
+    }, delay)
+  }
 }

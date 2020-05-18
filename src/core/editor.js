@@ -81,21 +81,34 @@ class Editor {
     this.undoRedo.reset()
     this.undoRedo.push(this.content)
   }
-
+  /**
+   * 获取range
+   */
   getRange() {
     return this.rangeUtil.getRange()
   }
-
+  /**
+   * 添加自定义事件监听
+   * @param {String} type 
+   * @param {Function} listener 
+   */
   subscrible(type, listener) {
     console.log('subscrible: ', type)
     this.eventHub.$on(type, listener)
   }
-
+  /**
+   * 触发自定义事件
+   * @param {String} type 
+   * @param {any} args 
+   */
   dispatch(type, args) {
     console.log('dispatch: ', type)
     this.eventHub.$emit(type, args)
   }
-
+  /**
+   * 触发DOM事件
+   * @param {String} eventName 
+   */
   triggerEvent(eventName) {
     let doc = this.document
     let event = doc.createEvent('Event')
@@ -103,24 +116,19 @@ class Editor {
     event.initEvent(eventName, false, true)
     doc.dispatchEvent(event)
   }
-
+  /**
+   * @param {String} name 
+   * @param {any} value 
+   */
   execCommand(name, value) {
     this.document.execCommand(name, false, value)
     this.triggerEvent('selectionchange')
     this.setContent()
   }
   /**
-   * @param {string} value
+   * 设置字体
+   * @param {String} value 
    */
-  setFontSize(value) {
-    let range = this.rangeUtil.getRange()
-    if (!range || range.collapsed) return
-    let resultRange = setFontSize(range, value)
-    if (resultRange) {
-      let { start, startOffset, end, endOffset } = resultRange
-      this.rangeUtil.setRange(start, end, startOffset, endOffset)
-    }
-  }
   setFontName(value) {
     if (browser !== 'Edge') {
       this.document.execCommand('fontName', false, value)
@@ -128,8 +136,8 @@ class Editor {
       let range = this.rangeUtil.getRange()
       if (!range || range.collapsed) return
       let container = range.commonAncestorContainer
+      // if we replace font element with span element, after run execCommand again, edge will create another font element instead of using the exsiting span element
       // if range container has only one child
-      // if we replace font element with span element, after we run execCommand again, ie will create another font element instead of using the span element
       if (container.childNodes.length === 1 
           && container.childNodes.nodeType === 1
           && container.tagName.toLowerCase() === 'span') {
@@ -144,6 +152,24 @@ class Editor {
       }
     }
   }
+  /**
+   * 设置字号
+   * @param {String} value
+   */
+  setFontSize(value) {
+    let range = this.rangeUtil.getRange()
+    if (!range || range.collapsed) return
+    let resultRange = setFontSize(range, value)
+    if (resultRange) {
+      let { start, startOffset, end, endOffset } = resultRange
+      this.rangeUtil.setRange(start, end, startOffset, endOffset)
+    }
+  }
+  /**
+   * 设置文字颜色和背景颜色
+   * @param {String} name 
+   * @param {String} value 
+   */
   setColor(name, value) {
     if (browser !== 'Edge') {
       this.document.execCommand(name, false, value)
@@ -152,7 +178,6 @@ class Editor {
       if (!range || range.collapsed) return
       let container = range.commonAncestorContainer
       // if range container has only one child
-      // if we replace font element with span element, after we run execCommand again, ie will create another font element instead of using the span element
       if (container.childNodes.length === 1 
           && container.childNodes.nodeType === 1
           && container.tagName.toLowerCase() === 'span') {
@@ -168,6 +193,7 @@ class Editor {
     }
   }
   /**
+   * 插入html
    * @param {string} html
    */
   insertHTML(html) {
@@ -175,7 +201,13 @@ class Editor {
     if (!range || !html) return
     insertHTML(range, html)
   }
-  insertCodeBlock (attrName, attrValue, codeLang) {
+  /**
+   * 插入代码块
+   * @param {String} attrName 
+   * @param {String} attrValue 
+   * @param {String} codeLang 
+   */
+  insertCode(attrName, attrValue, codeLang) {
     let range = this.rangeUtil.getRange()
     if (!range) return
     let container = range.commonAncestorContainer
@@ -196,6 +228,7 @@ class Editor {
     }
   }
   /**
+   * 插入表格
    * @param {number} rows
    * @param {number} cols
    */
@@ -218,7 +251,7 @@ class Editor {
   }
 
   /**
-   * change element
+   * 改变元素标签
    * @param {string} value tagName
    */
   formatBlock(value) {
@@ -241,7 +274,7 @@ class Editor {
    * @param {any} range
    * @param {any} tagName
    */
-  wrapTextNode (range, tagName) {
+  wrapTextNode(range, tagName) {
     let offset = range.startOffset
     let obj = this.document.createElement(tagName)
     obj.appendChild(this.document.createTextNode(range.startContainer.nodeValue))

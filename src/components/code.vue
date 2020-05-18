@@ -40,7 +40,7 @@
       selectHandler(codeLang) {
         let { attrName, attrValue } = this.pattern
         this.val = codeLang
-        this.editor.insertCodeBlock(attrName, attrValue, codeLang)
+        this.editor.insertCode(attrName, attrValue, codeLang)
         this.eventHub.$emit('set-active-component')
       },
       

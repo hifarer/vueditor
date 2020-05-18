@@ -4,8 +4,7 @@
     <ve-toolbar 
       :config="config"
       :view="view"
-      :activeComponent="activeComponent">
-    </ve-toolbar>
+      :activeComponent="activeComponent" />
     <div class="ve-container">
       <div class="ve-wrapper">
         <ve-editor 
