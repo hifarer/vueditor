@@ -3,9 +3,10 @@
   <div class="ve-toolbar">
     <template v-for="name in config.toolbar">
       <div 
-        v-if="name == '|'" 
+        v-if="name == '|'"
+        class="ve-divider"
         :key="name" 
-        class="ve-divider">
+        >
       </div>
       <component 
         v-else-if="name.indexOf('ve-') !== -1"
@@ -16,10 +17,11 @@
         :activeComponent="activeComponent"
       />
       <div 
-        v-else 
+        v-else
+        unselectable="on"
         :key="name" 
         :class="['ve-icon', { 've-active': status[name] === 'active', 've-disable': status[name] === 'disable' }]" 
-        unselectable="on">
+        >
         <a href="javascript:;" :title="lang[name].title" @click.prevent="clickHandler(name)">
           <i :class="toolbarConf[name]"></i>
         </a>

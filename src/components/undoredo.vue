@@ -36,8 +36,8 @@
     },
     mounted() {
       this.editor.subscrible('history', () => {
-        this.canUndo = this.view === 'design' && this.editor.canUndo()
-        this.canRedo = this.view === 'design' && this.editor.canRedo()
+        this.canUndo = this.editor.canUndo()
+        this.canRedo = this.editor.canRedo()
       })
     }
   }

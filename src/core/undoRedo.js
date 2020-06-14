@@ -10,7 +10,7 @@ export default class UndoRedo {
     this.index = -1
   }
   canUndo() {
-    return this.index > 0
+    return this.index >= 0
   }
   canRedo() {
     return this.index < this.stack.length - 1

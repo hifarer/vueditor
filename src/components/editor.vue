@@ -31,7 +31,7 @@
         iframe.setAttribute('marginheight', 0)
         iframe.setAttribute('marginwidth', 0)
         iframe.setAttribute('frameborder', 0)
-        iframe.setAttribute('scrolling', 'NO')
+        // iframe.setAttribute('scrolling', 'NO')
         this.$refs.editor.appendChild(iframe)
         this.iframeWin = iframe.contentWindow
         this.iframeDoc = iframe.contentWindow.document
@@ -187,6 +187,7 @@
       },
 
       setButtonStatus() {
+        if (this.view === 'code') return
         let status = {}
         let arr = this.config.toolbar
         for (let i = 0, name; i < arr.length; i++ ) {

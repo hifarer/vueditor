@@ -47,15 +47,16 @@ class Editor {
     return this.content
   }
 
-  setContent(value) {
+  setContent(value, noHistory) {
     if (typeof value === 'undefined') {
       this._syncContent(0)
-      this.undoRedo.push(this.content)
+      // 这里不能简写
+      noHistory !== true && this.undoRedo.push(this.content)
     } else {
       if (this.content !== value) {
         this.content = value
         this._syncContent(1)
-        this.undoRedo.push(value)
+        noHistory !== true && this.undoRedo.push(value)
       }
     }
     this.dispatch('history')
@@ -71,11 +72,11 @@ class Editor {
   }
   undo() {
     if (!this.canUndo()) return
-    this.setContent(this.undoRedo.undo())
+    this.setContent(this.undoRedo.undo(), true)
   }
   redo() {
     if (!this.canRedo()) return
-    this.setContent(this.undoRedo.redo()) 
+    this.setContent(this.undoRedo.redo(), true)
   }
   resetUndoRedo() {
     this.undoRedo.reset()
@@ -110,6 +111,7 @@ class Editor {
    * @param {String} eventName 
    */
   triggerEvent(eventName) {
+    console.log('triggerEvent')
     let doc = this.document
     let event = doc.createEvent('Event')
     // args: string type, boolean bubbles, boolean cancelable
@@ -199,7 +201,11 @@ class Editor {
   insertHTML(html) {
     let range = this.rangeUtil.getRange()
     if (!range || !html) return
-    insertHTML(range, html)
+    let resultRange = insertHTML(range, html)
+    if (resultRange) {
+      let { start, startOffset, end, endOffset } = resultRange
+      this.rangeUtil.setRange(start, end, startOffset, endOffset)
+    }
   }
   /**
    * 插入代码块
@@ -217,7 +223,7 @@ class Editor {
       container.setAttribute(attrName, codeLang)
     } else {
       let tempDiv = document.createElement('div')
-      let html = ('<pre><code ' + attrName + '="' + attrValue + '"><br></code></pre>').replace(/#lang#/igm, codeLang)
+      let html = ('<pre><code ' + attrName + '="' + attrValue + '">&zwnj;</code></pre>').replace(/#lang#/igm, codeLang)
       tempDiv.innerHTML = html
       // if the range is inside pre element
       if (container.tagName.toLowerCase() === 'pre') {

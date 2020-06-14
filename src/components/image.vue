@@ -51,6 +51,8 @@
         if (val) {
           body.classList ? body.classList.add('ve-fixed') : body.className += 've-fixed' 
         } else {
+          this.url = ''
+          this.$refs.file.value = null
           body.classList ? body.classList.remove('ve-fixed') : body.className = body.className.replace('ve-fixed', '')
         }
       }
@@ -67,6 +69,7 @@
         this.eventHub.$emit('set-active-component')
       },
       clickHandler(event) {
+        if (this.view !== 'design') return
         this.eventHub.$emit('set-active-component', 'image')
       },
       changeHandler() {

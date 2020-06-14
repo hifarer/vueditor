@@ -29,8 +29,8 @@ export default class RangeUtil {
    * @param {number} endOffset
    */
   setRange(startContainer, endContainer, startOffset, endOffset) {
-    let range = this.getRange()
-    if (!range) return
+    if (!startContainer) return
+    let range = startContainer.ownerDocument.createRange()
     if (typeof startOffset === 'undefined') {
       range.setStartBefore(startContainer)
     } else {
@@ -50,8 +50,8 @@ export default class RangeUtil {
    * @param {Node} node
    */
   setRangeAtNode(node) {
-    let range = this.getRange()
-    if (!range) return
+    if (!node) return
+    let range = node.ownerDocument.createRange()
     range.selectNode(node)
     this.sel.removeAllRanges()
     this.sel.addRange(range)
@@ -61,8 +61,8 @@ export default class RangeUtil {
    * @param {any} node
    */
   setRangeAtNodeContent(node) {
-    let range = this.getRange()
-    if (!range) return
+    if (!node) return
+    let range = node.ownerDocument.createRange()
     range.selectNodeContents(node)
     this.sel.removeAllRanges()
     this.sel.addRange(range)

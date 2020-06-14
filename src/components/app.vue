@@ -40,14 +40,6 @@
         eventHub: this.eventHub
       }
     },
-    watch: {
-      'view': function(val, oldVal) {
-        if (val === 'design' && oldVal !== 'code') {
-          // re-init stack
-          this.editor.resetUndoRedo()
-        }
-      }
-    },
     components: {
       've-toolbar': Toolbar,
       've-editor': EditorComponent
