@@ -69,7 +69,6 @@
         })
         this.eventHub.$emit('set-active-component', showMenu ? 'color' : '')
       },
-      // todo ie输入颜色代码range丢失问题
       inputHandler() {
         let color = this.val
         if (!checkColor(color)) {

@@ -2,14 +2,13 @@
 <template>
   <div class="vueditor" :class="{ 've-fullscreen': fullscreen }">
     <ve-toolbar 
-      :config="config"
+      :toolbarList="config.toolbar"
       :view="view"
-      :activeComponent="activeComponent" />
+      :activeComponent="activeComponent"
+    />
     <div class="ve-container">
       <div class="ve-wrapper">
-        <ve-editor 
-          :config="config"
-          :view="view" />
+        <ve-editor :view="view" />
       </div>
     </div>
   </div>
@@ -36,6 +35,7 @@
       this.editor = new Editor(eventHub)
       this.eventHub = eventHub
       return {
+        config: this.config,
         editor: this.editor,
         eventHub: this.eventHub
       }

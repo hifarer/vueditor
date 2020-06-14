@@ -29,7 +29,6 @@
   export default {
     name: 'image',
     props: {
-      config: Object,
       view: String,
       activeComponent: String
     },
@@ -39,7 +38,7 @@
         lang: window.__VUEDITOR_LANGUAGE__.image
       }
     },
-    inject: ['editor', 'eventHub'],
+    inject: ['config', 'editor', 'eventHub'],
     computed: {
       show() {
         return this.activeComponent === 'image'

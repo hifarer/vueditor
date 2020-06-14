@@ -1,11 +1,11 @@
 
 <template>
   <div class="ve-toolbar">
-    <template v-for="name in config.toolbar">
+    <template v-for="name in toolbarList">
       <div 
         v-if="name == '|'"
         class="ve-divider"
-        :key="name" 
+        :key="name"
         >
       </div>
       <component 
@@ -13,7 +13,6 @@
         :is="name"
         :key="name"
         :view="view"
-        :config="config"
         :activeComponent="activeComponent"
       />
       <div 
@@ -47,14 +46,17 @@
   export default {
     name: 'toolbar',
     props: {
-      config: Object,
+      toolbarList: Array,
       view: String,
       activeComponent: String
     },
+    inject: ['editor', 'eventHub'],
     data() {
       let status = {}
-      for (let i = 0, item = ''; i < this.config.toolbar.length; i++) {
-        item = this.config.toolbar[i]
+      let arr = this.toolbarList
+      // 2.2版本先执行initState 再执行initInjections，所以这里不能从inject中读取config.toolbar
+      for (let i = 0, item = ''; i < arr.length; i++) {
+        item = arr[i]
         if (toolbarConf.hasOwnProperty(item)) {
           status[item] = 'default' // default disable active
         }
@@ -64,7 +66,6 @@
         status: status
       }
     },
-    inject: ['editor', 'eventHub'],
     components: {
       've-fontsize': FontSize,
       've-fontname': FontName,
@@ -80,7 +81,7 @@
     watch: {
       'view': function (val) {
         let status = {}
-        this.config.toolbar.forEach(item => {
+        this.toolbarList.forEach(item => {
           if (item !== '|') {
             status[item] = val !== 'design' ? 'disable' : 'default'
           }

@@ -10,11 +10,9 @@
   export default {
     name: 'design',
     props: {
-      config: Object,
-      view: String,
-      content: String
+      view: String
     },
-    inject: ['editor', 'eventHub'],
+    inject: ['config', 'editor', 'eventHub'],
     data() {
       return {
         lang: window.__VUEDITOR_LANGUAGE__.design

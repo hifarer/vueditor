@@ -47,7 +47,6 @@
         this.editor.addLink(this.val)
         this.eventHub.$emit('set-active-component')
       },
-      // todo unlink IE问题
       clearLink() {
         this.editor.clearLink()
         this.eventHub.$emit('set-active-component')

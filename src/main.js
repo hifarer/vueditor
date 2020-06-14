@@ -14,8 +14,6 @@ import './style/main.less'
 // 动态配置与静态配置
 // 动态的可以传入，静态的写死在配置文件
 
-// todo IE设置字号BUG 清除格式问题　插入图片 表格问题
-
 /**
  * @param {Array} arr
  */
