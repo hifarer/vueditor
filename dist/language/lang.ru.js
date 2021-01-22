@@ -66,6 +66,6 @@ const lang = {
     title: 'полный экран'
   },
   table: {title: 'Таблица'},
-  undo: {title: 'Назадо'},
+  undo: {title: 'Назад'},
   redo: {title: 'Вперед'}
 }
