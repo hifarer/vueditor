@@ -1,6 +1,8 @@
 Vueditor
 ===
 
+# Please note that this project has not been maintained for a long time, and there are some unfixed bugs, do not use it in a production environment.
+
 [![vueditor](https://img.shields.io/npm/v/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![vueditor](https://img.shields.io/npm/l/vueditor.svg)](https://www.npmjs.com/package/vueditor)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
