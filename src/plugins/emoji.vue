@@ -21,14 +21,14 @@
 </style>
 
 <template>
-  <div class="ve-popover emoji" v-show="showPopup" 
+  <div class="ve-popover emoji" v-show="showPopup"
   :style="{left: rect.left + 'px', top: (rect.top + rect.height) + 'px'}">
     <div class="ve-pop-arrow"></div>
     <div class="ve-pop-header">Insert Emoji</div>
     <div class="ve-pop-body">
-      <div class="wrap" @click="insertItem">
+      <div class="wrap">
         <a href="javascript:;" draggable="false" v-for="item in arr">
-          <img :src="parseSrc(item)" :alt="convert(item)">
+          <img :src="parseSrc(item)" :alt="convert(item)" @click="insertItem">
         </a>
       </div>
     </div>
