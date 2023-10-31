@@ -50,11 +50,7 @@
     "webpack-hot-middleware": "^2.18.2"
   },
   "keywords": [
-    "vue editor",
-    "vue.js editor",
-    "rich text editor",
-    "wysiwyg editor",
-    "vue.js wysiwyg editor"
+    "vueditor_solu"
   ],
   "author": "hifarer",
   "license": "MIT",
