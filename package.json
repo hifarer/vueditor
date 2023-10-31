@@ -1,6 +1,6 @@
 {
   "name": "vueditor_solu",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "a wysiwyg editor based on Vue.js and Vuex",
   "repository": {
     "type": "git",
