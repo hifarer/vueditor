@@ -1,10 +1,10 @@
 {
-  "name": "vueditor",
-  "version": "0.3.1",
+  "name": "vueditor_solu",
+  "version": "0.4.4",
   "description": "a wysiwyg editor based on Vue.js and Vuex",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hifarer/vueditor.git"
+    "url": "git+https://github.com/sivathaneeru/vueditor.git"
   },
   "main": "dist/script/vueditor.min.js",
   "scripts": {
@@ -15,8 +15,6 @@
     "eslint": "eslint --fix --ext .vue,.js ./src/"
   },
   "dependencies": {
-    "marked": "^0.3.6",
-    "twemoji": "^2.4.1",
     "vue": ">=2.0.5",
     "vuex": ">=2.0.0"
   },
@@ -52,12 +50,15 @@
     "webpack-hot-middleware": "^2.18.2"
   },
   "keywords": [
-    "vue editor",
-    "vue.js editor",
-    "rich text editor",
-    "wysiwyg editor",
-    "vue.js wysiwyg editor"
+    "vueditor_solu"
   ],
   "author": "hifarer",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sivathaneeru/vueditor/issues"
+  },
+  "homepage": "https://github.com/sivathaneeru/vueditor#readme",
+  "directories": {
+    "doc": "docs"
+  }
 }

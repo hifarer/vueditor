@@ -177,7 +177,7 @@ Default value of the above fields:
     'removeFormat', 'undo', '|', 'elements', 'fontName', 'fontSize', 'foreColor', 'backColor', 'divider',
     'bold', 'italic', 'underline', 'strikeThrough', 'links', 'divider', 'subscript', 'superscript',
     'divider', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', '|', 'indent', 'outdent',
-    'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'tables', '|', 'switchView'
+    'insertOrderedList', 'insertUnorderedList', '|', 'picture', 'table', '|', 'switchView'
   ],
   fontName: [
     {val: 'arial black'}, 
